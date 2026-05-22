@@ -113,7 +113,7 @@ export default function HomePage() {
     }
 
     const projectId = await finalizeGeneratedProject(modelId)
-    router.push(`/project/${projectId}`)
+    router.push(`/project/${projectId}/empathy-map`)
   }
 
   function renderGenerationScreen() {

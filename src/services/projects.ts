@@ -10,6 +10,10 @@ export interface HistoryItem {
   id: string
   title: string
   translationKey?: "ecoSync" | "greenLogistics" | "carbonTrack" | "agroEsg"
+  empathy?: {
+    pains: string[]
+    gains: string[]
+  }
 }
 
 const NETWORK_DELAY_MS = 500
