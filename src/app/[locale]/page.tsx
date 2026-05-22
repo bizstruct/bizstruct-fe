@@ -1,19 +1,32 @@
-import { ArrowUp } from "lucide-react"
-import { getTranslations } from "next-intl/server"
-import { submitProjectIdea } from "@/app/actions"
+"use client"
+
+import { useState, type FormEvent } from "react"
+import { ArrowUp, Loader2 } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { activeProjects } from "@/data/active-projects"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { getActiveProjects } from "@/services/projects"
+import { useProjectStore } from "@/store/use-project-store"
 
-export default async function HomePage() {
-  const t = await getTranslations("HomePage")
-  const projects = await getActiveProjects()
+export default function HomePage() {
+  const t = useTranslations("HomePage")
+  const [text, setText] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const addProjectFromIdea = useProjectStore((state) => state.addProjectFromIdea)
+  const isLoading = useProjectStore((state) => state.isLoading)
 
-  async function handleProjectIdeaSubmit(formData: FormData) {
-    "use server"
+  async function handleProjectIdeaSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError(null)
 
-    await submitProjectIdea(formData)
+    try {
+      await addProjectFromIdea(text)
+      setText("")
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Сталася непередбачувана помилка"
+      setError(message)
+    }
   }
 
   return (
@@ -27,22 +40,26 @@ export default async function HomePage() {
         </p>
       </div>
 
-      <form action={handleProjectIdeaSubmit} className="w-full max-w-2xl mx-auto mb-auto flex flex-col justify-center h-full">
+      <form onSubmit={handleProjectIdeaSubmit} className="w-full max-w-2xl mx-auto mb-auto flex flex-col justify-center h-full">
         <div className="relative border border-slate-200 rounded-2xl bg-white p-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
           <textarea
-            name="idea"
+            value={text}
+            onChange={(event) => setText(event.target.value)}
             rows={3}
             placeholder={t("input.placeholder")}
-            className="w-full resize-none border-0 bg-transparent p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none min-h-[70px]"
+            disabled={isLoading}
+            className="w-full resize-none border-0 bg-transparent p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none min-h-[70px] disabled:cursor-not-allowed disabled:opacity-70"
           />
+          {error && <p className="px-3 text-xs text-rose-500 font-medium mt-1.5">{error}</p>}
           <div className="flex justify-end pt-2">
             <Button
               type="submit"
               size="icon"
               aria-label={t("input.submit")}
-              className="h-8 w-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+              disabled={isLoading}
+              className="h-8 w-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <ArrowUp className="h-4 w-4" />
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" />}
             </Button>
           </div>
         </div>
@@ -56,7 +73,7 @@ export default async function HomePage() {
         <div className="px-10 relative">
           <Carousel opts={{ align: "start" }} className="w-full">
             <CarouselContent>
-              {projects.map((project) => (
+              {activeProjects.map((project) => (
                 <CarouselItem key={project.id} className="md:col-span-1 md:basis-1/2 lg:basis-1/3">
                   <Card className="rounded-xl border-slate-200 bg-white shadow-none hover:border-slate-300 transition-colors cursor-pointer h-32 flex flex-col justify-between p-4">
                     <div>

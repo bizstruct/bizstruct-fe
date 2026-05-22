@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useTranslations } from "next-intl"
 import { Plus, Folder, PanelLeftClose } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { getProjectHistory, type HistoryItem } from "@/services/projects"
+import { useProjectStore } from "@/store/use-project-store"
 
 interface SidebarProps {
   isOpen: boolean
@@ -13,25 +13,12 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const t = useTranslations("Sidebar")
-  const [projectHistory, setProjectHistory] = useState<HistoryItem[]>([])
+  const history = useProjectStore((state) => state.history)
+  const fetchHistory = useProjectStore((state) => state.fetchHistory)
 
   useEffect(() => {
-    let isMounted = true
-
-    async function loadProjectHistory() {
-      const history = await getProjectHistory()
-
-      if (isMounted) {
-        setProjectHistory(history)
-      }
-    }
-
-    loadProjectHistory()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
+    void fetchHistory().catch(() => {})
+  }, [fetchHistory])
 
   if (!isOpen) return null
 
@@ -63,13 +50,15 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <p className="px-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">
           {t("history")}
         </p>
-        {projectHistory.map((project) => (
+        {history.map((project) => (
           <button
             key={project.id}
             className="w-full flex items-center gap-2 px-3 py-2 text-sm font-normal text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors text-left truncate"
           >
             <Folder className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-            <span className="truncate">{t(`projects.${project.translationKey}`)}</span>
+            <span className="truncate">
+              {project.translationKey ? t(`projects.${project.translationKey}`) : project.title}
+            </span>
           </button>
         ))}
       </div>

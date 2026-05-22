@@ -8,7 +8,8 @@ export interface Project {
 
 export interface HistoryItem {
   id: string
-  translationKey: "ecoSync" | "greenLogistics" | "carbonTrack" | "agroEsg"
+  title: string
+  translationKey?: "ecoSync" | "greenLogistics" | "carbonTrack" | "agroEsg"
 }
 
 const NETWORK_DELAY_MS = 500
