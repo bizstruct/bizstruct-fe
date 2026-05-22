@@ -8,7 +8,7 @@ interface ProjectStoreState {
   history: HistoryItem[]
   isLoading: boolean
   fetchHistory: () => Promise<void>
-  addProjectFromIdea: (idea: string) => Promise<void>
+  addProjectFromIdea: (idea: string) => Promise<string>
 }
 
 function mergeHistory(existingHistory: HistoryItem[], fetchedHistory: HistoryItem[]): HistoryItem[] {
@@ -47,6 +47,8 @@ export const useProjectStore = create<ProjectStoreState>((set) => ({
       set((state) => ({
         history: [result.data, ...state.history],
       }))
+
+      return result.data.id
     } catch (error) {
       if (error instanceof Error) {
         throw error

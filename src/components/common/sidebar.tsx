@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useTranslations } from "next-intl"
 import { Plus, Folder, PanelLeftClose } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Link, usePathname } from "@/i18n/routing"
 import { useProjectStore } from "@/store/use-project-store"
 
 interface SidebarProps {
@@ -13,6 +14,7 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const t = useTranslations("Sidebar")
+  const pathname = usePathname()
   const history = useProjectStore((state) => state.history)
   const fetchHistory = useProjectStore((state) => state.fetchHistory)
 
@@ -51,15 +53,20 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           {t("history")}
         </p>
         {history.map((project) => (
-          <button
+          <Link
             key={project.id}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm font-normal text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors text-left truncate"
+            href={`/project/${project.id}`}
+            className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-normal rounded-lg transition-colors text-left truncate ${
+              pathname?.endsWith(`/project/${project.id}`)
+                ? "bg-slate-50 text-slate-900"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            }`}
           >
             <Folder className="h-3.5 w-3.5 text-slate-400 shrink-0" />
             <span className="truncate">
               {project.translationKey ? t(`projects.${project.translationKey}`) : project.title}
             </span>
-          </button>
+          </Link>
         ))}
       </div>
     </aside>

@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react"
 import { ArrowUp, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { useRouter } from "@/i18n/routing"
 import { activeProjects } from "@/data/active-projects"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -11,6 +12,7 @@ import { useProjectStore } from "@/store/use-project-store"
 
 export default function HomePage() {
   const t = useTranslations("HomePage")
+  const router = useRouter()
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
   const addProjectFromIdea = useProjectStore((state) => state.addProjectFromIdea)
@@ -21,8 +23,9 @@ export default function HomePage() {
     setError(null)
 
     try {
-      await addProjectFromIdea(text)
+      const newProjectId = await addProjectFromIdea(text)
       setText("")
+      router.push(`/project/${newProjectId}`)
     } catch (err) {
       const message = err instanceof Error ? err.message : "Сталася непередбачувана помилка"
       setError(message)
