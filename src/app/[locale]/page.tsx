@@ -1,15 +1,20 @@
-"use client"
-
 import { ArrowUp } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
+import { submitProjectIdea } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { getActiveProjects } from "@/services/projects"
 
-const activeProjectKeys = ["ecoSync", "smartGrid", "carbonTrack", "bioWaste"] as const
+export default async function HomePage() {
+  const t = await getTranslations("HomePage")
+  const projects = await getActiveProjects()
 
-export default function HomePage() {
-  const t = useTranslations("HomePage")
+  async function handleProjectIdeaSubmit(formData: FormData) {
+    "use server"
+
+    await submitProjectIdea(formData)
+  }
 
   return (
     <div className="flex flex-col justify-between h-full max-w-4xl mx-auto px-6 py-10">
@@ -22,15 +27,17 @@ export default function HomePage() {
         </p>
       </div>
 
-      <div className="w-full max-w-2xl mx-auto mb-auto flex flex-col justify-center h-full">
+      <form action={handleProjectIdeaSubmit} className="w-full max-w-2xl mx-auto mb-auto flex flex-col justify-center h-full">
         <div className="relative border border-slate-200 rounded-2xl bg-white p-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
           <textarea
+            name="idea"
             rows={3}
             placeholder={t("input.placeholder")}
             className="w-full resize-none border-0 bg-transparent p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none min-h-[70px]"
           />
           <div className="flex justify-end pt-2">
             <Button
+              type="submit"
               size="icon"
               aria-label={t("input.submit")}
               className="h-8 w-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
@@ -39,7 +46,7 @@ export default function HomePage() {
             </Button>
           </div>
         </div>
-      </div>
+      </form>
 
       <div className="w-full mt-12 border-t border-slate-100 pt-8">
         <div className="flex items-center justify-between mb-4 px-2">
@@ -49,19 +56,19 @@ export default function HomePage() {
         <div className="px-10 relative">
           <Carousel opts={{ align: "start" }} className="w-full">
             <CarouselContent>
-              {activeProjectKeys.map((projectKey) => (
-                <CarouselItem key={projectKey} className="md:col-span-1 md:basis-1/2 lg:basis-1/3">
+              {projects.map((project) => (
+                <CarouselItem key={project.id} className="md:col-span-1 md:basis-1/2 lg:basis-1/3">
                   <Card className="rounded-xl border-slate-200 bg-white shadow-none hover:border-slate-300 transition-colors cursor-pointer h-32 flex flex-col justify-between p-4">
                     <div>
                       <h3 className="text-sm font-medium text-slate-900 truncate">
-                        {t(`projects.items.${projectKey}.title`)}
+                        {t(`projects.items.${project.translationKey}.title`)}
                       </h3>
                       <p className="text-xs text-slate-400 line-clamp-2 mt-1">
-                        {t(`projects.items.${projectKey}.description`)}
+                        {t(`projects.items.${project.translationKey}.description`)}
                       </p>
                     </div>
                     <span className="text-[10px] font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded self-start">
-                      {t(`projects.items.${projectKey}.status`)}
+                      {t(`projects.items.${project.translationKey}.status`)}
                     </span>
                   </Card>
                 </CarouselItem>

@@ -1,23 +1,37 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import { Plus, Folder, PanelLeftClose } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getProjectHistory, type HistoryItem } from "@/services/projects"
 
 interface SidebarProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
 }
 
-const projectHistory = [
-  { id: 1, key: "ecoSync" },
-  { id: 2, key: "greenLogistics" },
-  { id: 3, key: "carbonTrack" },
-  { id: 4, key: "agroEsg" },
-] as const
-
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const t = useTranslations("Sidebar")
+  const [projectHistory, setProjectHistory] = useState<HistoryItem[]>([])
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadProjectHistory() {
+      const history = await getProjectHistory()
+
+      if (isMounted) {
+        setProjectHistory(history)
+      }
+    }
+
+    loadProjectHistory()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   if (!isOpen) return null
 
@@ -55,7 +69,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
             className="w-full flex items-center gap-2 px-3 py-2 text-sm font-normal text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors text-left truncate"
           >
             <Folder className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-            <span className="truncate">{t(`projects.${project.key}`)}</span>
+            <span className="truncate">{t(`projects.${project.translationKey}`)}</span>
           </button>
         ))}
       </div>
