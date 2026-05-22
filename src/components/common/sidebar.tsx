@@ -22,10 +22,14 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     void fetchHistory().catch(() => {})
   }, [fetchHistory])
 
-  if (!isOpen) return null
-
   return (
-    <aside className="w-64 border-r border-slate-100 bg-white flex flex-col h-screen shrink-0 transition-all">
+    <aside
+      className={`bg-white flex flex-col h-screen shrink-0 transition-all duration-300 ease-in-out ${
+        isOpen
+          ? "w-64 opacity-100 visible border-r border-slate-100"
+          : "w-0 opacity-0 invisible overflow-hidden border-none"
+      }`}
+    >
       <div className="h-14 flex items-center justify-between px-4 border-b border-slate-100">
         <span className="font-semibold text-slate-900 tracking-tight text-sm">{t("brand")}</span>
         <Button
@@ -40,10 +44,13 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       </div>
 
       <div className="p-3.5">
-        <Button className="w-full justify-start gap-2 bg-indigo-600 hover:bg-indigo-700 text-white shadow-none text-sm font-medium h-9 rounded-lg">
+        <Link
+          href="/"
+          className="w-full inline-flex items-center justify-start gap-2 bg-indigo-600 hover:bg-indigo-700 text-white shadow-none text-sm font-medium h-9 rounded-lg px-4 transition-colors"
+        >
           <Plus className="h-4 w-4" />
           {t("newProject")}
-        </Button>
+        </Link>
       </div>
 
       <div className="border-t border-slate-100 mx-3" />
