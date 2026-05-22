@@ -1,0 +1,56 @@
+{
+  "Metadata": {
+    "title": "BizStruct AI",
+    "description": "Створюйте структуру бізнес-проєктів за допомогою ШІ."
+  },
+  "AppShell": {
+    "openSidebar": "Відкрити бічну панель"
+  },
+  "Sidebar": {
+    "brand": "BizStruct AI",
+    "close": "Закрити бічну панель",
+    "newProject": "Новий проєкт",
+    "history": "Історія проєктів",
+    "projects": {
+      "ecoSync": "EcoSync Manufacturing",
+      "greenLogistics": "GreenLogistics UA",
+      "carbonTrack": "CarbonTrack IoT",
+      "agroEsg": "AgroESG Platform"
+    }
+  },
+  "HomePage": {
+    "hero": {
+      "title": "Створіть структуру вашого наступного проєкту",
+      "subtitle": "Опишіть ідею, а штучний інтелект сформує бізнес-модель, архітектуру та PRD."
+    },
+    "input": {
+      "placeholder": "Введіть вашу бізнес-ідею тут (наприклад: сервіс для автоматичного трекінгу CO2 для заводів...)",
+      "submit": "Надіслати ідею"
+    },
+    "projects": {
+      "title": "Ваші активні проєкти",
+      "items": {
+        "ecoSync": {
+          "title": "EcoSync platform",
+          "description": "AI-native ESG автоматизація для виробництва",
+          "status": "Q3 MVP"
+        },
+        "smartGrid": {
+          "title": "SmartGrid Automation",
+          "description": "Оптимізація енергомереж через ШІ",
+          "status": "Бетта"
+        },
+        "carbonTrack": {
+          "title": "CarbonTrack IoT",
+          "description": "Пряма інтеграція з датчиками викидів",
+          "status": "Планування"
+        },
+        "bioWaste": {
+          "title": "BioWaste Circular",
+          "description": "Управління відходами агрокомплексів",
+          "status": "Дослідження"
+        }
+      }
+    }
+  }
+}
