@@ -10,9 +10,10 @@ import { useProjectStore } from "@/store/use-project-store"
 type Quote = { id: number; text: string }
 
 export default function EmpathyMapPage(): JSX.Element {
-  const params = useParams() as { id?: string }
+  const params = useParams() as { id?: string; locale?: string }
   const router = useRouter()
   const projectId = params?.id ?? "[id]"
+  const locale = params?.locale ?? "en"
   const initialSays: Quote[] = [
     { id: 1, text: "Нам потрібно автоматизувати ESG-звітність, щоб відповідати вимогам стейкхолдерів." },
     { id: 2, text: "Поточні процеси збору даних занадто повільні." },
@@ -266,7 +267,7 @@ export default function EmpathyMapPage(): JSX.Element {
                 const ok = confirm("Є незбережені зміни. Вийти без збереження?")
                 if (!ok) return
               }
-              router.push(`/project/${projectId}/value-prop`)
+              router.push(`/project/${projectId}/scenario`)
             }}
             className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm"
           >

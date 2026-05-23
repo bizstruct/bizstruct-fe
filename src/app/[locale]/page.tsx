@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "@/i18n/routing"
+import { useParams } from "next/navigation"
 import { activeProjects } from "@/data/active-projects"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -51,6 +52,8 @@ const generationStages = [
 export default function HomePage() {
   const t = useTranslations("HomePage")
   const router = useRouter()
+  const params = useParams() as { locale?: string }
+  const locale = params?.locale ?? "en"
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
