@@ -24,10 +24,10 @@ export default function ScenarioPage(): JSX.Element {
         <div className="flex items-center gap-3">
           <Button variant="outline" className="text-sm">Перегенерувати</Button>
           <Button
-            onClick={() => router.push(`/project/${projectId}/canvas`)}
+            onClick={() => router.push(`/${locale}/project/${projectId}/what-if`)}
             className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm"
           >
-            Продовжити до Business Model Canvas
+            Продовжити до Креативного штормінгу
           </Button>
         </div>
       </div>
