@@ -92,7 +92,7 @@ export default function WhatIfPage(): JSX.Element {
   function applyVector(vectorId: VectorId) {
     setSelectedVector(vectorId)
     console.log("what-if vector selected", { projectId, vectorId })
-    router.push(`/${locale}/project/${projectId}/canvas`)
+    router.push(`/project/${projectId}/architecture`)
   }
 
   return (
