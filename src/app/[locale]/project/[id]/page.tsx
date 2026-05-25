@@ -1,77 +1,141 @@
-import { getTranslations } from "next-intl/server"
-import { notFound } from "next/navigation"
+"use client"
 
-type ProjectPageProps = {
-  params: Promise<{ id: string; locale: string }>
+import React, { useState, useEffect } from "react"
+import { useParams } from "next/navigation"
+import { useTranslations } from "next-intl"
+import {
+  LayoutGrid, FlaskConical, Mic2, Route, Heart,
+  GitBranch, Cpu,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useProjectStore } from "@/store/use-project-store"
+import { getEmpathyMap } from "@/services/empathy-map"
+import { getHypotheses } from "@/services/hypotheses"
+import { getPitch } from "@/services/pitch"
+import { getScenario } from "@/services/scenario"
+import { getWhatIfVectors } from "@/services/what-if"
+import { getArchitecture } from "@/services/architecture"
+import { EmpathyView } from "@/components/empathy-map/EmpathyView"
+import { CanvasView } from "@/components/canvas/CanvasView"
+import { HypothesesView } from "@/components/hypotheses/HypothesesView"
+import { PitchView } from "@/components/pitch/PitchView"
+import { ScenarioView } from "@/components/scenario/ScenarioView"
+import { WhatIfView } from "@/components/what-if/WhatIfView"
+import { ArchitectureView } from "@/components/architecture/ArchitectureView"
+import type { EmpathyData } from "@/schemas/empathy-map.schema"
+import type { Hypothesis } from "@/schemas/hypotheses.schema"
+import type { PitchData } from "@/schemas/pitch.schema"
+import type { ScenarioData } from "@/schemas/scenario.schema"
+import type { WhatIfVector } from "@/schemas/what-if.schema"
+import type { ArchitectureData } from "@/schemas/architecture.schema"
+
+type ActiveView = "empathy" | "canvas" | "hypotheses" | "pitch" | "what-if" | "architecture" | "scenario"
+
+const VIEW_ICONS: Record<ActiveView, React.ElementType> = {
+  empathy:      Heart,
+  scenario:     Route,
+  "what-if":    GitBranch,
+  canvas:       LayoutGrid,
+  architecture: Cpu,
+  hypotheses:   FlaskConical,
+  pitch:        Mic2,
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { id, locale } = await params
+export default function ProjectWorkspacePage() {
+  const t       = useTranslations("WorkspacePage")
+  const params  = useParams()
+  const projectId = (params?.id as string) ?? ""
+  const locale    = (params?.locale as string) ?? "en"
+  const history   = useProjectStore((s) => s.history)
+  const project   = history.find((h) => h.id === projectId)
 
-  if (!id || !locale) {
-    notFound()
-  }
+  const [activeView, setActiveView] = useState<ActiveView>("empathy")
 
-  const t = await getTranslations({ locale, namespace: "HomePage" })
+  const [empathyData,      setEmpathyData]      = useState<EmpathyData | null>(null)
+  const [hypotheses,       setHypotheses]        = useState<Hypothesis[] | null>(null)
+  const [pitchData,        setPitchData]         = useState<PitchData | null>(null)
+  const [scenarioData,     setScenarioData]      = useState<ScenarioData | null>(null)
+  const [whatIfVectors,    setWhatIfVectors]     = useState<WhatIfVector[] | null>(null)
+  const [architectureData, setArchitectureData]  = useState<ArchitectureData | null>(null)
+
+  useEffect(() => {
+    if (!projectId) return
+    getEmpathyMap(projectId, locale).then(setEmpathyData).catch(() => {})
+    getHypotheses(projectId).then(setHypotheses).catch(() => {})
+    getPitch(projectId, locale).then(setPitchData).catch(() => {})
+    getScenario(projectId, locale).then(setScenarioData).catch(() => {})
+    getWhatIfVectors(projectId).then(setWhatIfVectors).catch(() => {})
+    getArchitecture(projectId, locale).then(setArchitectureData).catch(() => {})
+  }, [projectId, locale])
+
+  const views: { key: ActiveView; label: string }[] = [
+    { key: "empathy",      label: t("views.empathy") },
+    { key: "scenario",     label: t("views.scenario") },
+    { key: "what-if",      label: t("views.whatIf") },
+    { key: "canvas",       label: t("views.canvas") },
+    { key: "architecture", label: t("views.architecture") },
+    { key: "hypotheses",   label: t("views.hypotheses") },
+    { key: "pitch",        label: t("views.pitch") },
+  ]
 
   return (
-    <div className="min-h-full flex flex-col bg-slate-50">
-      <header className="h-14 shrink-0 border-b border-slate-200 bg-white/80 backdrop-blur-sm px-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-sm font-semibold tracking-tight text-slate-900">Project Workspace</h1>
-          <p className="text-[11px] text-slate-500">Project ID: {id}</p>
+    <div className="flex flex-col h-full bg-white">
+      <header className="shrink-0 border-b border-slate-200 bg-white">
+        <div className="px-5 pt-3 pb-2 flex items-center gap-2">
+          <h1 className="text-sm font-semibold text-slate-900 truncate">
+            {project?.title ?? `Project ${projectId.slice(-8)}`}
+          </h1>
+          <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+            {t("status.draft")}
+          </span>
+          <span className="shrink-0 text-[10px] text-slate-400 ml-1">· {t("projectWorkspace")}</span>
         </div>
-        <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-medium text-slate-500">
-          Linear-style workspace
-        </div>
+
+        <nav className="overflow-x-auto px-5 pb-2" style={{ scrollbarWidth: "none" }}>
+          <div className="inline-flex items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-50 p-0.5 w-max">
+            {views.map(({ key, label }) => {
+              const Icon = VIEW_ICONS[key]
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveView(key)}
+                  className={cn(
+                    "shrink-0 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium whitespace-nowrap transition-all",
+                    activeView === key
+                      ? "bg-white shadow-sm text-slate-900 border border-slate-200"
+                      : "text-slate-500 hover:text-slate-700 hover:bg-white/60",
+                  )}
+                >
+                  <Icon className="h-3 w-3" />
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </nav>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-10">
-        <div className="w-full max-w-4xl">
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-400">Current Project</p>
-              <h2 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
-                Project {id.slice(-6)}
-              </h2>
-            </div>
-            <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-medium text-white">
-              ID {id}
-            </span>
-          </div>
-
-          <section className="rounded-3xl border border-slate-200 bg-white shadow-sm min-h-[360px] flex items-center justify-center px-8 py-10">
-            <div className="max-w-xl text-center">
-              <div className="mx-auto mb-4 h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-sm font-semibold">
-                AI
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900">Тут буде ваш Business Model Canvas або згенерований ШІ контент</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Поки що це робоча зона для цього проєкту. Далі тут з&apos;являться відповіді моделі, артефакти та наступні кроки.
-              </p>
-            </div>
-          </section>
-        </div>
-      </main>
-
-      <footer className="shrink-0 border-t border-slate-200 bg-white px-6 py-4">
-        <div className="mx-auto max-w-4xl">
-          <form className="flex items-end gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
-            <textarea
-              rows={2}
-              placeholder={t("input.placeholder")}
-              className="min-h-[56px] flex-1 resize-none border-0 bg-transparent px-2 py-1 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0"
-            />
-            <button
-              type="submit"
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white transition-colors hover:bg-slate-800"
-              aria-label="Send message"
-            >
-              <span className="text-sm">↵</span>
-            </button>
-          </form>
-        </div>
-      </footer>
+      <div className="flex-1 min-h-0">
+        {activeView === "empathy" && empathyData && (
+          <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} />
+        )}
+        {activeView === "scenario" && scenarioData && (
+          <ScenarioView scenarioData={scenarioData} />
+        )}
+        {activeView === "what-if" && whatIfVectors && (
+          <WhatIfView vectors={whatIfVectors} onApply={() => setActiveView("architecture")} />
+        )}
+        {activeView === "canvas" && <CanvasView />}
+        {activeView === "architecture" && architectureData && (
+          <ArchitectureView architectureData={architectureData} onGoToCanvas={() => setActiveView("canvas")} />
+        )}
+        {activeView === "hypotheses" && hypotheses && (
+          <HypothesesView initialHypotheses={hypotheses} />
+        )}
+        {activeView === "pitch" && pitchData && (
+          <PitchView pitchData={pitchData} />
+        )}
+      </div>
     </div>
   )
 }

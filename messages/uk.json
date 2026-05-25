@@ -38,7 +38,7 @@
         "smartGrid": {
           "title": "SmartGrid Automation",
           "description": "Оптимізація енергомереж через ШІ",
-          "status": "Бетта"
+          "status": "Бета"
         },
         "carbonTrack": {
           "title": "CarbonTrack IoT",
@@ -51,6 +51,236 @@
           "status": "Дослідження"
         }
       }
+    },
+    "errors": {
+      "unexpected": "Сталася непередбачувана помилка"
     }
+  },
+  "Generation": {
+    "title": "Генерація бізнес-моделей",
+    "subtitle": "Штучний інтелект послідовно аналізує ідею та формує декілька стратегічних варіантів.",
+    "stages": {
+      "analyzing": {
+        "title": "Аналіз вхідної ідеї...",
+        "description": "Оцінюємо контекст, сигнали ринку та потенційні ризики."
+      },
+      "structuring": {
+        "title": "Аналіз ринку та конкурентів...",
+        "description": "Структуруємо логіку бізнесу, аудиторію та канали монетизації."
+      },
+      "generatingModels": {
+        "title": "Генерація архітектури бізнес-моделей...",
+        "description": "Формуємо декілька варіантів із різними сильними сторонами."
+      }
+    }
+  },
+  "ModelSelection": {
+    "label": "Варіанти бізнес-моделей",
+    "title": "Оберіть найбільш сильну концепцію",
+    "fields": {
+      "targetAudience": "Цільова аудиторія",
+      "valueProposition": "Ціннісна пропозиція",
+      "description": "Опис"
+    },
+    "selectModel": "Вибрати цю модель",
+    "prevAriaLabel": "Вліво",
+    "nextAriaLabel": "Вправо",
+    "goToModelAriaLabel": "Перейти до моделі {n}"
+  },
+  "WorkspacePage": {
+    "status": {
+      "draft": "Чорновик"
+    },
+    "projectWorkspace": "Простір проєкту",
+    "views": {
+      "empathy": "Карта емпатії",
+      "scenario": "Сценарій користувача",
+      "whatIf": "What-If",
+      "canvas": "Canvas",
+      "architecture": "Архітектура",
+      "hypotheses": "Карта гіпотез",
+      "pitch": "Піч"
+    }
+  },
+  "EmpathyView": {
+    "title": "Карта емпатії",
+    "subtitle": "Цільова аудиторія: Корпоративний екоменеджер",
+    "regenerate": "Перегенерувати",
+    "save": "Зберегти",
+    "saved": "Збережено!",
+    "empty": "Порожньо — натисни + щоб додати",
+    "newItem": "Новий пункт",
+    "categories": {
+      "says": "Що говорить (Says)",
+      "thinks": "Що думає (Thinks)",
+      "does": "Що робить (Does)",
+      "feels": "Що відчуває (Feels)",
+      "pains": "Болі",
+      "gains": "Вигоди"
+    }
+  },
+  "CanvasView": {
+    "title": "Business Model Canvas",
+    "exportPdf": "Експорт PDF",
+    "generatePitch": "Згенерувати Піч",
+    "empty": "Порожньо",
+    "addNote": "Додати нотатку…",
+    "aiLabel": "AI",
+    "sections": {
+      "keyPartners": "Ключові партнери",
+      "keyActivities": "Ключові активності",
+      "keyResources": "Ключові ресурси",
+      "valuePropositions": "Ціннісні пропозиції",
+      "customerRelationships": "Відносини з клієнтами",
+      "channels": "Канали",
+      "customerSegments": "Сегменти клієнтів",
+      "costStructure": "Структура витрат",
+      "revenueStreams": "Потоки доходів"
+    }
+  },
+  "HypothesesView": {
+    "title": "Карта гіпотез · Важливість vs Докази",
+    "add": "Додати",
+    "syncCanvas": "Синхронізувати Canvas",
+    "dragToReclassify": "Перетягни для перекласифікації",
+    "dropHere": "Кинь сюди",
+    "axis": {
+      "importance": "ВАЖЛИВІСТЬ",
+      "evidence": "ДОКАЗИ",
+      "high": "ВИСОКА",
+      "low": "НИЗЬКА"
+    },
+    "quadrants": {
+      "q1": "ВАЖЛИВЕ\n& НЕВІДОМЕ",
+      "q2": "ВАЖЛИВЕ\n& ВІДОМЕ",
+      "q3": "НЕВАЖЛИВЕ\n& НЕВІДОМЕ",
+      "q4": "НЕВАЖЛИВЕ\n& ВІДОМЕ"
+    },
+    "categories": {
+      "Desirability": "Бажаність",
+      "Viability": "Життєздатність",
+      "Feasibility": "Здійсненність"
+    }
+  },
+  "PitchView": {
+    "title": "Генератор Піча",
+    "regenerate": "Перегенерувати",
+    "previous": "← Назад",
+    "next": "Далі →",
+    "mapHypotheses": "Карта гіпотез",
+    "storyTypes": {
+      "investor": "Для інвестора",
+      "customer": "Для клієнта"
+    },
+    "investor": {
+      "hook": "Гачок",
+      "problem": "Проблема",
+      "solution": "Рішення",
+      "traction": "Тракція",
+      "ask": "Запит"
+    },
+    "customer": {
+      "opening": "Вступ",
+      "empathy": "Емпатія",
+      "transformation": "Трансформація",
+      "socialProof": "Соціальний доказ",
+      "invitation": "Запрошення"
+    }
+  },
+  "ScenarioView": {
+    "resultTitle": "Результат впровадження",
+    "persona": {
+      "roleLabel": "Роль",
+      "painPointLabel": "Больова точка"
+    },
+    "timeline": {
+      "context": "Контекст",
+      "goal": "Ціль",
+      "action": "Дія в продукті"
+    },
+    "metrics": {
+      "before": "Ручний збір даних з Excel",
+      "after": "Готовий звіт з AI-аналітикою"
+    }
+  },
+  "WhatIfView": {
+    "creativeBrainstorming": "Креативний штормінг",
+    "title": "Провокації «What-If»",
+    "subtitle": "ШІ проаналізував емпатію персони та сценарій. Обери вектор інновацій, щоб зламати шаблони ринку.",
+    "applyVector": "Застосувати цей вектор",
+    "standardPath": "Ні, йдемо стандартним шляхом B2B SaaS →",
+    "blockLabels": {
+      "value": "Value",
+      "revenue": "Revenue",
+      "cost": "Cost",
+      "relationships": "Relationships"
+    },
+    "vectors": {
+      "financial": {
+        "badge": "💰 Фінансова інновація",
+        "title": "А що, як зробити сервіс повністю безкоштовним, а заробляти лише на результаті клієнта?",
+        "prompt": "Фокус на бар'єрі входу, швидкому масштабуванні та моделі оплати за успіх.",
+        "blocks": {
+          "value": "Нульовий фінансовий поріг входу, миттєва довіра та ширший ринок для залучення нових команд.",
+          "revenue": "Монетизація через success fee, частку від заощаджень або преміальні аналітичні пакети."
+        }
+      },
+      "technical": {
+        "badge": "⚙️ Технологічний прорив",
+        "title": "А що, як повністю відмовитися від веб-інтерфейсу (No-UI) і працювати тільки через AI-асистента?",
+        "prompt": "Фокус на автоматизації, голосових сценаріях і прихованій складності замість класичного UI.",
+        "blocks": {
+          "value": "Менше тертя для користувача, швидші дії та відчуття, що продукт працює автономно.",
+          "cost": "Скорочення витрат на фронтенд-команди, але зростання вимог до AI-інфраструктури та інтеграцій."
+        }
+      },
+      "emotional": {
+        "badge": "🤝 Супер-сервіс для персони",
+        "title": "А що, як сфокусуватися на психологічному спокої персони, а не лише на функціональній ефективності?",
+        "prompt": "Фокус на знятті тривожності, чітких підказках і високому рівні сервісної підтримки.",
+        "blocks": {
+          "value": "Персона отримує відчуття контролю, ясність наступних кроків та впевненість у результаті.",
+          "relationships": "Продукт стає надійним партнером, а не просто інструментом, що зменшує опір змінам."
+        }
+      }
+    }
+  },
+  "ArchitectureView": {
+    "title": "Архітектурний профіль моделі",
+    "subtitle": "Архітектурний каркас, визначений AI на основі ваших ввідних даних. Слугуватиме фундаментом для генерації Business Model Canvas.",
+    "changeConceptBtn": "Змінити концепт",
+    "generating": "Генерація…",
+    "generateCanvas": "Згенерувати повну Business Model Canvas",
+    "epicenterLabel": "Епіцентр бізнес-моделі",
+    "patternLabel": "Шаблон бізнес-моделі",
+    "determined": "Визначено",
+    "systemSelection": "Системний підбір",
+    "epicenter": {
+      "original": {
+        "title": "Епіцентр: Фінанси (Finance-Driven)"
+      },
+      "regenerated": {
+        "title": "Епіцентр: Resource-Driven"
+      }
+    },
+    "pattern": {
+      "original": {
+        "title": "Шаблон: Freemium + Pay-per-use"
+      },
+      "regenerated": {
+        "title": "Шаблон: Subscription-First"
+      }
+    }
+  },
+  "Common": {
+    "actions": {
+      "add": "Додати",
+      "save": "Зберегти",
+      "cancel": "Скасувати",
+      "delete": "Видалити",
+      "edit": "Редагувати"
+    },
+    "loading": "Завантаження…",
+    "error": "Щось пішло не так"
   }
 }

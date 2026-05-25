@@ -1,35 +1,17 @@
-import { activeProjects } from "@/data/active-projects"
-import { projectHistory } from "@/data/project-history"
+import { API_ROUTES } from "@/constants/api"
+import { ProjectSchema, HistoryItemSchema } from "@/schemas/project.schema"
+import type { Project, HistoryItem } from "@/schemas/project.schema"
+import { z } from "zod"
+import { apiGet } from "./api-client"
 
-export interface Project {
-  id: string
-  translationKey: "ecoSync" | "smartGrid" | "carbonTrack" | "bioWaste"
-}
-
-export interface HistoryItem {
-  id: string
-  title: string
-  translationKey?: "ecoSync" | "greenLogistics" | "carbonTrack" | "agroEsg"
-  empathy?: {
-    pains: string[]
-    gains: string[]
-  }
-}
-
-const NETWORK_DELAY_MS = 500
-
-async function simulateNetworkDelay() {
-  await new Promise((resolve) => setTimeout(resolve, NETWORK_DELAY_MS))
-}
+export type { Project, HistoryItem }
 
 export async function getActiveProjects(): Promise<Project[]> {
-  await simulateNetworkDelay()
-
-  return [...activeProjects]
+  const data = await apiGet<unknown[]>(API_ROUTES.projects)
+  return z.array(ProjectSchema).parse(data)
 }
 
 export async function getProjectHistory(): Promise<HistoryItem[]> {
-  await simulateNetworkDelay()
-
-  return [...projectHistory]
+  const data = await apiGet<unknown[]>(API_ROUTES.projectsHistory)
+  return z.array(HistoryItemSchema).parse(data)
 }

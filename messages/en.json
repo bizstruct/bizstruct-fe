@@ -51,6 +51,236 @@
           "status": "Research"
         }
       }
+    },
+    "errors": {
+      "unexpected": "An unexpected error occurred"
     }
+  },
+  "Generation": {
+    "title": "Generating business models",
+    "subtitle": "AI is sequentially analyzing the idea and forming several strategic options.",
+    "stages": {
+      "analyzing": {
+        "title": "Analyzing the input idea...",
+        "description": "Evaluating context, market signals and potential risks."
+      },
+      "structuring": {
+        "title": "Market and competitor analysis...",
+        "description": "Structuring business logic, audience, and monetization channels."
+      },
+      "generatingModels": {
+        "title": "Generating business model architectures...",
+        "description": "Forming multiple variants with different strengths."
+      }
+    }
+  },
+  "ModelSelection": {
+    "label": "Business model options",
+    "title": "Choose the strongest concept",
+    "fields": {
+      "targetAudience": "Target audience",
+      "valueProposition": "Value proposition",
+      "description": "Description"
+    },
+    "selectModel": "Select this model",
+    "prevAriaLabel": "Previous",
+    "nextAriaLabel": "Next",
+    "goToModelAriaLabel": "Go to model {n}"
+  },
+  "WorkspacePage": {
+    "status": {
+      "draft": "Draft"
+    },
+    "projectWorkspace": "Project Workspace",
+    "views": {
+      "empathy": "Empathy Map",
+      "scenario": "User Scenario",
+      "whatIf": "What-If",
+      "canvas": "Canvas",
+      "architecture": "Architecture",
+      "hypotheses": "Hypothesis Map",
+      "pitch": "Pitch"
+    }
+  },
+  "EmpathyView": {
+    "title": "Empathy Map",
+    "subtitle": "Target audience: Corporate Env Manager",
+    "regenerate": "Regenerate",
+    "save": "Save",
+    "saved": "Saved!",
+    "empty": "Empty — click + to add",
+    "newItem": "New item",
+    "categories": {
+      "says": "What says (Says)",
+      "thinks": "What thinks (Thinks)",
+      "does": "What does (Does)",
+      "feels": "What feels (Feels)",
+      "pains": "Pains",
+      "gains": "Gains"
+    }
+  },
+  "CanvasView": {
+    "title": "Business Model Canvas",
+    "exportPdf": "Export PDF",
+    "generatePitch": "Generate Pitch",
+    "empty": "Empty",
+    "addNote": "Add note…",
+    "aiLabel": "AI",
+    "sections": {
+      "keyPartners": "Key Partners",
+      "keyActivities": "Key Activities",
+      "keyResources": "Key Resources",
+      "valuePropositions": "Value Propositions",
+      "customerRelationships": "Customer Relationships",
+      "channels": "Channels",
+      "customerSegments": "Customer Segments",
+      "costStructure": "Cost Structure",
+      "revenueStreams": "Revenue Streams"
+    }
+  },
+  "HypothesesView": {
+    "title": "Hypothesis Mapping · Importance vs Evidence",
+    "add": "Add",
+    "syncCanvas": "Sync Canvas",
+    "dragToReclassify": "Drag to reclassify",
+    "dropHere": "Drop here",
+    "axis": {
+      "importance": "IMPORTANCE",
+      "evidence": "EVIDENCE",
+      "high": "HIGH",
+      "low": "LOW"
+    },
+    "quadrants": {
+      "q1": "IMPORTANT\n& UNKNOWN",
+      "q2": "IMPORTANT\n& KNOWN",
+      "q3": "UNIMPORTANT\n& UNKNOWN",
+      "q4": "UNIMPORTANT\n& KNOWN"
+    },
+    "categories": {
+      "Desirability": "Desirability",
+      "Viability": "Viability",
+      "Feasibility": "Feasibility"
+    }
+  },
+  "PitchView": {
+    "title": "Pitch Generator",
+    "regenerate": "Regenerate",
+    "previous": "← Previous",
+    "next": "Next →",
+    "mapHypotheses": "Map Hypotheses",
+    "storyTypes": {
+      "investor": "Investor Story",
+      "customer": "Customer Story"
+    },
+    "investor": {
+      "hook": "The Hook",
+      "problem": "The Problem",
+      "solution": "The Solution",
+      "traction": "Traction",
+      "ask": "The Ask"
+    },
+    "customer": {
+      "opening": "Opening",
+      "empathy": "Empathy",
+      "transformation": "Transformation",
+      "socialProof": "Social Proof",
+      "invitation": "Invitation"
+    }
+  },
+  "ScenarioView": {
+    "resultTitle": "Implementation result",
+    "persona": {
+      "roleLabel": "Role",
+      "painPointLabel": "Pain point"
+    },
+    "timeline": {
+      "context": "Context",
+      "goal": "Goal",
+      "action": "Action in the product"
+    },
+    "metrics": {
+      "before": "Manual Excel data collection",
+      "after": "Ready report with AI analytics"
+    }
+  },
+  "WhatIfView": {
+    "creativeBrainstorming": "Creative brainstorming",
+    "title": "What-If Provocations",
+    "subtitle": "AI analyzed the persona's empathy and scenario. Choose an innovation vector to break market patterns.",
+    "applyVector": "Apply this vector",
+    "standardPath": "No, let's go with the standard B2B SaaS path →",
+    "blockLabels": {
+      "value": "Value",
+      "revenue": "Revenue",
+      "cost": "Cost",
+      "relationships": "Relationships"
+    },
+    "vectors": {
+      "financial": {
+        "badge": "💰 Financial Innovation",
+        "title": "What if we made the service completely free, earning only on the client's result?",
+        "prompt": "Focus on entry barrier, rapid scaling, and a success-based payment model.",
+        "blocks": {
+          "value": "Zero financial entry threshold, instant trust, and a wider market to attract new teams.",
+          "revenue": "Monetization via success fee, share of savings, or premium analytics packages."
+        }
+      },
+      "technical": {
+        "badge": "⚙️ Technology Breakthrough",
+        "title": "What if we completely abandoned the web interface (No-UI) and worked only through an AI assistant?",
+        "prompt": "Focus on automation, voice scenarios, and hidden complexity instead of classic UI.",
+        "blocks": {
+          "value": "Less friction for the user, faster actions and the feeling that the product works autonomously.",
+          "cost": "Reduced frontend team costs, but growing AI infrastructure and integration requirements."
+        }
+      },
+      "emotional": {
+        "badge": "🤝 Super-service for the Persona",
+        "title": "What if we focused on the persona's psychological peace, not just functional efficiency?",
+        "prompt": "Focus on reducing anxiety, clear prompts, and a high level of service support.",
+        "blocks": {
+          "value": "The persona gains a sense of control, clarity of next steps and confidence in the result.",
+          "relationships": "The product becomes a trusted partner rather than just a tool, reducing resistance to change."
+        }
+      }
+    }
+  },
+  "ArchitectureView": {
+    "title": "Architectural Model Profile",
+    "subtitle": "The architectural framework defined by AI based on your inputs. It will serve as the foundation for Business Model Canvas generation.",
+    "changeConceptBtn": "Change concept",
+    "generating": "Generating…",
+    "generateCanvas": "Generate full Business Model Canvas",
+    "epicenterLabel": "Business model epicenter",
+    "patternLabel": "Business model pattern",
+    "determined": "Determined",
+    "systemSelection": "System selection",
+    "epicenter": {
+      "original": {
+        "title": "Epicenter: Finance (Finance-Driven)"
+      },
+      "regenerated": {
+        "title": "Epicenter: Resource-Driven"
+      }
+    },
+    "pattern": {
+      "original": {
+        "title": "Pattern: Freemium + Pay-per-use"
+      },
+      "regenerated": {
+        "title": "Pattern: Subscription-First"
+      }
+    }
+  },
+  "Common": {
+    "actions": {
+      "add": "Add",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "loading": "Loading…",
+    "error": "Something went wrong"
   }
 }
