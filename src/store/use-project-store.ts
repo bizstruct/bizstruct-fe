@@ -31,6 +31,45 @@ interface ProjectStoreState {
   addProjectFromIdea: (idea: string) => Promise<void>
   finalizeGeneratedProject: (modelId: string) => Promise<string>
   resetGenerationFlow: () => void
+  // Canvas related state & actions
+  canvasSections: CanvasSections
+  addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => string
+  updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => void
+  deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => void
+  moveCanvasCard: (from: { section: CanvasSectionKey; cardId: string }, to: { section: CanvasSectionKey; index: number }) => void
+}
+
+export type CanvasCard = {
+  id: string
+  text: string
+  isAiGenerated: boolean
+  subtext?: string
+}
+
+export type CanvasSections = {
+  keyPartners: CanvasCard[]
+  keyActivities: CanvasCard[]
+  keyResources: CanvasCard[]
+  valuePropositions: CanvasCard[]
+  customerRelationships: CanvasCard[]
+  channels: CanvasCard[]
+  customerSegments: CanvasCard[]
+  costStructure: CanvasCard[]
+  revenueStreams: CanvasCard[]
+}
+
+export type CanvasSectionKey = keyof CanvasSections
+
+const defaultCanvas: CanvasSections = {
+  keyPartners: [{ id: "keyPartners-kp1", text: "Local data integrators and ERP vendors", isAiGenerated: true }],
+  keyActivities: [{ id: "keyActivities-ka1", text: "Automated data ingestion and normalization", isAiGenerated: true }],
+  keyResources: [{ id: "keyResources-kr1", text: "Sensor & IoT connectors", isAiGenerated: false }],
+  valuePropositions: [{ id: "valuePropositions-vp1", text: "Real-time carbon footprint monitoring for assets", isAiGenerated: true }],
+  customerRelationships: [{ id: "customerRelationships-cr1", text: "Dedicated onboarding and monthly check-ins", isAiGenerated: false }],
+  channels: [{ id: "channels-ch1", text: "API integrations and one-click export", isAiGenerated: true }],
+  customerSegments: [{ id: "customerSegments-cs1", text: "Mid-market corporate sustainability teams", isAiGenerated: true }],
+  costStructure: [{ id: "costStructure-cost1", text: "Cloud compute for model training and inference", isAiGenerated: true }],
+  revenueStreams: [{ id: "revenueStreams-rev1", text: "Subscription tiers (Core, Pro, Enterprise)", isAiGenerated: true }],
 }
 
 function mergeHistory(existingHistory: HistoryItem[], fetchedHistory: HistoryItem[]): HistoryItem[] {
@@ -85,6 +124,7 @@ function delay(ms: number): Promise<void> {
 export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   history: [],
   isLoading: false,
+  canvasSections: defaultCanvas,
   generationStep: "idle",
   generatedProject: null,
   currentTempHistoryId: null,
@@ -214,6 +254,99 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       generationStep: "idle",
       generatedProject: null,
       isLoading: false,
+    })
+  },
+  // Canvas actions
+  addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated = false) => {
+    // generate a collision-resistant id (regenerate if it already exists)
+    const idExists = (id: string) => {
+      const secs = get().canvasSections
+      return Object.values(secs).some((arr) => arr.some((c) => c.id === id))
+    }
+
+    let id: string
+    // prefer stable UUIDs when available
+    if (typeof globalThis !== 'undefined' && (globalThis as any).crypto && typeof (globalThis as any).crypto.randomUUID === 'function') {
+      id = `${section}-${(globalThis as any).crypto.randomUUID()}`
+      if (idExists(id)) {
+        // extremely unlikely, fallback to timestamp+random
+        id = `${section}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`
+      }
+    } else {
+      let attempts = 0
+      do {
+        id = `${section}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`
+        attempts += 1
+        if (attempts > 10) break
+      } while (idExists(id))
+    }
+
+    const card: CanvasCard = { id, text, isAiGenerated }
+    set((state) => ({
+      canvasSections: {
+        ...state.canvasSections,
+        [section]: [card, ...state.canvasSections[section]],
+      },
+    }))
+    return id
+  },
+  updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => {
+    set((state) => ({
+      canvasSections: {
+        ...state.canvasSections,
+        [section]: state.canvasSections[section].map((c) => (c.id === cardId ? { ...c, text } : c)),
+      },
+    }))
+  },
+  deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => {
+    set((state) => ({
+      canvasSections: {
+        ...state.canvasSections,
+        [section]: state.canvasSections[section].filter((c) => c.id !== cardId),
+      },
+    }))
+  },
+  moveCanvasCard: (from, to) => {
+    set((state) => {
+      // if moving within the same section, operate on a single array
+      if (from.section === to.section) {
+        const arr = [...state.canvasSections[from.section]]
+        const idx = arr.findIndex((c) => c.id === from.cardId)
+        if (idx === -1) return {}
+        const [moved] = arr.splice(idx, 1)
+        // adjust insertion index if out of bounds
+        let insertIndex = to.index
+        if (insertIndex < 0) insertIndex = 0
+        if (insertIndex > arr.length) insertIndex = arr.length
+        arr.splice(insertIndex, 0, moved)
+
+        return {
+          canvasSections: {
+            ...state.canvasSections,
+            [from.section]: arr,
+          },
+        }
+      }
+
+      // moving between different sections
+      const sourceArr = [...state.canvasSections[from.section]]
+      const idx = sourceArr.findIndex((c) => c.id === from.cardId)
+      if (idx === -1) return {}
+
+      const [moved] = sourceArr.splice(idx, 1)
+      const targetArr = [...state.canvasSections[to.section]]
+      let insertIndex = to.index
+      if (insertIndex < 0) insertIndex = 0
+      if (insertIndex > targetArr.length) insertIndex = targetArr.length
+      targetArr.splice(insertIndex, 0, moved)
+
+      return {
+        canvasSections: {
+          ...state.canvasSections,
+          [from.section]: sourceArr,
+          [to.section]: targetArr,
+        },
+      }
     })
   },
 }))
