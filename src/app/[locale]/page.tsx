@@ -25,7 +25,7 @@ export default function HomePage() {
 
   async function handleSelectModel(modelId: string) {
     const projectId = await finalizeGeneratedProject(modelId)
-    router.push(ROUTES.empathyMap(projectId))
+    router.push(ROUTES.project(projectId))
   }
 
   return (

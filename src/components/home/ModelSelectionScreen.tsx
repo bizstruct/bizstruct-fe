@@ -98,7 +98,7 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
                 type="button"
                 onClick={() => carouselApi?.scrollTo(index)}
                 className={s.dot(activeModelIndex === index)}
-                aria-label={tModel("goToModelAriaLabel").replace("{n}", String(index + 1))}
+                aria-label={tModel("goToModelAriaLabel", { n: index + 1 })}
               />
             ))}
           </div>
