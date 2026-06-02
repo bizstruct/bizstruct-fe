@@ -117,7 +117,7 @@ export default function ProjectWorkspacePage() {
 
       <div className="flex-1 min-h-0">
         {activeView === "empathy" && empathyData && (
-          <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} />
+          <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
         )}
         {activeView === "scenario" && scenarioData && (
           <ScenarioView scenarioData={scenarioData} />

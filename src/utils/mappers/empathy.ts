@@ -8,9 +8,9 @@ export function itemsToTexts(items: EmpathyItem[]): string[] {
   return items.map((item) => item.text)
 }
 
-export function addItem(items: EmpathyItem[], text: string): EmpathyItem[] {
-  const nextId = items.length ? Math.max(...items.map((q) => q.id)) + 1 : 1
-  return [...items, { id: nextId, text }]
+export function addItem(items: EmpathyItem[], text = ""): { items: EmpathyItem[]; newId: number } {
+  const newId = items.length ? Math.max(...items.map((q) => q.id)) + 1 : 1
+  return { items: [...items, { id: newId, text }], newId }
 }
 
 export function updateItem(items: EmpathyItem[], id: number, text: string): EmpathyItem[] {
