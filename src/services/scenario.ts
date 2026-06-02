@@ -3,8 +3,39 @@ import { ScenarioDataSchema } from "@/schemas/scenario.schema"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 import { apiGet } from "./api-client"
 
-export async function getScenario(projectId: string, locale: string): Promise<ScenarioData> {
+type RawMetricBlock = Record<string, string>
+type RawTimeline = { icon_key?: string; iconKey?: string; label_key?: string; labelKey?: string; text: string; highlight?: boolean }
+type RawPersona  = { name: string; initials: string; role: string; pain_point?: string; painPoint?: string }
+type RawScenario = { persona: RawPersona; timeline: RawTimeline[]; metrics: { before: RawMetricBlock; after: RawMetricBlock } }
+
+function pickMetricValue(block: RawMetricBlock): string {
+  return block.report_time ?? block.value ?? Object.values(block)[0] ?? ""
+}
+
+function normalize(raw: RawScenario): ScenarioData {
+  return {
+    persona: {
+      name:       raw.persona.name,
+      initials:   raw.persona.initials,
+      role:       raw.persona.role,
+      painPoint:  raw.persona.pain_point ?? raw.persona.painPoint ?? "",
+    },
+    timeline: raw.timeline.map((s) => ({
+      iconKey:   (s.icon_key ?? s.iconKey ?? "sparkles").toLowerCase(),
+      labelKey:  (s.label_key ?? s.labelKey ?? "").toLowerCase(),
+      text:      s.text,
+      highlight: s.highlight ?? false,
+    })),
+    metrics: {
+      before: { value: pickMetricValue(raw.metrics.before), descriptionKey: "ScenarioView.metrics.before" },
+      after:  { value: pickMetricValue(raw.metrics.after),  descriptionKey: "ScenarioView.metrics.after"  },
+    },
+  }
+}
+
+export async function getScenario(projectId: string, locale: string): Promise<ScenarioData | null> {
   const url = `${API_ROUTES.scenario(projectId)}?locale=${locale}`
-  const data = await apiGet<unknown>(url)
-  return ScenarioDataSchema.parse(data)
+  const raw = await apiGet<{ scenario: RawScenario | null }>(url)
+  if (raw.scenario == null) return null
+  return ScenarioDataSchema.parse(normalize(raw.scenario))
 }

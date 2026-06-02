@@ -126,6 +126,7 @@
     "empty": "Порожньо",
     "addNote": "Додати нотатку…",
     "aiLabel": "AI",
+    "common_add": "Додати",
     "sections": {
       "keyPartners": "Ключові партнери",
       "keyActivities": "Ключові активності",
@@ -196,7 +197,9 @@
     "timeline": {
       "context": "Контекст",
       "goal": "Ціль",
-      "action": "Дія в продукті"
+      "action": "Дія в продукті",
+      "result": "Результат",
+      "impact": "Вплив"
     },
     "metrics": {
       "before": "Ручний збір даних з Excel",

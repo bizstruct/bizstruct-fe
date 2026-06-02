@@ -2,7 +2,6 @@ const BASE = "/api"
 
 export const API_ROUTES = {
   projects: `${BASE}/projects`,
-  projectsHistory: `${BASE}/projects/history`,
   canvas: (projectId: string) => `${BASE}/canvas/${projectId}`,
   empathyMap: (projectId: string) => `${BASE}/empathy-map/${projectId}`,
   hypotheses: (projectId: string) => `${BASE}/hypotheses/${projectId}`,

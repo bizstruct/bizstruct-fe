@@ -126,6 +126,7 @@
     "empty": "Empty",
     "addNote": "Add note…",
     "aiLabel": "AI",
+    "common_add": "Add",
     "sections": {
       "keyPartners": "Key Partners",
       "keyActivities": "Key Activities",
@@ -196,7 +197,9 @@
     "timeline": {
       "context": "Context",
       "goal": "Goal",
-      "action": "Action in the product"
+      "action": "Action in the product",
+      "result": "Result",
+      "impact": "Impact"
     },
     "metrics": {
       "before": "Manual Excel data collection",

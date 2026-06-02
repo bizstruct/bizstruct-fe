@@ -17,7 +17,7 @@ export default function WhatIfPage() {
 
   useEffect(() => {
     if (!projectId) return
-    getWhatIfVectors(projectId).then(setVectors).catch(() => {})
+    getWhatIfVectors(projectId).then(setVectors).catch(console.error)
   }, [projectId])
 
   if (!vectors) return null

@@ -9,6 +9,16 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   return response.json() as Promise<T>
 }
 
+export function parseOrLog<T>(schema: { parse: (v: unknown) => T }, data: unknown, label: string): T {
+  try {
+    return schema.parse(data)
+  } catch (err) {
+    console.error(`[${label}] Zod parse failed. Raw data:`, JSON.stringify(data, null, 2))
+    console.error(`[${label}] Error:`, err)
+    throw err
+  }
+}
+
 export const apiGet  = <T>(url: string)                          => apiFetch<T>(url)
 export const apiPost = <T>(url: string, body: unknown)           => apiFetch<T>(url, { method: "POST",  body: JSON.stringify(body) })
 export const apiPut  = <T>(url: string, body: unknown)           => apiFetch<T>(url, { method: "PUT",   body: JSON.stringify(body) })

@@ -70,9 +70,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
             }`}
           >
             <Folder className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-            <span className="truncate">
-              {project.translationKey ? t(`projects.${project.translationKey}`) : project.title}
-            </span>
+            <span className="truncate">{project.title ?? project.id}</span>
           </Link>
         ))}
       </div>

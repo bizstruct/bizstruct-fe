@@ -1,15 +1,15 @@
 import type { Project, HistoryItem } from "@/schemas/project.schema"
 
 export const mockActiveProjects: Project[] = [
-  { id: "eco-sync-platform",    translationKey: "ecoSync" },
-  { id: "smart-grid-automation", translationKey: "smartGrid" },
-  { id: "carbon-track-iot",     translationKey: "carbonTrack" },
-  { id: "bio-waste-circular",   translationKey: "bioWaste" },
+  { id: "eco-sync-platform",     title: "EcoSync Platform" },
+  { id: "smart-grid-automation", title: "Smart Grid Automation" },
+  { id: "carbon-track-iot",      title: "CarbonTrack IoT" },
+  { id: "bio-waste-circular",    title: "BioWaste Circular" },
 ]
 
 export const mockProjectHistory: HistoryItem[] = [
-  { id: "eco-sync-manufacturing", title: "EcoSync Manufacturing",  translationKey: "ecoSync" },
-  { id: "green-logistics-ua",     title: "GreenLogistics UA",      translationKey: "greenLogistics" },
-  { id: "carbon-track-iot",       title: "CarbonTrack IoT",        translationKey: "carbonTrack" },
-  { id: "agro-esg-platform",      title: "AgroESG Platform",       translationKey: "agroEsg" },
+  { id: "eco-sync-manufacturing", title: "EcoSync Manufacturing" },
+  { id: "green-logistics-ua",     title: "GreenLogistics UA" },
+  { id: "carbon-track-iot",       title: "CarbonTrack IoT" },
+  { id: "agro-esg-platform",      title: "AgroESG Platform" },
 ]

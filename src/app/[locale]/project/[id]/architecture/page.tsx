@@ -17,7 +17,7 @@ export default function ArchitecturePage() {
 
   useEffect(() => {
     if (!projectId) return
-    getArchitecture(projectId, locale).then(setArchitectureData).catch(() => {})
+    getArchitecture(projectId, locale).then(setArchitectureData).catch(console.error)
   }, [projectId, locale])
 
   if (!architectureData) return null

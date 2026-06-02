@@ -2,13 +2,15 @@ import { z } from "zod"
 
 export const ProjectSchema = z.object({
   id: z.string(),
-  translationKey: z.enum(["ecoSync", "smartGrid", "carbonTrack", "bioWaste"]),
+  title: z.string().optional(),
+  idea: z.string().optional(),
+  status: z.string().optional(),
+  translationKey: z.string().nullish(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 })
 
-export const HistoryItemSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  translationKey: z.enum(["ecoSync", "greenLogistics", "carbonTrack", "agroEsg"]).optional(),
+export const HistoryItemSchema = ProjectSchema.extend({
   empathy: z
     .object({
       pains: z.array(z.string()),

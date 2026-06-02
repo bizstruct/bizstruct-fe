@@ -3,7 +3,7 @@ import { z } from "zod"
 export const ArchitectureVariantSchema = z.enum(["original", "regenerated"])
 
 export const ArchitectureCardSchema = z.object({
-  titleKey: z.string(),
+  title: z.string(),
   description: z.string(),
 })
 

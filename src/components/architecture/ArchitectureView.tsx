@@ -57,7 +57,7 @@ export function ArchitectureView({ architectureData, onGoToCanvas }: Props) {
               </div>
               <div>
                 <div className={architectureStyles.cardTypeLabel}>{t("epicenterLabel")}</div>
-                <h3 className={architectureStyles.cardTitle}>{t(epicenter.titleKey as Parameters<typeof t>[0])}</h3>
+                <h3 className={architectureStyles.cardTitle}>{epicenter.title}</h3>
               </div>
               <span className={cn(architectureStyles.cardBadge, architectureStyles.cardBadgeDetermined)}>
                 {t("determined")}
@@ -77,7 +77,7 @@ export function ArchitectureView({ architectureData, onGoToCanvas }: Props) {
               </div>
               <div>
                 <div className={architectureStyles.cardTypeLabel}>{t("patternLabel")}</div>
-                <h3 className={architectureStyles.cardTitle}>{t(pattern.titleKey as Parameters<typeof t>[0])}</h3>
+                <h3 className={architectureStyles.cardTitle}>{pattern.title}</h3>
               </div>
               <span className={cn(architectureStyles.cardBadge, architectureStyles.cardBadgeSystem)}>
                 {t("systemSelection")}

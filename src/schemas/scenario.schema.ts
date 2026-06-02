@@ -8,7 +8,7 @@ export const PersonaSchema = z.object({
 })
 
 export const TimelineStepSchema = z.object({
-  iconKey: z.enum(["clock", "target", "sparkles"]),
+  iconKey: z.string(),
   labelKey: z.string(),
   text: z.string(),
   highlight: z.boolean().optional(),

@@ -2,9 +2,8 @@
 
 import { create } from "zustand"
 import { createProjectFromIdea } from "@/app/actions"
-import { getProjectHistory } from "@/services/projects"
+import { getActiveProjects } from "@/services/projects"
 import { mockDefaultCanvas } from "@/mocks/data/canvas"
-import { buildMockModels } from "@/mocks/data/generation"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
 import type { HistoryItem } from "@/schemas/project.schema"
 import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/canvas.schema"
@@ -12,6 +11,8 @@ import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/can
 export type { CanvasSectionKey, CanvasCard, CanvasSections }
 
 export type GenerationStep = "idle" | "analyzing" | "structuring" | "generating_models" | "completed"
+
+export const GENERATING_STEPS: GenerationStep[] = ["analyzing", "structuring", "generating_models"]
 
 export interface GeneratedBusinessModel {
   id: string
@@ -63,8 +64,12 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   currentTempHistoryId: null,
 
   fetchHistory: async () => {
-    const fetched = await getProjectHistory()
-    set((state) => ({ history: mergeHistory(state.history, fetched) }))
+    try {
+      const fetched = await getActiveProjects()
+      set((state) => ({ history: mergeHistory(state.history, fetched) }))
+    } catch (err) {
+      console.error("[fetchHistory] failed:", err)
+    }
   },
 
   addProjectFromIdea: async (idea: string) => {
@@ -100,7 +105,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
           id: result.data.id,
           title: result.data.title,
           idea,
-          models: buildMockModels(result.data.title, idea),
+          models: result.data.models,
         },
         generationStep: "completed",
       })

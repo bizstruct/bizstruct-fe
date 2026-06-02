@@ -1,16 +1,20 @@
 "use client"
 
 import React from "react"
-import { Clock, Target, Sparkles, Zap } from "lucide-react"
+import { Clock, Target, Sparkles, Zap, Calendar, CheckCircle, TrendingUp } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 import { scenarioStyles } from "./styles"
 
 const TIMELINE_ICONS: Record<string, React.ElementType> = {
-  clock:    Clock,
-  target:   Target,
-  sparkles: Sparkles,
+  clock:          Clock,
+  calendar:       Calendar,
+  target:         Target,
+  sparkles:       Sparkles,
+  zap:            Zap,
+  "check-circle": CheckCircle,
+  "trending-up":  TrendingUp,
 }
 
 interface Props {
