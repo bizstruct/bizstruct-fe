@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 import { createProjectFromIdea, fetchProjectById } from "@/app/actions"
-import { getActiveProjects } from "@/services/projects"
+import { getActiveProjects, deleteProjectById } from "@/services/projects"
 import { mockDefaultCanvas } from "@/mocks/data/canvas"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
 import type { HistoryItem } from "@/schemas/project.schema"
@@ -40,6 +40,8 @@ interface ProjectStoreState {
   addProjectFromIdea: (idea: string) => Promise<void>
   finalizeGeneratedProject: (modelId: string) => Promise<string>
   resetGenerationFlow: () => void
+  deleteProject: (id: string) => Promise<void>
+  renameProject: (id: string, title: string) => void
   canvasSections: CanvasSections
   addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => string
   updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => void
@@ -175,6 +177,15 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   },
 
   resetGenerationFlow: () => set({ generationStep: "idle", generatedProject: null, isLoading: false }),
+
+  deleteProject: async (id) => {
+    await deleteProjectById(id)
+    set((state) => ({ history: state.history.filter((h) => h.id !== id) }))
+  },
+
+  renameProject: (id, title) => set((state) => ({
+    history: state.history.map((h) => h.id === id ? { ...h, title } : h),
+  })),
 
   addCanvasCard: (section, text, isAiGenerated = false) => {
     const sections = get().canvasSections
