@@ -220,6 +220,12 @@
     "title": "What-If Provocations",
     "subtitle": "AI analyzed the persona's empathy and scenario. Choose an innovation vector to break market patterns.",
     "applyVector": "Apply this vector",
+    "applying": "Applying…",
+    "applied": "Applied",
+    "validate": "Validate",
+    "validating": "Validating…",
+    "regenerate": "Regenerate vectors",
+    "regenerating": "Regenerating…",
     "standardPath": "No, let's go with the standard B2B SaaS path →",
     "blockLabels": {
       "value": "Value",

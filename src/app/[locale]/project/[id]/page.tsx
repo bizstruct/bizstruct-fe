@@ -72,8 +72,8 @@ export default function ProjectWorkspacePage() {
     { key: "empathy",      label: t("views.empathy") },
     { key: "scenario",     label: t("views.scenario") },
     { key: "what-if",      label: t("views.whatIf") },
-    { key: "canvas",       label: t("views.canvas") },
     { key: "architecture", label: t("views.architecture") },
+    { key: "canvas",       label: t("views.canvas") },
     { key: "hypotheses",   label: t("views.hypotheses") },
     { key: "pitch",        label: t("views.pitch") },
   ]
@@ -123,7 +123,20 @@ export default function ProjectWorkspacePage() {
           <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
         )}
         {activeView === "what-if" && whatIfVectors && (
-          <WhatIfView vectors={whatIfVectors} onApply={() => setActiveView("architecture")} />
+          <WhatIfView
+  projectId={projectId}
+  vectors={whatIfVectors}
+  hasSubsequentData={architectureData !== null}
+  onApplied={(scenarioId) => {
+    setWhatIfVectors(prev =>
+      prev?.map(v => ({
+        ...v,
+        status: v.scenarioId === scenarioId ? "applied" as const : v.status === "applied" ? null : v.status,
+      })) ?? null
+    )
+    setActiveView("architecture")
+  }}
+/>
         )}
         {activeView === "canvas" && <CanvasView />}
         {activeView === "architecture" && architectureData && (

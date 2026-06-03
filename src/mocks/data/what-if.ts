@@ -1,43 +1,39 @@
-import type { WhatIfVector } from "@/schemas/what-if.schema"
-
-export const mockWhatIfVectors: WhatIfVector[] = [
-  {
-    id: "financial",
-    badgeKey:  "WhatIfView.vectors.financial.badge",
-    titleKey:  "WhatIfView.vectors.financial.title",
-    promptKey: "WhatIfView.vectors.financial.prompt",
-    accentClass: "text-indigo-600 group-hover:text-indigo-700",
-    borderClass: "border-t-indigo-500",
-    iconKey: "coins",
-    blocks: [
-      { labelKey: "WhatIfView.blockLabels.value",   text: "WhatIfView.vectors.financial.blocks.value" },
-      { labelKey: "WhatIfView.blockLabels.revenue", text: "WhatIfView.vectors.financial.blocks.revenue" },
+export const mockWhatIfData = {
+  whatIf: {
+    scenarios: [
+      {
+        id:          "scenario-financial-001",
+        vector:      "Financial",
+        color:       "indigo",
+        icon:        "coins",
+        title:       "What if we made the service completely free, earning only on the client's result?",
+        description: "Focus on entry barrier, rapid scaling, and a success-based payment model.",
+        value:       "Zero financial entry threshold, instant trust, and a wider market to attract new teams.",
+        revenue:     "Monetization via success fee, share of savings, or premium analytics packages.",
+        status:      null,
+      },
+      {
+        id:          "scenario-technical-001",
+        vector:      "Technical",
+        color:       "teal",
+        icon:        "cpu",
+        title:       "What if we completely abandoned the web interface (No-UI) and worked only through an AI assistant?",
+        description: "Focus on automation, voice scenarios, and hidden complexity instead of classic UI.",
+        value:       "Less friction for the user, faster actions and the feeling that the product works autonomously.",
+        cost:        "Reduced frontend team costs, but growing AI infrastructure and integration requirements.",
+        status:      null,
+      },
+      {
+        id:          "scenario-emotional-001",
+        vector:      "Emotional",
+        color:       "slate",
+        icon:        "heartHandshake",
+        title:       "What if we focused on the persona's psychological peace, not just functional efficiency?",
+        description: "Focus on reducing anxiety, clear prompts, and a high level of service support.",
+        value:       "The persona gains a sense of control, clarity of next steps and confidence in the result.",
+        relationships: "The product becomes a trusted partner rather than just a tool, reducing resistance to change.",
+        status:      null,
+      },
     ],
   },
-  {
-    id: "technical",
-    badgeKey:  "WhatIfView.vectors.technical.badge",
-    titleKey:  "WhatIfView.vectors.technical.title",
-    promptKey: "WhatIfView.vectors.technical.prompt",
-    accentClass: "text-teal-600 group-hover:text-teal-700",
-    borderClass: "border-t-teal-500",
-    iconKey: "cpu",
-    blocks: [
-      { labelKey: "WhatIfView.blockLabels.value", text: "WhatIfView.vectors.technical.blocks.value" },
-      { labelKey: "WhatIfView.blockLabels.cost",  text: "WhatIfView.vectors.technical.blocks.cost" },
-    ],
-  },
-  {
-    id: "emotional",
-    badgeKey:  "WhatIfView.vectors.emotional.badge",
-    titleKey:  "WhatIfView.vectors.emotional.title",
-    promptKey: "WhatIfView.vectors.emotional.prompt",
-    accentClass: "text-slate-700 group-hover:text-slate-900",
-    borderClass: "border-t-slate-600",
-    iconKey: "heartHandshake",
-    blocks: [
-      { labelKey: "WhatIfView.blockLabels.value",         text: "WhatIfView.vectors.emotional.blocks.value" },
-      { labelKey: "WhatIfView.blockLabels.relationships", text: "WhatIfView.vectors.emotional.blocks.relationships" },
-    ],
-  },
-]
+}

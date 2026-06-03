@@ -17,6 +17,9 @@ export const whatIfStyles = {
   blockLabel:    "text-[10px] font-bold uppercase tracking-widest text-slate-400",
   blockText:     "mt-1.5 text-xs leading-relaxed text-slate-600",
   applyBtn:      "h-10 w-full rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs gap-2",
-  footer:        "flex justify-center",
-  standardPath:  "text-xs font-medium text-slate-400 hover:text-slate-700 transition-colors",
+  footer:         "flex justify-center pt-2",
+  regenerateBtn:  "h-9 gap-2 text-xs font-medium border-violet-200 text-violet-600 hover:bg-violet-50 hover:border-violet-300 hover:text-violet-700 disabled:opacity-40 disabled:cursor-not-allowed px-5",
+  appliedBadge:   "inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 shrink-0",
+  applyBtnApplied:"bg-emerald-600 hover:bg-emerald-700",
+  validateBtn:    "w-full h-8 text-xs gap-1.5 border-amber-200 text-amber-600 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 disabled:opacity-40 disabled:cursor-not-allowed",
 }

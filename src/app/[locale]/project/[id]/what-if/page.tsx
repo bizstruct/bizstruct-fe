@@ -24,8 +24,9 @@ export default function WhatIfPage() {
 
   return (
     <WhatIfView
+      projectId={projectId}
       vectors={vectors}
-      onApply={() => router.push(`/${locale}${ROUTES.architecture(projectId)}`)}
+      onApplied={(_scenarioId) => router.push(`/${locale}${ROUTES.architecture(projectId)}`)}
     />
   )
 }
