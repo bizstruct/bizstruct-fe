@@ -1,22 +1,28 @@
-import { cn } from "@/lib/utils"
-
 export const canvasStyles = {
-  root:        "flex flex-col h-full",
-  header:      "shrink-0 flex items-center justify-between px-5 py-2.5 border-b border-slate-200 bg-white",
-  headerTitle: "text-xs font-semibold text-slate-700",
-  gridWrapper: "flex-1 overflow-auto p-4",
-  grid:        "group grid grid-cols-10 grid-rows-[1fr_1fr_auto] gap-1.5 h-full min-h-[480px]",
-  section:     (bg: string, border: string) => cn("flex flex-col gap-2 p-3 overflow-y-auto border rounded-lg", bg, border),
-  sectionLabel:(text: string) => cn("flex items-center gap-1.5 shrink-0", text),
-  sectionLabelText: "text-[10px] font-bold uppercase tracking-widest leading-none",
-  card:        "group relative bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm hover:shadow-md transition-all",
-  cardText:    "text-[11px] leading-snug text-slate-700 pr-4",
-  cardActions: "absolute bottom-1.5 right-1.5 hidden group-hover:flex items-center gap-0.5",
-  cardAiBadge: "absolute top-1.5 right-1.5 flex items-center gap-0.5 rounded-full bg-indigo-50 px-1.5 py-0.5 text-[9px] font-semibold text-indigo-500",
-  cardTextarea: "w-full resize-none rounded border border-indigo-300 bg-white px-2 py-1.5 text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200",
-  emptySection: "flex-1 flex items-center justify-center border border-dashed border-slate-200 rounded-lg py-4",
-  emptyText:    "text-[10px] text-slate-400",
-  addButton:    (text: string) => cn("shrink-0 flex items-center gap-1 text-[10px] font-medium transition-opacity opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100", text),
-  addTextarea:  "w-full resize-none rounded border border-indigo-300 bg-white px-2 py-1.5 text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200",
-  inlineActions:"flex gap-1 justify-end",
+  root:          "flex flex-col h-full",
+  header:        "shrink-0 flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-white",
+  headerTitle:   "text-sm font-bold text-slate-800 tracking-tight",
+
+  gridWrapper:   "flex-1 overflow-y-auto p-4",
+  grid:          "grid grid-cols-10 gap-2",
+
+  // Section card shell (mirrors EmpathyCardList Card)
+  card:          "border shadow-sm rounded-xl overflow-hidden",
+  cardInner:     "p-3 flex flex-col",
+  cardHeader:    "flex items-center gap-2 mb-2.5 shrink-0",
+  cardTitle:     "text-[10px] font-bold tracking-widest uppercase",
+  cardCount:     "ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full",
+  cardAddBtn:    "rounded-md p-1 text-slate-400 hover:text-slate-700 hover:bg-white/70 transition-colors",
+
+  // Items list
+  list:          "space-y-1.5 mt-1",
+  listItem:      "group flex items-start gap-1.5 rounded-lg px-2 py-2 cursor-grab active:cursor-grabbing",
+  itemText:      "flex-1 text-[11.5px] leading-relaxed text-slate-700 font-medium",
+  itemTextarea:  "flex-1 resize-none overflow-hidden bg-transparent text-[11.5px] leading-relaxed text-slate-800 font-medium focus:outline-none",
+  grip:          "h-3.5 w-3.5 mt-0.5 shrink-0 text-slate-300 group-hover:text-slate-400 transition-colors",
+  itemDelete:    "shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 hover:text-rose-500",
+  aiBadge:       "shrink-0 mt-1 text-[8px] font-semibold text-indigo-400",
+
+  emptyState:    "flex items-center justify-center rounded-lg border border-dashed border-slate-200 py-4",
+  emptyText:     "text-[10px] text-slate-400 italic",
 }

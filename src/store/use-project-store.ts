@@ -3,6 +3,7 @@
 import { create } from "zustand"
 import { createProjectFromIdea, fetchProjectById } from "@/app/actions"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
+import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard } from "@/services/canvas"
 import { mockDefaultCanvas } from "@/mocks/data/canvas"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
 import type { HistoryItem } from "@/schemas/project.schema"
@@ -42,10 +43,13 @@ interface ProjectStoreState {
   resetGenerationFlow: () => void
   deleteProject: (id: string) => Promise<void>
   renameProject: (id: string, title: string) => void
+  activeProjectId: string | null
+  setActiveProjectId: (id: string) => void
   canvasSections: CanvasSections
-  addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => string
-  updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => void
-  deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => void
+  setCanvasSections: (sections: CanvasSections) => void
+  addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => Promise<string>
+  updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => Promise<void>
+  deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => Promise<void>
   moveCanvasCard: (from: { section: CanvasSectionKey; cardId: string }, to: { section: CanvasSectionKey; index: number }) => void
 }
 
@@ -74,6 +78,7 @@ const POLL_MAX_ATTEMPTS = 3 // DEV: low limit — increase to 40 when backend /a
 export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   history: [],
   isLoading: false,
+  activeProjectId: null,
   canvasSections: mockDefaultCanvas,
   generationStep: "idle",
   generatedProject: null,
@@ -187,31 +192,60 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     history: state.history.map((h) => h.id === id ? { ...h, title } : h),
   })),
 
-  addCanvasCard: (section, text, isAiGenerated = false) => {
-    const sections = get().canvasSections
-    const card     = createCard(sections, section, text, isAiGenerated)
+  setCanvasSections: (sections) => set({ canvasSections: sections }),
+
+  setActiveProjectId: (id) => set({ activeProjectId: id }),
+
+  addCanvasCard: async (section, text, isAiGenerated = false) => {
+    const { activeProjectId, canvasSections } = get()
+    // Optimistic update with a temp id
+    const tempCard = createCard(canvasSections, section, text, isAiGenerated)
     set((state) => ({
-      canvasSections: { ...state.canvasSections, [section]: [card, ...state.canvasSections[section]] },
+      canvasSections: { ...state.canvasSections, [section]: [tempCard, ...state.canvasSections[section]] },
     }))
-    return card.id
+    if (activeProjectId) {
+      try {
+        const saved = await apiAddCanvasCard(activeProjectId, section, text)
+        if (saved) {
+          set((state) => ({
+            canvasSections: {
+              ...state.canvasSections,
+              [section]: state.canvasSections[section].map((c) => c.id === tempCard.id ? saved : c),
+            },
+          }))
+          return saved.id
+        }
+      } catch {
+        // Keep optimistic card on failure
+      }
+    }
+    return tempCard.id
   },
 
-  updateCanvasCard: (section, cardId, text) => {
+  updateCanvasCard: async (section, cardId, text) => {
     set((state) => ({
       canvasSections: {
         ...state.canvasSections,
         [section]: state.canvasSections[section].map((c) => (c.id === cardId ? { ...c, text } : c)),
       },
     }))
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiUpdateCanvasCard(activeProjectId, section, cardId, text).catch(() => {})
+    }
   },
 
-  deleteCanvasCard: (section, cardId) => {
+  deleteCanvasCard: async (section, cardId) => {
     set((state) => ({
       canvasSections: {
         ...state.canvasSections,
         [section]: state.canvasSections[section].filter((c) => c.id !== cardId),
       },
     }))
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiDeleteCanvasCard(activeProjectId, section, cardId).catch(() => {})
+    }
   },
 
   moveCanvasCard: (from, to) => {

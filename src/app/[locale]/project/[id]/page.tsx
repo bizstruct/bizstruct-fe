@@ -78,8 +78,8 @@ export default function ProjectWorkspacePage() {
     { key: "what-if",      label: t("views.whatIf") },
     { key: "architecture", label: t("views.architecture") },
     { key: "canvas",       label: t("views.canvas") },
-    { key: "hypotheses",   label: t("views.hypotheses") },
     { key: "pitch",        label: t("views.pitch") },
+    { key: "hypotheses",   label: t("views.hypotheses") },
   ]
 
   return (
@@ -142,7 +142,7 @@ export default function ProjectWorkspacePage() {
   }}
 />
         )}
-        {activeView === "canvas" && <CanvasView />}
+        {activeView === "canvas" && <CanvasView hasPitch={pitchData !== null} onGoToPitch={() => setActiveView("pitch")} />}
         {activeView === "architecture" && architectureData && (
           <ArchitectureView projectId={projectId} locale={locale} architectureData={architectureData} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
         )}

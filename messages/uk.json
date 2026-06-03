@@ -121,12 +121,24 @@
   },
   "CanvasView": {
     "title": "Business Model Canvas",
-    "exportPdf": "Експорт PDF",
     "generatePitch": "Згенерувати Піч",
     "empty": "Порожньо",
-    "addNote": "Додати нотатку…",
-    "aiLabel": "AI",
-    "common_add": "Додати",
+    "save": "Зберегти",
+    "saving": "Збереження…",
+    "saved": "Збережено",
+    "newItemPlaceholder": "Введіть текст і натисніть Save…",
+    "regenerate": "Регенерувати",
+    "regenerating": "Регенерація…",
+    "validateBtn": "Валідувати",
+    "validating": "Валідація…",
+    "validated": "Підтверджено",
+    "validateFailed": "Невалідно",
+    "legend": {
+      "new": "Нові",
+      "modified": "Змінені",
+      "reordered": "Переміщені",
+      "pendingDelete": "До видалення"
+    },
     "sections": {
       "keyPartners": "Ключові партнери",
       "keyActivities": "Ключові активності",

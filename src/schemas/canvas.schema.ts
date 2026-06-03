@@ -7,16 +7,18 @@ export const CanvasCardSchema = z.object({
   subtext: z.string().optional(),
 })
 
+const cardArray = z.array(CanvasCardSchema).default([])
+
 export const CanvasSectionsSchema = z.object({
-  keyPartners: z.array(CanvasCardSchema),
-  keyActivities: z.array(CanvasCardSchema),
-  keyResources: z.array(CanvasCardSchema),
-  valuePropositions: z.array(CanvasCardSchema),
-  customerRelationships: z.array(CanvasCardSchema),
-  channels: z.array(CanvasCardSchema),
-  customerSegments: z.array(CanvasCardSchema),
-  costStructure: z.array(CanvasCardSchema),
-  revenueStreams: z.array(CanvasCardSchema),
+  keyPartners:           cardArray,
+  keyActivities:         cardArray,
+  keyResources:          cardArray,
+  valuePropositions:     cardArray,
+  customerRelationships: cardArray,
+  channels:              cardArray,
+  customerSegments:      cardArray,
+  costStructure:         cardArray,
+  revenueStreams:        cardArray,
 })
 
 export type CanvasCard = z.infer<typeof CanvasCardSchema>

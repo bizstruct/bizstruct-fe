@@ -1,33 +1,209 @@
 "use client"
 
-import React from "react"
-import { Download, Mic2 } from "lucide-react"
+import React, { useEffect, useRef, useState } from "react"
+import { Check, Loader2, Mic2, RefreshCw, ShieldCheck, XCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useParams, useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ROUTES } from "@/constants/routes"
+import { useProjectStore } from "@/store/use-project-store"
+import { getCanvas, apiDeleteCanvasCard, validateCanvas, regenerateCanvas } from "@/services/canvas"
+import type { CanvasSectionKey } from "@/schemas/canvas.schema"
 import { canvasStyles } from "./styles"
-import { CanvasSection, CANVAS_ORDER } from "./CanvasSection"
+import { CanvasSectionCard, CANVAS_ORDER } from "./CanvasSectionCard"
 
-export function CanvasView() {
-  const t        = useTranslations("CanvasView")
-  const router   = useRouter()
-  const params   = useParams()
-  const locale   = (params?.locale as string) ?? "en"
-  const projectId = (params?.id as string) ?? ""
+type SaveStatus     = "idle" | "dirty" | "saving" | "saved"
+type ValidateStatus = "idle" | "validating" | "valid" | "invalid"
+
+interface Props {
+  hasPitch?:    boolean
+  onGoToPitch?: () => void
+}
+
+export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
+  const t               = useTranslations("CanvasView")
+  const router          = useRouter()
+  const params          = useParams()
+  const locale          = (params?.locale as string) ?? "en"
+  const projectId       = (params?.id as string) ?? ""
+  const setCanvasSections  = useProjectStore((s) => s.setCanvasSections)
+  const setActiveProjectId = useProjectStore((s) => s.setActiveProjectId)
+  const deleteCanvasCard   = useProjectStore((s) => s.deleteCanvasCard)
+
+  const [saveStatus,     setSaveStatus]     = useState<SaveStatus>("idle")
+  const [validateStatus, setValidateStatus] = useState<ValidateStatus>("idle")
+  const [regenerating,   setRegenerating]   = useState(false)
+  const [savedAt,    setSavedAt]    = useState(0)
+
+  const dirtyRef       = useRef<Set<CanvasSectionKey>>(new Set())
+  const pendingDeletes = useRef<Partial<Record<CanvasSectionKey, Set<string>>>>({})
+  const pendingNew     = useRef<Partial<Record<CanvasSectionKey, () => Promise<void>>>>({})
+
+  useEffect(() => {
+    if (!projectId) return
+    setActiveProjectId(projectId)
+    getCanvas(projectId).then((data) => {
+      if (data) setCanvasSections(data)
+    }).catch(() => {})
+  }, [projectId, setCanvasSections, setActiveProjectId])
+
+  async function handleRegenerate() {
+    if (regenerating) return
+    setRegenerating(true)
+    try {
+      const fresh = await regenerateCanvas(projectId, locale)
+      if (fresh) {
+        setCanvasSections(fresh)
+        setSavedAt((n) => n + 1) // reset visual states in children
+      }
+    } finally {
+      setRegenerating(false)
+    }
+  }
+
+  async function handleValidate() {
+    if (saveStatus !== "dirty") return
+    setValidateStatus("validating")
+    try {
+      await validateCanvas(projectId)
+      setValidateStatus("valid")
+      setTimeout(() => setValidateStatus("idle"), 3000)
+    } catch {
+      setValidateStatus("invalid")
+      setTimeout(() => setValidateStatus("idle"), 3000)
+    }
+  }
+
+  function handleHasChanges(section: CanvasSectionKey, dirty: boolean) {
+    if (dirty) dirtyRef.current.add(section)
+    else dirtyRef.current.delete(section)
+    setSaveStatus(dirtyRef.current.size > 0 ? "dirty" : "idle")
+  }
+
+  function handlePendingDeletes(section: CanvasSectionKey, ids: Set<string>) {
+    pendingDeletes.current[section] = ids
+  }
+
+  function handlePendingNew(section: CanvasSectionKey, commit: (() => Promise<void>) | null) {
+    if (commit) pendingNew.current[section] = commit
+    else delete pendingNew.current[section]
+  }
+
+  async function handleSave() {
+    if (saveStatus !== "dirty") return
+    setSaveStatus("saving")
+    try {
+      // Snapshot pending deletes before any async work (the Set refs can change)
+      const deleteSnapshot: Array<[CanvasSectionKey, string[]]> = Object.entries(pendingDeletes.current)
+        .map(([section, ids]) => [section as CanvasSectionKey, ids ? [...ids] : []])
+
+      // Delete sequentially within each section to avoid Zustand set() race conditions
+      for (const [section, ids] of deleteSnapshot) {
+        for (const id of ids) {
+          await deleteCanvasCard(section, id)
+        }
+      }
+
+      // Commit new items (each handles its own ordering)
+      const commitFns = Object.values(pendingNew.current).filter(Boolean) as Array<() => Promise<void>>
+      await Promise.all(commitFns.map(fn => fn()))
+
+      pendingDeletes.current = {}
+      pendingNew.current = {}
+      dirtyRef.current.clear()
+      setSavedAt((n) => n + 1)
+      setSaveStatus("saved")
+      setTimeout(() => setSaveStatus("idle"), 2000)
+    } catch {
+      setSaveStatus("dirty")
+    }
+  }
+
+  const saveBtnClass = {
+    idle:   "h-7 gap-1.5 text-xs font-semibold cursor-not-allowed bg-slate-100 text-slate-400 border border-slate-200 hover:bg-slate-100",
+    dirty:  "h-7 gap-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white",
+    saving: "h-7 gap-1.5 text-xs font-semibold bg-indigo-400 text-white cursor-wait",
+    saved:  "h-7 gap-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-600 text-white",
+  }[saveStatus]
 
   return (
     <div className={canvasStyles.root}>
       <div className={canvasStyles.header}>
-        <span className={canvasStyles.headerTitle}>{t("title")}</span>
+        <div>
+          <span className={canvasStyles.headerTitle}>{t("title")}</span>
+          <div className="flex items-center gap-3 mt-1">
+            {[
+              { color: "bg-green-400",  label: t("legend.new") },
+              { color: "bg-amber-400",  label: t("legend.modified") },
+              { color: "bg-purple-400", label: t("legend.reordered") },
+              { color: "bg-slate-300",  label: t("legend.pendingDelete") },
+            ].map(({ color, label }) => (
+              <span key={label} className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-400">
+                <span className={cn("h-2 w-2 rounded-full inline-block", color)} /> {label}
+              </span>
+            ))}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-slate-200 text-slate-600">
-            <Download className="h-3 w-3" /> {t("exportPdf")}
+          <Button
+            size="sm"
+            disabled={saveStatus === "idle" || saveStatus === "saving"}
+            onClick={() => void handleSave()}
+            className={cn("transition-colors", saveBtnClass)}
+          >
+            {saveStatus === "saving" ? (
+              <><Loader2 className="h-3 w-3 animate-spin" /> {t("saving")}</>
+            ) : saveStatus === "saved" ? (
+              <><Check className="h-3 w-3" /> {t("saved")}</>
+            ) : (
+              <><Check className="h-3 w-3" /> {t("save")}</>
+            )}
           </Button>
+          <Button
+            variant="outline" size="sm"
+            disabled={saveStatus !== "dirty" || validateStatus === "validating"}
+            onClick={() => void handleValidate()}
+            className={cn(
+              "h-7 gap-1.5 text-xs font-medium transition-colors",
+              validateStatus === "valid"
+                ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                : validateStatus === "invalid"
+                ? "border-red-300 bg-red-50 text-red-600"
+                : validateStatus === "validating"
+                ? "border-indigo-200 text-indigo-400 cursor-wait"
+                : saveStatus === "dirty"
+                ? "border-indigo-300 text-indigo-600 hover:bg-indigo-50"
+                : "opacity-40 cursor-not-allowed",
+            )}
+          >
+            {validateStatus === "validating" ? (
+              <><Loader2 className="h-3 w-3 animate-spin" /> {t("validating")}</>
+            ) : validateStatus === "valid" ? (
+              <><Check className="h-3 w-3" /> {t("validated")}</>
+            ) : validateStatus === "invalid" ? (
+              <><XCircle className="h-3 w-3" /> {t("validateFailed")}</>
+            ) : (
+              <><ShieldCheck className="h-3.5 w-3.5" /> {t("validateBtn")}</>
+            )}
+          </Button>
+          {hasPitch && (
+            <Button
+              variant="outline" size="sm"
+              disabled={regenerating}
+              onClick={() => void handleRegenerate()}
+              className="h-7 gap-1.5 text-xs font-medium border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+            >
+              {regenerating
+                ? <><Loader2 className="h-3 w-3 animate-spin" /> {t("regenerating")}</>
+                : <><RefreshCw className="h-3 w-3" /> {t("regenerate")}</>
+              }
+            </Button>
+          )}
           <Button
             size="sm"
             className="h-7 gap-1.5 text-xs bg-violet-600 hover:bg-violet-700"
-            onClick={() => router.push(`/${locale}${ROUTES.pitch(projectId)}`)}
+            onClick={() => onGoToPitch ? onGoToPitch() : router.push(`/${locale}${ROUTES.pitch(projectId)}`)}
           >
             <Mic2 className="h-3 w-3" /> {t("generatePitch")}
           </Button>
@@ -37,7 +213,14 @@ export function CanvasView() {
       <div className={canvasStyles.gridWrapper}>
         <div className={canvasStyles.grid}>
           {CANVAS_ORDER.map((key) => (
-            <CanvasSection key={key} sectionKey={key} />
+            <CanvasSectionCard
+              key={key}
+              sectionKey={key}
+              savedAt={savedAt}
+              onHasChanges={(dirty) => handleHasChanges(key, dirty)}
+              onPendingDeletes={(ids) => handlePendingDeletes(key, ids)}
+              onPendingNew={(text) => handlePendingNew(key, text)}
+            />
           ))}
         </div>
       </div>

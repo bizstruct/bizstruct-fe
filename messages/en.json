@@ -121,12 +121,24 @@
   },
   "CanvasView": {
     "title": "Business Model Canvas",
-    "exportPdf": "Export PDF",
     "generatePitch": "Generate Pitch",
     "empty": "Empty",
-    "addNote": "Add note…",
-    "aiLabel": "AI",
-    "common_add": "Add",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "newItemPlaceholder": "Type and click Save…",
+    "regenerate": "Regenerate",
+    "regenerating": "Regenerating…",
+    "validateBtn": "Validate",
+    "validating": "Validating…",
+    "validated": "Validated",
+    "validateFailed": "Invalid",
+    "legend": {
+      "new": "New",
+      "modified": "Modified",
+      "reordered": "Reordered",
+      "pendingDelete": "Pending delete"
+    },
     "sections": {
       "keyPartners": "Key Partners",
       "keyActivities": "Key Activities",
