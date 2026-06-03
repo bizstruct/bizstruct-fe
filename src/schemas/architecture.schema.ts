@@ -1,23 +1,51 @@
 import { z } from "zod"
 
-export const ArchitectureVariantSchema = z.enum(["original", "regenerated"])
+// ── Epicenter: 4 closed values ────────────────────────────────────────────
+export const EpicenterSchema = z.enum([
+  "resource-driven",
+  "offer-driven",
+  "customer-driven",
+  "finance-driven",
+])
 
-export const ArchitectureCardSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-})
+// ── Pattern: 5 closed values ──────────────────────────────────────────────
+export const PatternSchema = z.enum([
+  "unbundling",
+  "long-tail",
+  "multi-sided-platform",
+  "free",
+  "open-business-model",
+])
 
+// ── Subtypes (only for "free" and "open-business-model") ─────────────────
+export const PatternSubtypeSchema = z.enum([
+  "freemium",
+  "ad-supported",
+  "bait-and-hook",
+  "open-source",
+  "outside-in",
+  "inside-out",
+])
+
+export const PATTERN_SUBTYPES: Partial<Record<PatternType, PatternSubtypeType[]>> = {
+  "free":                ["freemium", "ad-supported", "bait-and-hook", "open-source"],
+  "open-business-model": ["outside-in", "inside-out"],
+}
+
+// ── Flat schema matching backend response ─────────────────────────────────
 export const ArchitectureDataSchema = z.object({
-  original: z.object({
-    epicenter: ArchitectureCardSchema,
-    pattern: ArchitectureCardSchema,
+  epicenter: z.object({
+    value:       EpicenterSchema,
+    description: z.string(),
   }),
-  regenerated: z.object({
-    epicenter: ArchitectureCardSchema,
-    pattern: ArchitectureCardSchema,
+  pattern: z.object({
+    value:       PatternSchema,
+    subtype:     PatternSubtypeSchema.nullable(),
+    description: z.string(),
   }),
 })
 
-export type ArchitectureVariant = z.infer<typeof ArchitectureVariantSchema>
-export type ArchitectureCard = z.infer<typeof ArchitectureCardSchema>
-export type ArchitectureData = z.infer<typeof ArchitectureDataSchema>
+export type EpicenterType      = z.infer<typeof EpicenterSchema>
+export type PatternType        = z.infer<typeof PatternSchema>
+export type PatternSubtypeType = z.infer<typeof PatternSubtypeSchema>
+export type ArchitectureData   = z.infer<typeof ArchitectureDataSchema>

@@ -267,27 +267,39 @@
     "title": "Architectural Model Profile",
     "subtitle": "The architectural framework defined by AI based on your inputs. It will serve as the foundation for Business Model Canvas generation.",
     "changeConceptBtn": "Change concept",
+    "validateBtn": "Validate",
+    "validating": "Validating…",
+    "validated": "Validated",
+    "validateFailed": "Invalid",
     "generating": "Generating…",
     "generateCanvas": "Generate full Business Model Canvas",
     "epicenterLabel": "Business model epicenter",
     "patternLabel": "Business model pattern",
+    "subtypeLabel": "Subtype",
     "determined": "Determined",
     "systemSelection": "System selection",
-    "epicenter": {
-      "original": {
-        "title": "Epicenter: Finance (Finance-Driven)"
-      },
-      "regenerated": {
-        "title": "Epicenter: Resource-Driven"
-      }
+    "epicenterDesc": "Description",
+    "patternDesc": "Description",
+    "epicenters": {
+      "resource-driven": "Resource-driven",
+      "offer-driven": "Offer-driven",
+      "customer-driven": "Customer-driven",
+      "finance-driven": "Finance-driven"
     },
-    "pattern": {
-      "original": {
-        "title": "Pattern: Freemium + Pay-per-use"
-      },
-      "regenerated": {
-        "title": "Pattern: Subscription-First"
-      }
+    "patterns": {
+      "unbundling": "Unbundling",
+      "long-tail": "Long Tail",
+      "multi-sided-platform": "Multi-sided Platform",
+      "free": "FREE",
+      "open-business-model": "Open Business Model"
+    },
+    "subtypes": {
+      "freemium": "Freemium",
+      "ad-supported": "Ad-supported",
+      "bait-and-hook": "Bait & Hook",
+      "open-source": "Open Source",
+      "outside-in": "Outside-In",
+      "inside-out": "Inside-Out"
     }
   },
   "Common": {

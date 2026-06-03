@@ -267,27 +267,39 @@
     "title": "Архітектурний профіль моделі",
     "subtitle": "Архітектурний каркас, визначений AI на основі ваших ввідних даних. Слугуватиме фундаментом для генерації Business Model Canvas.",
     "changeConceptBtn": "Змінити концепт",
+    "validateBtn": "Валідувати",
+    "validating": "Валідація…",
+    "validated": "Підтверджено",
+    "validateFailed": "Невалідно",
     "generating": "Генерація…",
     "generateCanvas": "Згенерувати повну Business Model Canvas",
     "epicenterLabel": "Епіцентр бізнес-моделі",
     "patternLabel": "Шаблон бізнес-моделі",
+    "subtypeLabel": "Підтип",
     "determined": "Визначено",
     "systemSelection": "Системний підбір",
-    "epicenter": {
-      "original": {
-        "title": "Епіцентр: Фінанси (Finance-Driven)"
-      },
-      "regenerated": {
-        "title": "Епіцентр: Resource-Driven"
-      }
+    "epicenterDesc": "Опис",
+    "patternDesc": "Опис",
+    "epicenters": {
+      "resource-driven": "Resource-driven",
+      "offer-driven": "Offer-driven",
+      "customer-driven": "Customer-driven",
+      "finance-driven": "Finance-driven"
     },
-    "pattern": {
-      "original": {
-        "title": "Шаблон: Freemium + Pay-per-use"
-      },
-      "regenerated": {
-        "title": "Шаблон: Subscription-First"
-      }
+    "patterns": {
+      "unbundling": "Unbundling",
+      "long-tail": "Long Tail",
+      "multi-sided-platform": "Multi-sided Platform",
+      "free": "FREE",
+      "open-business-model": "Open Business Model"
+    },
+    "subtypes": {
+      "freemium": "Freemium",
+      "ad-supported": "Ad-supported",
+      "bait-and-hook": "Bait & Hook",
+      "open-source": "Open Source",
+      "outside-in": "Outside-In",
+      "inside-out": "Inside-Out"
     }
   },
   "Common": {

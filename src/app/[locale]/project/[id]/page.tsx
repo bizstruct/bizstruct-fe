@@ -15,6 +15,7 @@ import { getPitch } from "@/services/pitch"
 import { getScenario } from "@/services/scenario"
 import { getWhatIfVectors } from "@/services/what-if"
 import { getArchitecture } from "@/services/architecture"
+import { getCanvas } from "@/services/canvas"
 import { EmpathyView } from "@/components/empathy-map/EmpathyView"
 import { CanvasView } from "@/components/canvas/CanvasView"
 import { HypothesesView } from "@/components/hypotheses/HypothesesView"
@@ -28,6 +29,7 @@ import type { PitchData } from "@/schemas/pitch.schema"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 import type { WhatIfVector } from "@/schemas/what-if.schema"
 import type { ArchitectureData } from "@/schemas/architecture.schema"
+import type { CanvasSections } from "@/schemas/canvas.schema"
 
 type ActiveView = "empathy" | "canvas" | "hypotheses" | "pitch" | "what-if" | "architecture" | "scenario"
 
@@ -57,6 +59,7 @@ export default function ProjectWorkspacePage() {
   const [scenarioData,     setScenarioData]      = useState<ScenarioData | null>(null)
   const [whatIfVectors,    setWhatIfVectors]     = useState<WhatIfVector[] | null>(null)
   const [architectureData, setArchitectureData]  = useState<ArchitectureData | null>(null)
+  const [canvasData,       setCanvasData]        = useState<CanvasSections | null>(null)
 
   useEffect(() => {
     if (!projectId) return
@@ -66,6 +69,7 @@ export default function ProjectWorkspacePage() {
     getScenario(projectId, locale).then(setScenarioData).catch(() => {})
     getWhatIfVectors(projectId).then(setWhatIfVectors).catch(() => {})
     getArchitecture(projectId, locale).then(setArchitectureData).catch(() => {})
+    getCanvas(projectId).then(setCanvasData).catch(() => {})
   }, [projectId, locale])
 
   const views: { key: ActiveView; label: string }[] = [
@@ -140,7 +144,7 @@ export default function ProjectWorkspacePage() {
         )}
         {activeView === "canvas" && <CanvasView />}
         {activeView === "architecture" && architectureData && (
-          <ArchitectureView architectureData={architectureData} onGoToCanvas={() => setActiveView("canvas")} />
+          <ArchitectureView projectId={projectId} locale={locale} architectureData={architectureData} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
         )}
         {activeView === "hypotheses" && hypotheses && (
           <HypothesesView initialHypotheses={hypotheses} />

@@ -2,28 +2,15 @@ import { type NextRequest, NextResponse } from "next/server"
 
 const BASE = process.env.API_BASE_URL
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ projectId: string }> },
-) {
-  const { projectId } = await context.params
-  const locale = request.nextUrl.searchParams.get("locale") ?? "en"
-  const res = await fetch(`${BASE}/api/architecture/${projectId}?locale=${locale}`, {
-    cache: "no-store",
-  })
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
-}
-
-export async function PUT(
+export async function PATCH(
   request: NextRequest,
   context: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await context.params
   const locale = request.nextUrl.searchParams.get("locale") ?? "en"
   const body = await request.json()
-  const res = await fetch(`${BASE}/api/architecture/${projectId}?locale=${locale}`, {
-    method: "PUT",
+  const res = await fetch(`${BASE}/api/architecture/${projectId}/pattern?locale=${locale}`, {
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
