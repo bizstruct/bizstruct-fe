@@ -15,8 +15,8 @@ export const TimelineStepSchema = z.object({
 })
 
 export const ScenarioMetricsSchema = z.object({
-  before: z.object({ value: z.string(), descriptionKey: z.string() }),
-  after: z.object({ value: z.string(), descriptionKey: z.string() }),
+  before: z.object({ value: z.string(), description: z.string() }),
+  after: z.object({ value: z.string(), description: z.string() }),
 })
 
 export const ScenarioDataSchema = z.object({

@@ -189,12 +189,21 @@
     }
   },
   "ScenarioView": {
+    "title": "User Scenario",
+    "subtitle": "Persona journey from pain point to measurable outcome",
+    "save": "Save",
+    "saved": "Saved!",
+    "validate": "Validate",
+    "regenerate": "Regenerate",
+    "nextStep": "What-If",
     "resultTitle": "Implementation result",
     "persona": {
+      "sectionTitle": "Persona",
       "roleLabel": "Role",
       "painPointLabel": "Pain point"
     },
     "timeline": {
+      "sectionTitle": "User Journey",
       "context": "Context",
       "goal": "Goal",
       "action": "Action in the product",

@@ -20,5 +20,5 @@ export default function ScenarioPage() {
 
   if (!scenarioData) return null
 
-  return <ScenarioView scenarioData={scenarioData} />
+  return <ScenarioView projectId={projectId} scenarioData={scenarioData} />
 }

@@ -120,7 +120,7 @@ export default function ProjectWorkspacePage() {
           <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
         )}
         {activeView === "scenario" && scenarioData && (
-          <ScenarioView scenarioData={scenarioData} />
+          <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
         )}
         {activeView === "what-if" && whatIfVectors && (
           <WhatIfView vectors={whatIfVectors} onApply={() => setActiveView("architecture")} />

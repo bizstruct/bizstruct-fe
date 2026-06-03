@@ -15,8 +15,8 @@ const scenarioMockData: Record<Locale, ScenarioData> = {
       { iconKey: "sparkles", labelKey: "ScenarioView.timeline.action",    text: "Логін → Один клік → Автогенерація звіту та AI-інсайти",                   highlight: true },
     ],
     metrics: {
-      before: { value: "3 дні",  descriptionKey: "ScenarioView.metrics.before" },
-      after:  { value: "15 хв",  descriptionKey: "ScenarioView.metrics.after" },
+      before: { value: "3 дні",  description: "Ручний збір даних з Excel" },
+      after:  { value: "15 хв",  description: "Готовий звіт з AI-аналітикою" },
     },
   },
   en: {
@@ -32,8 +32,8 @@ const scenarioMockData: Record<Locale, ScenarioData> = {
       { iconKey: "sparkles", labelKey: "ScenarioView.timeline.action",  text: "Login → One Click → Auto-generate report and AI insights",                 highlight: true },
     ],
     metrics: {
-      before: { value: "3 days", descriptionKey: "ScenarioView.metrics.before" },
-      after:  { value: "15 min", descriptionKey: "ScenarioView.metrics.after" },
+      before: { value: "3 days", description: "Manual Excel data collection" },
+      after:  { value: "15 min", description: "Ready report with AI analytics" },
     },
   },
 }

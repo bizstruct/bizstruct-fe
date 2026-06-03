@@ -189,12 +189,21 @@
     }
   },
   "ScenarioView": {
+    "title": "Сценарій користувача",
+    "subtitle": "Шлях персони від больової точки до вимірюваного результату",
+    "save": "Зберегти",
+    "saved": "Збережено!",
+    "validate": "Перевірити",
+    "regenerate": "Перегенерувати",
+    "nextStep": "What-If",
     "resultTitle": "Результат впровадження",
     "persona": {
+      "sectionTitle": "Персона",
       "roleLabel": "Роль",
       "painPointLabel": "Больова точка"
     },
     "timeline": {
+      "sectionTitle": "Шлях користувача",
       "context": "Контекст",
       "goal": "Ціль",
       "action": "Дія в продукті",
