@@ -149,8 +149,13 @@ export default function ProjectWorkspacePage() {
         {activeView === "hypotheses" && hypotheses && (
           <HypothesesView initialHypotheses={hypotheses} />
         )}
-        {activeView === "pitch" && pitchData && (
-          <PitchView pitchData={pitchData} />
+        {activeView === "pitch" && (
+          <PitchView
+            pitchData={pitchData ?? { investor: [], customer: [] }}
+            projectId={projectId}
+            locale={locale}
+            onMapHypotheses={() => setActiveView("hypotheses")}
+          />
         )}
       </div>
     </div>

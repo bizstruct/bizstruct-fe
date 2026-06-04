@@ -181,6 +181,21 @@
     "previous": "← Назад",
     "next": "Далі →",
     "mapHypotheses": "Карта гіпотез",
+    "noContent": "Контент піча відсутній. Спочатку згенеруйте піч.",
+    "headlinePlaceholder": "Додайте заголовок…",
+    "bodyPlaceholder": "Додайте текст…",
+    "saveStatus": {
+      "idle": "Збережено",
+      "dirty": "Зберегти",
+      "saving": "Збереження…",
+      "saved": "Збережено"
+    },
+    "validateStatus": {
+      "idle": "Перевірити",
+      "validating": "Перевірка…",
+      "valid": "Перевірено",
+      "invalid": "Помилка"
+    },
     "storyTypes": {
       "investor": "Для інвестора",
       "customer": "Для клієнта"

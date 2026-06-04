@@ -181,6 +181,21 @@
     "previous": "← Previous",
     "next": "Next →",
     "mapHypotheses": "Map Hypotheses",
+    "noContent": "No pitch content yet. Generate a pitch first.",
+    "headlinePlaceholder": "Add a headline…",
+    "bodyPlaceholder": "Add content…",
+    "saveStatus": {
+      "idle": "Saved",
+      "dirty": "Save",
+      "saving": "Saving…",
+      "saved": "Saved"
+    },
+    "validateStatus": {
+      "idle": "Validate",
+      "validating": "Validating…",
+      "valid": "Validated",
+      "invalid": "Failed"
+    },
     "storyTypes": {
       "investor": "Investor Story",
       "customer": "Customer Story"
