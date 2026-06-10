@@ -153,8 +153,14 @@
   },
   "HypothesesView": {
     "title": "Hypothesis Mapping · Importance vs Evidence",
-    "add": "Add",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
     "syncCanvas": "Sync Canvas",
+    "addItem": "Add item",
+    "newItemPlaceholder": "Describe your hypothesis…",
+    "confirm": "Add",
+    "cancel": "Cancel",
     "dragToReclassify": "Drag to reclassify",
     "dropHere": "Drop here",
     "axis": {
@@ -164,10 +170,10 @@
       "low": "LOW"
     },
     "quadrants": {
-      "q1": "IMPORTANT\n& UNKNOWN",
-      "q2": "IMPORTANT\n& KNOWN",
-      "q3": "UNIMPORTANT\n& UNKNOWN",
-      "q4": "UNIMPORTANT\n& KNOWN"
+      "q1": "INVESTIGATE",
+      "q2": "VALIDATED",
+      "q3": "IGNORE",
+      "q4": "PARKED"
     },
     "categories": {
       "Desirability": "Desirability",

@@ -17,13 +17,13 @@ const CATEGORY_ICON: Record<EmpathyCategory, React.ElementType> = {
   gains:  CheckCircle2,
 }
 
-const CATEGORY_THEME: Record<EmpathyCategory, { card: string; item: string; accent: string; icon: string }> = {
-  says:   { card: "border-sky-100 bg-sky-50/40",       item: "bg-sky-50 border-l-2 border-sky-300 hover:bg-sky-100/70",        accent: "text-sky-700",    icon: "bg-sky-100 text-sky-600"     },
-  thinks: { card: "border-violet-100 bg-violet-50/40", item: "bg-violet-50 border-l-2 border-violet-300 hover:bg-violet-100/70", accent: "text-violet-700", icon: "bg-violet-100 text-violet-600" },
-  does:   { card: "border-indigo-100 bg-indigo-50/40", item: "bg-indigo-50 border-l-2 border-indigo-300 hover:bg-indigo-100/70", accent: "text-indigo-700", icon: "bg-indigo-100 text-indigo-600" },
-  feels:  { card: "border-pink-100 bg-pink-50/40",     item: "bg-pink-50 border-l-2 border-pink-300 hover:bg-pink-100/70",      accent: "text-pink-700",   icon: "bg-pink-100 text-pink-600"   },
-  pains:  { card: "border-red-100 bg-red-50/40",       item: "bg-red-50 border-l-2 border-red-300 hover:bg-red-100/70",         accent: "text-red-700",    icon: "bg-red-100 text-red-600"     },
-  gains:  { card: "border-cyan-100 bg-cyan-50/40",     item: "bg-cyan-50 border-l-2 border-cyan-300 hover:bg-cyan-100/70",      accent: "text-cyan-700",   icon: "bg-cyan-100 text-cyan-600"   },
+const CATEGORY_THEME: Record<EmpathyCategory, { card: string; header: string; body: string; divide: string; item: string; accent: string; icon: string; empty: string }> = {
+  says:   { card: "border-sky-300",     header: "bg-sky-100 border-sky-200",     body: "bg-sky-50/60",     divide: "divide-sky-100",     item: "bg-white border-l-[3px] border-sky-400 hover:bg-sky-50",        accent: "text-sky-700",    icon: "bg-sky-200 text-sky-700",     empty: "border-sky-200"     },
+  thinks: { card: "border-violet-300",  header: "bg-violet-100 border-violet-200", body: "bg-violet-50/60", divide: "divide-violet-100",  item: "bg-white border-l-[3px] border-violet-400 hover:bg-violet-50",  accent: "text-violet-700", icon: "bg-violet-200 text-violet-700", empty: "border-violet-200"  },
+  does:   { card: "border-indigo-300",  header: "bg-indigo-100 border-indigo-200", body: "bg-indigo-50/60", divide: "divide-indigo-100",  item: "bg-white border-l-[3px] border-indigo-400 hover:bg-indigo-50",  accent: "text-indigo-700", icon: "bg-indigo-200 text-indigo-700", empty: "border-indigo-200"  },
+  feels:  { card: "border-pink-300",    header: "bg-pink-100 border-pink-200",     body: "bg-pink-50/60",   divide: "divide-pink-100",    item: "bg-white border-l-[3px] border-pink-400 hover:bg-pink-50",      accent: "text-pink-700",   icon: "bg-pink-200 text-pink-700",   empty: "border-pink-200"    },
+  pains:  { card: "border-red-300",     header: "bg-red-100 border-red-200",       body: "bg-red-50/60",    divide: "divide-red-100",     item: "bg-white border-l-[3px] border-red-400 hover:bg-red-50",        accent: "text-red-700",    icon: "bg-red-200 text-red-700",     empty: "border-red-200"     },
+  gains:  { card: "border-emerald-300", header: "bg-emerald-100 border-emerald-200", body: "bg-emerald-50/60", divide: "divide-emerald-100", item: "bg-white border-l-[3px] border-emerald-400 hover:bg-emerald-50", accent: "text-emerald-700", icon: "bg-emerald-200 text-emerald-700", empty: "border-emerald-200" },
 }
 
 interface Props {
@@ -73,46 +73,46 @@ export function EmpathyCardList({ category, items, onUpdate, onDelete, onAdd, on
   const theme = CATEGORY_THEME[category]
 
   function itemStyle(id: number) {
-    if (pendingDeleteIds.has(id)) return "bg-slate-100 border-l-2 border-slate-300 opacity-50"
-    if (newIds.has(id))           return "bg-green-50 border-l-2 border-green-400"
-    if (modifiedIds.has(id))      return "bg-amber-50 border-l-2 border-amber-400"
-    if (reorderedIds.has(id))     return "bg-purple-50 border-l-2 border-purple-400"
+    if (pendingDeleteIds.has(id)) return "bg-slate-100 border-l-[3px] border-slate-300 opacity-50"
+    if (newIds.has(id))           return "bg-green-50 border-l-[3px] border-green-500"
+    if (modifiedIds.has(id))      return "bg-amber-50 border-l-[3px] border-amber-500"
+    if (reorderedIds.has(id))     return "bg-purple-50 border-l-[3px] border-purple-500"
     return theme.item
   }
 
   return (
     <Card className={cn(empathyStyles.card, theme.card)}>
-      <div className={empathyStyles.cardInner}>
-        <div className={empathyStyles.cardHeader}>
-          <div className={cn("flex items-center justify-center h-6 w-6 rounded-md shrink-0", theme.icon)}>
-            <Icon className="h-3.5 w-3.5" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className={cn(empathyStyles.cardTitle, theme.accent)}>
-              {t(`categories.${category}` as Parameters<typeof t>[0])}
-            </h3>
-          </div>
-          <span className={cn("text-[10px] font-semibold px-1.5 py-0.5 rounded-full", theme.icon)}>
-            {items.filter(q => !pendingDeleteIds.has(q.id)).length}
-          </span>
-          <button
-            onClick={() => {
-              const newId = onAdd()
-              setNewIds((s) => new Set(s).add(newId))
-              setEditingId(newId)
-            }}
-            className={empathyStyles.cardAddBtn}
-          >
-            <Plus className="h-3.5 w-3.5" />
-          </button>
+      <div className={cn(empathyStyles.cardHead, theme.header)}>
+        <div className={cn("flex items-center justify-center h-6 w-6 rounded-md shrink-0", theme.icon)}>
+          <Icon className="h-3.5 w-3.5" />
         </div>
+        <div className="flex-1 min-w-0">
+          <h3 className={cn(empathyStyles.cardTitle, theme.accent)}>
+            {t(`categories.${category}` as Parameters<typeof t>[0])}
+          </h3>
+        </div>
+        <span className={cn("text-[10px] font-semibold px-1.5 py-0.5 rounded-full", theme.icon)}>
+          {items.filter(q => !pendingDeleteIds.has(q.id)).length}
+        </span>
+        <button
+          onClick={() => {
+            const newId = onAdd()
+            setNewIds((s) => new Set(s).add(newId))
+            setEditingId(newId)
+          }}
+          className={cn(empathyStyles.cardAddBtn, theme.accent)}
+        >
+          <Plus className="h-3.5 w-3.5" />
+        </button>
+      </div>
 
+      <div className={cn(empathyStyles.cardBody, theme.body)}>
         {items.length === 0 ? (
-          <div className={empathyStyles.emptyState}>
+          <div className={cn(empathyStyles.emptyState, theme.empty)}>
             <span className={empathyStyles.emptyText}>{t("empty")}</span>
           </div>
         ) : (
-          <ul className={empathyStyles.list}>
+          <ul className={cn(empathyStyles.list, theme.divide)}>
             {items.map((q, idx) => {
               const isPendingDelete = pendingDeleteIds.has(q.id)
               return (

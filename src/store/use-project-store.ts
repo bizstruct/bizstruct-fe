@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { createProjectFromIdea, fetchProjectById } from "@/app/actions"
+import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
 import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard } from "@/services/canvas"
 import { mockDefaultCanvas } from "@/mocks/data/canvas"
@@ -58,10 +59,6 @@ function mergeHistory(existing: HistoryItem[], fetched: HistoryItem[]): HistoryI
   return [...existing, ...fetched.filter((item) => !existingIds.has(item.id))]
 }
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
 function normalizeModel(raw: RawModelOption): GeneratedBusinessModel {
   return {
     id:               raw.id,
@@ -72,8 +69,6 @@ function normalizeModel(raw: RawModelOption): GeneratedBusinessModel {
   }
 }
 
-const POLL_INTERVAL_MS = 3000
-const POLL_MAX_ATTEMPTS = 3 // DEV: low limit — increase to 40 when backend /api/projects/{id} is ready
 
 export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   history: [],
@@ -113,7 +108,6 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
       set({ generationStep: "structuring" })
 
-      // Step 2: poll until modelsOptions is populated
       let models: GeneratedBusinessModel[] | null = null
       let projectTitle = initial.title
 
@@ -121,13 +115,12 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
         models = initial.modelsOptions.map(normalizeModel)
       } else {
         set({ generationStep: "generating_models" })
-        for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
-          await delay(POLL_INTERVAL_MS)
+        const result = await waitForProjectGeneration(initial.id)
+        if (result.status === "completed") {
           const data = await fetchProjectById(initial.id)
           if (data?.modelsOptions?.length) {
             models = data.modelsOptions.map(normalizeModel)
             projectTitle = data.title ?? initial.title
-            break
           }
         }
       }
