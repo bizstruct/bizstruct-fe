@@ -1,7 +1,8 @@
 'use client'
 
 import { create } from "zustand"
-import { createProjectFromIdea, fetchProjectById } from "@/app/actions"
+import { createProjectFromIdea, fetchProjectById, selectProjectModel, saveModelsEdits, triggerRegenerateModels } from "@/app/actions"
+import type { RawModelOption, RawProjectResponse } from "@/app/actions"
 import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
 import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard } from "@/services/canvas"
@@ -9,7 +10,6 @@ import { mockDefaultCanvas } from "@/mocks/data/canvas"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
 import type { HistoryItem } from "@/schemas/project.schema"
 import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/canvas.schema"
-import type { RawModelOption } from "@/app/actions"
 
 export type { CanvasSectionKey, CanvasCard, CanvasSections }
 
@@ -30,6 +30,7 @@ interface GeneratedProject {
   title: string
   idea: string
   models: GeneratedBusinessModel[]
+  rawModelsOptions: { models: RawModelOption[]; selected_id: string | null } | null
 }
 
 interface ProjectStoreState {
@@ -44,6 +45,8 @@ interface ProjectStoreState {
   resetGenerationFlow: () => void
   deleteProject: (id: string) => Promise<void>
   renameProject: (id: string, title: string) => void
+  updateGeneratedModel: (modelId: string, field: keyof GeneratedBusinessModel, value: string) => Promise<void>
+  regenerateModels: () => Promise<void>
   activeProjectId: string | null
   setActiveProjectId: (id: string) => void
   canvasSections: CanvasSections
@@ -59,14 +62,27 @@ function mergeHistory(existing: HistoryItem[], fetched: HistoryItem[]): HistoryI
   return [...existing, ...fetched.filter((item) => !existingIds.has(item.id))]
 }
 
+const POLL_INTERVAL_MS  = 3000
+const POLL_MAX_ATTEMPTS = 40
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 function normalizeModel(raw: RawModelOption): GeneratedBusinessModel {
   return {
     id:               raw.id,
-    title:            raw.title,
-    audience:         raw.audience,
-    valueProposition: raw.value_proposition ?? raw.valueProposition ?? "",
+    title:            raw.name ?? raw.title ?? raw.id,
+    audience:         raw.target_segment ?? raw.audience ?? "",
+    valueProposition: raw.tagline ?? raw.value_proposition ?? raw.valueProposition ?? "",
     description:      raw.description,
   }
+}
+
+function extractModels(modelsOptions: RawProjectResponse["modelsOptions"]): RawModelOption[] {
+  if (!modelsOptions) return []
+  if (Array.isArray(modelsOptions)) return modelsOptions
+  return modelsOptions.models ?? []
 }
 
 
@@ -110,17 +126,45 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
       let models: GeneratedBusinessModel[] | null = null
       let projectTitle = initial.title
+      let rawModelsOptions: { models: RawModelOption[]; selected_id: string | null } | null = null
 
-      if (initial.modelsOptions?.length) {
-        models = initial.modelsOptions.map(normalizeModel)
+      const initialModels = extractModels(initial.modelsOptions)
+      if (initialModels.length) {
+        models = initialModels.map(normalizeModel)
+        rawModelsOptions = Array.isArray(initial.modelsOptions)
+          ? { models: initial.modelsOptions, selected_id: null }
+          : (initial.modelsOptions as { models: RawModelOption[]; selected_id: string | null })
       } else {
         set({ generationStep: "generating_models" })
-        const result = await waitForProjectGeneration(initial.id)
-        if (result.status === "completed") {
-          const data = await fetchProjectById(initial.id)
-          if (data?.modelsOptions?.length) {
-            models = data.modelsOptions.map(normalizeModel)
-            projectTitle = data.title ?? initial.title
+        try {
+          const result = await waitForProjectGeneration(initial.id)
+          if (result.status === "completed") {
+            const data = await fetchProjectById(initial.id)
+            const fetchedModels = extractModels(data?.modelsOptions ?? null)
+            if (fetchedModels.length) {
+              models = fetchedModels.map(normalizeModel)
+              projectTitle = data?.title ?? initial.title
+              const opts = data?.modelsOptions ?? null
+              rawModelsOptions = opts
+                ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
+                : null
+            }
+          }
+        } catch {
+          // PubSub unavailable — fall back to polling
+          for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
+            await delay(POLL_INTERVAL_MS)
+            const data = await fetchProjectById(initial.id)
+            const fetchedModels = extractModels(data?.modelsOptions ?? null)
+            if (fetchedModels.length) {
+              models = fetchedModels.map(normalizeModel)
+              projectTitle = data?.title ?? initial.title
+              const opts = data?.modelsOptions ?? null
+              rawModelsOptions = opts
+                ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
+                : null
+              break
+            }
           }
         }
       }
@@ -135,7 +179,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       }
 
       set({
-        generatedProject: { id: initial.id, title: projectTitle, idea, models },
+        generatedProject: { id: initial.id, title: projectTitle, idea, models, rawModelsOptions },
         generationStep: "completed",
       })
     } catch (error) {
@@ -158,6 +202,10 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     const selectedModel = generatedProject.models.find((m) => m.id === modelId)
     if (!selectedModel) throw new Error("Не вдалося знайти вибрану модель")
 
+    if (generatedProject.rawModelsOptions) {
+      await selectProjectModel(generatedProject.id, generatedProject.rawModelsOptions, modelId).catch(() => {})
+    }
+
     const historyItem: HistoryItem = {
       id:    generatedProject.id,
       title: selectedModel.title,
@@ -177,13 +225,107 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   resetGenerationFlow: () => set({ generationStep: "idle", generatedProject: null, isLoading: false }),
 
   deleteProject: async (id) => {
-    await deleteProjectById(id)
+    if (!id.startsWith("temp-")) {
+      await deleteProjectById(id)
+    }
     set((state) => ({ history: state.history.filter((h) => h.id !== id) }))
   },
 
   renameProject: (id, title) => set((state) => ({
     history: state.history.map((h) => h.id === id ? { ...h, title } : h),
   })),
+
+  updateGeneratedModel: async (modelId, field, value) => {
+    const { generatedProject } = get()
+    if (!generatedProject) return
+
+    const updatedModels = generatedProject.models.map((m) =>
+      m.id === modelId ? { ...m, [field]: value } : m
+    )
+
+    const updatedRaw = generatedProject.rawModelsOptions
+      ? {
+          ...generatedProject.rawModelsOptions,
+          models: generatedProject.rawModelsOptions.models.map((r) => {
+            if (r.id !== modelId) return r
+            return {
+              ...r,
+              name: field === "title" ? value : r.name,
+              title: field === "title" ? value : r.title,
+              target_segment: field === "audience" ? value : r.target_segment,
+              audience: field === "audience" ? value : r.audience,
+              tagline: field === "valueProposition" ? value : r.tagline,
+              value_proposition: field === "valueProposition" ? value : r.value_proposition,
+              description: field === "description" ? value : r.description,
+            }
+          }),
+        }
+      : null
+
+    set((state) => ({
+      generatedProject: state.generatedProject
+        ? { ...state.generatedProject, models: updatedModels, rawModelsOptions: updatedRaw }
+        : null,
+    }))
+
+    if (updatedRaw && generatedProject.id) {
+      await saveModelsEdits(generatedProject.id, updatedRaw).catch(() => {})
+    }
+  },
+
+  regenerateModels: async () => {
+    const { generatedProject } = get()
+    if (!generatedProject) return
+
+    set({ generationStep: "generating_models" })
+
+    try {
+      await triggerRegenerateModels(generatedProject.id)
+
+      const result = await waitForProjectGeneration(generatedProject.id)
+      if (result.status === "completed") {
+        const data = await fetchProjectById(generatedProject.id)
+        const fetchedModels = extractModels(data?.modelsOptions ?? null)
+        if (fetchedModels.length) {
+          const models = fetchedModels.map(normalizeModel)
+          const opts = data?.modelsOptions ?? null
+          const rawModelsOptions = opts
+            ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
+            : null
+          set((state) => ({
+            generatedProject: state.generatedProject
+              ? { ...state.generatedProject, models, rawModelsOptions }
+              : null,
+            generationStep: "completed",
+          }))
+          return
+        }
+      }
+    } catch {
+      // PubSub unavailable — fall back to polling
+      for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
+        await delay(POLL_INTERVAL_MS)
+        const data = await fetchProjectById(generatedProject.id)
+        const fetchedModels = extractModels(data?.modelsOptions ?? null)
+        if (fetchedModels.length) {
+          const models = fetchedModels.map(normalizeModel)
+          const opts = data?.modelsOptions ?? null
+          const rawModelsOptions = opts
+            ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
+            : null
+          set((state) => ({
+            generatedProject: state.generatedProject
+              ? { ...state.generatedProject, models, rawModelsOptions }
+              : null,
+            generationStep: "completed",
+          }))
+          return
+        }
+      }
+    }
+
+    set({ generationStep: "completed" })
+  },
 
   setCanvasSections: (sections) => set({ canvasSections: sections }),
 

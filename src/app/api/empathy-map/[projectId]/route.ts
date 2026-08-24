@@ -4,7 +4,7 @@ import type { Locale } from "@/constants/i18n"
 
 export async function GET(request: NextRequest) {
   const locale = (request.nextUrl.searchParams.get("locale") ?? "en") as Locale
-  return NextResponse.json(getMockEmpathyData(locale))
+  return NextResponse.json({ empathyMap: getMockEmpathyData(locale) })
 }
 
 export async function PUT() {

@@ -43,6 +43,15 @@ const VIEW_ICONS: Record<ActiveView, React.ElementType> = {
   pitch:        Mic2,
 }
 
+function GeneratingPlaceholder() {
+  return (
+    <div className="flex flex-col items-center justify-center h-full gap-3 text-slate-400">
+      <div className="h-6 w-6 rounded-full border-2 border-slate-300 border-t-slate-500 animate-spin" />
+      <p className="text-sm">Generating content…</p>
+    </div>
+  )
+}
+
 export default function ProjectWorkspacePage() {
   const t       = useTranslations("WorkspacePage")
   const params  = useParams()
@@ -63,13 +72,38 @@ export default function ProjectWorkspacePage() {
 
   useEffect(() => {
     if (!projectId) return
-    getEmpathyMap(projectId, locale).then(setEmpathyData).catch(() => {})
-    getHypotheses(projectId).then(setHypotheses).catch(() => {})
-    getPitch(projectId, locale).then(setPitchData).catch(() => {})
-    getScenario(projectId, locale).then(setScenarioData).catch(() => {})
-    getWhatIfVectors(projectId).then(setWhatIfVectors).catch(() => {})
-    getArchitecture(projectId, locale).then(setArchitectureData).catch(() => {})
-    getCanvas(projectId).then(setCanvasData).catch(() => {})
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    async function fetchAll() {
+      const [empathy, hyps, pitch, scenario, whatIf, arch, canvas] = await Promise.all([
+        getEmpathyMap(projectId, locale).catch(() => null),
+        getHypotheses(projectId).catch(() => null),
+        getPitch(projectId, locale).catch(() => null),
+        getScenario(projectId, locale).catch(() => null),
+        getWhatIfVectors(projectId).catch(() => null),
+        getArchitecture(projectId, locale).catch(() => null),
+        getCanvas(projectId).catch(() => null),
+      ])
+      if (cancelled) return
+      if (empathy)  setEmpathyData(empathy)
+      if (hyps)     setHypotheses(hyps)
+      if (pitch)    setPitchData(pitch)
+      if (scenario) setScenarioData(scenario)
+      if (whatIf?.length)  setWhatIfVectors(whatIf)
+      if (arch)     setArchitectureData(arch)
+      if (canvas)   setCanvasData(canvas)
+      const allReady = empathy && hyps !== null && pitch && scenario && whatIf !== null && arch && canvas
+      if (!allReady) {
+        timer = setTimeout(fetchAll, 5000)
+      }
+    }
+
+    fetchAll()
+    return () => {
+      cancelled = true
+      if (timer) clearTimeout(timer)
+    }
   }, [projectId, locale])
 
   const views: { key: ActiveView; label: string }[] = [
@@ -119,35 +153,40 @@ export default function ProjectWorkspacePage() {
         </nav>
       </header>
 
-      <div className="flex-1 min-h-0">
-        {activeView === "empathy" && empathyData && (
-          <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
+      <div className="flex-1 min-h-0 relative">
+        {activeView === "empathy" && (empathyData
+          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
+          : <GeneratingPlaceholder />
         )}
-        {activeView === "scenario" && scenarioData && (
-          <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
+        {activeView === "scenario" && (scenarioData
+          ? <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
+          : <GeneratingPlaceholder />
         )}
-        {activeView === "what-if" && whatIfVectors && (
-          <WhatIfView
-  projectId={projectId}
-  vectors={whatIfVectors}
-  hasSubsequentData={architectureData !== null}
-  onApplied={(scenarioId) => {
-    setWhatIfVectors(prev =>
-      prev?.map(v => ({
-        ...v,
-        status: v.scenarioId === scenarioId ? "applied" as const : v.status === "applied" ? null : v.status,
-      })) ?? null
-    )
-    setActiveView("architecture")
-  }}
-/>
+        {activeView === "what-if" && (whatIfVectors
+          ? <WhatIfView
+              projectId={projectId}
+              vectors={whatIfVectors}
+              hasSubsequentData={architectureData !== null}
+              onApplied={(scenarioId) => {
+                setWhatIfVectors(prev =>
+                  prev?.map(v => ({
+                    ...v,
+                    status: v.scenarioId === scenarioId ? "applied" as const : v.status === "applied" ? null : v.status,
+                  })) ?? null
+                )
+                setActiveView("architecture")
+              }}
+            />
+          : <GeneratingPlaceholder />
         )}
         {activeView === "canvas" && <CanvasView hasPitch={pitchData !== null} onGoToPitch={() => setActiveView("pitch")} />}
-        {activeView === "architecture" && architectureData && (
-          <ArchitectureView projectId={projectId} locale={locale} architectureData={architectureData} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
+        {activeView === "architecture" && (architectureData
+          ? <ArchitectureView projectId={projectId} locale={locale} architectureData={architectureData} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
+          : <GeneratingPlaceholder />
         )}
-        {activeView === "hypotheses" && hypotheses && (
-          <HypothesesView initialHypotheses={hypotheses} />
+        {activeView === "hypotheses" && (hypotheses
+          ? <HypothesesView initialHypotheses={hypotheses} />
+          : <GeneratingPlaceholder />
         )}
         {activeView === "pitch" && (
           <PitchView

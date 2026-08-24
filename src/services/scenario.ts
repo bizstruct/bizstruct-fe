@@ -44,6 +44,6 @@ export async function saveScenario(projectId: string, data: ScenarioData): Promi
 export async function getScenario(projectId: string, locale: string): Promise<ScenarioData | null> {
   const url = `${API_ROUTES.scenario(projectId)}?locale=${locale}`
   const raw = await apiGet<{ scenario: RawScenario | null }>(url)
-  if (raw.scenario == null) return null
+  if (raw?.scenario == null) return null
   return ScenarioDataSchema.parse(normalize(raw.scenario))
 }

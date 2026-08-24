@@ -3,6 +3,9 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json" },
     ...options,
   })
+  if (response.status === 404) {
+    return null as T
+  }
   if (!response.ok) {
     throw new Error(`API error ${response.status}: ${response.statusText}`)
   }

@@ -71,7 +71,7 @@ function normalizeVector(raw: RawVector): WhatIfVector {
 
 export async function getWhatIfVectors(projectId: string): Promise<WhatIfVector[]> {
   const envelope = await apiGet<{ whatIf: { scenarios: RawVector[] } | null }>(API_ROUTES.whatIf(projectId))
-  if (envelope.whatIf == null) return []
+  if (envelope?.whatIf == null) return []
   return z.array(WhatIfVectorSchema).parse(envelope.whatIf.scenarios.map(normalizeVector))
 }
 

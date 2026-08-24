@@ -83,6 +83,10 @@
       "description": "Description"
     },
     "selectModel": "Select this model",
+    "regenerate": "Regenerate",
+    "validate": "Validate",
+    "validating": "Validating…",
+    "editHint": "Click to edit",
     "prevAriaLabel": "Previous",
     "nextAriaLabel": "Next",
     "goToModelAriaLabel": "Go to model {n}"

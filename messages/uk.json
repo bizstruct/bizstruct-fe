@@ -83,6 +83,10 @@
       "description": "Опис"
     },
     "selectModel": "Вибрати цю модель",
+    "regenerate": "Перегенерувати",
+    "validate": "Провалідувати",
+    "validating": "Валідуємо…",
+    "editHint": "Клікніть для редагування",
     "prevAriaLabel": "Вліво",
     "nextAriaLabel": "Вправо",
     "goToModelAriaLabel": "Перейти до моделі {n}"

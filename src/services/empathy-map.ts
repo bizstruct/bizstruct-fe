@@ -10,7 +10,7 @@ export async function saveEmpathyMap(projectId: string, data: EmpathyData): Prom
 export async function getEmpathyMap(projectId: string, locale: string): Promise<EmpathyData | null> {
   const url = `${API_ROUTES.empathyMap(projectId)}?locale=${locale}`
   const raw = await apiGet<{ empathyMap: unknown }>(url)
-  if (raw.empathyMap == null) return null
+  if (raw?.empathyMap == null) return null
   // unwrap double-wrapping if data was previously saved with { empathyMap: data } body
   const inner = (raw.empathyMap as Record<string, unknown>)?.empathyMap ?? raw.empathyMap
   return parseOrLog(EmpathyDataSchema, inner, "empathy-map")

@@ -52,7 +52,7 @@ export async function getArchitecture(projectId: string, locale: string): Promis
   const url = `${API_ROUTES.architecture(projectId)}?locale=${locale}`
   const raw = await apiGet<{ architecture: RawLocaleData | null }>(url)
 
-  if (!raw.architecture) return null
+  if (!raw?.architecture) return null
 
   try {
     return normalizeLocale(raw.architecture)

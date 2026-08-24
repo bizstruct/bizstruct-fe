@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useState, useEffect, type FormEvent } from "react"
 import { ArrowUp, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,8 @@ export function IdeaForm({ isLoading, onSubmit }: Props) {
   const t = useTranslations("HomePage")
   const [text, setText]   = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -44,7 +46,7 @@ export function IdeaForm({ isLoading, onSubmit }: Props) {
             type="submit"
             size="icon"
             aria-label={t("input.submit")}
-            disabled={isLoading || text.trim().length < 10}
+            disabled={!mounted || isLoading || text.trim().length < 10}
             className={s.submitBtn}
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" />}

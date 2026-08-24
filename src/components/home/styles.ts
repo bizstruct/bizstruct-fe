@@ -38,4 +38,6 @@ export const modelSelectionStyles = {
   navBtnNext:    "absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2",
   dots:          "mt-6 flex items-center justify-center gap-2",
   dot:           (active: boolean) => cn("h-2.5 rounded-full transition-all", active ? "w-8 bg-violet-600" : "w-2.5 bg-slate-300"),
+  actionBtns:    "flex gap-2 pt-1",
+  secondaryBtn:  "flex-1 h-10 rounded-xl border-slate-200 text-xs font-medium text-slate-600 shadow-none hover:bg-slate-50 hover:text-slate-800",
 }
