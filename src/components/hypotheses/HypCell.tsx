@@ -16,7 +16,7 @@ const ICONS: Record<string, React.ElementType> = {
 }
 
 const DT_KEY = "hyp-card-id"
-const CATEGORIES: HypothesisCategory[] = ["Desirability", "Viability", "Feasibility"]
+const CATEGORIES: HypothesisCategory[] = ["desirability", "viability", "feasibility"]
 
 interface Props {
   id: HypothesisQuadrant
@@ -43,7 +43,7 @@ export function HypCell({
   const [draggingId,    setDraggingId]    = useState<string | null>(null)
   const [dragOverId,    setDragOverId]    = useState<string | null>(null)
   const [draftText,     setDraftText]     = useState<string | null>(null)
-  const [draftCategory, setDraftCategory] = useState<HypothesisCategory>("Desirability")
+  const [draftCategory, setDraftCategory] = useState<HypothesisCategory>("desirability")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const itemIds = new Set(items.map((h) => h.id))
@@ -61,7 +61,7 @@ export function HypCell({
 
   function openDraft() {
     setDraftText("")
-    setDraftCategory("Desirability")
+    setDraftCategory("desirability")
     setTimeout(() => textareaRef.current?.focus(), 0)
   }
 

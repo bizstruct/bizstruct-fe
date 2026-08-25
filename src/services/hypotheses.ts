@@ -1,19 +1,24 @@
 import { API_ROUTES } from "@/constants/api"
-import { HypothesisSchema } from "@/schemas/hypotheses.schema"
 import type { Hypothesis } from "@/schemas/hypotheses.schema"
-import { z } from "zod"
-import { apiGet, apiPatch, parseOrLog } from "./api-client"
+import { apiGet, apiPatch } from "./api-client"
 
-export async function getHypotheses(projectId: string): Promise<Hypothesis[]> {
-  const raw = await apiGet<{ hypotheses: unknown }>(API_ROUTES.hypotheses(projectId))
-  if (raw?.hypotheses == null) return []
-  // ML stores {hypotheses:[...]}, frontend save stores [...] directly
-  const items = Array.isArray(raw.hypotheses)
-    ? raw.hypotheses
-    : (raw.hypotheses as { hypotheses?: unknown[] }).hypotheses ?? []
-  return parseOrLog(z.array(HypothesisSchema), items, "hypotheses")
+// bizstruct-be's _block_response wraps every block under its own key, and
+// the stored value here is itself the domain model's {hypotheses: [...]}
+// wrapper — so a GET response is double-nested: {hypotheses: {hypotheses:
+// [...]}}. This isn't defensive guesswork the way the old unwrap was
+// (before the backend consistently stored the wrapped shape, the outer
+// value could be either a bare array or {hypotheses: [...]}) — it's now a
+// fixed, known shape.
+interface HypothesesResponse {
+  hypotheses: { hypotheses: Hypothesis[] } | null
 }
 
-export async function saveHypotheses(projectId: string, hypotheses: Hypothesis[]): Promise<void> {
-  await apiPatch(API_ROUTES.hypotheses(projectId), { hypotheses })
+export async function getHypotheses(projectId: string): Promise<Hypothesis[]> {
+  const raw = await apiGet<HypothesesResponse>(API_ROUTES.hypotheses(projectId))
+  return raw?.hypotheses?.hypotheses ?? []
+}
+
+export async function saveHypotheses(projectId: string, hypotheses: Hypothesis[]): Promise<Hypothesis[]> {
+  const raw = await apiPatch<HypothesesResponse>(API_ROUTES.hypotheses(projectId), { hypotheses })
+  return raw?.hypotheses?.hypotheses ?? []
 }

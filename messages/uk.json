@@ -180,9 +180,9 @@
       "q4": "ПРИПАРКОВАНО"
     },
     "categories": {
-      "Desirability": "Бажаність",
-      "Viability": "Життєздатність",
-      "Feasibility": "Здійсненність"
+      "desirability": "Бажаність",
+      "viability": "Життєздатність",
+      "feasibility": "Здійсненність"
     }
   },
   "PitchView": {

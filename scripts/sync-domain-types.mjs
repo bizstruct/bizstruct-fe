@@ -114,6 +114,7 @@ async function main() {
   await syncBlockSchema("empathy_map", "empathy-map", "EmpathyMap")
   await syncBlockSchema("scenario", "scenario", "Scenario")
   await syncBlockSchema("pitch", "pitch", "Pitch")
+  await syncBlockSchema("hypotheses", "hypotheses", "Hypotheses")
   await syncChain()
 }
 

@@ -34,9 +34,9 @@ export const hypothesesStyles = {
 }
 
 export const HYP_CAT_CFG = {
-  Desirability: { border: "border-l-sky-500",     dot: "bg-sky-500",     badge: "bg-sky-50 text-sky-700" },
-  Viability:    { border: "border-l-emerald-500",  dot: "bg-emerald-500", badge: "bg-emerald-50 text-emerald-700" },
-  Feasibility:  { border: "border-l-teal-500",     dot: "bg-teal-500",    badge: "bg-teal-50 text-teal-700" },
+  desirability: { border: "border-l-sky-500",     dot: "bg-sky-500",     badge: "bg-sky-50 text-sky-700" },
+  viability:    { border: "border-l-emerald-500",  dot: "bg-emerald-500", badge: "bg-emerald-50 text-emerald-700" },
+  feasibility:  { border: "border-l-teal-500",     dot: "bg-teal-500",    badge: "bg-teal-50 text-teal-700" },
 } as const
 
 export const HYP_Q_CFG = {

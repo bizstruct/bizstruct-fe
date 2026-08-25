@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.4.0/schemas/empathy_map.json (bizstruct-domain@v0.4.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.5.0/schemas/empathy_map.json (bizstruct-domain@v0.5.0)
 
 /**
  * @minItems 3

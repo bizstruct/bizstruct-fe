@@ -180,9 +180,9 @@
       "q4": "PARKED"
     },
     "categories": {
-      "Desirability": "Desirability",
-      "Viability": "Viability",
-      "Feasibility": "Feasibility"
+      "desirability": "Desirability",
+      "viability": "Viability",
+      "feasibility": "Feasibility"
     }
   },
   "PitchView": {
