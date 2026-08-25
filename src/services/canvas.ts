@@ -1,6 +1,7 @@
 import { API_ROUTES } from "@/constants/api"
 import { CanvasSectionsSchema } from "@/schemas/canvas.schema"
 import type { CanvasSections, CanvasCard, CanvasSectionKey } from "@/schemas/canvas.schema"
+import type { CanvasCard as RawCard } from "@/types/domain/canvas"
 import { apiGet, apiPost, apiPatch, apiPut, apiDelete } from "./api-client"
 
 // Backend uses snake_case section names
@@ -28,26 +29,15 @@ export const SECTION_KEY_TO_API: Record<CanvasSectionKey, string> = {
   revenueStreams:        "revenue_streams",
 }
 
-type RawCard = {
-  id:               string
-  text:             string
-  is_ai_generated?: boolean
-  isAiGenerated?:   boolean
-  subtext?:         string
-}
-
 function normalizeCard(raw: RawCard): CanvasCard {
   return {
     id:            raw.id,
     text:          raw.text,
-    isAiGenerated: raw.is_ai_generated ?? raw.isAiGenerated ?? false,
-    subtext:       raw.subtext,
+    isAiGenerated: raw.is_ai_generated ?? false,
   }
 }
 
-function normalizeCanvas(raw: Record<string, unknown>): CanvasSections {
-  const payload = (raw.canvasData ?? raw.canvas ?? raw) as Record<string, unknown>
-
+function normalizeCanvas(payload: Record<string, unknown>): CanvasSections {
   const result: Partial<CanvasSections> = {}
 
   for (const [key, cards] of Object.entries(payload)) {
@@ -59,14 +49,13 @@ function normalizeCanvas(raw: Record<string, unknown>): CanvasSections {
   return CanvasSectionsSchema.parse(result)
 }
 
+// No internal try/catch — a backend error propagates to the caller instead
+// of being swallowed into a null that's indistinguishable from "not
+// generated yet". See CanvasView.tsx for how the caller surfaces it.
 export async function getCanvas(projectId: string): Promise<CanvasSections | null> {
-  try {
-    const raw = await apiGet<Record<string, unknown>>(API_ROUTES.canvas(projectId))
-    return normalizeCanvas(raw)
-  } catch (err) {
-    console.error("[canvas] getCanvas failed:", err)
-    return null
-  }
+  const raw = await apiGet<{ canvas: Record<string, unknown> | null }>(API_ROUTES.canvas(projectId))
+  if (!raw?.canvas) return null
+  return normalizeCanvas(raw.canvas)
 }
 
 export async function apiAddCanvasCard(
@@ -74,12 +63,14 @@ export async function apiAddCanvasCard(
   section:   CanvasSectionKey,
   text:      string,
 ): Promise<CanvasCard | null> {
-  const raw = await apiPost<RawCard | undefined>(
+  // The response is {projectId, section, item: {...}} — the card itself is
+  // nested under `item`, not the top-level response.
+  const raw = await apiPost<{ item?: RawCard } | undefined>(
     `${API_ROUTES.canvas(projectId)}/${SECTION_KEY_TO_API[section]}`,
     { text },
   )
-  if (!raw?.id) return null
-  return normalizeCard(raw)
+  if (!raw?.item?.id) return null
+  return normalizeCard(raw.item)
 }
 
 export async function apiUpdateCanvasCard(
@@ -126,5 +117,18 @@ export async function apiDeleteCanvasCard(
 ): Promise<void> {
   await apiDelete(
     `${API_ROUTES.canvas(projectId)}/${SECTION_KEY_TO_API[section]}/${cardId}`,
+  )
+}
+
+export async function apiMoveCanvasCard(
+  projectId:  string,
+  fromSection: CanvasSectionKey,
+  cardId:      string,
+  toSection:   CanvasSectionKey,
+  toIndex?:    number,
+): Promise<void> {
+  await apiPatch<void>(
+    `${API_ROUTES.canvas(projectId)}/${SECTION_KEY_TO_API[fromSection]}/${cardId}/move`,
+    { toSection: SECTION_KEY_TO_API[toSection], toIndex },
   )
 }

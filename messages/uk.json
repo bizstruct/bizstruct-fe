@@ -129,6 +129,8 @@
   },
   "CanvasView": {
     "title": "Business Model Canvas",
+    "loadError": "Не вдалося завантажити канву з сервера.",
+    "retry": "Повторити",
     "generatePitch": "Згенерувати Піч",
     "empty": "Порожньо",
     "save": "Зберегти",

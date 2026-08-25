@@ -129,6 +129,8 @@
   },
   "CanvasView": {
     "title": "Business Model Canvas",
+    "loadError": "Could not load the canvas from the server.",
+    "retry": "Retry",
     "generatePitch": "Generate Pitch",
     "empty": "Empty",
     "save": "Save",

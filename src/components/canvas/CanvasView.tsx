@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
-import { Check, Loader2, Mic2, RefreshCw, ShieldCheck, XCircle } from "lucide-react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import { AlertTriangle, Check, Loader2, Mic2, RefreshCw, ShieldCheck, XCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useParams, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -35,18 +35,43 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
   const [validateStatus, setValidateStatus] = useState<ValidateStatus>("idle")
   const [regenerating,   setRegenerating]   = useState(false)
   const [savedAt,    setSavedAt]    = useState(0)
+  const [loadError,  setLoadError]  = useState(false)
+  const [loading,    setLoading]    = useState(true)
 
   const dirtyRef       = useRef<Set<CanvasSectionKey>>(new Set())
   const pendingDeletes = useRef<Partial<Record<CanvasSectionKey, Set<string>>>>({})
   const pendingNew     = useRef<Partial<Record<CanvasSectionKey, () => Promise<void>>>>({})
 
+  // Doesn't reset loading/error state itself (that would be a setState
+  // called synchronously from the mount effect below) — loading/loadError
+  // already start at the right values for a fresh mount. The retry button
+  // resets them explicitly before calling this.
+  const fetchCanvas = useCallback((projectId: string) => {
+    getCanvas(projectId)
+      .then((data) => {
+        if (data) setCanvasSections(data)
+      })
+      .catch(() => {
+        // A real backend error, not "not generated yet" — surface it
+        // instead of silently leaving whatever was already in the store
+        // (see Part C: no silent mock/stale fallback).
+        setLoadError(true)
+      })
+      .finally(() => setLoading(false))
+  }, [setCanvasSections])
+
   useEffect(() => {
     if (!projectId) return
     setActiveProjectId(projectId)
-    getCanvas(projectId).then((data) => {
-      if (data) setCanvasSections(data)
-    }).catch(() => {})
-  }, [projectId, setCanvasSections, setActiveProjectId])
+    fetchCanvas(projectId)
+  }, [projectId, setActiveProjectId, fetchCanvas])
+
+  function retryLoadCanvas() {
+    if (!projectId) return
+    setLoading(true)
+    setLoadError(false)
+    fetchCanvas(projectId)
+  }
 
   async function handleRegenerate() {
     if (regenerating) return
@@ -210,20 +235,34 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
         </div>
       </div>
 
-      <div className={canvasStyles.gridWrapper}>
-        <div className={canvasStyles.grid}>
-          {CANVAS_ORDER.map((key) => (
-            <CanvasSectionCard
-              key={key}
-              sectionKey={key}
-              savedAt={savedAt}
-              onHasChanges={(dirty) => handleHasChanges(key, dirty)}
-              onPendingDeletes={(ids) => handlePendingDeletes(key, ids)}
-              onPendingNew={(text) => handlePendingNew(key, text)}
-            />
-          ))}
+      {loadError ? (
+        <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+          <AlertTriangle className="h-6 w-6 text-red-500" />
+          <p className="text-sm text-slate-600">{t("loadError")}</p>
+          <Button size="sm" variant="outline" onClick={retryLoadCanvas}>
+            <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> {t("retry")}
+          </Button>
         </div>
-      </div>
+      ) : loading ? (
+        <div className="flex items-center justify-center gap-2 py-16 text-slate-400">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
+      ) : (
+        <div className={canvasStyles.gridWrapper}>
+          <div className={canvasStyles.grid}>
+            {CANVAS_ORDER.map((key) => (
+              <CanvasSectionCard
+                key={key}
+                sectionKey={key}
+                savedAt={savedAt}
+                onHasChanges={(dirty) => handleHasChanges(key, dirty)}
+                onPendingDeletes={(ids) => handlePendingDeletes(key, ids)}
+                onPendingNew={(text) => handlePendingNew(key, text)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

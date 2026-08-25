@@ -6,13 +6,28 @@ import type { ModelsOptionsPayload, RawProjectResponse } from "@/app/actions"
 import type { BusinessModelOption } from "@/types/domain/models-options"
 import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
-import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard } from "@/services/canvas"
-import { mockDefaultCanvas } from "@/mocks/data/canvas"
+import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard, apiMoveCanvasCard } from "@/services/canvas"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
 import type { HistoryItem } from "@/schemas/project.schema"
 import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/canvas.schema"
 
 export type { CanvasSectionKey, CanvasCard, CanvasSections }
+
+// Not mock data — an actually-empty canvas. canvasSections starts here and
+// is replaced once CanvasView's real fetch resolves; if that fetch fails,
+// it must stay empty (and the UI must show an error), not silently keep
+// showing plausible-looking fake data. See Part C of the canvas task.
+const EMPTY_CANVAS_SECTIONS: CanvasSections = {
+  keyPartners: [],
+  keyActivities: [],
+  keyResources: [],
+  valuePropositions: [],
+  customerRelationships: [],
+  channels: [],
+  customerSegments: [],
+  costStructure: [],
+  revenueStreams: [],
+}
 
 export type GenerationStep = "idle" | "analyzing" | "structuring" | "generating_models" | "completed"
 
@@ -60,7 +75,7 @@ interface ProjectStoreState {
   addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => Promise<string>
   updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => Promise<void>
   deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => Promise<void>
-  moveCanvasCard: (from: { section: CanvasSectionKey; cardId: string }, to: { section: CanvasSectionKey; index: number }) => void
+  moveCanvasCard: (from: { section: CanvasSectionKey; cardId: string }, to: { section: CanvasSectionKey; index: number }) => Promise<void>
 }
 
 function mergeHistory(existing: HistoryItem[], fetched: HistoryItem[]): HistoryItem[] {
@@ -99,7 +114,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   history: [],
   isLoading: false,
   activeProjectId: null,
-  canvasSections: mockDefaultCanvas,
+  canvasSections: EMPTY_CANVAS_SECTIONS,
   generationStep: "idle",
   generatedProject: null,
   currentTempHistoryId: null,
@@ -355,10 +370,14 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   },
 
   updateCanvasCard: async (section, cardId, text) => {
+    // Editing a card's text always clears isAiGenerated locally too — the
+    // backend forces the same thing on write (see routers/blocks.py's
+    // update_canvas_item), so the optimistic update should already reflect
+    // it instead of flickering true->false after the next refetch.
     set((state) => ({
       canvasSections: {
         ...state.canvasSections,
-        [section]: state.canvasSections[section].map((c) => (c.id === cardId ? { ...c, text } : c)),
+        [section]: state.canvasSections[section].map((c) => (c.id === cardId ? { ...c, text, isAiGenerated: false } : c)),
       },
     }))
     const { activeProjectId } = get()
@@ -380,9 +399,21 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     }
   },
 
-  moveCanvasCard: (from, to) => {
+  moveCanvasCard: async (from, to) => {
     set((state) => ({
       canvasSections: moveCard(state.canvasSections, from, to),
     }))
+    // Same-section reordering is persisted by the caller via
+    // apiReorderSection (CanvasSectionCard's drag handler, which already
+    // has the full reordered card list to hand the PUT-section endpoint) —
+    // calling apiMoveCanvasCard here too would be a redundant, possibly
+    // racing second write. Only a genuine cross-section move needs this
+    // call; same-section reordering already worked before this endpoint
+    // existed.
+    if (from.section === to.section) return
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiMoveCanvasCard(activeProjectId, from.section, from.cardId, to.section, to.index).catch(() => {})
+    }
   },
 }))
