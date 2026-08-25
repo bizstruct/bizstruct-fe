@@ -1,18 +1,27 @@
-import { z } from "zod"
+// Domain types come from bizstruct-domain (via `npm run sync:domain`) — see
+// src/types/domain/pitch.ts. The backend validates every Pitch payload
+// before it's ever stored (bizstruct-be's /api/internal/hook and
+// /api/pitch/* endpoints).
+//
+// The audience is `customer`, not `client` — bizstruct-be previously used
+// `client` here while this schema (and bizstruct_domain.enums.PitchAudience)
+// already used `customer`; the backend has since been renamed to match.
+export type { Pitch, InvestorSlide, CustomerSlide } from "@/types/domain/pitch"
 
-export const StoryTypeSchema = z.enum(["investor", "customer"])
+export const STORY_TYPES = ["investor", "customer"] as const
+export type StoryType = (typeof STORY_TYPES)[number]
 
-export const PitchStepSchema = z.object({
-  id: z.number(),
-  titleKey: z.string(),
-  content: z.string(),
-})
+// PitchStep/PitchData are a presentation-layer shape, not the domain
+// model: `titleKey` (an i18n lookup key derived from the slide's `type`)
+// and a single HTML `content` string (bilingual headline/content collapsed
+// to the active next-intl locale) are UI concerns, built in services/pitch.ts.
+export interface PitchStep {
+  id: number
+  titleKey: string
+  content: string
+}
 
-export const PitchDataSchema = z.object({
-  investor: z.array(PitchStepSchema),
-  customer: z.array(PitchStepSchema),
-})
-
-export type StoryType = z.infer<typeof StoryTypeSchema>
-export type PitchStep = z.infer<typeof PitchStepSchema>
-export type PitchData = z.infer<typeof PitchDataSchema>
+export interface PitchData {
+  investor: PitchStep[]
+  customer: PitchStep[]
+}

@@ -1,41 +1,22 @@
-import type { Locale } from "@/constants/i18n"
-import type { PitchData } from "@/schemas/pitch.schema"
+import type { Pitch } from "@/types/domain/pitch"
 
-const pitchMockData: Record<Locale, PitchData> = {
-  uk: {
-    investor: [
-      { id: 1, titleKey: "PitchView.investor.hook",        content: "<strong>$1.2 трлн</strong> у штрафах та невідповідностях ESG — лише цього року. Кожна корпоративна команда зі сталого розвитку тоне в таблицях, поки регулятори затягують петлю." },
-      { id: 2, titleKey: "PitchView.investor.problem",     content: "Менеджери зі сталого розвитку витрачають <strong>6+ годин на тиждень</strong> на ручну агрегацію даних. Фінансові директори не можуть обґрунтувати ROI ESG-інвестицій перед радою. Дедлайни CSRD маячать по всьому ЄС." },
-      { id: 3, titleKey: "PitchView.investor.solution",    content: "<strong>EcoSync</strong> автоматизує збір ESG-даних, забезпечує моніторинг вуглецевого сліду в реальному часі та генерує звіти для ради директорів за <strong>15 хвилин</strong> замість 3 днів." },
-      { id: 4, titleKey: "PitchView.investor.traction",    content: "<ul><li>3 корпоративних пілоти підписано (€2.1М ARR pipeline)</li><li>Запущено CSRD-сертифікований модуль звітності</li><li>NPS 72 серед бета-когорти</li></ul>" },
-      { id: 5, titleKey: "PitchView.investor.ask",         content: "Залучаємо <strong>€4М Series A</strong> для розширення продажів у ЄС та побудови мережі Scope 3 постачальників. Ціль — €8М ARR до кінця 2-го року." },
-    ],
-    customer: [
-      { id: 1, titleKey: "PitchView.customer.opening",     content: "Ви — Олена. Кінець кварталу. Рада хоче звіт ESG <strong>до п'ятниці</strong>. Ваша поштова скринька — цвинтар Excel-файлів із 3 регіональних офісів." },
-      { id: 2, titleKey: "PitchView.customer.empathy",     content: "Ви вже бували тут — копіювали цифри опівночі, сподіваючись, що ніхто не змінив формулу. Одна неправильна клітинка — і весь звіт <strong>марний</strong>." },
-      { id: 3, titleKey: "PitchView.customer.transformation", content: "З EcoSync ви входите в систему, одноразово підключаєте джерела даних і натискаєте <strong>Згенерувати звіт</strong>. За п'ятнадцять хвилин CSRD-сумісний документ у вашій скринці." },
-      { id: 4, titleKey: "PitchView.customer.socialProof", content: "<blockquote>EcoSync скоротив наш цикл звітності з 3 днів до менш ніж години. Наш фінансовий директор нарешті довіряє цифрам.</blockquote><cite>— ESG Lead, Fortune 500 виробник</cite>" },
-      { id: 5, titleKey: "PitchView.customer.invitation",  content: "Готові повернути свої п'ятниці? <strong>Почніть безкоштовне 14-денне пробне використання</strong> — без картки, без впровадження, без таблиць." },
-    ],
-  },
-  en: {
-    investor: [
-      { id: 1, titleKey: "PitchView.investor.hook",        content: "<strong>$1.2 trillion</strong> in ESG fines and compliance failures — this year alone. Every corporate sustainability team is drowning in spreadsheets while regulators tighten the noose." },
-      { id: 2, titleKey: "PitchView.investor.problem",     content: "Corporate sustainability managers spend <strong>6+ hours weekly</strong> on manual data aggregation. CFOs can't justify ESG investment ROI to their boards. CSRD deadlines loom large across the EU." },
-      { id: 3, titleKey: "PitchView.investor.solution",    content: "<strong>EcoSync</strong> automates ESG data collection, delivers real-time carbon monitoring, and generates board-ready reports in <strong>15 minutes</strong> instead of 3 days." },
-      { id: 4, titleKey: "PitchView.investor.traction",    content: "<ul><li>3 enterprise pilots signed (€2.1M ARR pipeline)</li><li>CSRD-certified reporting module launched</li><li>NPS of 72 across beta cohort</li></ul>" },
-      { id: 5, titleKey: "PitchView.investor.ask",         content: "Raising <strong>€4M Series A</strong> to expand EU sales motion and build Scope 3 supplier network. Targeting €8M ARR by end of Year 2." },
-    ],
-    customer: [
-      { id: 1, titleKey: "PitchView.customer.opening",     content: "You're Olena. End of quarter. The board wants the ESG report <strong>by Friday</strong>. Your inbox is a graveyard of Excel files from 3 regional offices." },
-      { id: 2, titleKey: "PitchView.customer.empathy",     content: "You've been here before — copy-pasting figures at midnight, praying no one changed a formula. One wrong cell and the whole report is <strong>meaningless</strong>." },
-      { id: 3, titleKey: "PitchView.customer.transformation", content: "With EcoSync, you log in, connect your data sources once, and click <strong>Generate Report</strong>. Fifteen minutes later, a CSRD-compliant document lands in your inbox." },
-      { id: 4, titleKey: "PitchView.customer.socialProof", content: "<blockquote>EcoSync cut our reporting cycle from 3 days to under an hour. Our CFO finally trusts the numbers.</blockquote><cite>— ESG Lead, Fortune 500 manufacturer</cite>" },
-      { id: 5, titleKey: "PitchView.customer.invitation",  content: "Ready to reclaim your Fridays? <strong>Start your free 14-day trial</strong> — no credit card, no implementation fees, no spreadsheets." },
-    ],
-  },
+const data: Pitch = {
+  investor: [
+    { type: "hook", headline_uk: "$1.2 трлн у штрафах ESG — лише цього року", headline_en: "$1.2 trillion in ESG fines — this year alone", content_uk: "Кожна корпоративна команда зі сталого розвитку тоне в таблицях, поки регулятори затягують петлю.", content_en: "Every corporate sustainability team is drowning in spreadsheets while regulators tighten the noose." },
+    { type: "problem", headline_uk: "Менеджери витрачають 6+ годин на тиждень на ручну агрегацію", headline_en: "Managers spend 6+ hours weekly on manual aggregation", content_uk: "Фінансові директори не можуть обґрунтувати ROI ESG-інвестицій перед радою. Дедлайни CSRD маячать по всьому ЄС.", content_en: "CFOs can't justify ESG investment ROI to their boards. CSRD deadlines loom large across the EU." },
+    { type: "solution", headline_uk: "EcoSync: звіт за 15 хвилин замість 3 днів", headline_en: "EcoSync: a report in 15 minutes instead of 3 days", content_uk: "Автоматизує збір ESG-даних, забезпечує моніторинг вуглецевого сліду в реальному часі та генерує звіти для ради директорів.", content_en: "Automates ESG data collection, delivers real-time carbon monitoring, and generates board-ready reports." },
+    { type: "traction", headline_uk: "3 пілоти. €2.1М ARR pipeline. NPS 72.", headline_en: "3 pilots. €2.1M ARR pipeline. NPS 72.", content_uk: "CSRD-сертифікований модуль звітності запущено серед бета-когорти.", content_en: "CSRD-certified reporting module launched across the beta cohort." },
+    { type: "ask", headline_uk: "Залучаємо €4М Series A", headline_en: "Raising €4M Series A", content_uk: "Для розширення продажів у ЄС та побудови мережі Scope 3 постачальників. Ціль — €8М ARR до кінця 2-го року.", content_en: "To expand EU sales motion and build a Scope 3 supplier network. Targeting €8M ARR by end of Year 2." },
+  ],
+  customer: [
+    { type: "opening", headline_uk: "Олено, рада хоче ESG-звіт до п'ятниці", headline_en: "Olena, the board wants the ESG report by Friday", content_uk: "Ваша поштова скринька — цвинтар Excel-файлів із 3 регіональних офісів.", content_en: "Your inbox is a graveyard of Excel files from 3 regional offices." },
+    { type: "empathy", headline_uk: "Ми знаємо: копіювати цифри опівночі — це не ваша робота", headline_en: "We know: copy-pasting figures at midnight isn't your job", content_uk: "Одна неправильна клітинка — і весь звіт марний. Це відбувається щоквартально.", content_en: "One wrong cell and the whole report is meaningless. It happens every quarter." },
+    { type: "transformation", headline_uk: "Один клік замість трьох днів ручної роботи", headline_en: "One click instead of three days of manual work", content_uk: "З EcoSync ви підключаєте джерела даних один раз і натискаєте «Згенерувати звіт». За 15 хвилин CSRD-сумісний документ готовий.", content_en: "With EcoSync you connect your data sources once and click Generate Report. Fifteen minutes later, a CSRD-compliant document is ready." },
+    { type: "social_proof", headline_uk: "«Скоротили цикл звітності з 3 днів до менш ніж години»", headline_en: '"Cut our reporting cycle from 3 days to under an hour"', content_uk: "— ESG Lead, виробник зі списку Fortune 500. Фінансовий директор нарешті довіряє цифрам.", content_en: "— ESG Lead, Fortune 500 manufacturer. Our CFO finally trusts the numbers." },
+    { type: "invitation", headline_uk: "Почніть безкоштовне 14-денне пробне використання", headline_en: "Start your free 14-day trial", content_uk: "Без картки, без впровадження, без таблиць.", content_en: "No credit card, no implementation fees, no spreadsheets." },
+  ],
 }
 
-export function getMockPitchData(locale: Locale): PitchData {
-  return pitchMockData[locale] ?? pitchMockData.en
+export function getMockPitchData(): Pitch {
+  return data
 }

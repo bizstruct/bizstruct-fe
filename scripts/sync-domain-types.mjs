@@ -113,6 +113,7 @@ async function main() {
   await syncBlockSchema("architecture", "architecture", "Architecture")
   await syncBlockSchema("empathy_map", "empathy-map", "EmpathyMap")
   await syncBlockSchema("scenario", "scenario", "Scenario")
+  await syncBlockSchema("pitch", "pitch", "Pitch")
   await syncChain()
 }
 

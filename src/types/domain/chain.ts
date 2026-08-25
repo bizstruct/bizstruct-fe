@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.3.0/schemas/chain.json (bizstruct-domain@v0.3.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.4.0/schemas/chain.json (bizstruct-domain@v0.4.0)
 
 export type StageMode = "both" | "pro"
 

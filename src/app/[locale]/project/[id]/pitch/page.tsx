@@ -20,5 +20,5 @@ export default function PitchPage() {
 
   if (!pitchData) return null
 
-  return <PitchView pitchData={pitchData} />
+  return <PitchView pitchData={pitchData} projectId={projectId} locale={locale} />
 }

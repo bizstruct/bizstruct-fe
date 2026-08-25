@@ -1,11 +1,13 @@
 import { API_ROUTES } from "@/constants/api"
-import { PitchDataSchema } from "@/schemas/pitch.schema"
 import type { PitchData, StoryType } from "@/schemas/pitch.schema"
-import { apiGet, apiPatch, apiPost } from "./api-client"
+import type { Pitch as DomainPitch, InvestorSlide, CustomerSlide } from "@/types/domain/pitch"
+import { apiGet, apiPatch } from "./api-client"
 
-type RawStep  = { type: string; headline?: string; content: string }
-type RawPitch = { investor?: RawStep[]; client?: RawStep[]; customer?: RawStep[] }
-type ApiResponse = PitchData | { pitch: RawPitch | null }
+// Pitch stores both languages inline per slide (headline_uk/headline_en,
+// content_uk/content_en) — like architecture/empathy_map/scenario, not as
+// a {uk:..., en:...} wrapper. The backend validates every write against
+// bizstruct_domain's Pitch model. The audience field is `customer`, not
+// `client` (see schemas/pitch.schema.ts).
 
 function toCamel(s: string): string {
   return s.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
@@ -15,8 +17,37 @@ function toSnake(s: string): string {
   return s.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`)
 }
 
-export async function validatePitch(projectId: string, locale: string): Promise<void> {
-  await apiPost<void>(`${API_ROUTES.pitch(projectId)}/validate?locale=${locale}`, {})
+type FieldLocale = "uk" | "en"
+
+function toFieldLocale(locale: string): FieldLocale {
+  return locale === "uk" ? "uk" : "en"
+}
+
+function headlineField(locale: string): "headline_uk" | "headline_en" {
+  return `headline_${toFieldLocale(locale)}`
+}
+
+function contentField(locale: string): "content_uk" | "content_en" {
+  return `content_${toFieldLocale(locale)}`
+}
+
+function toPitchSteps(slides: (InvestorSlide | CustomerSlide)[], storyType: string, locale: string) {
+  const hField = headlineField(locale)
+  const cField = contentField(locale)
+  return slides.map((s, i) => ({
+    id: i + 1,
+    titleKey: `${storyType}.${toCamel(s.type)}`,
+    content: s[hField] ? `<strong>${s[hField]}</strong><br/>${s[cField]}` : s[cField],
+  }))
+}
+
+export async function getPitch(projectId: string, locale: string): Promise<PitchData | null> {
+  const raw = await apiGet<{ pitch: DomainPitch | null }>(API_ROUTES.pitch(projectId))
+  if (!raw?.pitch) return null
+  return {
+    investor: toPitchSteps(raw.pitch.investor, "investor", locale),
+    customer: toPitchSteps(raw.pitch.customer, "customer", locale),
+  }
 }
 
 export async function savePitchStep(
@@ -27,38 +58,9 @@ export async function savePitchStep(
   headline: string,
   content: string,
 ): Promise<void> {
-  const pitchType = storyType === "investor" ? "investor" : "client"
   const slideType = toSnake(titleKey.split(".").pop() ?? "")
-  const url = `${API_ROUTES.pitch(projectId)}/${pitchType}/${slideType}?locale=${locale}`
-  await apiPatch<void>(url, { headline: headline || undefined, content })
-}
-
-function normalizeSteps(steps: RawStep[], storyType: string) {
-  return steps.map((s, i) => ({
-    id:       i + 1,
-    titleKey: `${storyType}.${toCamel(s.type)}`,
-    content:  s.headline ? `<strong>${s.headline}</strong><br/>${s.content}` : s.content,
-  }))
-}
-
-export async function getPitch(projectId: string, locale: string): Promise<PitchData | null> {
-  const url  = `${API_ROUTES.pitch(projectId)}?locale=${locale}`
-  const body = await apiGet<ApiResponse>(url)
-  if (!body) return null
-
-  // Already-normalized PitchData (investor/customer arrays of PitchStep)
-  if ("investor" in body || "customer" in body) {
-    return PitchDataSchema.parse({
-      investor: (body as PitchData).investor ?? [],
-      customer: (body as PitchData).customer ?? [],
-    })
-  }
-
-  // Raw backend envelope: { pitch: RawPitch | null }
-  const raw = (body as { pitch: RawPitch | null }).pitch
-  if (!raw) return null
-  return PitchDataSchema.parse({
-    investor: normalizeSteps(raw.investor ?? [], "investor"),
-    customer: normalizeSteps(raw.client ?? raw.customer ?? [], "customer"),
-  })
+  const url = `${API_ROUTES.pitch(projectId)}/${storyType}/${slideType}`
+  const body: Record<string, string> = { [contentField(locale)]: content }
+  if (headline) body[headlineField(locale)] = headline
+  await apiPatch<void>(url, body)
 }

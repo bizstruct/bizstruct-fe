@@ -2,6 +2,7 @@ export const pitchStyles = {
   // ── shell ─────────────────────────────────────────────────────────────────
   root:          "flex flex-col h-full",
   header:        "shrink-0 flex items-center px-5 py-3 border-b border-slate-200 bg-white",
+  headerTitle:   "text-sm font-semibold text-slate-900",
   headerLeft:    "flex-1 flex items-center",
   headerCenter:  "flex items-center",
   headerRight:   "flex-1 flex items-center justify-end gap-2",

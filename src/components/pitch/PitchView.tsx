@@ -1,15 +1,14 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
-import { RefreshCw, Check, ChevronRight, FlaskConical, Loader2, ShieldCheck, XCircle } from "lucide-react"
+import { RefreshCw, Check, ChevronRight, FlaskConical, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import type { PitchData, StoryType, PitchStep } from "@/schemas/pitch.schema"
-import { savePitchStep, validatePitch } from "@/services/pitch"
+import { savePitchStep } from "@/services/pitch"
 import { pitchStyles, STEP_COLORS, DEFAULT_STEP_COLORS } from "./styles"
 
-type SaveStatus     = "idle" | "dirty" | "saving" | "saved"
-type ValidateStatus = "idle" | "validating" | "valid" | "invalid"
+type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 
 interface Props {
   pitchData:        PitchData
@@ -43,10 +42,8 @@ export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Pro
   const [storyType,  setStoryType]  = useState<StoryType>("investor")
   const [stepIdx,    setStepIdx]    = useState(0)
   const [localData,  setLocalData]  = useState<PitchData>(() => pitchData)
-  const [saveStatus,     setSaveStatus]     = useState<SaveStatus>("idle")
-  const [validateStatus, setValidateStatus] = useState<ValidateStatus>("idle")
-  const saveTimerRef     = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const validateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle")
+  const saveTimerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const headlineRef   = useRef<HTMLTextAreaElement>(null)
   const bodyRef       = useRef<HTMLTextAreaElement>(null)
 
@@ -86,7 +83,6 @@ export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Pro
       ),
     }))
     setSaveStatus("dirty")
-    setValidateStatus("idle")
   }
 
   async function saveCurrentStep() {
@@ -101,21 +97,6 @@ export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Pro
       saveTimerRef.current = setTimeout(() => setSaveStatus("idle"), 2000)
     } catch {
       setSaveStatus("dirty")
-    }
-  }
-
-  async function handleValidate() {
-    if (validateStatus === "validating") return
-    setValidateStatus("validating")
-    try {
-      await validatePitch(projectId, locale)
-      setValidateStatus("valid")
-      if (validateTimerRef.current) clearTimeout(validateTimerRef.current)
-      validateTimerRef.current = setTimeout(() => setValidateStatus("idle"), 3000)
-    } catch {
-      setValidateStatus("invalid")
-      if (validateTimerRef.current) clearTimeout(validateTimerRef.current)
-      validateTimerRef.current = setTimeout(() => setValidateStatus("idle"), 3000)
     }
   }
 
@@ -166,23 +147,6 @@ export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Pro
             {saveStatus === "saving" && <Loader2 className="h-3 w-3 animate-spin" />}
             {saveStatus === "saved"  && <Check   className="h-3 w-3" />}
             {t(`saveStatus.${saveStatus}` as Parameters<typeof t>[0])}
-          </Button>
-          <Button
-            variant="outline" size="sm"
-            disabled={validateStatus === "validating"}
-            onClick={() => void handleValidate()}
-            className={
-              validateStatus === "valid"   ? "h-7 gap-1.5 text-xs font-medium border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-50" :
-              validateStatus === "invalid" ? "h-7 gap-1.5 text-xs font-medium border-red-300 bg-red-50 text-red-600 hover:bg-red-50" :
-              validateStatus === "validating" ? "h-7 gap-1.5 text-xs font-medium border-amber-200 text-amber-400 cursor-wait" :
-              "h-7 gap-1.5 text-xs font-medium border-amber-200 text-amber-600 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700"
-            }
-          >
-            {validateStatus === "validating" ? <Loader2   className="h-3 w-3 animate-spin" /> :
-             validateStatus === "valid"      ? <Check     className="h-3 w-3" /> :
-             validateStatus === "invalid"    ? <XCircle   className="h-3 w-3" /> :
-                                              <ShieldCheck className="h-3.5 w-3.5" />}
-            {t(`validateStatus.${validateStatus}` as Parameters<typeof t>[0])}
           </Button>
           <Button size="sm" className={pitchStyles.regenBtn}>
             <RefreshCw className="h-3 w-3" /> {t("regenerate")}
