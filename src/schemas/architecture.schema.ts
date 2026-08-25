@@ -1,51 +1,30 @@
-import { z } from "zod"
+// Types come from bizstruct-domain (via `npm run sync:domain`), not from a
+// hand-maintained zod schema — see src/types/domain/architecture.ts. The
+// backend validates every Architecture payload before it's ever stored
+// (bizstruct-be's /api/internal/hook and /api/architecture/* endpoints), so
+// the frontend no longer needs to defensively re-parse/normalize API
+// responses the way the old locale-nested schema did.
+export type {
+  Architecture,
+  Epicenter,
+  Pattern,
+  PatternSubtype,
+} from "@/types/domain/architecture"
 
-// ── Epicenter: 4 closed values ────────────────────────────────────────────
-export const EpicenterSchema = z.enum([
-  "resource-driven",
-  "offer-driven",
-  "customer-driven",
-  "finance-driven",
-])
+export {
+  EPICENTER_VALUES,
+  PATTERN_VALUES,
+  PATTERN_SUBTYPE_VALUES,
+} from "@/types/domain/architecture"
 
-// ── Pattern: 5 closed values ──────────────────────────────────────────────
-export const PatternSchema = z.enum([
-  "unbundling",
-  "long-tail",
-  "multi-sided-platform",
-  "free",
-  "open-business-model",
-])
+import type { Pattern, PatternSubtype } from "@/types/domain/architecture"
 
-// ── Subtypes (only for "free" and "open-business-model") ─────────────────
-export const PatternSubtypeSchema = z.enum([
-  "freemium",
-  "ad-supported",
-  "bait-and-hook",
-  "open-source",
-  "outside-in",
-  "inside-out",
-])
-
-export const PATTERN_SUBTYPES: Partial<Record<PatternType, PatternSubtypeType[]>> = {
-  "free":                ["freemium", "ad-supported", "bait-and-hook", "open-source"],
-  "open-business-model": ["outside-in", "inside-out"],
+// Mirrors bizstruct_domain.enums.PATTERN_SUBTYPES (Python) — that mapping is
+// enforced by Architecture's cross-field validator but isn't itself part of
+// the JSON Schema (it's business logic inside a @model_validator, not a
+// declarative constraint), so it can't be generated. Keep in sync manually
+// if bizstruct-domain's PATTERN_SUBTYPES changes.
+export const PATTERN_SUBTYPES: Partial<Record<Pattern, readonly PatternSubtype[]>> = {
+  free: ["freemium", "ad_supported", "bait_and_hook"],
+  open_business_model: ["outside_in", "inside_out"],
 }
-
-// ── Flat schema matching backend response ─────────────────────────────────
-export const ArchitectureDataSchema = z.object({
-  epicenter: z.object({
-    value:       EpicenterSchema,
-    description: z.string(),
-  }),
-  pattern: z.object({
-    value:       PatternSchema,
-    subtype:     PatternSubtypeSchema.nullable(),
-    description: z.string(),
-  }),
-})
-
-export type EpicenterType      = z.infer<typeof EpicenterSchema>
-export type PatternType        = z.infer<typeof PatternSchema>
-export type PatternSubtypeType = z.infer<typeof PatternSubtypeSchema>
-export type ArchitectureData   = z.infer<typeof ArchitectureDataSchema>

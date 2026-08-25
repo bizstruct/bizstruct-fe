@@ -315,28 +315,28 @@
     "subtypeLabel": "Підтип",
     "determined": "Визначено",
     "systemSelection": "Системний підбір",
-    "epicenterDesc": "Опис",
-    "patternDesc": "Опис",
+    "epicenterDesc": "Обґрунтування",
+    "patternDesc": "Обґрунтування",
     "epicenters": {
-      "resource-driven": "Resource-driven",
-      "offer-driven": "Offer-driven",
-      "customer-driven": "Customer-driven",
-      "finance-driven": "Finance-driven"
+      "resource_driven": "Ресурсо-орієнтований",
+      "offer_driven": "Пропозиційно-орієнтований",
+      "customer_driven": "Клієнто-орієнтований",
+      "finance_driven": "Фінансово-орієнтований",
+      "multiple_epicenter": "Мультиепіцентровий"
     },
     "patterns": {
-      "unbundling": "Unbundling",
-      "long-tail": "Long Tail",
-      "multi-sided-platform": "Multi-sided Platform",
-      "free": "FREE",
-      "open-business-model": "Open Business Model"
+      "unbundling": "Розділення бізнесів",
+      "long_tail": "Довгий хвіст",
+      "multi_sided_platform": "Багатостороння платформа",
+      "free": "Безкоштовний",
+      "open_business_model": "Відкрита бізнес-модель"
     },
     "subtypes": {
       "freemium": "Freemium",
-      "ad-supported": "Ad-supported",
-      "bait-and-hook": "Bait & Hook",
-      "open-source": "Open Source",
-      "outside-in": "Outside-In",
-      "inside-out": "Inside-Out"
+      "ad_supported": "З рекламою",
+      "bait_and_hook": "Приманка й гачок",
+      "outside_in": "Ззовні-всередину",
+      "inside_out": "Зсередини-назовні"
     }
   },
   "Common": {

@@ -28,7 +28,7 @@ import type { Hypothesis } from "@/schemas/hypotheses.schema"
 import type { PitchData } from "@/schemas/pitch.schema"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 import type { WhatIfVector } from "@/schemas/what-if.schema"
-import type { ArchitectureData } from "@/schemas/architecture.schema"
+import type { Architecture } from "@/schemas/architecture.schema"
 import type { CanvasSections } from "@/schemas/canvas.schema"
 
 type ActiveView = "empathy" | "canvas" | "hypotheses" | "pitch" | "what-if" | "architecture" | "scenario"
@@ -67,7 +67,7 @@ export default function ProjectWorkspacePage() {
   const [pitchData,        setPitchData]         = useState<PitchData | null>(null)
   const [scenarioData,     setScenarioData]      = useState<ScenarioData | null>(null)
   const [whatIfVectors,    setWhatIfVectors]     = useState<WhatIfVector[] | null>(null)
-  const [architectureData, setArchitectureData]  = useState<ArchitectureData | null>(null)
+  const [architecture,      setArchitecture]      = useState<Architecture | null>(null)
   const [canvasData,       setCanvasData]        = useState<CanvasSections | null>(null)
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function ProjectWorkspacePage() {
         getPitch(projectId, locale).catch(() => null),
         getScenario(projectId, locale).catch(() => null),
         getWhatIfVectors(projectId).catch(() => null),
-        getArchitecture(projectId, locale).catch(() => null),
+        getArchitecture(projectId).catch(() => null),
         getCanvas(projectId).catch(() => null),
       ])
       if (cancelled) return
@@ -91,7 +91,7 @@ export default function ProjectWorkspacePage() {
       if (pitch)    setPitchData(pitch)
       if (scenario) setScenarioData(scenario)
       if (whatIf?.length)  setWhatIfVectors(whatIf)
-      if (arch)     setArchitectureData(arch)
+      if (arch)     setArchitecture(arch)
       if (canvas)   setCanvasData(canvas)
       const allReady = empathy && hyps !== null && pitch && scenario && whatIf !== null && arch && canvas
       if (!allReady) {
@@ -166,7 +166,7 @@ export default function ProjectWorkspacePage() {
           ? <WhatIfView
               projectId={projectId}
               vectors={whatIfVectors}
-              hasSubsequentData={architectureData !== null}
+              hasSubsequentData={architecture !== null}
               onApplied={(scenarioId) => {
                 setWhatIfVectors(prev =>
                   prev?.map(v => ({
@@ -180,8 +180,8 @@ export default function ProjectWorkspacePage() {
           : <GeneratingPlaceholder />
         )}
         {activeView === "canvas" && <CanvasView hasPitch={pitchData !== null} onGoToPitch={() => setActiveView("pitch")} />}
-        {activeView === "architecture" && (architectureData
-          ? <ArchitectureView projectId={projectId} locale={locale} architectureData={architectureData} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
+        {activeView === "architecture" && (architecture
+          ? <ArchitectureView projectId={projectId} locale={locale} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "hypotheses" && (hypotheses

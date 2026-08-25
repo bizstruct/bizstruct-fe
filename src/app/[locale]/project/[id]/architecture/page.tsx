@@ -6,7 +6,7 @@ import { getArchitecture } from "@/services/architecture"
 import { getCanvas } from "@/services/canvas"
 import { ArchitectureView } from "@/components/architecture/ArchitectureView"
 import { ROUTES } from "@/constants/routes"
-import type { ArchitectureData } from "@/schemas/architecture.schema"
+import type { Architecture } from "@/schemas/architecture.schema"
 import type { CanvasSections } from "@/schemas/canvas.schema"
 
 export default function ArchitecturePage() {
@@ -15,22 +15,22 @@ export default function ArchitecturePage() {
   const projectId = params?.id ?? ""
   const locale    = params?.locale ?? "en"
 
-  const [architectureData, setArchitectureData] = useState<ArchitectureData | null>(null)
-  const [canvasData,       setCanvasData]       = useState<CanvasSections | null>(null)
+  const [architecture, setArchitecture] = useState<Architecture | null>(null)
+  const [canvasData,   setCanvasData]   = useState<CanvasSections | null>(null)
 
   useEffect(() => {
     if (!projectId) return
-    getArchitecture(projectId, locale).then(setArchitectureData).catch(console.error)
+    getArchitecture(projectId).then(setArchitecture).catch(console.error)
     getCanvas(projectId).then(setCanvasData).catch(() => {})
-  }, [projectId, locale])
+  }, [projectId])
 
-  if (!architectureData) return null
+  if (!architecture) return null
 
   return (
     <ArchitectureView
       projectId={projectId}
       locale={locale}
-      architectureData={architectureData}
+      architecture={architecture}
       hasCanvas={canvasData !== null}
       onGoToCanvas={() => router.push(`/${locale}${ROUTES.canvas(projectId)}`)}
     />

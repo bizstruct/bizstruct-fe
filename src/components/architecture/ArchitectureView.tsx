@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import {
-  RotateCcw, Sparkles, ArrowDown, Check, Loader2, ShieldCheck, XCircle,
-  Database, Gift, Users, DollarSign,
+  RotateCcw, Sparkles, ArrowDown, Check, Loader2,
+  Database, Gift, Users, DollarSign, Layers,
   Scissors, BarChart2, Network, Zap, Globe,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -11,33 +11,42 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
+  EPICENTER_VALUES,
+  PATTERN_VALUES,
   PATTERN_SUBTYPES,
-  EpicenterSchema,
-  PatternSchema,
-  PatternSubtypeSchema,
 } from "@/schemas/architecture.schema"
 import type {
-  ArchitectureData,
-  EpicenterType,
-  PatternType,
-  PatternSubtypeType,
+  Architecture,
+  Epicenter,
+  Pattern,
+  PatternSubtype,
 } from "@/schemas/architecture.schema"
-import { patchArchitectureEpicenter, patchArchitecturePattern, validateArchitecture } from "@/services/architecture"
+import { patchArchitectureEpicenter, patchArchitecturePattern } from "@/services/architecture"
 import { architectureStyles as s } from "./styles"
 
-const EPICENTER_ICONS: Record<EpicenterType, React.ReactNode> = {
-  "resource-driven": <Database   className="h-5 w-5" />,
-  "offer-driven":    <Gift       className="h-5 w-5" />,
-  "customer-driven": <Users      className="h-5 w-5" />,
-  "finance-driven":  <DollarSign className="h-5 w-5" />,
+const EPICENTER_ICONS: Record<Epicenter, React.ReactNode> = {
+  resource_driven:    <Database   className="h-5 w-5" />,
+  offer_driven:        <Gift       className="h-5 w-5" />,
+  customer_driven:    <Users      className="h-5 w-5" />,
+  finance_driven:      <DollarSign className="h-5 w-5" />,
+  multiple_epicenter: <Layers     className="h-5 w-5" />,
 }
 
-const PATTERN_ICONS: Record<PatternType, React.ReactNode> = {
-  "unbundling":           <Scissors  className="h-5 w-5" />,
-  "long-tail":            <BarChart2 className="h-5 w-5" />,
-  "multi-sided-platform": <Network   className="h-5 w-5" />,
-  "free":                 <Zap       className="h-5 w-5" />,
-  "open-business-model":  <Globe     className="h-5 w-5" />,
+const PATTERN_ICONS: Record<Pattern, React.ReactNode> = {
+  unbundling:            <Scissors  className="h-5 w-5" />,
+  long_tail:              <BarChart2 className="h-5 w-5" />,
+  multi_sided_platform: <Network   className="h-5 w-5" />,
+  free:                    <Zap       className="h-5 w-5" />,
+  open_business_model:  <Globe     className="h-5 w-5" />,
+}
+
+// Architecture carries both languages inline (epicenter_rationale_uk/_en,
+// pattern_rationale_uk/_en) rather than being sliced per-locale server-side —
+// pick the field for next-intl's active locale.
+type RationaleLocale = "uk" | "en"
+
+function toRationaleLocale(locale: string): RationaleLocale {
+  return locale === "uk" ? "uk" : "en"
 }
 
 function EditableText({
@@ -55,7 +64,7 @@ function EditableText({
   useEffect(() => {
     if (ref.current) ref.current.textContent = initialText
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [initialText])
   return (
     <div
       ref={ref}
@@ -71,7 +80,7 @@ function EditableText({
 function SelectorGroup<T extends string>({
   options, value, onChange, getLabel, size = "md", originalValue,
 }: {
-  options:        T[]
+  options:        readonly T[]
   value:          T
   onChange:       (v: T) => void
   getLabel:       (v: T) => string
@@ -114,32 +123,34 @@ function SelectorGroup<T extends string>({
   )
 }
 
-type SaveStatus     = "idle" | "dirty" | "saving" | "saved" | "error"
-type ValidateStatus = "idle" | "validating" | "valid" | "invalid"
+type SaveStatus = "idle" | "dirty" | "saving" | "saved" | "error"
 
 interface Props {
-  projectId:        string
-  locale:           string
-  architectureData: ArchitectureData
-  hasCanvas:        boolean
-  onGoToCanvas:     () => void
+  projectId:     string
+  locale:        string
+  architecture:  Architecture
+  hasCanvas:     boolean
+  onGoToCanvas:  () => void
 }
 
-export function ArchitectureView({ projectId, locale, architectureData, hasCanvas, onGoToCanvas }: Props) {
+export function ArchitectureView({ projectId, locale, architecture, hasCanvas, onGoToCanvas }: Props) {
   const t  = useTranslations("ArchitectureView")
   const tc = useTranslations("Common.actions")
 
-  const [epicenter,      setEpicenter]      = useState<EpicenterType>(architectureData.epicenter.value)
-  const [pattern,        setPattern]        = useState<PatternType>(architectureData.pattern.value)
-  const [patternSubtype, setPatternSubtype] = useState<PatternSubtypeType | null>(architectureData.pattern.subtype)
+  const rationaleLocale = toRationaleLocale(locale)
+  const epicenterRationaleField = `epicenter_rationale_${rationaleLocale}` as const
+  const patternRationaleField   = `pattern_rationale_${rationaleLocale}`   as const
+
+  const [epicenter,      setEpicenter]      = useState<Epicenter>(architecture.epicenter)
+  const [pattern,        setPattern]        = useState<Pattern>(architecture.pattern)
+  const [patternSubtype, setPatternSubtype] = useState<PatternSubtype | null>(architecture.pattern_subtype ?? null)
   const [saveStatus,     setSaveStatus]     = useState<SaveStatus>("idle")
-  const [validateStatus, setValidateStatus] = useState<ValidateStatus>("idle")
 
   // Track what was loaded from the backend so we can show "was: X" diffs
   const original = useRef({
-    epicenter:     architectureData.epicenter.value,
-    pattern:       architectureData.pattern.value,
-    patternSubtype: architectureData.pattern.subtype,
+    epicenter:      architecture.epicenter,
+    pattern:        architecture.pattern,
+    patternSubtype: architecture.pattern_subtype ?? null,
   })
 
   const epicenterDescRef = useRef<HTMLDivElement>(null)
@@ -147,22 +158,21 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
 
   function markDirty() {
     setSaveStatus((prev) => prev === "idle" || prev === "saved" ? "dirty" : prev)
-    setValidateStatus("idle")
   }
 
-  function handleEpicenterChange(v: EpicenterType) {
+  function handleEpicenterChange(v: Epicenter) {
     setEpicenter(v)
     markDirty()
   }
 
-  function handlePatternChange(v: PatternType) {
+  function handlePatternChange(v: Pattern) {
     setPattern(v)
     const subtypes = PATTERN_SUBTYPES[v]
     setPatternSubtype(subtypes ? subtypes[0] : null)
     markDirty()
   }
 
-  function handleSubtypeChange(v: PatternSubtypeType) {
+  function handleSubtypeChange(v: PatternSubtype) {
     setPatternSubtype(v)
     markDirty()
   }
@@ -176,14 +186,14 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
     setSaveStatus("saving")
     try {
       await Promise.all([
-        patchArchitectureEpicenter(projectId, locale, {
-          value:       epicenter,
-          description: getDesc(epicenterDescRef, architectureData.epicenter.description),
+        patchArchitectureEpicenter(projectId, {
+          epicenter: epicenter,
+          [epicenterRationaleField]: getDesc(epicenterDescRef, architecture[epicenterRationaleField]),
         }),
-        patchArchitecturePattern(projectId, locale, {
-          value:       pattern,
-          subtype:     patternSubtype ?? undefined,
-          description: getDesc(patternDescRef, architectureData.pattern.description),
+        patchArchitecturePattern(projectId, {
+          pattern: pattern,
+          pattern_subtype: patternSubtype,
+          [patternRationaleField]: getDesc(patternDescRef, architecture[patternRationaleField]),
         }),
       ])
       original.current = { epicenter, pattern, patternSubtype }
@@ -195,32 +205,13 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
     }
   }
 
-  async function handleValidate() {
-    if (saveStatus !== "dirty") return
-    setValidateStatus("validating")
-    try {
-      await validateArchitecture(projectId, locale, {
-        epicenter:            epicenter,
-        pattern:              pattern,
-        subtype:              patternSubtype,
-        epicenterDescription: getDesc(epicenterDescRef, architectureData.epicenter.description),
-        patternDescription:   getDesc(patternDescRef, architectureData.pattern.description),
-      })
-      setValidateStatus("valid")
-      setTimeout(() => setValidateStatus("idle"), 3000)
-    } catch {
-      setValidateStatus("invalid")
-      setTimeout(() => setValidateStatus("idle"), 3000)
-    }
-  }
-
-  const epicenters = EpicenterSchema.options
-  const patterns   = PatternSchema.options
+  const epicenters = EPICENTER_VALUES
+  const patterns   = PATTERN_VALUES
   const subtypes   = PATTERN_SUBTYPES[pattern] ?? []
 
-  const epicenterChanged  = epicenter     !== original.current.epicenter
-  const patternChanged    = pattern       !== original.current.pattern
-  const subtypeChanged    = patternSubtype !== original.current.patternSubtype
+  const epicenterChanged = epicenter      !== original.current.epicenter
+  const patternChanged   = pattern        !== original.current.pattern
+  const subtypeChanged   = patternSubtype !== original.current.patternSubtype
 
   const saveBtnClass = {
     idle:   s.saveBtnIdle,
@@ -255,33 +246,6 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
                 <>Error</>
               ) : (
                 <><Check className="h-3 w-3" /> {tc("save")}</>
-              )}
-            </Button>
-            <Button
-              variant="outline" size="sm"
-              disabled={saveStatus !== "dirty" || validateStatus === "validating"}
-              onClick={() => void handleValidate()}
-              className={cn(
-                "h-8 gap-1.5 text-xs font-medium transition-colors",
-                validateStatus === "valid"
-                  ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                  : validateStatus === "invalid"
-                  ? "border-red-300 bg-red-50 text-red-600"
-                  : validateStatus === "validating"
-                  ? "border-indigo-200 text-indigo-400 cursor-wait"
-                  : saveStatus === "dirty"
-                  ? "border-indigo-300 text-indigo-600 hover:bg-indigo-50"
-                  : "opacity-40 cursor-not-allowed",
-              )}
-            >
-              {validateStatus === "validating" ? (
-                <><Loader2 className="h-3 w-3 animate-spin" /> {t("validating")}</>
-              ) : validateStatus === "valid" ? (
-                <><Check className="h-3 w-3" /> {t("validated")}</>
-              ) : validateStatus === "invalid" ? (
-                <><XCircle className="h-3 w-3" /> {t("validateFailed")}</>
-              ) : (
-                <><ShieldCheck className="h-3.5 w-3.5" /> {t("validateBtn")}</>
               )}
             </Button>
             {!hasCanvas && (
@@ -321,7 +285,8 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
             <div ref={epicenterDescRef} className={s.descWrap}>
               <div className={s.descLabel}>{t("epicenterDesc")}</div>
               <EditableText
-                initialText={architectureData.epicenter.description}
+                key={epicenterRationaleField}
+                initialText={architecture[epicenterRationaleField]}
                 field="desc"
                 onInput={markDirty}
                 className={s.cardDesc}
@@ -373,7 +338,8 @@ export function ArchitectureView({ projectId, locale, architectureData, hasCanva
             <div ref={patternDescRef} className={s.descWrap}>
               <div className={s.descLabel}>{t("patternDesc")}</div>
               <EditableText
-                initialText={architectureData.pattern.description}
+                key={patternRationaleField}
+                initialText={architecture[patternRationaleField]}
                 field="desc"
                 onInput={markDirty}
                 className={s.cardDesc}

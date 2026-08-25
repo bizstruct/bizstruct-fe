@@ -7,8 +7,7 @@ export async function GET(
   context: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await context.params
-  const locale = request.nextUrl.searchParams.get("locale") ?? "en"
-  const res = await fetch(`${BASE}/api/architecture/${projectId}?locale=${locale}`, {
+  const res = await fetch(`${BASE}/api/architecture/${projectId}`, {
     cache: "no-store",
   })
   const data = await res.json()
@@ -20,9 +19,8 @@ export async function PUT(
   context: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await context.params
-  const locale = request.nextUrl.searchParams.get("locale") ?? "en"
   const body = await request.json()
-  const res = await fetch(`${BASE}/api/architecture/${projectId}?locale=${locale}`, {
+  const res = await fetch(`${BASE}/api/architecture/${projectId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

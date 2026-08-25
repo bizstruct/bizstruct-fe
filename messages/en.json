@@ -315,28 +315,28 @@
     "subtypeLabel": "Subtype",
     "determined": "Determined",
     "systemSelection": "System selection",
-    "epicenterDesc": "Description",
-    "patternDesc": "Description",
+    "epicenterDesc": "Rationale",
+    "patternDesc": "Rationale",
     "epicenters": {
-      "resource-driven": "Resource-driven",
-      "offer-driven": "Offer-driven",
-      "customer-driven": "Customer-driven",
-      "finance-driven": "Finance-driven"
+      "resource_driven": "Resource-driven",
+      "offer_driven": "Offer-driven",
+      "customer_driven": "Customer-driven",
+      "finance_driven": "Finance-driven",
+      "multiple_epicenter": "Multiple epicenter"
     },
     "patterns": {
       "unbundling": "Unbundling",
-      "long-tail": "Long Tail",
-      "multi-sided-platform": "Multi-sided Platform",
-      "free": "FREE",
-      "open-business-model": "Open Business Model"
+      "long_tail": "Long Tail",
+      "multi_sided_platform": "Multi-sided Platform",
+      "free": "Free",
+      "open_business_model": "Open Business Model"
     },
     "subtypes": {
       "freemium": "Freemium",
-      "ad-supported": "Ad-supported",
-      "bait-and-hook": "Bait & Hook",
-      "open-source": "Open Source",
-      "outside-in": "Outside-In",
-      "inside-out": "Inside-Out"
+      "ad_supported": "Ad-supported",
+      "bait_and_hook": "Bait & Hook",
+      "outside_in": "Outside-In",
+      "inside_out": "Inside-Out"
     }
   },
   "Common": {

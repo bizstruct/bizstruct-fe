@@ -7,9 +7,8 @@ export async function PATCH(
   context: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await context.params
-  const locale = request.nextUrl.searchParams.get("locale") ?? "en"
   const body = await request.json()
-  const res = await fetch(`${BASE}/api/architecture/${projectId}/pattern?locale=${locale}`, {
+  const res = await fetch(`${BASE}/api/architecture/${projectId}/pattern`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
