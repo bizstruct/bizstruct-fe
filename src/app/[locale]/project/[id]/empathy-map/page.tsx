@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import { useProjectStore } from "@/store/use-project-store"
 import { getEmpathyMap } from "@/services/empathy-map"
 import { EmpathyView } from "@/components/empathy-map/EmpathyView"
-import type { EmpathyData } from "@/schemas/empathy-map.schema"
+import type { EmpathyMap } from "@/schemas/empathy-map.schema"
 
 export default function EmpathyMapPage() {
   const params    = useParams() as { id?: string; locale?: string }
@@ -14,12 +14,12 @@ export default function EmpathyMapPage() {
   const history   = useProjectStore((s) => s.history)
   const project   = history.find((h) => h.id === projectId)
 
-  const [empathyData, setEmpathyData] = useState<EmpathyData | null>(null)
+  const [empathyData, setEmpathyData] = useState<EmpathyMap | null>(null)
 
   useEffect(() => {
     if (!projectId) return
-    getEmpathyMap(projectId, locale).then(setEmpathyData).catch(() => {})
-  }, [projectId, locale])
+    getEmpathyMap(projectId).then(setEmpathyData).catch(() => {})
+  }, [projectId])
 
   if (!empathyData) return null
 
@@ -27,6 +27,7 @@ export default function EmpathyMapPage() {
     <EmpathyView
       projectId={projectId}
       projectName={project?.title ?? projectId}
+      locale={locale}
       initialData={empathyData}
     />
   )

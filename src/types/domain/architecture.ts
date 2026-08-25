@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.1.0/schemas/architecture.json (bizstruct-domain@v0.1.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.2.0/schemas/architecture.json (bizstruct-domain@v0.2.0)
 
 /**
  * Epicentres of business model innovation.

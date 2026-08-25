@@ -1,23 +1,10 @@
-import { z } from "zod"
+// Types come from bizstruct-domain (via `npm run sync:domain`), not from a
+// hand-maintained zod schema — see src/types/domain/empathy-map.ts. The
+// backend validates every EmpathyMap payload before it's ever stored
+// (bizstruct-be's /api/internal/hook and /api/empathy-map/* endpoints), so
+// the frontend no longer needs to defensively re-parse/normalize API
+// responses the way the old locale-nested schema did.
+export type { EmpathyMap, EmpathyItem } from "@/types/domain/empathy-map"
 
 export const EMPATHY_CATEGORIES = ["says", "thinks", "does", "feels", "pains", "gains"] as const
-
-export const EmpathyCategorySchema = z.enum(EMPATHY_CATEGORIES)
-
-export const EmpathyItemSchema = z.object({
-  id: z.number(),
-  text: z.string(),
-})
-
-export const EmpathyDataSchema = z.object({
-  says: z.array(EmpathyItemSchema),
-  thinks: z.array(EmpathyItemSchema),
-  does: z.array(EmpathyItemSchema),
-  feels: z.array(EmpathyItemSchema),
-  pains: z.array(EmpathyItemSchema),
-  gains: z.array(EmpathyItemSchema),
-})
-
-export type EmpathyCategory = z.infer<typeof EmpathyCategorySchema>
-export type EmpathyItem = z.infer<typeof EmpathyItemSchema>
-export type EmpathyData = z.infer<typeof EmpathyDataSchema>
+export type EmpathyCategory = (typeof EMPATHY_CATEGORIES)[number]

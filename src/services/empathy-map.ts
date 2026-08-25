@@ -1,17 +1,20 @@
 import { API_ROUTES } from "@/constants/api"
-import { EmpathyDataSchema } from "@/schemas/empathy-map.schema"
-import type { EmpathyData } from "@/schemas/empathy-map.schema"
-import { apiGet, apiPut, parseOrLog } from "./api-client"
+import type { EmpathyMap } from "@/schemas/empathy-map.schema"
+import { apiGet, apiPut } from "./api-client"
 
-export async function saveEmpathyMap(projectId: string, data: EmpathyData): Promise<void> {
-  await apiPut(API_ROUTES.empathyMap(projectId), data)
+// EmpathyMap stores both languages inline per item (text_uk/text_en on each
+// EmpathyItem) — like architecture, unlike the other blocks, there's no
+// {uk: {...}, en: {...}} wrapper and no `locale` query param. The backend
+// validates every write against bizstruct_domain's EmpathyMap model, so this
+// layer no longer normalizes/defensively re-parses responses the way it used
+// to when the old schema was locale-nested.
+
+export async function getEmpathyMap(projectId: string): Promise<EmpathyMap | null> {
+  const raw = await apiGet<{ empathyMap: EmpathyMap | null }>(API_ROUTES.empathyMap(projectId))
+  return raw?.empathyMap ?? null
 }
 
-export async function getEmpathyMap(projectId: string, locale: string): Promise<EmpathyData | null> {
-  const url = `${API_ROUTES.empathyMap(projectId)}?locale=${locale}`
-  const raw = await apiGet<{ empathyMap: unknown }>(url)
-  if (raw?.empathyMap == null) return null
-  // unwrap double-wrapping if data was previously saved with { empathyMap: data } body
-  const inner = (raw.empathyMap as Record<string, unknown>)?.empathyMap ?? raw.empathyMap
-  return parseOrLog(EmpathyDataSchema, inner, "empathy-map")
+export async function saveEmpathyMap(projectId: string, data: EmpathyMap): Promise<EmpathyMap> {
+  const raw = await apiPut<{ empathyMap: EmpathyMap }>(API_ROUTES.empathyMap(projectId), data)
+  return raw.empathyMap
 }

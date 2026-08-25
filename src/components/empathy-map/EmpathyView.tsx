@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useProjectStore } from "@/store/use-project-store"
-import type { EmpathyCategory, EmpathyData, EmpathyItem } from "@/schemas/empathy-map.schema"
-import { addItem, updateItem, deleteItem } from "@/utils/mappers/empathy"
+import type { EmpathyCategory, EmpathyMap as EmpathyMapData, EmpathyItem } from "@/schemas/empathy-map.schema"
+import { addItem, updateItem, deleteItem, getItemText } from "@/utils/mappers/empathy"
 import { saveEmpathyMap } from "@/services/empathy-map"
 import { empathyStyles } from "./styles"
 import { EmpathyCardList } from "./EmpathyCardList"
@@ -20,25 +20,35 @@ type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 interface Props {
   projectId:          string
   projectName:        string
-  initialData:        EmpathyData
+  locale:             string
+  initialData:        EmpathyMapData
   onNext?:            () => void
   hasSubsequentData?: boolean
 }
 
-export function EmpathyView({ projectId, projectName, initialData, onNext, hasSubsequentData }: Props) {
+export function EmpathyView({ projectId, projectName, locale, initialData, onNext, hasSubsequentData }: Props) {
   const t             = useTranslations("EmpathyView")
   const history       = useProjectStore((s) => s.history)
   const setStoreState = useProjectStore.setState
 
   const projectHistoryItem = history.find((h) => h.id === projectId)
 
+  // The store's history cache only keeps a plain-string preview of
+  // pains/gains (seeded right after generation, before this view's own
+  // fetch lands) — not bilingual. Synthesize both language fields from
+  // that single string as a placeholder; the real bilingual text from the
+  // backend takes over as soon as initialData/the store refresh.
+  function fromCachedTexts(texts: string[]): EmpathyItem[] {
+    return texts.map((text, i) => ({ id: i + 1, text_uk: text, text_en: text }))
+  }
+
   const [state, setState] = useState<Record<EmpathyCategory, EmpathyItem[]>>(() => ({
     ...initialData,
     pains: projectHistoryItem?.empathy?.pains
-      ? projectHistoryItem.empathy.pains.map((text, i) => ({ id: i + 1, text }))
+      ? fromCachedTexts(projectHistoryItem.empathy.pains)
       : initialData.pains,
     gains: projectHistoryItem?.empathy?.gains
-      ? projectHistoryItem.empathy.gains.map((text, i) => ({ id: i + 1, text }))
+      ? fromCachedTexts(projectHistoryItem.empathy.gains)
       : initialData.gains,
   }))
 
@@ -53,14 +63,15 @@ export function EmpathyView({ projectId, projectName, initialData, onNext, hasSu
     if (projectHistoryItem?.empathy) {
       setState((prev) => ({
         ...prev,
-        pains: projectHistoryItem.empathy!.pains.map((text, i) => ({ id: i + 1, text })),
-        gains: projectHistoryItem.empathy!.gains.map((text, i) => ({ id: i + 1, text })),
+        pains: fromCachedTexts(projectHistoryItem.empathy!.pains),
+        gains: fromCachedTexts(projectHistoryItem.empathy!.gains),
       }))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectHistoryItem?.id])
 
   function update(cat: EmpathyCategory, id: number, text: string) {
-    setState((prev) => ({ ...prev, [cat]: updateItem(prev[cat], id, text) }))
+    setState((prev) => ({ ...prev, [cat]: updateItem(prev[cat], locale, id, text) }))
   }
 
   function del(cat: EmpathyCategory, id: number) {
@@ -70,7 +81,7 @@ export function EmpathyView({ projectId, projectName, initialData, onNext, hasSu
   function add(cat: EmpathyCategory): number {
     let newId = 0
     setState((prev) => {
-      const result = addItem(prev[cat])
+      const result = addItem(prev[cat], locale)
       newId = result.newId
       return { ...prev, [cat]: result.items }
     })
@@ -100,20 +111,23 @@ export function EmpathyView({ projectId, projectName, initialData, onNext, hasSu
     if (saveStatus === "idle" || saveStatus === "saving") return
     setSaveStatus("saving")
 
-    // build final state: exclude pending-delete IDs from each category
-    const finalState: EmpathyData = {} as EmpathyData
+    // build final state: exclude pending-delete IDs from each category.
+    // Plain arrays here, not EmpathyMapData's generated 3-6-length tuple
+    // types (json-schema-to-typescript encodes minItems/maxItems that way) —
+    // the backend is what actually enforces that constraint on save.
+    const finalState = {} as Record<EmpathyCategory, EmpathyItem[]>
     for (const cat of [...TOP_CATEGORIES, ...BOTTOM_CATEGORIES] as EmpathyCategory[]) {
       const pending = pendingDeletes.current[cat] ?? new Set()
       finalState[cat] = state[cat].filter((item) => !pending.has(item.id))
     }
 
     try {
-      await saveEmpathyMap(projectId, finalState)
+      await saveEmpathyMap(projectId, finalState as EmpathyMapData)
 
-      // update local store
+      // update local store (plain-string preview, current locale only)
       const empathy = {
-        pains: finalState.pains.map((p) => p.text),
-        gains: finalState.gains.map((g) => g.text),
+        pains: finalState.pains.map((p) => getItemText(p, locale)),
+        gains: finalState.gains.map((g) => getItemText(g, locale)),
       }
       const exists = history.some((h) => h.id === projectId)
       setStoreState({
@@ -195,6 +209,7 @@ export function EmpathyView({ projectId, projectName, initialData, onNext, hasSu
               key={cat}
               category={cat}
               items={state[cat]}
+              locale={locale}
               onUpdate={(id, text) => update(cat, id, text)}
               onDelete={(id) => del(cat, id)}
               onAdd={() => add(cat)}
@@ -211,6 +226,7 @@ export function EmpathyView({ projectId, projectName, initialData, onNext, hasSu
               key={cat}
               category={cat}
               items={state[cat]}
+              locale={locale}
               onUpdate={(id, text) => update(cat, id, text)}
               onDelete={(id) => del(cat, id)}
               onAdd={() => add(cat)}

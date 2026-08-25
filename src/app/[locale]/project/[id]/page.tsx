@@ -23,7 +23,7 @@ import { PitchView } from "@/components/pitch/PitchView"
 import { ScenarioView } from "@/components/scenario/ScenarioView"
 import { WhatIfView } from "@/components/what-if/WhatIfView"
 import { ArchitectureView } from "@/components/architecture/ArchitectureView"
-import type { EmpathyData } from "@/schemas/empathy-map.schema"
+import type { EmpathyMap } from "@/schemas/empathy-map.schema"
 import type { Hypothesis } from "@/schemas/hypotheses.schema"
 import type { PitchData } from "@/schemas/pitch.schema"
 import type { ScenarioData } from "@/schemas/scenario.schema"
@@ -62,7 +62,7 @@ export default function ProjectWorkspacePage() {
 
   const [activeView, setActiveView] = useState<ActiveView>("empathy")
 
-  const [empathyData,      setEmpathyData]      = useState<EmpathyData | null>(null)
+  const [empathyData,      setEmpathyData]      = useState<EmpathyMap | null>(null)
   const [hypotheses,       setHypotheses]        = useState<Hypothesis[] | null>(null)
   const [pitchData,        setPitchData]         = useState<PitchData | null>(null)
   const [scenarioData,     setScenarioData]      = useState<ScenarioData | null>(null)
@@ -77,7 +77,7 @@ export default function ProjectWorkspacePage() {
 
     async function fetchAll() {
       const [empathy, hyps, pitch, scenario, whatIf, arch, canvas] = await Promise.all([
-        getEmpathyMap(projectId, locale).catch(() => null),
+        getEmpathyMap(projectId).catch(() => null),
         getHypotheses(projectId).catch(() => null),
         getPitch(projectId, locale).catch(() => null),
         getScenario(projectId, locale).catch(() => null),
@@ -155,7 +155,7 @@ export default function ProjectWorkspacePage() {
 
       <div className="flex-1 min-h-0 relative">
         {activeView === "empathy" && (empathyData
-          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
+          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} locale={locale} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "scenario" && (scenarioData

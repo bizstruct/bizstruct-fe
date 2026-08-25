@@ -8,13 +8,13 @@
 // not a constant in this file — one place to bump when the domain package
 // releases a new version.
 //
-// schemas/architecture.json is an actual JSON Schema (from
-// Architecture.model_json_schema()) — compiled with json-schema-to-typescript
-// into types, plus a runtime const array of values per enum (pulled from the
-// same schema's `enum` lists) so UI code has something to iterate over: a
-// generated .d.ts can only carry types, not values, and the option lists for
-// selectors are exactly the kind of "hardcoded old values" this sync exists
-// to keep from drifting.
+// schemas/architecture.json and schemas/empathy_map.json are actual JSON
+// Schemas (from each model's .model_json_schema()) — compiled with
+// json-schema-to-typescript into types, plus a runtime const array of
+// values per enum (pulled from the same schema's `enum` lists) so UI code
+// has something to iterate over: a generated .d.ts can only carry types,
+// not values, and the option lists for selectors are exactly the kind of
+// "hardcoded old values" this sync exists to keep from drifting.
 //
 // schemas/chain.json is NOT a JSON Schema — it's the serialized STAGES data
 // itself (bizstruct_domain.chain.STAGES dumped to JSON), by design: the
@@ -58,9 +58,9 @@ async function fetchJson(name) {
   return res.json()
 }
 
-async function syncArchitecture() {
-  const schema = await fetchJson("architecture")
-  const ts = await compile(schema, schema.title ?? "Architecture", {
+async function syncBlockSchema(schemaFile, outFile, title) {
+  const schema = await fetchJson(schemaFile)
+  const ts = await compile(schema, schema.title ?? title, {
     bannerComment: "",
     style: { semi: false },
   })
@@ -77,9 +77,9 @@ async function syncArchitecture() {
     })
     .join("\n")
 
-  const outPath = path.join(OUT_DIR, "architecture.ts")
-  await writeFile(outPath, header("architecture") + "\n" + ts + "\n" + enumConsts + "\n", "utf-8")
-  console.log(`wrote src/types/domain/architecture.ts (bizstruct-domain@${TAG})`)
+  const outPath = path.join(OUT_DIR, `${outFile}.ts`)
+  await writeFile(outPath, header(schemaFile) + "\n" + ts + "\n" + enumConsts + "\n", "utf-8")
+  console.log(`wrote src/types/domain/${outFile}.ts (bizstruct-domain@${TAG})`)
 }
 
 async function syncChain() {
@@ -110,7 +110,8 @@ export const STAGES: readonly Stage[] = ${JSON.stringify(stages, null, 2)} as co
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
-  await syncArchitecture()
+  await syncBlockSchema("architecture", "architecture", "Architecture")
+  await syncBlockSchema("empathy_map", "empathy-map", "EmpathyMap")
   await syncChain()
 }
 
