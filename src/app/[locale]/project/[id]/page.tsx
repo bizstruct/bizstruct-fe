@@ -80,7 +80,7 @@ export default function ProjectWorkspacePage() {
         getEmpathyMap(projectId).catch(() => null),
         getHypotheses(projectId).catch(() => null),
         getPitch(projectId, locale).catch(() => null),
-        getScenario(projectId, locale).catch(() => null),
+        getScenario(projectId).catch(() => null),
         getWhatIfVectors(projectId).catch(() => null),
         getArchitecture(projectId).catch(() => null),
         getCanvas(projectId).catch(() => null),
@@ -159,7 +159,7 @@ export default function ProjectWorkspacePage() {
           : <GeneratingPlaceholder />
         )}
         {activeView === "scenario" && (scenarioData
-          ? <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
+          ? <ScenarioView projectId={projectId} locale={locale} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "what-if" && (whatIfVectors

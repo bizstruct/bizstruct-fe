@@ -15,10 +15,10 @@ export default function ScenarioPage() {
 
   useEffect(() => {
     if (!projectId) return
-    getScenario(projectId, locale).then(setScenarioData).catch(() => {})
-  }, [projectId, locale])
+    getScenario(projectId).then(setScenarioData).catch(() => {})
+  }, [projectId])
 
   if (!scenarioData) return null
 
-  return <ScenarioView projectId={projectId} scenarioData={scenarioData} />
+  return <ScenarioView projectId={projectId} locale={locale} scenarioData={scenarioData} />
 }

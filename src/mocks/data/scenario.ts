@@ -1,43 +1,27 @@
-import type { Locale } from "@/constants/i18n"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 
-const scenarioMockData: Record<Locale, ScenarioData> = {
-  uk: {
-    persona: {
-      name: "Олена",
-      initials: "О",
-      role: "Корпоративний менеджер з екології",
-      painPoint: "Розрізнені Excel-таблиці, помилки введення",
-    },
-    timeline: [
-      { iconKey: "clock",    labelKey: "ScenarioView.timeline.context",   text: "Кінець кварталу — Олена має терміново підготувати звіт",                   highlight: false },
-      { iconKey: "target",   labelKey: "ScenarioView.timeline.goal",      text: "Консолідувати викиди із 3 регіональних офісів",                            highlight: false },
-      { iconKey: "sparkles", labelKey: "ScenarioView.timeline.action",    text: "Логін → Один клік → Автогенерація звіту та AI-інсайти",                   highlight: true },
-    ],
-    metrics: {
-      before: { value: "3 дні",  description: "Ручний збір даних з Excel" },
-      after:  { value: "15 хв",  description: "Готовий звіт з AI-аналітикою" },
-    },
+const data: ScenarioData = {
+  persona: {
+    name_uk: "Олена Коваль",
+    name_en: "Olena Koval",
+    role_uk: "Корпоративний менеджер з екології",
+    role_en: "Corporate Sustainability Manager",
+    pain_point_uk: "Розрізнені Excel-таблиці, помилки введення",
+    pain_point_en: "Fragmented Excel files, data entry errors",
   },
-  en: {
-    persona: {
-      name: "Olena",
-      initials: "O",
-      role: "Corporate Sustainability Manager",
-      painPoint: "Fragmented Excel files, data entry errors",
-    },
-    timeline: [
-      { iconKey: "clock",    labelKey: "ScenarioView.timeline.context", text: "End of quarter — Olena must urgently prepare a report",                    highlight: false },
-      { iconKey: "target",   labelKey: "ScenarioView.timeline.goal",    text: "Consolidate emissions from 3 regional offices",                            highlight: false },
-      { iconKey: "sparkles", labelKey: "ScenarioView.timeline.action",  text: "Login → One Click → Auto-generate report and AI insights",                 highlight: true },
-    ],
-    metrics: {
-      before: { value: "3 days", description: "Manual Excel data collection" },
-      after:  { value: "15 min", description: "Ready report with AI analytics" },
-    },
+  timeline: [
+    { step_type: "context", icon_key: "calendar", text_uk: "Кінець кварталу — Олена має терміново підготувати звіт", text_en: "End of quarter — Olena must urgently prepare a report" },
+    { step_type: "goal", icon_key: "target", text_uk: "Консолідувати викиди із 3 регіональних офісів", text_en: "Consolidate emissions from 3 regional offices" },
+    { step_type: "action", icon_key: "zap", text_uk: "Логін → Один клік → Автогенерація звіту та AI-інсайти", text_en: "Login → One Click → Auto-generate report and AI insights" },
+    { step_type: "result", icon_key: "check-circle", text_uk: "Повний звіт готовий за 15 хвилин, дані з усіх офісів звірені", text_en: "Full report ready in 15 minutes, data from all offices reconciled" },
+    { step_type: "impact", icon_key: "trending-up", text_uk: "Вивільнені дні Олена витрачає на нові ESG-ініціативи", text_en: "Olena spends the freed-up days on new ESG initiatives" },
+  ],
+  metrics: {
+    before: { value_uk: "3 дні", value_en: "3 days", label_uk: "Ручний збір даних з Excel", label_en: "Manual Excel data collection" },
+    after: { value_uk: "15 хв", value_en: "15 min", label_uk: "Готовий звіт з AI-аналітикою", label_en: "Ready report with AI analytics" },
   },
 }
 
-export function getMockScenarioData(locale: Locale): ScenarioData {
-  return scenarioMockData[locale] ?? scenarioMockData.en
+export function getMockScenarioData(): ScenarioData {
+  return data
 }

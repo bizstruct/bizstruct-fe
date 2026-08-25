@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import type { ScenarioData } from "@/schemas/scenario.schema"
+import type { ScenarioData, StepType } from "@/schemas/scenario.schema"
 import { saveScenario } from "@/services/scenario"
 import { scenarioStyles } from "./styles"
 
@@ -20,7 +20,7 @@ const TIMELINE_ICONS: Record<string, React.ElementType> = {
   "trending-up":  TrendingUp,
 }
 
-const STEP_THEMES: Record<string, { icon: string; item: string; label: string }> = {
+const STEP_THEMES: Record<StepType, { icon: string; item: string; label: string }> = {
   context: { icon: "bg-sky-100 text-sky-600",        item: "border-l-2 border-sky-300 bg-sky-50/60",        label: "text-sky-600"    },
   goal:    { icon: "bg-violet-100 text-violet-600",   item: "border-l-2 border-violet-300 bg-violet-50/60",   label: "text-violet-600" },
   action:  { icon: "bg-indigo-100 text-indigo-600",   item: "border-l-2 border-indigo-300 bg-indigo-50/60",   label: "text-indigo-600" },
@@ -28,24 +28,32 @@ const STEP_THEMES: Record<string, { icon: string; item: string; label: string }>
   impact:  { icon: "bg-amber-100 text-amber-600",     item: "border-l-2 border-amber-300 bg-amber-50/60",     label: "text-amber-600"  },
 }
 
-const DEFAULT_STEP_THEME = { icon: "bg-slate-100 text-slate-600", item: "border-l-2 border-slate-300 bg-slate-50/60", label: "text-slate-500" }
+// Scenario carries both languages inline (text_uk/text_en, name_uk/name_en,
+// etc.) rather than being sliced per-locale server-side — pick the field
+// for next-intl's active locale, same pattern as ArchitectureView.
+type FieldLocale = "uk" | "en"
 
-function getStepTheme(labelKey: string) {
-  const suffix = labelKey.split(".").pop() ?? ""
-  return STEP_THEMES[suffix] ?? DEFAULT_STEP_THEME
+function toFieldLocale(locale: string): FieldLocale {
+  return locale === "uk" ? "uk" : "en"
+}
+
+function computeInitials(name: string): string {
+  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? "").join("")
 }
 
 type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 
 interface Props {
   projectId:          string
+  locale:             string
   scenarioData:       ScenarioData
   onNext?:            () => void
   hasSubsequentData?: boolean
 }
 
-export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentData }: Props) {
+export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubsequentData }: Props) {
   const t = useTranslations("ScenarioView")
+  const fieldLocale = toFieldLocale(locale)
 
   const [data,           setData]           = useState<ScenarioData>(scenarioData)
   const [editingField,   setEditingField]   = useState<string | null>(null)
@@ -62,52 +70,59 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
 
   // ── setters ──────────────────────────────────────────────────────────────
 
-  function setStepText(labelKey: string, text: string) {
-    setData(prev => ({ ...prev, timeline: prev.timeline.map(s => s.labelKey === labelKey ? { ...s, text } : s) }))
+  // prev.timeline.map() returns a plain array, not ScenarioData["timeline"]'s
+  // generated 5-tuple type (json-schema-to-typescript encodes minItems:5/
+  // maxItems:5 that way) — the backend is what actually enforces that
+  // constraint on save, so a cast here is fine.
+  function setStepText(stepType: StepType, text: string) {
+    const field = `text_${fieldLocale}` as const
+    setData(prev => ({
+      ...prev,
+      timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, [field]: text } : s) as ScenarioData["timeline"],
+    }))
     markDirty()
   }
 
-  function setPersonaField(field: "role" | "painPoint" | "name", value: string) {
-    setData(prev => {
-      const persona = { ...prev.persona, [field]: value }
-      if (field === "name") {
-        persona.initials = value.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? "").join("")
-      }
-      return { ...prev, persona }
-    })
+  function setPersonaField(field: "role" | "pain_point" | "name", value: string) {
+    const key = `${field}_${fieldLocale}` as const
+    setData(prev => ({ ...prev, persona: { ...prev.persona, [key]: value } }))
     markDirty()
   }
 
   function setMetricValue(side: "before" | "after", value: string) {
-    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], value } } }))
+    const field = `value_${fieldLocale}` as const
+    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: value } } }))
     markDirty()
   }
 
-  function setMetricDesc(side: "before" | "after", description: string) {
-    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], description } } }))
+  function setMetricLabel(side: "before" | "after", label: string) {
+    const field = `label_${fieldLocale}` as const
+    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: label } } }))
     markDirty()
   }
 
   // ── blur handlers — revert to original if field left empty ────────────────
 
-  function blurPersonaField(field: "name" | "role" | "painPoint") {
+  function blurPersonaField(field: "name" | "role" | "pain_point") {
+    const key = `${field}_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.persona[field].trim()) {
-        const orig    = editOriginalRef.current
-        const persona = { ...prev.persona, [field]: orig }
-        if (field === "name") persona.initials = orig.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? "").join("")
-        return { ...prev, persona }
+      if (!prev.persona[key].trim()) {
+        return { ...prev, persona: { ...prev.persona, [key]: editOriginalRef.current } }
       }
       return prev
     })
     setEditingField(null)
   }
 
-  function blurStepText(labelKey: string) {
+  function blurStepText(stepType: StepType) {
+    const field = `text_${fieldLocale}` as const
     setData(prev => {
-      const step = prev.timeline.find(s => s.labelKey === labelKey)
-      if (step && !step.text.trim()) {
-        return { ...prev, timeline: prev.timeline.map(s => s.labelKey === labelKey ? { ...s, text: editOriginalRef.current } : s) }
+      const step = prev.timeline.find(s => s.step_type === stepType)
+      if (step && !step[field].trim()) {
+        return {
+          ...prev,
+          timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, [field]: editOriginalRef.current } : s) as ScenarioData["timeline"],
+        }
       }
       return prev
     })
@@ -115,19 +130,21 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
   }
 
   function blurMetricValue(side: "before" | "after") {
+    const field = `value_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.metrics[side].value.trim()) {
-        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], value: editOriginalRef.current } } }
+      if (!prev.metrics[side][field].trim()) {
+        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: editOriginalRef.current } } }
       }
       return prev
     })
     setEditingField(null)
   }
 
-  function blurMetricDesc(side: "before" | "after") {
+  function blurMetricLabel(side: "before" | "after") {
+    const field = `label_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.metrics[side].description.trim()) {
-        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], description: editOriginalRef.current } } }
+      if (!prev.metrics[side][field].trim()) {
+        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: editOriginalRef.current } } }
       }
       return prev
     })
@@ -168,18 +185,22 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
 
   const { persona, timeline, metrics } = data
 
-  // Pre-resolve all known timeline labels; unknown keys fall back to capitalised suffix
-  const timelineLabels: Record<string, string> = {
+  const personaName      = persona[`name_${fieldLocale}`]
+  const personaRole      = persona[`role_${fieldLocale}`]
+  const personaPainPoint = persona[`pain_point_${fieldLocale}`]
+  const initials          = computeInitials(personaName)
+
+  const metricBeforeValue = metrics.before[`value_${fieldLocale}`]
+  const metricBeforeLabel = metrics.before[`label_${fieldLocale}`]
+  const metricAfterValue  = metrics.after[`value_${fieldLocale}`]
+  const metricAfterLabel  = metrics.after[`label_${fieldLocale}`]
+
+  const timelineLabels: Record<StepType, string> = {
     context: t("timeline.context"),
     goal:    t("timeline.goal"),
     action:  t("timeline.action"),
     result:  t("timeline.result"),
     impact:  t("timeline.impact"),
-  }
-
-  function resolveLabel(labelKey: string): string {
-    const suffix = labelKey.split(".").pop() ?? ""
-    return timelineLabels[suffix] ?? (suffix.charAt(0).toUpperCase() + suffix.slice(1))
   }
 
   return (
@@ -250,7 +271,7 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                 {editingField === "metric.before" ? (
                   <input
                     autoFocus
-                    value={metrics.before.value}
+                    value={metricBeforeValue}
                     onChange={(e) => setMetricValue("before", e.target.value)}
                     onBlur={() => blurMetricValue("before")}
                     onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricValue("before") }}
@@ -258,27 +279,27 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                   />
                 ) : (
                   <div
-                    onClick={() => startEdit("metric.before", metrics.before.value)}
+                    onClick={() => startEdit("metric.before", metricBeforeValue)}
                     className={cn(scenarioStyles.metricBeforeVal, "cursor-text")}
                   >
-                    {metrics.before.value}
+                    {metricBeforeValue}
                   </div>
                 )}
-                {editingField === "metric.before.desc" ? (
+                {editingField === "metric.before.label" ? (
                   <input
                     autoFocus
-                    value={metrics.before.description}
-                    onChange={(e) => setMetricDesc("before", e.target.value)}
-                    onBlur={() => blurMetricDesc("before")}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricDesc("before") }}
+                    value={metricBeforeLabel}
+                    onChange={(e) => setMetricLabel("before", e.target.value)}
+                    onBlur={() => blurMetricLabel("before")}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricLabel("before") }}
                     className="text-xs text-slate-500 text-center bg-transparent border-b border-slate-200 focus:outline-none focus:border-slate-400 w-full"
                   />
                 ) : (
                   <div
-                    onClick={() => startEdit("metric.before.desc", metrics.before.description)}
+                    onClick={() => startEdit("metric.before.label", metricBeforeLabel)}
                     className={cn(scenarioStyles.metricLabel, "cursor-text")}
                   >
-                    {metrics.before.description}
+                    {metricBeforeLabel}
                   </div>
                 )}
               </div>
@@ -287,7 +308,7 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                 {editingField === "metric.after" ? (
                   <input
                     autoFocus
-                    value={metrics.after.value}
+                    value={metricAfterValue}
                     onChange={(e) => setMetricValue("after", e.target.value)}
                     onBlur={() => blurMetricValue("after")}
                     onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricValue("after") }}
@@ -295,29 +316,29 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                   />
                 ) : (
                   <div
-                    onClick={() => startEdit("metric.after", metrics.after.value)}
+                    onClick={() => startEdit("metric.after", metricAfterValue)}
                     className={cn(scenarioStyles.metricAfterVal, "cursor-text")}
                   >
-                    {metrics.after.value}
+                    {metricAfterValue}
                   </div>
                 )}
                 <div className={scenarioStyles.metricAfterTag}>
                   <Zap className="h-3.5 w-3.5" />
-                  {editingField === "metric.after.desc" ? (
+                  {editingField === "metric.after.label" ? (
                     <input
                       autoFocus
-                      value={metrics.after.description}
-                      onChange={(e) => setMetricDesc("after", e.target.value)}
-                      onBlur={() => blurMetricDesc("after")}
-                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricDesc("after") }}
+                      value={metricAfterLabel}
+                      onChange={(e) => setMetricLabel("after", e.target.value)}
+                      onBlur={() => blurMetricLabel("after")}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurMetricLabel("after") }}
                       className="text-xs text-indigo-500 bg-transparent border-b border-indigo-200 focus:outline-none focus:border-indigo-400 min-w-0 flex-1"
                     />
                   ) : (
                     <span
-                      onClick={() => startEdit("metric.after.desc", metrics.after.description)}
+                      onClick={() => startEdit("metric.after.label", metricAfterLabel)}
                       className="cursor-text"
                     >
-                      {metrics.after.description}
+                      {metricAfterLabel}
                     </span>
                   )}
                 </div>
@@ -339,12 +360,12 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                 </div>
 
                 <div className={scenarioStyles.personaTopRow}>
-                  <div className={scenarioStyles.avatar}>{persona.initials}</div>
+                  <div className={scenarioStyles.avatar}>{initials}</div>
                   <div className="flex-1 min-w-0">
                     {editingField === "persona.name" ? (
                       <input
                         autoFocus
-                        value={persona.name}
+                        value={personaName}
                         onChange={(e) => setPersonaField("name", e.target.value)}
                         onBlur={() => blurPersonaField("name")}
                         onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurPersonaField("name") }}
@@ -352,13 +373,13 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                       />
                     ) : (
                       <div
-                        onClick={() => startEdit("persona.name", persona.name)}
+                        onClick={() => startEdit("persona.name", personaName)}
                         className={cn(scenarioStyles.personaName, "cursor-text border-b border-transparent")}
                       >
-                        {persona.name}
+                        {personaName}
                       </div>
                     )}
-                    <div className={scenarioStyles.personaRole}>{persona.role}</div>
+                    <div className={scenarioStyles.personaRole}>{personaRole}</div>
                   </div>
                 </div>
 
@@ -368,7 +389,7 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                     {editingField === "persona.role" ? (
                       <input
                         autoFocus
-                        value={persona.role}
+                        value={personaRole}
                         onChange={(e) => setPersonaField("role", e.target.value)}
                         onBlur={() => blurPersonaField("role")}
                         onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurPersonaField("role") }}
@@ -376,30 +397,30 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                       />
                     ) : (
                       <div
-                        onClick={() => startEdit("persona.role", persona.role)}
+                        onClick={() => startEdit("persona.role", personaRole)}
                         className={cn(scenarioStyles.roleBadge, "cursor-text")}
                       >
-                        {persona.role}
+                        {personaRole}
                       </div>
                     )}
                   </div>
                   <div>
                     <div className={scenarioStyles.fieldLabel}>{t("persona.painPointLabel")}</div>
-                    {editingField === "persona.painPoint" ? (
+                    {editingField === "persona.pain_point" ? (
                       <input
                         autoFocus
-                        value={persona.painPoint}
-                        onChange={(e) => setPersonaField("painPoint", e.target.value)}
-                        onBlur={() => blurPersonaField("painPoint")}
-                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurPersonaField("painPoint") }}
+                        value={personaPainPoint}
+                        onChange={(e) => setPersonaField("pain_point", e.target.value)}
+                        onBlur={() => blurPersonaField("pain_point")}
+                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === "Escape") blurPersonaField("pain_point") }}
                         className={cn(scenarioStyles.editBadgeInput, "border-rose-200 bg-rose-50 text-rose-700 focus:ring-rose-300")}
                       />
                     ) : (
                       <div
-                        onClick={() => startEdit("persona.painPoint", persona.painPoint)}
+                        onClick={() => startEdit("persona.pain_point", personaPainPoint)}
                         className={cn(scenarioStyles.painBadge, "cursor-text")}
                       >
-                        {persona.painPoint}
+                        {personaPainPoint}
                       </div>
                     )}
                   </div>
@@ -421,12 +442,13 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
 
                 <div className={scenarioStyles.timelineSteps}>
                   {timeline.map((step) => {
-                    const Icon    = TIMELINE_ICONS[step.iconKey] ?? Sparkles
-                    const theme   = getStepTheme(step.labelKey)
-                    const label   = resolveLabel(step.labelKey)
-                    const fieldId = `step.${step.labelKey}`
+                    const Icon    = TIMELINE_ICONS[step.icon_key] ?? Sparkles
+                    const theme   = STEP_THEMES[step.step_type]
+                    const label   = timelineLabels[step.step_type]
+                    const fieldId = `step.${step.step_type}`
+                    const text    = step[`text_${fieldLocale}`]
                     return (
-                      <div key={step.labelKey} className={cn(scenarioStyles.timelineStep, theme.item)}>
+                      <div key={step.step_type} className={cn(scenarioStyles.timelineStep, theme.item)}>
                         <div className={cn(scenarioStyles.timelineStepIcon, theme.icon)}>
                           <Icon className="h-3.5 w-3.5" />
                         </div>
@@ -435,26 +457,26 @@ export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentDat
                           {editingField === fieldId ? (
                             <textarea
                               autoFocus
-                              value={step.text}
+                              value={text}
                               rows={1}
                               ref={(el) => {
                                 if (el) { el.style.height = "auto"; el.style.height = `${el.scrollHeight}px` }
                               }}
                               onChange={(e) => {
-                                setStepText(step.labelKey, e.target.value)
+                                setStepText(step.step_type, e.target.value)
                                 e.target.style.height = "auto"
                                 e.target.style.height = `${e.target.scrollHeight}px`
                               }}
-                              onBlur={() => blurStepText(step.labelKey)}
-                              onKeyDown={(e) => { if (e.key === "Escape") blurStepText(step.labelKey) }}
+                              onBlur={() => blurStepText(step.step_type)}
+                              onKeyDown={(e) => { if (e.key === "Escape") blurStepText(step.step_type) }}
                               className={scenarioStyles.editTextarea}
                             />
                           ) : (
                             <div
-                              onClick={() => startEdit(fieldId, step.text)}
+                              onClick={() => startEdit(fieldId, text)}
                               className={cn(scenarioStyles.timelineText, "cursor-text")}
                             >
-                              {step.text}
+                              {text}
                             </div>
                           )}
                         </div>

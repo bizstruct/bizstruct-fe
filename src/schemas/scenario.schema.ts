@@ -1,31 +1,28 @@
-import { z } from "zod"
+// Types come from bizstruct-domain (via `npm run sync:domain`), not from a
+// hand-maintained zod schema — see src/types/domain/scenario.ts. The
+// backend validates every Scenario payload before it's ever stored
+// (bizstruct-be's /api/internal/hook and /api/scenario/* endpoints), so the
+// frontend no longer needs to defensively re-parse/normalize API responses
+// the way the old locale-nested schema did.
+//
+// Note `highlight` (which timeline steps get visually emphasized) is
+// deliberately NOT part of the domain model — it's presentation logic.
+// Derive it from `step_type` at the render site (highlight `action` and
+// `result`) instead of storing it.
+export type {
+  Scenario as ScenarioData,
+  Persona,
+  TimelineStep,
+  ScenarioMetrics,
+  MetricValue,
+  StepType,
+  IconKey,
+} from "@/types/domain/scenario"
 
-export const PersonaSchema = z.object({
-  name: z.string(),
-  initials: z.string(),
-  role: z.string(),
-  painPoint: z.string(),
-})
+import type { StepType } from "@/types/domain/scenario"
 
-export const TimelineStepSchema = z.object({
-  iconKey: z.string(),
-  labelKey: z.string(),
-  text: z.string(),
-  highlight: z.boolean().optional(),
-})
+const HIGHLIGHTED_STEPS: readonly StepType[] = ["action", "result"]
 
-export const ScenarioMetricsSchema = z.object({
-  before: z.object({ value: z.string(), description: z.string() }),
-  after: z.object({ value: z.string(), description: z.string() }),
-})
-
-export const ScenarioDataSchema = z.object({
-  persona: PersonaSchema,
-  timeline: z.array(TimelineStepSchema),
-  metrics: ScenarioMetricsSchema,
-})
-
-export type Persona = z.infer<typeof PersonaSchema>
-export type TimelineStep = z.infer<typeof TimelineStepSchema>
-export type ScenarioMetrics = z.infer<typeof ScenarioMetricsSchema>
-export type ScenarioData = z.infer<typeof ScenarioDataSchema>
+export function isHighlightedStep(stepType: StepType): boolean {
+  return HIGHLIGHTED_STEPS.includes(stepType)
+}
