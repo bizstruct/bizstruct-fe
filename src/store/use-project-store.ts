@@ -2,7 +2,8 @@
 
 import { create } from "zustand"
 import { createProjectFromIdea, fetchProjectById, selectProjectModel, saveModelsEdits, triggerRegenerateModels } from "@/app/actions"
-import type { RawModelOption, RawProjectResponse } from "@/app/actions"
+import type { ModelsOptionsPayload, RawProjectResponse } from "@/app/actions"
+import type { BusinessModelOption } from "@/types/domain/models-options"
 import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
 import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard } from "@/services/canvas"
@@ -23,6 +24,11 @@ export interface GeneratedBusinessModel {
   audience: string
   valueProposition: string
   description: string
+  monetization: string
+  keyMetric: string
+  timeToValue: string
+  score: number
+  scoreRationale: string
 }
 
 interface GeneratedProject {
@@ -30,7 +36,7 @@ interface GeneratedProject {
   title: string
   idea: string
   models: GeneratedBusinessModel[]
-  rawModelsOptions: { models: RawModelOption[]; selected_id: string | null } | null
+  rawModelsOptions: ModelsOptionsPayload | null
 }
 
 interface ProjectStoreState {
@@ -69,20 +75,23 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function normalizeModel(raw: RawModelOption): GeneratedBusinessModel {
+function normalizeModel(raw: BusinessModelOption): GeneratedBusinessModel {
   return {
     id:               raw.id,
-    title:            raw.name ?? raw.title ?? raw.id,
-    audience:         raw.target_segment ?? raw.audience ?? "",
-    valueProposition: raw.tagline ?? raw.value_proposition ?? raw.valueProposition ?? "",
+    title:            raw.title,
+    audience:         raw.audience,
+    valueProposition: raw.value_proposition,
     description:      raw.description,
+    monetization:     raw.monetization,
+    keyMetric:        raw.key_metric,
+    timeToValue:      raw.time_to_value,
+    score:            raw.score,
+    scoreRationale:   raw.score_rationale,
   }
 }
 
-function extractModels(modelsOptions: RawProjectResponse["modelsOptions"]): RawModelOption[] {
-  if (!modelsOptions) return []
-  if (Array.isArray(modelsOptions)) return modelsOptions
-  return modelsOptions.models ?? []
+function extractModels(modelsOptions: RawProjectResponse["modelsOptions"]): BusinessModelOption[] {
+  return modelsOptions?.options ?? []
 }
 
 
@@ -126,14 +135,12 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
       let models: GeneratedBusinessModel[] | null = null
       let projectTitle = initial.title
-      let rawModelsOptions: { models: RawModelOption[]; selected_id: string | null } | null = null
+      let rawModelsOptions: ModelsOptionsPayload | null = null
 
       const initialModels = extractModels(initial.modelsOptions)
       if (initialModels.length) {
         models = initialModels.map(normalizeModel)
-        rawModelsOptions = Array.isArray(initial.modelsOptions)
-          ? { models: initial.modelsOptions, selected_id: null }
-          : (initial.modelsOptions as { models: RawModelOption[]; selected_id: string | null })
+        rawModelsOptions = initial.modelsOptions
       } else {
         set({ generationStep: "generating_models" })
         try {
@@ -144,10 +151,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
             if (fetchedModels.length) {
               models = fetchedModels.map(normalizeModel)
               projectTitle = data?.title ?? initial.title
-              const opts = data?.modelsOptions ?? null
-              rawModelsOptions = opts
-                ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
-                : null
+              rawModelsOptions = data?.modelsOptions ?? null
             }
           }
         } catch {
@@ -159,10 +163,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
             if (fetchedModels.length) {
               models = fetchedModels.map(normalizeModel)
               projectTitle = data?.title ?? initial.title
-              const opts = data?.modelsOptions ?? null
-              rawModelsOptions = opts
-                ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
-                : null
+              rawModelsOptions = data?.modelsOptions ?? null
               break
             }
           }
@@ -172,9 +173,9 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       if (!models?.length) {
         // DEV fallback: endpoint not ready yet — use placeholder models
         models = [
-          { id: "model-1", title: `B2B SaaS · ${ideaSnippet || "Project"}`,       audience: "SMB teams",        valueProposition: "Automates core workflow",       description: "Subscription model with fast onboarding." },
-          { id: "model-2", title: `Marketplace · ${ideaSnippet || "Project"}`,    audience: "Enterprise buyers", valueProposition: "Connects supply and demand",     description: "Transaction-based monetization." },
-          { id: "model-3", title: `Advisory Platform · ${ideaSnippet || "Project"}`, audience: "Founders & analysts", valueProposition: "AI-assisted strategy artifacts", description: "Premium packages with expert support." },
+          { id: "model-1", title: `B2B SaaS · ${ideaSnippet || "Project"}`,       audience: "SMB teams",        valueProposition: "Automates core workflow",       description: "Subscription model with fast onboarding.", monetization: "subscription",      keyMetric: "MRR / NRR",        timeToValue: "30 minutes to first report",  score: 78, scoreRationale: "Placeholder — subscription directly monetizes a recurring pain." },
+          { id: "model-2", title: `Marketplace · ${ideaSnippet || "Project"}`,    audience: "Enterprise buyers", valueProposition: "Connects supply and demand",     description: "Transaction-based monetization.",           monetization: "transaction_fee",   keyMetric: "GMV / Take rate",  timeToValue: "First transaction in 1–2 weeks", score: 65, scoreRationale: "Placeholder — higher upside per transaction, longer sales cycle." },
+          { id: "model-3", title: `Advisory Platform · ${ideaSnippet || "Project"}`, audience: "Founders & analysts", valueProposition: "AI-assisted strategy artifacts", description: "Premium packages with expert support.",    monetization: "retainer_plus_saas", keyMetric: "ACV / CSAT",       timeToValue: "First session in 48 hours",   score: 55, scoreRationale: "Placeholder — high value per client, limited scalability." },
         ]
       }
 
@@ -243,24 +244,26 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       m.id === modelId ? { ...m, [field]: value } : m
     )
 
-    const updatedRaw = generatedProject.rawModelsOptions
+    // Only the free-text fields sourced from BusinessModelOption's
+    // user-facing fields are user-editable (see ModelSelectionScreen's
+    // EditableField). monetization/key_metric/time_to_value/score/
+    // score_rationale are generated, display-only — not part of this map.
+    const RAW_FIELD_BY_UI_FIELD: Partial<Record<keyof GeneratedBusinessModel, keyof BusinessModelOption>> = {
+      title: "title",
+      audience: "audience",
+      valueProposition: "value_proposition",
+      description: "description",
+    }
+    const rawField = RAW_FIELD_BY_UI_FIELD[field]
+
+    const updatedRaw = generatedProject.rawModelsOptions && rawField
       ? {
           ...generatedProject.rawModelsOptions,
-          models: generatedProject.rawModelsOptions.models.map((r) => {
-            if (r.id !== modelId) return r
-            return {
-              ...r,
-              name: field === "title" ? value : r.name,
-              title: field === "title" ? value : r.title,
-              target_segment: field === "audience" ? value : r.target_segment,
-              audience: field === "audience" ? value : r.audience,
-              tagline: field === "valueProposition" ? value : r.tagline,
-              value_proposition: field === "valueProposition" ? value : r.value_proposition,
-              description: field === "description" ? value : r.description,
-            }
-          }),
+          options: generatedProject.rawModelsOptions.options.map((r) =>
+            r.id === modelId ? { ...r, [rawField]: value } : r
+          ),
         }
-      : null
+      : generatedProject.rawModelsOptions
 
     set((state) => ({
       generatedProject: state.generatedProject
@@ -288,10 +291,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
         const fetchedModels = extractModels(data?.modelsOptions ?? null)
         if (fetchedModels.length) {
           const models = fetchedModels.map(normalizeModel)
-          const opts = data?.modelsOptions ?? null
-          const rawModelsOptions = opts
-            ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
-            : null
+          const rawModelsOptions = data?.modelsOptions ?? null
           set((state) => ({
             generatedProject: state.generatedProject
               ? { ...state.generatedProject, models, rawModelsOptions }
@@ -309,10 +309,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
         const fetchedModels = extractModels(data?.modelsOptions ?? null)
         if (fetchedModels.length) {
           const models = fetchedModels.map(normalizeModel)
-          const opts = data?.modelsOptions ?? null
-          const rawModelsOptions = opts
-            ? Array.isArray(opts) ? { models: opts, selected_id: null } : opts as { models: RawModelOption[]; selected_id: string | null }
-            : null
+          const rawModelsOptions = data?.modelsOptions ?? null
           set((state) => ({
             generatedProject: state.generatedProject
               ? { ...state.generatedProject, models, rawModelsOptions }

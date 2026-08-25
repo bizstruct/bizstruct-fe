@@ -291,7 +291,10 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
                   <CarouselItem key={model.id} className="basis-full">
                     <Card className={s.card}>
                       <div className={s.cardHeader}>
-                        <p className={s.cardBadge}>Business Model</p>
+                        <div className="flex items-center justify-between">
+                          <p className={s.cardBadge}>Business Model</p>
+                          <ScoreRing score={model.score} />
+                        </div>
                         <EditableText modelId={model.id} field="title" value={model.title} className={s.cardTitle} />
                       </div>
                       <div className={s.cardBody}>
@@ -306,6 +309,24 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
                         <div>
                           <p className={s.fieldLabel}>{tModel("fields.description")}</p>
                           <EditableText modelId={model.id} field="description" value={model.description} className={s.fieldValueMuted} multiline />
+                        </div>
+
+                        {/* Generated, not user-editable — see updateGeneratedModel's
+                            RAW_FIELD_BY_UI_FIELD in the store for why these three
+                            stay display-only. */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className={s.fieldLabel}>{tModel("fields.keyMetric")}</p>
+                            <p className={s.fieldValue}>{model.keyMetric}</p>
+                          </div>
+                          <div>
+                            <p className={s.fieldLabel}>{tModel("fields.timeToValue")}</p>
+                            <p className={s.fieldValue}>{model.timeToValue}</p>
+                          </div>
+                        </div>
+                        <div>
+                          <p className={s.fieldLabel}>{tModel("fields.scoreRationale")}</p>
+                          <p className={s.fieldValueMuted}>{model.scoreRationale}</p>
                         </div>
 
                         <Button type="button" onClick={() => onSelectModel(model.id)} className={s.selectBtn}>

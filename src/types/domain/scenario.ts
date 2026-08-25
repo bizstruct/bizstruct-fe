@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.5.0/schemas/scenario.json (bizstruct-domain@v0.5.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.6.0/schemas/scenario.json (bizstruct-domain@v0.6.0)
 
 export type LabelEn = string
 export type LabelUk = string
@@ -16,7 +16,6 @@ export type RoleUk = string
  * @maxItems 5
  */
 export type Timeline = [TimelineStep, TimelineStep, TimelineStep, TimelineStep, TimelineStep]
-export type IconKey = "calendar" | "target" | "zap" | "check-circle" | "trending-up"
 export type StepType = "context" | "goal" | "action" | "result" | "impact"
 export type TextEn = string
 export type TextUk = string
@@ -53,12 +52,8 @@ export interface Persona {
 }
 /**
  * One step of the persona's journey.
- *
- * `icon_key` must match `step_type` per `_STEP_ICON` — validated on the
- * parent `Scenario`, since that's where the full ordered list is known.
  */
 export interface TimelineStep {
-  icon_key: IconKey
   step_type: StepType
   text_en: TextEn
   text_uk: TextUk

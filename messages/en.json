@@ -80,7 +80,11 @@
     "fields": {
       "targetAudience": "Target audience",
       "valueProposition": "Value proposition",
-      "description": "Description"
+      "description": "Description",
+      "keyMetric": "Key metric",
+      "timeToValue": "Time to value",
+      "score": "Viability score",
+      "scoreRationale": "Why this score"
     },
     "selectModel": "Select this model",
     "regenerate": "Regenerate",

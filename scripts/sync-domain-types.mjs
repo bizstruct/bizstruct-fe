@@ -115,6 +115,11 @@ async function main() {
   await syncBlockSchema("scenario", "scenario", "Scenario")
   await syncBlockSchema("pitch", "pitch", "Pitch")
   await syncBlockSchema("hypotheses", "hypotheses", "Hypotheses")
+  await syncBlockSchema("models_options", "models-options", "ModelsOptions")
+  // validate_model is a side-channel task result, not a chain block (see
+  // bizstruct-domain's NON_BLOCK_MODELS) — synced the same way regardless,
+  // it's still just a JSON Schema.
+  await syncBlockSchema("validate_model", "validate-model", "ValidateModelResult")
   await syncChain()
 }
 

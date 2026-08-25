@@ -80,7 +80,11 @@
     "fields": {
       "targetAudience": "Цільова аудиторія",
       "valueProposition": "Ціннісна пропозиція",
-      "description": "Опис"
+      "description": "Опис",
+      "keyMetric": "Ключова метрика",
+      "timeToValue": "Час до першої цінності",
+      "score": "Оцінка життєздатності",
+      "scoreRationale": "Чому саме така оцінка"
     },
     "selectModel": "Вибрати цю модель",
     "regenerate": "Перегенерувати",

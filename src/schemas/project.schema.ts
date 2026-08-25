@@ -25,6 +25,11 @@ export const GeneratedBusinessModelSchema = z.object({
   audience: z.string(),
   valueProposition: z.string(),
   description: z.string(),
+  monetization: z.string(),
+  keyMetric: z.string(),
+  timeToValue: z.string(),
+  score: z.number(),
+  scoreRationale: z.string(),
 })
 
 export const GeneratedProjectSchema = z.object({

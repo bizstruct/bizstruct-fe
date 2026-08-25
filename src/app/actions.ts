@@ -1,25 +1,24 @@
 "use server"
 
+import type { BusinessModelOption } from "@/types/domain/models-options"
+
 const API_BASE = process.env.API_BASE_URL ?? "http://localhost:8000"
 
-export interface RawModelOption {
-  id: string
-  name?: string
-  title?: string
-  tagline?: string
-  target_segment?: string
-  audience?: string
-  value_proposition?: string
-  valueProposition?: string
-  description: string
-  score?: number
+// The canonical shape here is bizstruct_domain.blocks.models_options.ModelsOptions
+// (synced via `npm run sync:domain`, see src/types/domain/models-options.ts).
+// `options` is only loosened from ModelsOptions' strict 3-tuple to a plain
+// array — client-side state manipulation (edits, regeneration) doesn't need
+// the tuple constraint; the backend still enforces exactly 3 on write.
+export interface ModelsOptionsPayload {
+  options: BusinessModelOption[]
+  selected_id: string | null
 }
 
 export interface RawProjectResponse {
   id: string
   title: string
   status: string
-  modelsOptions: { models: RawModelOption[]; selected_id: string | null } | RawModelOption[] | null
+  modelsOptions: ModelsOptionsPayload | null
 }
 
 export async function createProjectFromIdea(text: string): Promise<RawProjectResponse | null> {
@@ -50,7 +49,7 @@ export async function fetchProjectById(projectId: string): Promise<RawProjectRes
 
 export async function selectProjectModel(
   projectId: string,
-  rawModelsOptions: { models: RawModelOption[]; selected_id: string | null },
+  rawModelsOptions: ModelsOptionsPayload,
   modelId: string,
 ): Promise<void> {
   await fetch(`${API_BASE}/api/projects/${projectId}`, {
@@ -62,7 +61,7 @@ export async function selectProjectModel(
 
 export async function saveModelsEdits(
   projectId: string,
-  rawModelsOptions: { models: RawModelOption[]; selected_id: string | null },
+  rawModelsOptions: ModelsOptionsPayload,
 ): Promise<void> {
   await fetch(`${API_BASE}/api/projects/${projectId}`, {
     method: "PATCH",

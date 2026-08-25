@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef } from "react"
-import { Clock, Target, Sparkles, Zap, Calendar, CheckCircle, TrendingUp, User, BarChart2, Check, Loader2, RefreshCw, ArrowRight, ClipboardCheck } from "lucide-react"
+import { Target, Sparkles, Zap, Calendar, CheckCircle, TrendingUp, User, BarChart2, Check, Loader2, RefreshCw, ArrowRight, ClipboardCheck } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -10,14 +10,16 @@ import type { ScenarioData, StepType } from "@/schemas/scenario.schema"
 import { saveScenario } from "@/services/scenario"
 import { scenarioStyles } from "./styles"
 
-const TIMELINE_ICONS: Record<string, React.ElementType> = {
-  clock:          Clock,
-  calendar:       Calendar,
-  target:         Target,
-  sparkles:       Sparkles,
-  zap:            Zap,
-  "check-circle": CheckCircle,
-  "trending-up":  TrendingUp,
+// icon_key used to be stored on TimelineStep, but it was 100% derivable from
+// step_type (a fixed mapping) — pure presentation data that added nothing
+// domain-specific, so it was removed from the domain model. This is that
+// same fixed mapping, now living client-side where it belongs.
+const TIMELINE_ICONS: Record<StepType, React.ElementType> = {
+  context: Calendar,
+  goal:    Target,
+  action:  Zap,
+  result:  CheckCircle,
+  impact:  TrendingUp,
 }
 
 const STEP_THEMES: Record<StepType, { icon: string; item: string; label: string }> = {
@@ -442,7 +444,7 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
 
                 <div className={scenarioStyles.timelineSteps}>
                   {timeline.map((step) => {
-                    const Icon    = TIMELINE_ICONS[step.icon_key] ?? Sparkles
+                    const Icon    = TIMELINE_ICONS[step.step_type] ?? Sparkles
                     const theme   = STEP_THEMES[step.step_type]
                     const label   = timelineLabels[step.step_type]
                     const fieldId = `step.${step.step_type}`
