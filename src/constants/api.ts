@@ -2,6 +2,7 @@ const BASE = "/api"
 
 export const API_ROUTES = {
   projects: `${BASE}/projects`,
+  project: (projectId: string) => `${BASE}/projects/${projectId}`,
   canvas: (projectId: string) => `${BASE}/canvas/${projectId}`,
   empathyMap: (projectId: string) => `${BASE}/empathy-map/${projectId}`,
   hypotheses: (projectId: string) => `${BASE}/hypotheses/${projectId}`,
@@ -10,4 +11,6 @@ export const API_ROUTES = {
   whatIf: (projectId: string) => `${BASE}/what-if/${projectId}`,
   architecture: (projectId: string) => `${BASE}/architecture/${projectId}`,
   generation: `${BASE}/generation`,
+  regenerateModels: (projectId: string) => `${BASE}/generation/${projectId}/regenerate`,
+  validateModel: (projectId: string) => `${BASE}/models/${projectId}/validate`,
 } as const

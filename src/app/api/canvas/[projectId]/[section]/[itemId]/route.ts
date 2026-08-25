@@ -1,32 +1,25 @@
-import { type NextRequest, NextResponse } from "next/server"
-
-const BASE = process.env.API_BASE_URL
+import { NextResponse } from "next/server"
+import { backendFetch } from "@/lib/backend-client"
+import { toHttpResponse } from "@/lib/route-response"
 
 export async function PATCH(
-  request: NextRequest,
+  request: Request,
   context: { params: Promise<{ projectId: string; section: string; itemId: string }> },
 ) {
   const { projectId, section, itemId } = await context.params
   const body = await request.json()
-  const res = await fetch(`${BASE}/api/canvas/${projectId}/${section}/${itemId}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  })
-  if (res.status === 204 || res.headers.get("content-length") === "0") {
-    return new NextResponse(null, { status: 200 })
-  }
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
+  const result = await backendFetch(`/api/canvas/${projectId}/${section}/${itemId}`, { method: "PATCH", body })
+  return toHttpResponse(result)
 }
 
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   context: { params: Promise<{ projectId: string; section: string; itemId: string }> },
 ) {
   const { projectId, section, itemId } = await context.params
-  const res = await fetch(`${BASE}/api/canvas/${projectId}/${section}/${itemId}`, {
-    method: "DELETE",
-  })
-  return new NextResponse(null, { status: res.ok ? 200 : res.status })
+  const result = await backendFetch(`/api/canvas/${projectId}/${section}/${itemId}`, { method: "DELETE" })
+  if (!result.ok && result.kind !== "not_found") {
+    return toHttpResponse(result)
+  }
+  return new NextResponse(null, { status: 200 })
 }

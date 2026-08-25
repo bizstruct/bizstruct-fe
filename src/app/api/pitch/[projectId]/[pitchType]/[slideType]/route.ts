@@ -1,30 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server"
-
-const BASE = process.env.API_BASE_URL
+import { backendFetch } from "@/lib/backend-client"
+import { toHttpResponse } from "@/lib/route-response"
 
 export async function PATCH(
-  request: NextRequest,
+  request: Request,
   context: { params: Promise<{ projectId: string; pitchType: string; slideType: string }> },
 ) {
   const { projectId, pitchType, slideType } = await context.params
   const body = await request.json()
-
-  if (!BASE) {
-    return NextResponse.json({ ok: true })
-  }
-
-  const res = await fetch(
-    `${BASE}/api/pitch/${projectId}/${pitchType}/${slideType}`,
-    {
-      method:  "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(body),
-    },
-  )
-
-  if (!res.ok) {
-    return NextResponse.json({ error: "Failed to save" }, { status: res.status })
-  }
-
-  return NextResponse.json({ ok: true })
+  const result = await backendFetch(`/api/pitch/${projectId}/${pitchType}/${slideType}`, { method: "PATCH", body })
+  return toHttpResponse(result)
 }

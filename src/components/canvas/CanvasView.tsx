@@ -17,11 +17,18 @@ type SaveStatus     = "idle" | "dirty" | "saving" | "saved"
 type ValidateStatus = "idle" | "validating" | "valid" | "invalid"
 
 interface Props {
-  hasPitch?:    boolean
-  onGoToPitch?: () => void
+  hasPitch?:     boolean
+  onGoToPitch?:  () => void
+  // Cheap safeguard, not the full fix: there's no canvas versioning/ETag
+  // yet, so a user's edit racing an in-flight regeneration (or a delayed
+  // ml hook) can be silently lost. Blocking edits outright while the
+  // project is mid-generation avoids that specific race without the real
+  // fix (document version + If-Match, or per-field locking) — see the
+  // canvas task's B4 for what the real fix would need.
+  isGenerating?: boolean
 }
 
-export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
+export function CanvasView({ hasPitch = false, onGoToPitch, isGenerating = false }: Props) {
   const t               = useTranslations("CanvasView")
   const router          = useRouter()
   const params          = useParams()
@@ -173,7 +180,7 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
         <div className="flex items-center gap-2">
           <Button
             size="sm"
-            disabled={saveStatus === "idle" || saveStatus === "saving"}
+            disabled={isGenerating || saveStatus === "idle" || saveStatus === "saving"}
             onClick={() => void handleSave()}
             className={cn("transition-colors", saveBtnClass)}
           >
@@ -187,7 +194,7 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
           </Button>
           <Button
             variant="outline" size="sm"
-            disabled={saveStatus !== "dirty" || validateStatus === "validating"}
+            disabled={isGenerating || saveStatus !== "dirty" || validateStatus === "validating"}
             onClick={() => void handleValidate()}
             className={cn(
               "h-7 gap-1.5 text-xs font-medium transition-colors",
@@ -215,7 +222,7 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
           {hasPitch && (
             <Button
               variant="outline" size="sm"
-              disabled={regenerating}
+              disabled={isGenerating || regenerating}
               onClick={() => void handleRegenerate()}
               className="h-7 gap-1.5 text-xs font-medium border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50"
             >
@@ -235,6 +242,13 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
         </div>
       </div>
 
+      {isGenerating && (
+        <div className="mx-5 mt-3 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+          {t("generatingLock")}
+        </div>
+      )}
+
       {loadError ? (
         <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
           <AlertTriangle className="h-6 w-6 text-red-500" />
@@ -248,7 +262,10 @@ export function CanvasView({ hasPitch = false, onGoToPitch }: Props) {
           <Loader2 className="h-4 w-4 animate-spin" />
         </div>
       ) : (
-        <div className={canvasStyles.gridWrapper}>
+        <div
+          className={cn(canvasStyles.gridWrapper, isGenerating && "pointer-events-none opacity-60")}
+          aria-disabled={isGenerating}
+        >
           <div className={canvasStyles.grid}>
             {CANVAS_ORDER.map((key) => (
               <CanvasSectionCard

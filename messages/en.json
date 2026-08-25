@@ -93,7 +93,22 @@
     "editHint": "Click to edit",
     "prevAriaLabel": "Previous",
     "nextAriaLabel": "Next",
-    "goToModelAriaLabel": "Go to model {n}"
+    "goToModelAriaLabel": "Go to model {n}",
+    "errors": {
+      "kind": {
+        "not_found": "This project no longer exists.",
+        "validation": "The server rejected this data.",
+        "server": "The server returned an error.",
+        "network": "Could not reach the server.",
+        "timeout": "The request timed out.",
+        "config": "The app is misconfigured."
+      },
+      "selectFailed": "Could not save your selection.",
+      "saveFailed": "Could not save your changes.",
+      "regenerateFailed": "Could not regenerate models.",
+      "validateRequestFailed": "Could not start validation.",
+      "retry": "Retry"
+    }
   },
   "WorkspacePage": {
     "status": {
@@ -131,6 +146,7 @@
     "title": "Business Model Canvas",
     "loadError": "Could not load the canvas from the server.",
     "retry": "Retry",
+    "generatingLock": "The project is still generating — editing is disabled until it finishes.",
     "generatePitch": "Generate Pitch",
     "empty": "Empty",
     "save": "Save",

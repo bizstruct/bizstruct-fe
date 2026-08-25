@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { mockDefaultCanvas } from "@/mocks/data/canvas"
 import { SECTION_KEY_TO_API } from "@/services/canvas"
+import { backendFetch } from "@/lib/backend-client"
+import { toHttpResponse } from "@/lib/route-response"
 
-const BASE = process.env.API_BASE_URL
 // Mocks are opt-in only, via NEXT_PUBLIC_USE_MOCKS=true — never a silent
 // fallback for a missing/unreachable backend. A backend error must surface
 // as an error to the caller (see services/canvas.ts / CanvasView.tsx),
@@ -33,11 +34,8 @@ export async function GET(
 
   const { projectId } = await context.params
   const locale = request.nextUrl.searchParams.get("locale") ?? "en"
-  const res = await fetch(`${BASE}/api/canvas/${projectId}?locale=${locale}`, {
-    cache: "no-store",
-  })
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
+  const result = await backendFetch(`/api/canvas/${projectId}?locale=${locale}`, { cache: "no-store" })
+  return toHttpResponse(result)
 }
 
 export async function PUT(
@@ -47,15 +45,6 @@ export async function PUT(
   const { projectId } = await context.params
   const locale = request.nextUrl.searchParams.get("locale") ?? "en"
   const body = await request.json()
-
-  const res = await fetch(`${BASE}/api/canvas/${projectId}?locale=${locale}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  })
-  if (res.status === 204 || res.headers.get("content-length") === "0") {
-    return new NextResponse(null, { status: 200 })
-  }
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
+  const result = await backendFetch(`/api/canvas/${projectId}?locale=${locale}`, { method: "PUT", body })
+  return toHttpResponse(result)
 }

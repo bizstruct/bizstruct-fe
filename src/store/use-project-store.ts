@@ -1,8 +1,9 @@
 'use client'
 
 import { create } from "zustand"
-import { createProjectFromIdea, fetchProjectById, selectProjectModel, saveModelsEdits, triggerRegenerateModels } from "@/app/actions"
-import type { ModelsOptionsPayload, RawProjectResponse } from "@/app/actions"
+import { createProjectFromIdea, fetchProjectById, selectProjectModel, saveModelsEdits, triggerRegenerateModels } from "@/services/generation"
+import type { ModelsOptionsPayload, RawProjectResponse } from "@/services/generation"
+import type { ApiErrorKind } from "@/lib/api-result"
 import type { BusinessModelOption } from "@/types/domain/models-options"
 import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
@@ -54,19 +55,32 @@ interface GeneratedProject {
   rawModelsOptions: ModelsOptionsPayload | null
 }
 
+// Surfaced by a failed models_options mutation (select/save/regenerate) so
+// ModelSelectionScreen can show a visible, retryable error instead of the
+// previous silent .catch(() => {}). `retry` re-invokes the exact action
+// that failed with its original arguments.
+export interface ModelActionError {
+  action: "select" | "save" | "regenerate"
+  kind: ApiErrorKind
+  message: string
+  retry: () => void
+}
+
 interface ProjectStoreState {
   history: HistoryItem[]
   isLoading: boolean
   generationStep: GenerationStep
   generatedProject: GeneratedProject | null
   currentTempHistoryId: string | null
+  modelActionError: ModelActionError | null
+  clearModelActionError: () => void
   fetchHistory: () => Promise<void>
   addProjectFromIdea: (idea: string) => Promise<void>
   finalizeGeneratedProject: (modelId: string) => Promise<string>
   resetGenerationFlow: () => void
   deleteProject: (id: string) => Promise<void>
   renameProject: (id: string, title: string) => void
-  updateGeneratedModel: (modelId: string, field: keyof GeneratedBusinessModel, value: string) => Promise<void>
+  updateGeneratedModel: (modelId: string, field: keyof GeneratedBusinessModel, value: string) => Promise<boolean>
   regenerateModels: () => Promise<void>
   activeProjectId: string | null
   setActiveProjectId: (id: string) => void
@@ -109,6 +123,15 @@ function extractModels(modelsOptions: RawProjectResponse["modelsOptions"]): Busi
   return modelsOptions?.options ?? []
 }
 
+// Used inside the generation-polling loops below, where a single failed
+// fetch just means "try again next tick" — not worth surfacing as a hard
+// error the way a failed mutation is. See ModelActionError for the ones
+// that are.
+async function fetchProjectData(projectId: string): Promise<RawProjectResponse | null> {
+  const result = await fetchProjectById(projectId)
+  return result.ok ? result.data : null
+}
+
 
 export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   history: [],
@@ -118,6 +141,8 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
   generationStep: "idle",
   generatedProject: null,
   currentTempHistoryId: null,
+  modelActionError: null,
+  clearModelActionError: () => set({ modelActionError: null }),
 
   fetchHistory: async () => {
     try {
@@ -143,7 +168,15 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
     try {
       // Step 1: create project (returns immediately with status: "generating")
-      const initial = await createProjectFromIdea(idea)
+      const initialResult = await createProjectFromIdea(idea)
+      if (!initialResult.ok) {
+        throw new Error(
+          initialResult.kind === "network" || initialResult.kind === "timeout"
+            ? "Не вдалося зв'язатися з сервером. Перевірте з'єднання і спробуйте ще раз."
+            : "Не вдалося створити проєкт",
+        )
+      }
+      const initial = initialResult.data
       if (!initial?.id) throw new Error("Не вдалося створити проєкт")
 
       set({ generationStep: "structuring" })
@@ -161,7 +194,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
         try {
           const result = await waitForProjectGeneration(initial.id)
           if (result.status === "completed") {
-            const data = await fetchProjectById(initial.id)
+            const data = await fetchProjectData(initial.id)
             const fetchedModels = extractModels(data?.modelsOptions ?? null)
             if (fetchedModels.length) {
               models = fetchedModels.map(normalizeModel)
@@ -173,7 +206,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
           // PubSub unavailable — fall back to polling
           for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
             await delay(POLL_INTERVAL_MS)
-            const data = await fetchProjectById(initial.id)
+            const data = await fetchProjectData(initial.id)
             const fetchedModels = extractModels(data?.modelsOptions ?? null)
             if (fetchedModels.length) {
               models = fetchedModels.map(normalizeModel)
@@ -219,8 +252,24 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     if (!selectedModel) throw new Error("Не вдалося знайти вибрану модель")
 
     if (generatedProject.rawModelsOptions) {
-      await selectProjectModel(generatedProject.id, generatedProject.rawModelsOptions, modelId).catch(() => {})
+      const result = await selectProjectModel(generatedProject.id, generatedProject.rawModelsOptions, modelId)
+      if (!result.ok) {
+        set({
+          modelActionError: {
+            action: "select",
+            kind: result.kind,
+            message: result.message,
+            retry: () => { void get().finalizeGeneratedProject(modelId) },
+          },
+        })
+        // Do not navigate away or clear generatedProject — a failed save
+        // must not look like a successful one. The caller (page.tsx) is
+        // expected to catch this and leave the model-selection screen up;
+        // ModelSelectionScreen reads modelActionError directly to show it.
+        throw new Error(result.message)
+      }
     }
+    set({ modelActionError: null })
 
     const historyItem: HistoryItem = {
       id:    generatedProject.id,
@@ -253,7 +302,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
   updateGeneratedModel: async (modelId, field, value) => {
     const { generatedProject } = get()
-    if (!generatedProject) return
+    if (!generatedProject) return false
 
     const updatedModels = generatedProject.models.map((m) =>
       m.id === modelId ? { ...m, [field]: value } : m
@@ -287,22 +336,47 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     }))
 
     if (updatedRaw && generatedProject.id) {
-      await saveModelsEdits(generatedProject.id, updatedRaw).catch(() => {})
+      const result = await saveModelsEdits(generatedProject.id, updatedRaw)
+      if (!result.ok) {
+        set({
+          modelActionError: {
+            action: "save",
+            kind: result.kind,
+            message: result.message,
+            retry: () => { void get().updateGeneratedModel(modelId, field, value) },
+          },
+        })
+        return false
+      }
     }
+    set({ modelActionError: null })
+    return true
   },
 
   regenerateModels: async () => {
     const { generatedProject } = get()
     if (!generatedProject) return
 
-    set({ generationStep: "generating_models" })
+    set({ generationStep: "generating_models", modelActionError: null })
+
+    const triggerResult = await triggerRegenerateModels(generatedProject.id)
+    if (!triggerResult.ok) {
+      set({
+        generationStep: "completed",
+        modelActionError: {
+          action: "regenerate",
+          kind: triggerResult.kind,
+          message: triggerResult.message,
+          retry: () => { void get().regenerateModels() },
+        },
+      })
+      return
+    }
 
     try {
-      await triggerRegenerateModels(generatedProject.id)
-
       const result = await waitForProjectGeneration(generatedProject.id)
       if (result.status === "completed") {
-        const data = await fetchProjectById(generatedProject.id)
+        const data = await fetchProjectData(generatedProject.id)
         const fetchedModels = extractModels(data?.modelsOptions ?? null)
         if (fetchedModels.length) {
           const models = fetchedModels.map(normalizeModel)
@@ -320,7 +394,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       // PubSub unavailable — fall back to polling
       for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
         await delay(POLL_INTERVAL_MS)
-        const data = await fetchProjectById(generatedProject.id)
+        const data = await fetchProjectData(generatedProject.id)
         const fetchedModels = extractModels(data?.modelsOptions ?? null)
         if (fetchedModels.length) {
           const models = fetchedModels.map(normalizeModel)

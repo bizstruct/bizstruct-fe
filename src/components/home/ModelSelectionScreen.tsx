@@ -1,16 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowLeft, ArrowRight, RefreshCw, ShieldCheck, CheckCircle2, AlertTriangle, XCircle, ChevronRight } from "lucide-react"
+import { AlertCircle, ArrowLeft, ArrowRight, RefreshCw, ShieldCheck, CheckCircle2, AlertTriangle, XCircle, ChevronRight } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import { modelSelectionStyles as s } from "./styles"
 import { useProjectStore } from "@/store/use-project-store"
-import { triggerValidateModel } from "@/app/actions"
+import { triggerValidateModel } from "@/services/generation"
 import { waitForValidateResult } from "@/services/pubsub"
 import type { ValidationResult } from "@/services/pubsub"
+import type { ApiErrorKind } from "@/lib/api-result"
 import type { CarouselApi } from "@/components/ui/carousel"
 import type { GeneratedProject, GeneratedBusinessModel } from "@/schemas/project.schema"
 
@@ -20,7 +21,7 @@ interface Props {
 }
 
 type EditableField = keyof Pick<GeneratedBusinessModel, "title" | "audience" | "valueProposition" | "description">
-type ValidationState = ValidationResult | "loading" | "error"
+type ValidationState = ValidationResult | "loading" | { status: "error"; kind: ApiErrorKind }
 
 interface EditState {
   modelId: string
@@ -65,22 +66,36 @@ function ScoreRing({ score }: { score: number }) {
   )
 }
 
-function ValidationPanel({ result }: { result: ValidationState }) {
+function ValidationPanel({
+  result,
+  t,
+  onRetry,
+}: {
+  result: ValidationState
+  t: ReturnType<typeof useTranslations>
+  onRetry: () => void
+}) {
   if (result === "loading") {
     return (
       <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-5">
         <div className="flex items-center gap-3">
           <RefreshCw className="h-4 w-4 animate-spin text-violet-500" />
-          <span className="text-sm text-slate-500">Validating with AI…</span>
+          <span className="text-sm text-slate-500">{t("validating")}</span>
         </div>
       </div>
     )
   }
 
-  if (result === "error") {
+  if (typeof result === "object" && "status" in result && result.status === "error") {
     return (
-      <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 p-4 text-sm text-red-600">
-        Failed to validate. Check LLM configuration.
+      <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 p-4">
+        <div className="flex items-center gap-2 text-sm text-red-600">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{t(`errors.kind.${result.kind}`)}</span>
+        </div>
+        <Button type="button" size="sm" variant="outline" className="mt-2 h-7 text-xs" onClick={onRetry}>
+          <RefreshCw className="mr-1.5 h-3 w-3" /> {t("errors.retry")}
+        </Button>
       </div>
     )
   }
@@ -140,6 +155,8 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
   const updateGeneratedModel = useProjectStore((s) => s.updateGeneratedModel)
   const regenerateModels     = useProjectStore((s) => s.regenerateModels)
   const storeProject         = useProjectStore((s) => s.generatedProject)
+  const modelActionError     = useProjectStore((s) => s.modelActionError)
+  const clearModelActionError = useProjectStore((s) => s.clearModelActionError)
 
   const [carouselApi, setCarouselApi]           = useState<CarouselApi | null>(null)
   const [activeModelIndex, setActiveModelIndex] = useState(0)
@@ -171,7 +188,8 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
     if (!model || model[field] === value) return
 
     setModifiedKeys((prev) => new Set(prev).add(key))
-    await updateGeneratedModel(modelId, field, value)
+    const saved = await updateGeneratedModel(modelId, field, value)
+    if (!saved) return // modelActionError is now set — the banner below shows it, with retry
     setSavedKeys((prev) => new Set(prev).add(key))
     setTimeout(() => {
       setSavedKeys((prev) => { const next = new Set(prev); next.delete(key); return next })
@@ -195,18 +213,23 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
   async function handleValidate(model: GeneratedBusinessModel) {
     const projectId = storeProject?.id ?? generatedProject.id
     setValidations((prev) => ({ ...prev, [model.id]: "loading" }))
+
+    const triggerResult = await triggerValidateModel(projectId, model.id, {
+      title: model.title,
+      audience: model.audience,
+      value_proposition: model.valueProposition,
+      description: model.description,
+    })
+    if (!triggerResult.ok) {
+      setValidations((prev) => ({ ...prev, [model.id]: { status: "error", kind: triggerResult.kind } }))
+      return
+    }
+
     try {
-      await triggerValidateModel(projectId, {
-        modelId: model.id,
-        title: model.title,
-        audience: model.audience,
-        valueProposition: model.valueProposition,
-        description: model.description,
-      })
       const result = await waitForValidateResult(projectId, model.id)
       setValidations((prev) => ({ ...prev, [model.id]: result }))
     } catch {
-      setValidations((prev) => ({ ...prev, [model.id]: "error" }))
+      setValidations((prev) => ({ ...prev, [model.id]: { status: "error", kind: "network" } }))
     }
   }
 
@@ -279,6 +302,34 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
           <p className={s.label}>{tModel("label")}</p>
           <h2 className={s.title}>{tModel("title")}</h2>
         </div>
+
+        {modelActionError && (
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+            <div className="flex items-center gap-2 text-sm text-red-700">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>
+                {tModel(`errors.${modelActionError.action}Failed` as "errors.selectFailed")}{" "}
+                {tModel(`errors.kind.${modelActionError.kind}`)}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                type="button" size="sm" variant="outline" className="h-7 text-xs"
+                onClick={() => { modelActionError.retry() }}
+              >
+                <RefreshCw className="mr-1.5 h-3 w-3" /> {tModel("errors.retry")}
+              </Button>
+              <button
+                type="button"
+                onClick={clearModelActionError}
+                className="text-xs text-red-400 hover:text-red-600"
+                aria-label="Dismiss"
+              >
+                <XCircle className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className={s.carouselWrap}>
           <Carousel setApi={setCarouselApi} opts={{ align: "start" }} className="w-full">
@@ -354,7 +405,9 @@ export function ModelSelectionScreen({ generatedProject, onSelectModel }: Props)
                           </Button>
                         </div>
 
-                        {validation && <ValidationPanel result={validation} />}
+                        {validation && (
+                          <ValidationPanel result={validation} t={tModel} onRetry={() => void handleValidate(model)} />
+                        )}
                       </div>
                     </Card>
                   </CarouselItem>

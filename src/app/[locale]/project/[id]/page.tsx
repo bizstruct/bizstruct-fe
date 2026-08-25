@@ -16,6 +16,7 @@ import { getScenario } from "@/services/scenario"
 import { getWhatIfVectors } from "@/services/what-if"
 import { getArchitecture } from "@/services/architecture"
 import { getCanvas } from "@/services/canvas"
+import { fetchProjectById } from "@/services/generation"
 import { EmpathyView } from "@/components/empathy-map/EmpathyView"
 import { CanvasView } from "@/components/canvas/CanvasView"
 import { HypothesesView } from "@/components/hypotheses/HypothesesView"
@@ -69,6 +70,11 @@ export default function ProjectWorkspacePage() {
   const [whatIfVectors,    setWhatIfVectors]     = useState<WhatIfVector[] | null>(null)
   const [architecture,      setArchitecture]      = useState<Architecture | null>(null)
   const [canvasData,       setCanvasData]        = useState<CanvasSections | null>(null)
+  // Drives the "block canvas editing while regenerating" guard — see
+  // CanvasView's isGenerating prop. Not from the `history` list entry
+  // (project?.status), which can be stale or absent on a direct/refreshed
+  // navigation to this page; fetched directly instead.
+  const [projectStatus, setProjectStatus] = useState<string | null>(null)
 
   useEffect(() => {
     if (!projectId) return
@@ -76,7 +82,7 @@ export default function ProjectWorkspacePage() {
     let timer: ReturnType<typeof setTimeout> | null = null
 
     async function fetchAll() {
-      const [empathy, hyps, pitch, scenario, whatIf, arch, canvas] = await Promise.all([
+      const [empathy, hyps, pitch, scenario, whatIf, arch, canvas, projectResult] = await Promise.all([
         getEmpathyMap(projectId).catch(() => null),
         getHypotheses(projectId).catch(() => null),
         getPitch(projectId, locale).catch(() => null),
@@ -84,6 +90,7 @@ export default function ProjectWorkspacePage() {
         getWhatIfVectors(projectId).catch(() => null),
         getArchitecture(projectId).catch(() => null),
         getCanvas(projectId).catch(() => null),
+        fetchProjectById(projectId),
       ])
       if (cancelled) return
       if (empathy)  setEmpathyData(empathy)
@@ -93,6 +100,7 @@ export default function ProjectWorkspacePage() {
       if (whatIf?.length)  setWhatIfVectors(whatIf)
       if (arch)     setArchitecture(arch)
       if (canvas)   setCanvasData(canvas)
+      if (projectResult.ok) setProjectStatus(projectResult.data.status)
       const allReady = empathy && hyps !== null && pitch && scenario && whatIf !== null && arch && canvas
       if (!allReady) {
         timer = setTimeout(fetchAll, 5000)
@@ -179,7 +187,13 @@ export default function ProjectWorkspacePage() {
             />
           : <GeneratingPlaceholder />
         )}
-        {activeView === "canvas" && <CanvasView hasPitch={pitchData !== null} onGoToPitch={() => setActiveView("pitch")} />}
+        {activeView === "canvas" && (
+          <CanvasView
+            hasPitch={pitchData !== null}
+            onGoToPitch={() => setActiveView("pitch")}
+            isGenerating={projectStatus === "generating"}
+          />
+        )}
         {activeView === "architecture" && (architecture
           ? <ArchitectureView projectId={projectId} locale={locale} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
           : <GeneratingPlaceholder />

@@ -24,8 +24,14 @@ export default function HomePage() {
   } = useGenerationFlow()
 
   async function handleSelectModel(modelId: string) {
-    const projectId = await finalizeGeneratedProject(modelId)
-    router.push(ROUTES.project(projectId))
+    try {
+      const projectId = await finalizeGeneratedProject(modelId)
+      router.push(ROUTES.project(projectId))
+    } catch {
+      // A failed save sets the store's modelActionError, which
+      // ModelSelectionScreen reads directly and renders with a retry
+      // button — nothing else to do here but avoid an unhandled rejection.
+    }
   }
 
   return (
