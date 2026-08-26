@@ -1,0 +1,375 @@
+{
+  "Metadata": {
+    "title": "BizStruct AI",
+    "description": "Create business project structures with AI."
+  },
+  "AppShell": {
+    "openSidebar": "Open sidebar"
+  },
+  "Sidebar": {
+    "brand": "BizStruct AI",
+    "close": "Close sidebar",
+    "newProject": "New project",
+    "history": "Project history",
+    "projects": {
+      "ecoSync": "EcoSync Manufacturing",
+      "greenLogistics": "GreenLogistics UA",
+      "carbonTrack": "CarbonTrack IoT",
+      "agroEsg": "AgroESG Platform"
+    }
+  },
+  "HomePage": {
+    "hero": {
+      "title": "Structure your next project",
+      "subtitle": "Describe the idea, and AI will shape the business model, architecture, and PRD."
+    },
+    "input": {
+      "placeholder": "Enter your business idea here (for example: a service for automated CO2 tracking for factories...)",
+      "submit": "Submit idea"
+    },
+    "projects": {
+      "title": "Your active projects",
+      "items": {
+        "ecoSync": {
+          "title": "EcoSync platform",
+          "description": "AI-native ESG automation for manufacturing",
+          "status": "Q3 MVP"
+        },
+        "smartGrid": {
+          "title": "SmartGrid Automation",
+          "description": "AI-powered energy grid optimization",
+          "status": "Beta"
+        },
+        "carbonTrack": {
+          "title": "CarbonTrack IoT",
+          "description": "Direct integration with emissions sensors",
+          "status": "Planning"
+        },
+        "bioWaste": {
+          "title": "BioWaste Circular",
+          "description": "Waste management for agricultural complexes",
+          "status": "Research"
+        }
+      }
+    },
+    "errors": {
+      "unexpected": "An unexpected error occurred"
+    }
+  },
+  "Generation": {
+    "title": "Generating business models",
+    "subtitle": "AI is sequentially analyzing the idea and forming several strategic options.",
+    "stages": {
+      "analyzing": {
+        "title": "Analyzing the input idea...",
+        "description": "Evaluating context, market signals and potential risks."
+      },
+      "structuring": {
+        "title": "Market and competitor analysis...",
+        "description": "Structuring business logic, audience, and monetization channels."
+      },
+      "generatingModels": {
+        "title": "Generating business model architectures...",
+        "description": "Forming multiple variants with different strengths."
+      }
+    }
+  },
+  "ModelSelection": {
+    "label": "Business model options",
+    "title": "Choose the strongest concept",
+    "fields": {
+      "targetAudience": "Target audience",
+      "valueProposition": "Value proposition",
+      "description": "Description",
+      "keyMetric": "Key metric",
+      "timeToValue": "Time to value",
+      "score": "Viability score",
+      "scoreRationale": "Why this score"
+    },
+    "selectModel": "Select this model",
+    "regenerate": "Regenerate",
+    "validate": "Validate",
+    "validating": "Validating…",
+    "editHint": "Click to edit",
+    "prevAriaLabel": "Previous",
+    "nextAriaLabel": "Next",
+    "goToModelAriaLabel": "Go to model {n}",
+    "errors": {
+      "kind": {
+        "not_found": "This project no longer exists.",
+        "validation": "The server rejected this data.",
+        "server": "The server returned an error.",
+        "network": "Could not reach the server.",
+        "timeout": "The request timed out.",
+        "config": "The app is misconfigured."
+      },
+      "selectFailed": "Could not save your selection.",
+      "saveFailed": "Could not save your changes.",
+      "regenerateFailed": "Could not regenerate models.",
+      "validateRequestFailed": "Could not start validation.",
+      "retry": "Retry"
+    }
+  },
+  "WorkspacePage": {
+    "status": {
+      "draft": "Draft"
+    },
+    "projectWorkspace": "Project Workspace",
+    "views": {
+      "empathy": "Empathy Map",
+      "scenario": "User Scenario",
+      "whatIf": "What-If",
+      "canvas": "Canvas",
+      "architecture": "Architecture",
+      "hypotheses": "Hypothesis Map",
+      "pitch": "Pitch"
+    }
+  },
+  "EmpathyView": {
+    "title": "Empathy Map",
+    "subtitle": "Target audience: Corporate Env Manager",
+    "regenerate": "Regenerate",
+    "save": "Save",
+    "saved": "Saved!",
+    "empty": "Empty — click + to add",
+    "newItem": "New item",
+    "categories": {
+      "says": "What says (Says)",
+      "thinks": "What thinks (Thinks)",
+      "does": "What does (Does)",
+      "feels": "What feels (Feels)",
+      "pains": "Pains",
+      "gains": "Gains"
+    }
+  },
+  "CanvasView": {
+    "title": "Business Model Canvas",
+    "loadError": "Could not load the canvas from the server.",
+    "retry": "Retry",
+    "generatingLock": "The project is still generating — editing is disabled until it finishes.",
+    "generatePitch": "Generate Pitch",
+    "empty": "Empty",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "newItemPlaceholder": "Type and click Save…",
+    "regenerate": "Regenerate",
+    "regenerating": "Regenerating…",
+    "validateBtn": "Validate",
+    "validating": "Validating…",
+    "validated": "Validated",
+    "validateFailed": "Invalid",
+    "legend": {
+      "new": "New",
+      "modified": "Modified",
+      "reordered": "Reordered",
+      "pendingDelete": "Pending delete"
+    },
+    "sections": {
+      "keyPartners": "Key Partners",
+      "keyActivities": "Key Activities",
+      "keyResources": "Key Resources",
+      "valuePropositions": "Value Propositions",
+      "customerRelationships": "Customer Relationships",
+      "channels": "Channels",
+      "customerSegments": "Customer Segments",
+      "costStructure": "Cost Structure",
+      "revenueStreams": "Revenue Streams"
+    }
+  },
+  "HypothesesView": {
+    "title": "Hypothesis Mapping · Importance vs Evidence",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "syncCanvas": "Sync Canvas",
+    "addItem": "Add item",
+    "newItemPlaceholder": "Describe your hypothesis…",
+    "confirm": "Add",
+    "cancel": "Cancel",
+    "dragToReclassify": "Drag to reclassify",
+    "dropHere": "Drop here",
+    "axis": {
+      "importance": "IMPORTANCE",
+      "evidence": "EVIDENCE",
+      "high": "HIGH",
+      "low": "LOW"
+    },
+    "quadrants": {
+      "q1": "INVESTIGATE",
+      "q2": "VALIDATED",
+      "q3": "IGNORE",
+      "q4": "PARKED"
+    },
+    "categories": {
+      "desirability": "Desirability",
+      "viability": "Viability",
+      "feasibility": "Feasibility"
+    }
+  },
+  "PitchView": {
+    "title": "Pitch Generator",
+    "regenerate": "Regenerate",
+    "previous": "← Previous",
+    "next": "Next →",
+    "mapHypotheses": "Map Hypotheses",
+    "noContent": "No pitch content yet. Generate a pitch first.",
+    "headlinePlaceholder": "Add a headline…",
+    "bodyPlaceholder": "Add content…",
+    "saveStatus": {
+      "idle": "Saved",
+      "dirty": "Save",
+      "saving": "Saving…",
+      "saved": "Saved"
+    },
+    "validateStatus": {
+      "idle": "Validate",
+      "validating": "Validating…",
+      "valid": "Validated",
+      "invalid": "Failed"
+    },
+    "storyTypes": {
+      "investor": "Investor Story",
+      "customer": "Customer Story"
+    },
+    "investor": {
+      "hook": "The Hook",
+      "problem": "The Problem",
+      "solution": "The Solution",
+      "traction": "Traction",
+      "ask": "The Ask"
+    },
+    "customer": {
+      "opening": "Opening",
+      "empathy": "Empathy",
+      "transformation": "Transformation",
+      "socialProof": "Social Proof",
+      "invitation": "Invitation"
+    }
+  },
+  "ScenarioView": {
+    "title": "User Scenario",
+    "subtitle": "Persona journey from pain point to measurable outcome",
+    "save": "Save",
+    "saved": "Saved!",
+    "validate": "Validate",
+    "regenerate": "Regenerate",
+    "nextStep": "What-If",
+    "resultTitle": "Implementation result",
+    "persona": {
+      "sectionTitle": "Persona",
+      "roleLabel": "Role",
+      "painPointLabel": "Pain point"
+    },
+    "timeline": {
+      "sectionTitle": "User Journey",
+      "context": "Context",
+      "goal": "Goal",
+      "action": "Action in the product",
+      "result": "Result",
+      "impact": "Impact"
+    },
+    "metrics": {
+      "before": "Manual Excel data collection",
+      "after": "Ready report with AI analytics"
+    }
+  },
+  "WhatIfView": {
+    "creativeBrainstorming": "Creative brainstorming",
+    "title": "What-If Provocations",
+    "subtitle": "AI analyzed the persona's empathy and scenario. Choose an innovation vector to break market patterns.",
+    "applyVector": "Apply this vector",
+    "applying": "Applying…",
+    "applied": "Applied",
+    "validate": "Validate",
+    "validating": "Validating…",
+    "regenerate": "Regenerate vectors",
+    "regenerating": "Regenerating…",
+    "standardPath": "No, let's go with the standard B2B SaaS path →",
+    "blockLabels": {
+      "value": "Value",
+      "revenue": "Revenue",
+      "cost": "Cost",
+      "relationships": "Relationships"
+    },
+    "vectors": {
+      "financial": {
+        "badge": "💰 Financial Innovation",
+        "title": "What if we made the service completely free, earning only on the client's result?",
+        "prompt": "Focus on entry barrier, rapid scaling, and a success-based payment model.",
+        "blocks": {
+          "value": "Zero financial entry threshold, instant trust, and a wider market to attract new teams.",
+          "revenue": "Monetization via success fee, share of savings, or premium analytics packages."
+        }
+      },
+      "technical": {
+        "badge": "⚙️ Technology Breakthrough",
+        "title": "What if we completely abandoned the web interface (No-UI) and worked only through an AI assistant?",
+        "prompt": "Focus on automation, voice scenarios, and hidden complexity instead of classic UI.",
+        "blocks": {
+          "value": "Less friction for the user, faster actions and the feeling that the product works autonomously.",
+          "cost": "Reduced frontend team costs, but growing AI infrastructure and integration requirements."
+        }
+      },
+      "emotional": {
+        "badge": "🤝 Super-service for the Persona",
+        "title": "What if we focused on the persona's psychological peace, not just functional efficiency?",
+        "prompt": "Focus on reducing anxiety, clear prompts, and a high level of service support.",
+        "blocks": {
+          "value": "The persona gains a sense of control, clarity of next steps and confidence in the result.",
+          "relationships": "The product becomes a trusted partner rather than just a tool, reducing resistance to change."
+        }
+      }
+    }
+  },
+  "ArchitectureView": {
+    "title": "Architectural Model Profile",
+    "subtitle": "The architectural framework defined by AI based on your inputs. It will serve as the foundation for Business Model Canvas generation.",
+    "changeConceptBtn": "Change concept",
+    "validateBtn": "Validate",
+    "validating": "Validating…",
+    "validated": "Validated",
+    "validateFailed": "Invalid",
+    "generating": "Generating…",
+    "generateCanvas": "Generate full Business Model Canvas",
+    "epicenterLabel": "Business model epicenter",
+    "patternLabel": "Business model pattern",
+    "subtypeLabel": "Subtype",
+    "determined": "Determined",
+    "systemSelection": "System selection",
+    "epicenterDesc": "Rationale",
+    "patternDesc": "Rationale",
+    "epicenters": {
+      "resource_driven": "Resource-driven",
+      "offer_driven": "Offer-driven",
+      "customer_driven": "Customer-driven",
+      "finance_driven": "Finance-driven",
+      "multiple_epicenter": "Multiple epicenter"
+    },
+    "patterns": {
+      "unbundling": "Unbundling",
+      "long_tail": "Long Tail",
+      "multi_sided_platform": "Multi-sided Platform",
+      "free": "Free",
+      "open_business_model": "Open Business Model"
+    },
+    "subtypes": {
+      "freemium": "Freemium",
+      "ad_supported": "Ad-supported",
+      "bait_and_hook": "Bait & Hook",
+      "outside_in": "Outside-In",
+      "inside_out": "Inside-Out"
+    }
+  },
+  "Common": {
+    "actions": {
+      "add": "Add",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "loading": "Loading…",
+    "error": "Something went wrong"
+  }
+}

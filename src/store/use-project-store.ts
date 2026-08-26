@@ -1,0 +1,493 @@
+'use client'
+
+import { create } from "zustand"
+import { createProjectFromIdea, fetchProjectById, selectProjectModel, saveModelsEdits, triggerRegenerateModels } from "@/services/generation"
+import type { ModelsOptionsPayload, RawProjectResponse } from "@/services/generation"
+import type { ApiErrorKind } from "@/lib/api-result"
+import type { BusinessModelOption } from "@/types/domain/models-options"
+import { waitForProjectGeneration } from "@/services/pubsub"
+import { getActiveProjects, deleteProjectById } from "@/services/projects"
+import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard, apiMoveCanvasCard } from "@/services/canvas"
+import { createCard, moveCard } from "@/utils/mappers/canvas"
+import type { HistoryItem } from "@/schemas/project.schema"
+import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/canvas.schema"
+
+export type { CanvasSectionKey, CanvasCard, CanvasSections }
+
+// Not mock data — an actually-empty canvas. canvasSections starts here and
+// is replaced once CanvasView's real fetch resolves; if that fetch fails,
+// it must stay empty (and the UI must show an error), not silently keep
+// showing plausible-looking fake data. See Part C of the canvas task.
+const EMPTY_CANVAS_SECTIONS: CanvasSections = {
+  keyPartners: [],
+  keyActivities: [],
+  keyResources: [],
+  valuePropositions: [],
+  customerRelationships: [],
+  channels: [],
+  customerSegments: [],
+  costStructure: [],
+  revenueStreams: [],
+}
+
+export type GenerationStep = "idle" | "analyzing" | "structuring" | "generating_models" | "completed"
+
+export const GENERATING_STEPS: GenerationStep[] = ["analyzing", "structuring", "generating_models"]
+
+export interface GeneratedBusinessModel {
+  id: string
+  title: string
+  audience: string
+  valueProposition: string
+  description: string
+  monetization: string
+  keyMetric: string
+  timeToValue: string
+  score: number
+  scoreRationale: string
+}
+
+interface GeneratedProject {
+  id: string
+  title: string
+  idea: string
+  models: GeneratedBusinessModel[]
+  rawModelsOptions: ModelsOptionsPayload | null
+}
+
+// Surfaced by a failed models_options mutation (select/save/regenerate) so
+// ModelSelectionScreen can show a visible, retryable error instead of the
+// previous silent .catch(() => {}). `retry` re-invokes the exact action
+// that failed with its original arguments.
+export interface ModelActionError {
+  action: "select" | "save" | "regenerate"
+  kind: ApiErrorKind
+  message: string
+  retry: () => void
+}
+
+interface ProjectStoreState {
+  history: HistoryItem[]
+  isLoading: boolean
+  generationStep: GenerationStep
+  generatedProject: GeneratedProject | null
+  currentTempHistoryId: string | null
+  modelActionError: ModelActionError | null
+  clearModelActionError: () => void
+  fetchHistory: () => Promise<void>
+  addProjectFromIdea: (idea: string) => Promise<void>
+  finalizeGeneratedProject: (modelId: string) => Promise<string>
+  resetGenerationFlow: () => void
+  deleteProject: (id: string) => Promise<void>
+  renameProject: (id: string, title: string) => void
+  updateGeneratedModel: (modelId: string, field: keyof GeneratedBusinessModel, value: string) => Promise<boolean>
+  regenerateModels: () => Promise<void>
+  activeProjectId: string | null
+  setActiveProjectId: (id: string) => void
+  canvasSections: CanvasSections
+  setCanvasSections: (sections: CanvasSections) => void
+  addCanvasCard: (section: CanvasSectionKey, text: string, isAiGenerated?: boolean) => Promise<string>
+  updateCanvasCard: (section: CanvasSectionKey, cardId: string, text: string) => Promise<void>
+  deleteCanvasCard: (section: CanvasSectionKey, cardId: string) => Promise<void>
+  moveCanvasCard: (from: { section: CanvasSectionKey; cardId: string }, to: { section: CanvasSectionKey; index: number }) => Promise<void>
+}
+
+function mergeHistory(existing: HistoryItem[], fetched: HistoryItem[]): HistoryItem[] {
+  const existingIds = new Set(existing.map((item) => item.id))
+  return [...existing, ...fetched.filter((item) => !existingIds.has(item.id))]
+}
+
+const POLL_INTERVAL_MS  = 3000
+const POLL_MAX_ATTEMPTS = 40
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function normalizeModel(raw: BusinessModelOption): GeneratedBusinessModel {
+  return {
+    id:               raw.id,
+    title:            raw.title,
+    audience:         raw.audience,
+    valueProposition: raw.value_proposition,
+    description:      raw.description,
+    monetization:     raw.monetization,
+    keyMetric:        raw.key_metric,
+    timeToValue:      raw.time_to_value,
+    score:            raw.score,
+    scoreRationale:   raw.score_rationale,
+  }
+}
+
+function extractModels(modelsOptions: RawProjectResponse["modelsOptions"]): BusinessModelOption[] {
+  return modelsOptions?.options ?? []
+}
+
+// Used inside the generation-polling loops below, where a single failed
+// fetch just means "try again next tick" — not worth surfacing as a hard
+// error the way a failed mutation is. See ModelActionError for the ones
+// that are.
+async function fetchProjectData(projectId: string): Promise<RawProjectResponse | null> {
+  const result = await fetchProjectById(projectId)
+  return result.ok ? result.data : null
+}
+
+
+export const useProjectStore = create<ProjectStoreState>((set, get) => ({
+  history: [],
+  isLoading: false,
+  activeProjectId: null,
+  canvasSections: EMPTY_CANVAS_SECTIONS,
+  generationStep: "idle",
+  generatedProject: null,
+  currentTempHistoryId: null,
+  modelActionError: null,
+  clearModelActionError: () => set({ modelActionError: null }),
+
+  fetchHistory: async () => {
+    try {
+      const fetched = await getActiveProjects()
+      set((state) => ({ history: mergeHistory(state.history, fetched) }))
+    } catch (err) {
+      console.error("[fetchHistory] failed:", err)
+    }
+  },
+
+  addProjectFromIdea: async (idea: string) => {
+    const tempId      = `temp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
+    const ideaSnippet = idea.trim().split(/\s+/).slice(0, 8).join(" ")
+    const provisional: HistoryItem = { id: tempId, title: ideaSnippet ? `${ideaSnippet}...` : "Новий проєкт" }
+
+    set((state) => ({
+      history: [provisional, ...state.history],
+      isLoading: true,
+      generationStep: "analyzing",
+      generatedProject: null,
+      currentTempHistoryId: tempId,
+    }))
+
+    try {
+      // Step 1: create project (returns immediately with status: "generating")
+      const initialResult = await createProjectFromIdea(idea)
+      if (!initialResult.ok) {
+        throw new Error(
+          initialResult.kind === "network" || initialResult.kind === "timeout"
+            ? "Не вдалося зв'язатися з сервером. Перевірте з'єднання і спробуйте ще раз."
+            : "Не вдалося створити проєкт",
+        )
+      }
+      const initial = initialResult.data
+      if (!initial?.id) throw new Error("Не вдалося створити проєкт")
+
+      set({ generationStep: "structuring" })
+
+      let models: GeneratedBusinessModel[] | null = null
+      let projectTitle = initial.title
+      let rawModelsOptions: ModelsOptionsPayload | null = null
+
+      const initialModels = extractModels(initial.modelsOptions)
+      if (initialModels.length) {
+        models = initialModels.map(normalizeModel)
+        rawModelsOptions = initial.modelsOptions
+      } else {
+        set({ generationStep: "generating_models" })
+        try {
+          const result = await waitForProjectGeneration(initial.id)
+          if (result.status === "completed") {
+            const data = await fetchProjectData(initial.id)
+            const fetchedModels = extractModels(data?.modelsOptions ?? null)
+            if (fetchedModels.length) {
+              models = fetchedModels.map(normalizeModel)
+              projectTitle = data?.title ?? initial.title
+              rawModelsOptions = data?.modelsOptions ?? null
+            }
+          }
+        } catch {
+          // PubSub unavailable — fall back to polling
+          for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
+            await delay(POLL_INTERVAL_MS)
+            const data = await fetchProjectData(initial.id)
+            const fetchedModels = extractModels(data?.modelsOptions ?? null)
+            if (fetchedModels.length) {
+              models = fetchedModels.map(normalizeModel)
+              projectTitle = data?.title ?? initial.title
+              rawModelsOptions = data?.modelsOptions ?? null
+              break
+            }
+          }
+        }
+      }
+
+      if (!models?.length) {
+        // DEV fallback: endpoint not ready yet — use placeholder models
+        models = [
+          { id: "model-1", title: `B2B SaaS · ${ideaSnippet || "Project"}`,       audience: "SMB teams",        valueProposition: "Automates core workflow",       description: "Subscription model with fast onboarding.", monetization: "subscription",      keyMetric: "MRR / NRR",        timeToValue: "30 minutes to first report",  score: 78, scoreRationale: "Placeholder — subscription directly monetizes a recurring pain." },
+          { id: "model-2", title: `Marketplace · ${ideaSnippet || "Project"}`,    audience: "Enterprise buyers", valueProposition: "Connects supply and demand",     description: "Transaction-based monetization.",           monetization: "transaction_fee",   keyMetric: "GMV / Take rate",  timeToValue: "First transaction in 1–2 weeks", score: 65, scoreRationale: "Placeholder — higher upside per transaction, longer sales cycle." },
+          { id: "model-3", title: `Advisory Platform · ${ideaSnippet || "Project"}`, audience: "Founders & analysts", valueProposition: "AI-assisted strategy artifacts", description: "Premium packages with expert support.",    monetization: "retainer_plus_saas", keyMetric: "ACV / CSAT",       timeToValue: "First session in 48 hours",   score: 55, scoreRationale: "Placeholder — high value per client, limited scalability." },
+        ]
+      }
+
+      set({
+        generatedProject: { id: initial.id, title: projectTitle, idea, models, rawModelsOptions },
+        generationStep: "completed",
+      })
+    } catch (error) {
+      set((state) => ({
+        history: state.history.filter((h) => h.id !== tempId),
+        generationStep: "idle",
+        generatedProject: null,
+        currentTempHistoryId: null,
+      }))
+      throw error instanceof Error ? error : new Error("Сталася непередбачувана помилка")
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  finalizeGeneratedProject: async (modelId: string) => {
+    const { generatedProject, currentTempHistoryId } = get()
+    if (!generatedProject) throw new Error("Немає згенерованого проєкту для збереження")
+
+    const selectedModel = generatedProject.models.find((m) => m.id === modelId)
+    if (!selectedModel) throw new Error("Не вдалося знайти вибрану модель")
+
+    if (generatedProject.rawModelsOptions) {
+      const result = await selectProjectModel(generatedProject.id, generatedProject.rawModelsOptions, modelId)
+      if (!result.ok) {
+        set({
+          modelActionError: {
+            action: "select",
+            kind: result.kind,
+            message: result.message,
+            retry: () => { void get().finalizeGeneratedProject(modelId) },
+          },
+        })
+        // Do not navigate away or clear generatedProject — a failed save
+        // must not look like a successful one. The caller (page.tsx) is
+        // expected to catch this and leave the model-selection screen up;
+        // ModelSelectionScreen reads modelActionError directly to show it.
+        throw new Error(result.message)
+      }
+    }
+    set({ modelActionError: null })
+
+    const historyItem: HistoryItem = {
+      id:    generatedProject.id,
+      title: selectedModel.title,
+    }
+
+    set((state) => ({
+      history: [historyItem, ...state.history.filter((h) => h.id !== currentTempHistoryId)],
+      generationStep: "idle",
+      generatedProject: null,
+      isLoading: false,
+      currentTempHistoryId: null,
+    }))
+
+    return generatedProject.id
+  },
+
+  resetGenerationFlow: () => set({ generationStep: "idle", generatedProject: null, isLoading: false }),
+
+  deleteProject: async (id) => {
+    if (!id.startsWith("temp-")) {
+      await deleteProjectById(id)
+    }
+    set((state) => ({ history: state.history.filter((h) => h.id !== id) }))
+  },
+
+  renameProject: (id, title) => set((state) => ({
+    history: state.history.map((h) => h.id === id ? { ...h, title } : h),
+  })),
+
+  updateGeneratedModel: async (modelId, field, value) => {
+    const { generatedProject } = get()
+    if (!generatedProject) return false
+
+    const updatedModels = generatedProject.models.map((m) =>
+      m.id === modelId ? { ...m, [field]: value } : m
+    )
+
+    // Only the free-text fields sourced from BusinessModelOption's
+    // user-facing fields are user-editable (see ModelSelectionScreen's
+    // EditableField). monetization/key_metric/time_to_value/score/
+    // score_rationale are generated, display-only — not part of this map.
+    const RAW_FIELD_BY_UI_FIELD: Partial<Record<keyof GeneratedBusinessModel, keyof BusinessModelOption>> = {
+      title: "title",
+      audience: "audience",
+      valueProposition: "value_proposition",
+      description: "description",
+    }
+    const rawField = RAW_FIELD_BY_UI_FIELD[field]
+
+    const updatedRaw = generatedProject.rawModelsOptions && rawField
+      ? {
+          ...generatedProject.rawModelsOptions,
+          options: generatedProject.rawModelsOptions.options.map((r) =>
+            r.id === modelId ? { ...r, [rawField]: value } : r
+          ),
+        }
+      : generatedProject.rawModelsOptions
+
+    set((state) => ({
+      generatedProject: state.generatedProject
+        ? { ...state.generatedProject, models: updatedModels, rawModelsOptions: updatedRaw }
+        : null,
+    }))
+
+    if (updatedRaw && generatedProject.id) {
+      const result = await saveModelsEdits(generatedProject.id, updatedRaw)
+      if (!result.ok) {
+        set({
+          modelActionError: {
+            action: "save",
+            kind: result.kind,
+            message: result.message,
+            retry: () => { void get().updateGeneratedModel(modelId, field, value) },
+          },
+        })
+        return false
+      }
+    }
+    set({ modelActionError: null })
+    return true
+  },
+
+  regenerateModels: async () => {
+    const { generatedProject } = get()
+    if (!generatedProject) return
+
+    set({ generationStep: "generating_models", modelActionError: null })
+
+    const triggerResult = await triggerRegenerateModels(generatedProject.id)
+    if (!triggerResult.ok) {
+      set({
+        generationStep: "completed",
+        modelActionError: {
+          action: "regenerate",
+          kind: triggerResult.kind,
+          message: triggerResult.message,
+          retry: () => { void get().regenerateModels() },
+        },
+      })
+      return
+    }
+
+    try {
+      const result = await waitForProjectGeneration(generatedProject.id)
+      if (result.status === "completed") {
+        const data = await fetchProjectData(generatedProject.id)
+        const fetchedModels = extractModels(data?.modelsOptions ?? null)
+        if (fetchedModels.length) {
+          const models = fetchedModels.map(normalizeModel)
+          const rawModelsOptions = data?.modelsOptions ?? null
+          set((state) => ({
+            generatedProject: state.generatedProject
+              ? { ...state.generatedProject, models, rawModelsOptions }
+              : null,
+            generationStep: "completed",
+          }))
+          return
+        }
+      }
+    } catch {
+      // PubSub unavailable — fall back to polling
+      for (let i = 0; i < POLL_MAX_ATTEMPTS; i++) {
+        await delay(POLL_INTERVAL_MS)
+        const data = await fetchProjectData(generatedProject.id)
+        const fetchedModels = extractModels(data?.modelsOptions ?? null)
+        if (fetchedModels.length) {
+          const models = fetchedModels.map(normalizeModel)
+          const rawModelsOptions = data?.modelsOptions ?? null
+          set((state) => ({
+            generatedProject: state.generatedProject
+              ? { ...state.generatedProject, models, rawModelsOptions }
+              : null,
+            generationStep: "completed",
+          }))
+          return
+        }
+      }
+    }
+
+    set({ generationStep: "completed" })
+  },
+
+  setCanvasSections: (sections) => set({ canvasSections: sections }),
+
+  setActiveProjectId: (id) => set({ activeProjectId: id }),
+
+  addCanvasCard: async (section, text, isAiGenerated = false) => {
+    const { activeProjectId, canvasSections } = get()
+    // Optimistic update with a temp id
+    const tempCard = createCard(canvasSections, section, text, isAiGenerated)
+    set((state) => ({
+      canvasSections: { ...state.canvasSections, [section]: [tempCard, ...state.canvasSections[section]] },
+    }))
+    if (activeProjectId) {
+      try {
+        const saved = await apiAddCanvasCard(activeProjectId, section, text)
+        if (saved) {
+          set((state) => ({
+            canvasSections: {
+              ...state.canvasSections,
+              [section]: state.canvasSections[section].map((c) => c.id === tempCard.id ? saved : c),
+            },
+          }))
+          return saved.id
+        }
+      } catch {
+        // Keep optimistic card on failure
+      }
+    }
+    return tempCard.id
+  },
+
+  updateCanvasCard: async (section, cardId, text) => {
+    // Editing a card's text always clears isAiGenerated locally too — the
+    // backend forces the same thing on write (see routers/blocks.py's
+    // update_canvas_item), so the optimistic update should already reflect
+    // it instead of flickering true->false after the next refetch.
+    set((state) => ({
+      canvasSections: {
+        ...state.canvasSections,
+        [section]: state.canvasSections[section].map((c) => (c.id === cardId ? { ...c, text, isAiGenerated: false } : c)),
+      },
+    }))
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiUpdateCanvasCard(activeProjectId, section, cardId, text).catch(() => {})
+    }
+  },
+
+  deleteCanvasCard: async (section, cardId) => {
+    set((state) => ({
+      canvasSections: {
+        ...state.canvasSections,
+        [section]: state.canvasSections[section].filter((c) => c.id !== cardId),
+      },
+    }))
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiDeleteCanvasCard(activeProjectId, section, cardId).catch(() => {})
+    }
+  },
+
+  moveCanvasCard: async (from, to) => {
+    set((state) => ({
+      canvasSections: moveCard(state.canvasSections, from, to),
+    }))
+    // Same-section reordering is persisted by the caller via
+    // apiReorderSection (CanvasSectionCard's drag handler, which already
+    // has the full reordered card list to hand the PUT-section endpoint) —
+    // calling apiMoveCanvasCard here too would be a redundant, possibly
+    // racing second write. Only a genuine cross-section move needs this
+    // call; same-section reordering already worked before this endpoint
+    // existed.
+    if (from.section === to.section) return
+    const { activeProjectId } = get()
+    if (activeProjectId) {
+      await apiMoveCanvasCard(activeProjectId, from.section, from.cardId, to.section, to.index).catch(() => {})
+    }
+  },
+}))
