@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.7.0/schemas/hypotheses.json (bizstruct-domain@v0.7.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.8.1/schemas/hypotheses.json (bizstruct-domain@v0.8.1)
 
 /**
  * @minItems 5

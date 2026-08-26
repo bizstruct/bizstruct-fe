@@ -276,51 +276,39 @@
   },
   "WhatIfView": {
     "creativeBrainstorming": "Creative brainstorming",
-    "title": "What-If Provocations",
-    "subtitle": "AI analyzed the persona's empathy and scenario. Choose an innovation vector to break market patterns.",
-    "applyVector": "Apply this vector",
+    "title": "ERRC Alternatives",
+    "subtitle": "Three Blue Ocean Strategy alternatives, built from your own canvas — each one eliminates, reduces, raises, or creates something concrete.",
+    "expectedImpact": "Expected impact",
+    "applyAlternative": "Apply this alternative",
+    "confirmApply": "Confirm — this will change your canvas",
+    "cancel": "Cancel",
     "applying": "Applying…",
     "applied": "Applied",
-    "validate": "Validate",
-    "validating": "Validating…",
-    "regenerate": "Regenerate vectors",
-    "regenerating": "Regenerating…",
-    "standardPath": "No, let's go with the standard B2B SaaS path →",
-    "blockLabels": {
-      "value": "Value",
-      "revenue": "Revenue",
-      "cost": "Cost",
-      "relationships": "Relationships"
+    "revert": "Revert",
+    "reverting": "Reverting…",
+    "revertUnavailable": "Cannot revert (no snapshot)",
+    "appliedToCanvas": "Canvas updated.",
+    "viewCanvas": "View canvas →",
+    "regenerateNote": "These alternatives were generated once, from your canvas and architecture, and aren't regenerated automatically.",
+    "retry": "Retry",
+    "action": {
+      "eliminate": "Eliminate",
+      "reduce": "Reduce",
+      "raise": "Raise",
+      "create": "Create"
     },
-    "vectors": {
-      "financial": {
-        "badge": "💰 Financial Innovation",
-        "title": "What if we made the service completely free, earning only on the client's result?",
-        "prompt": "Focus on entry barrier, rapid scaling, and a success-based payment model.",
-        "blocks": {
-          "value": "Zero financial entry threshold, instant trust, and a wider market to attract new teams.",
-          "revenue": "Monetization via success fee, share of savings, or premium analytics packages."
-        }
+    "errors": {
+      "kind": {
+        "not_found": "This project no longer exists.",
+        "validation": "Some of this alternative's moves no longer match your canvas.",
+        "server": "The server returned an error.",
+        "network": "Could not reach the server.",
+        "timeout": "The request timed out.",
+        "config": "The app is misconfigured."
       },
-      "technical": {
-        "badge": "⚙️ Technology Breakthrough",
-        "title": "What if we completely abandoned the web interface (No-UI) and worked only through an AI assistant?",
-        "prompt": "Focus on automation, voice scenarios, and hidden complexity instead of classic UI.",
-        "blocks": {
-          "value": "Less friction for the user, faster actions and the feeling that the product works autonomously.",
-          "cost": "Reduced frontend team costs, but growing AI infrastructure and integration requirements."
-        }
-      },
-      "emotional": {
-        "badge": "🤝 Super-service for the Persona",
-        "title": "What if we focused on the persona's psychological peace, not just functional efficiency?",
-        "prompt": "Focus on reducing anxiety, clear prompts, and a high level of service support.",
-        "blocks": {
-          "value": "The persona gains a sense of control, clarity of next steps and confidence in the result.",
-          "relationships": "The product becomes a trusted partner rather than just a tool, reducing resistance to change."
-        }
-      }
-    }
+      "unresolvedMove": "{action} in {section}: “{target}” — no matching card found"
+    },
+    "generatingLock": "The project is still generating — applying or reverting is disabled until it finishes."
   },
   "ArchitectureView": {
     "title": "Architectural Model Profile",
