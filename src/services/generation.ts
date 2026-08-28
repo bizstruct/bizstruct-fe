@@ -8,6 +8,7 @@ import { API_ROUTES } from "@/constants/api"
 import { apiRequest } from "./api-client"
 import type { ApiResult } from "@/lib/api-result"
 import type { BusinessModelOption, ModelsOptions } from "@/types/domain/models-options"
+import type { ProjectLanguage } from "@/schemas/project.schema"
 
 // `options` loosened from ModelsOptions' strict 3-tuple to a plain array —
 // client-side state manipulation (edits, regeneration) doesn't need the
@@ -21,13 +22,21 @@ export interface RawProjectResponse {
   id: string
   title: string
   status: string
+  language: ProjectLanguage
   modelsOptions: ModelsOptionsPayload | null
 }
 
-export async function createProjectFromIdea(text: string): Promise<ApiResult<RawProjectResponse>> {
+// language is the generation-language parameter, fixed for the whole
+// project — set by the caller from the user's UI locale at creation time
+// (see [locale]/page.tsx), never re-derived later. Not a translation:
+// there's no layer that converts existing content between languages.
+export async function createProjectFromIdea(
+  text: string,
+  language: ProjectLanguage,
+): Promise<ApiResult<RawProjectResponse>> {
   return apiRequest<RawProjectResponse>(API_ROUTES.generation, {
     method: "POST",
-    body: JSON.stringify({ idea: text }),
+    body: JSON.stringify({ idea: text, language }),
   })
 }
 

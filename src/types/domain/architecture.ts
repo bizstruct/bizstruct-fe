@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.7.0/schemas/architecture.json (bizstruct-domain@v0.7.0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/bbee62baff73b4c40eadedc7a285274bf63b15c0/schemas/architecture.json (bizstruct-domain@bbee62baff73b4c40eadedc7a285274bf63b15c0)
 
 /**
  * Epicentres of business model innovation.
@@ -11,13 +11,9 @@
  */
 export type Epicenter = "resource_driven" | "offer_driven" | "customer_driven" | "finance_driven" | "multiple_epicenter"
 /**
- * Rationale for the chosen epicenter, in English.
+ * Rationale for the chosen epicenter, in the project's language.
  */
-export type EpicenterRationaleEn = string
-/**
- * Обґрунтування вибору епіцентру українською мовою.
- */
-export type EpicenterRationaleUk = string
+export type EpicenterRationale = string
 /**
  * Business model patterns.
  *
@@ -27,13 +23,9 @@ export type EpicenterRationaleUk = string
  */
 export type Pattern = "unbundling" | "long_tail" | "multi_sided_platform" | "free" | "open_business_model"
 /**
- * Rationale for the chosen pattern, in English.
+ * Rationale for the chosen pattern, in the project's language.
  */
-export type PatternRationaleEn = string
-/**
- * Обґрунтування вибору патерну українською мовою.
- */
-export type PatternRationaleUk = string
+export type PatternRationale = string
 /**
  * Subtypes that refine specific patterns.
  *
@@ -53,11 +45,9 @@ export type PatternSubtype = "freemium" | "ad_supported" | "bait_and_hook" | "ou
  */
 export interface Architecture {
   epicenter: Epicenter
-  epicenter_rationale_en: EpicenterRationaleEn
-  epicenter_rationale_uk: EpicenterRationaleUk
+  epicenter_rationale: EpicenterRationale
   pattern: Pattern
-  pattern_rationale_en: PatternRationaleEn
-  pattern_rationale_uk: PatternRationaleUk
+  pattern_rationale: PatternRationale
   /**
    * Subtype refining the pattern. Required for patterns that define subtypes (free, open_business_model) — freemium, ad-supported, and bait-and-hook are distinct economics and must be told apart; must be null for all other patterns.
    */

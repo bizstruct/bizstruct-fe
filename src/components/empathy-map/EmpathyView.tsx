@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useProjectStore } from "@/store/use-project-store"
 import type { EmpathyCategory, EmpathyMap as EmpathyMapData, EmpathyItem } from "@/schemas/empathy-map.schema"
-import { addItem, updateItem, deleteItem, getItemText } from "@/utils/mappers/empathy"
+import { addItem, updateItem, deleteItem } from "@/utils/mappers/empathy"
 import { saveEmpathyMap } from "@/services/empathy-map"
 import { empathyStyles } from "./styles"
 import { EmpathyCardList } from "./EmpathyCardList"
@@ -20,13 +20,12 @@ type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 interface Props {
   projectId:          string
   projectName:        string
-  locale:             string
   initialData:        EmpathyMapData
   onNext?:            () => void
   hasSubsequentData?: boolean
 }
 
-export function EmpathyView({ projectId, projectName, locale, initialData, onNext, hasSubsequentData }: Props) {
+export function EmpathyView({ projectId, projectName, initialData, onNext, hasSubsequentData }: Props) {
   const t             = useTranslations("EmpathyView")
   const history       = useProjectStore((s) => s.history)
   const setStoreState = useProjectStore.setState
@@ -35,11 +34,10 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
 
   // The store's history cache only keeps a plain-string preview of
   // pains/gains (seeded right after generation, before this view's own
-  // fetch lands) — not bilingual. Synthesize both language fields from
-  // that single string as a placeholder; the real bilingual text from the
-  // backend takes over as soon as initialData/the store refresh.
+  // fetch lands) — placeholder until the real text from the backend takes
+  // over as soon as initialData/the store refresh.
   function fromCachedTexts(texts: string[]): EmpathyItem[] {
-    return texts.map((text, i) => ({ id: i + 1, text_uk: text, text_en: text }))
+    return texts.map((text, i) => ({ id: i + 1, text }))
   }
 
   const [state, setState] = useState<Record<EmpathyCategory, EmpathyItem[]>>(() => ({
@@ -71,7 +69,7 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
   }, [projectHistoryItem?.id])
 
   function update(cat: EmpathyCategory, id: number, text: string) {
-    setState((prev) => ({ ...prev, [cat]: updateItem(prev[cat], locale, id, text) }))
+    setState((prev) => ({ ...prev, [cat]: updateItem(prev[cat], id, text) }))
   }
 
   function del(cat: EmpathyCategory, id: number) {
@@ -81,7 +79,7 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
   function add(cat: EmpathyCategory): number {
     let newId = 0
     setState((prev) => {
-      const result = addItem(prev[cat], locale)
+      const result = addItem(prev[cat])
       newId = result.newId
       return { ...prev, [cat]: result.items }
     })
@@ -124,16 +122,22 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
     try {
       await saveEmpathyMap(projectId, finalState as EmpathyMapData)
 
-      // update local store (plain-string preview, current locale only)
+      // update local store (plain-string preview)
       const empathy = {
-        pains: finalState.pains.map((p) => getItemText(p, locale)),
-        gains: finalState.gains.map((g) => getItemText(g, locale)),
+        pains: finalState.pains.map((p) => p.text),
+        gains: finalState.gains.map((g) => g.text),
       }
       const exists = history.some((h) => h.id === projectId)
       setStoreState({
         history: exists
           ? history.map((h) => h.id === projectId ? { ...h, empathy } : h)
-          : [{ id: projectId, title: projectName, empathy }, ...history],
+          // Fallback only — normally this project is already in history
+          // (added by addProjectFromIdea, with its real language) by the
+          // time this view can render. "en" here is an explicit default
+          // for the edge case of navigating straight to this project's
+          // empathy-map page without going through creation first, not a
+          // real language guess.
+          : [{ id: projectId, title: projectName, language: "en", empathy }, ...history],
       })
 
       setSavedAt((n) => n + 1)   // triggers EmpathyCardList to commit pending deletes
@@ -209,7 +213,6 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
               key={cat}
               category={cat}
               items={state[cat]}
-              locale={locale}
               onUpdate={(id, text) => update(cat, id, text)}
               onDelete={(id) => del(cat, id)}
               onAdd={() => add(cat)}
@@ -226,7 +229,6 @@ export function EmpathyView({ projectId, projectName, locale, initialData, onNex
               key={cat}
               category={cat}
               items={state[cat]}
-              locale={locale}
               onUpdate={(id, text) => update(cat, id, text)}
               onDelete={(id) => del(cat, id)}
               onAdd={() => add(cat)}

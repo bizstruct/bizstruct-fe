@@ -78,13 +78,17 @@ genuinely needs progressive form enhancement without JavaScript, or
 streaming, that would be a deliberate, documented exception here — not a
 silent reversion to a second mechanism.
 
-**Scope note:** `what_if`'s two route handlers
-(`src/app/api/what-if/[projectId]/route.ts` and its `[scenarioId]` child)
-were deliberately *not* migrated onto `backend-client.ts` in this pass — a
-parallel task is rewriting `what_if` for ERRC, and touching its routes here
-risked a merge conflict for no benefit to this task's goals. They still work
-exactly as before (a hand-rolled `fetch` to `API_BASE_URL`, no fallback, no
-mock); migrating them is a small follow-up once that task lands.
+**Scope note:** `what_if`'s route handlers were deliberately *not* migrated
+onto `backend-client.ts` in this pass — a parallel task was rewriting
+`what_if` for ERRC, and touching its routes here risked a merge conflict for
+no benefit to this task's goals. That task has since landed: `what_if`'s
+routes (`[projectId]/route.ts`, `[alternativeId]/route.ts`, and the new
+`apply`/`revert` routes) are on `backendFetch`/`toHttpResponse` like every
+other block, `getWhatIf`/`applyWhatIfAlternative`/`revertWhatIfAlternative`
+in `services/what-if.ts` return `ApiResult<T>` directly (no legacy
+`apiGet`/`apiPatch` wrapper — the ERRC rewrite went straight onto the new
+client rather than reproducing the old pattern), and its mocks are gated
+behind `NEXT_PUBLIC_USE_MOCKS=true` the same as canvas's.
 
 ## Consequences
 
@@ -119,8 +123,7 @@ mock); migrating them is a small follow-up once that task lands.
   classification for free), preserving their existing contract (404 → null,
   other failures → throw) for backward compatibility. New code should call
   `apiRequest`/`ApiResult` directly, as `services/generation.ts` does.
-- `what_if`'s routes still duplicate the fetch-and-forward boilerplate
-  `backend-client.ts` was meant to replace, for the reason noted above.
+  `services/what-if.ts` follows the same direct-`apiRequest` pattern.
 
 ## Alternatives considered
 

@@ -29,7 +29,6 @@ export default function ArchitecturePage() {
   return (
     <ArchitectureView
       projectId={projectId}
-      locale={locale}
       architecture={architecture}
       hasCanvas={canvasData !== null}
       onGoToCanvas={() => router.push(`/${locale}${ROUTES.canvas(projectId)}`)}

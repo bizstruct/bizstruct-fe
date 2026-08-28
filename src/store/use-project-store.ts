@@ -9,7 +9,7 @@ import { waitForProjectGeneration } from "@/services/pubsub"
 import { getActiveProjects, deleteProjectById } from "@/services/projects"
 import { apiAddCanvasCard, apiUpdateCanvasCard, apiDeleteCanvasCard, apiMoveCanvasCard } from "@/services/canvas"
 import { createCard, moveCard } from "@/utils/mappers/canvas"
-import type { HistoryItem } from "@/schemas/project.schema"
+import type { HistoryItem, ProjectLanguage } from "@/schemas/project.schema"
 import type { CanvasSections, CanvasSectionKey, CanvasCard } from "@/schemas/canvas.schema"
 
 export type { CanvasSectionKey, CanvasCard, CanvasSections }
@@ -51,6 +51,7 @@ interface GeneratedProject {
   id: string
   title: string
   idea: string
+  language: ProjectLanguage
   models: GeneratedBusinessModel[]
   rawModelsOptions: ModelsOptionsPayload | null
 }
@@ -75,7 +76,7 @@ interface ProjectStoreState {
   modelActionError: ModelActionError | null
   clearModelActionError: () => void
   fetchHistory: () => Promise<void>
-  addProjectFromIdea: (idea: string) => Promise<void>
+  addProjectFromIdea: (idea: string, language: ProjectLanguage) => Promise<void>
   finalizeGeneratedProject: (modelId: string) => Promise<string>
   resetGenerationFlow: () => void
   deleteProject: (id: string) => Promise<void>
@@ -153,10 +154,10 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     }
   },
 
-  addProjectFromIdea: async (idea: string) => {
+  addProjectFromIdea: async (idea: string, language: ProjectLanguage) => {
     const tempId      = `temp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`
     const ideaSnippet = idea.trim().split(/\s+/).slice(0, 8).join(" ")
-    const provisional: HistoryItem = { id: tempId, title: ideaSnippet ? `${ideaSnippet}...` : "Новий проєкт" }
+    const provisional: HistoryItem = { id: tempId, title: ideaSnippet ? `${ideaSnippet}...` : "Новий проєкт", language }
 
     set((state) => ({
       history: [provisional, ...state.history],
@@ -168,7 +169,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
 
     try {
       // Step 1: create project (returns immediately with status: "generating")
-      const initialResult = await createProjectFromIdea(idea)
+      const initialResult = await createProjectFromIdea(idea, language)
       if (!initialResult.ok) {
         throw new Error(
           initialResult.kind === "network" || initialResult.kind === "timeout"
@@ -228,7 +229,7 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
       }
 
       set({
-        generatedProject: { id: initial.id, title: projectTitle, idea, models, rawModelsOptions },
+        generatedProject: { id: initial.id, title: projectTitle, idea, language: initial.language, models, rawModelsOptions },
         generationStep: "completed",
       })
     } catch (error) {
@@ -272,8 +273,9 @@ export const useProjectStore = create<ProjectStoreState>((set, get) => ({
     set({ modelActionError: null })
 
     const historyItem: HistoryItem = {
-      id:    generatedProject.id,
-      title: selectedModel.title,
+      id:       generatedProject.id,
+      title:    selectedModel.title,
+      language: generatedProject.language,
     }
 
     set((state) => ({

@@ -1,17 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { mockWhatIfData } from "@/mocks/data/what-if"
+import { backendFetch } from "@/lib/backend-client"
+import { toHttpResponse } from "@/lib/route-response"
 
-const BASE = process.env.API_BASE_URL
+// Mocks are opt-in only, via NEXT_PUBLIC_USE_MOCKS=true — never a silent
+// fallback for a missing/unreachable backend (see canvas's own route for
+// the same convention and why).
+const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === "true"
 
 export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ projectId: string }> },
 ) {
+  if (USE_MOCKS) return NextResponse.json(mockWhatIfData)
+
   const { projectId } = await context.params
-  const res = await fetch(`${BASE}/api/what-if/${projectId}`, {
-    cache: "no-store",
-  })
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
+  const result = await backendFetch(`/api/what-if/${projectId}`, { cache: "no-store" })
+  return toHttpResponse(result)
 }
 
 export async function PUT(
@@ -20,11 +25,6 @@ export async function PUT(
 ) {
   const { projectId } = await context.params
   const body = await request.json()
-  const res = await fetch(`${BASE}/api/what-if/${projectId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  })
-  const data = await res.json()
-  return NextResponse.json(data, { status: res.status })
+  const result = await backendFetch(`/api/what-if/${projectId}`, { method: "PUT", body })
+  return toHttpResponse(result)
 }

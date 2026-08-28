@@ -2,7 +2,7 @@
   "name": "bizstruct-fe",
   "version": "0.1.0",
   "private": true,
-  "bizstructDomainVersion": "v0.7.0",
+  "bizstructDomainVersion": "bbee62baff73b4c40eadedc7a285274bf63b15c0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

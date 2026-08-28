@@ -13,7 +13,7 @@ import { getEmpathyMap } from "@/services/empathy-map"
 import { getHypotheses } from "@/services/hypotheses"
 import { getPitch } from "@/services/pitch"
 import { getScenario } from "@/services/scenario"
-import { getWhatIfVectors } from "@/services/what-if"
+import { getWhatIf } from "@/services/what-if"
 import { getArchitecture } from "@/services/architecture"
 import { getCanvas } from "@/services/canvas"
 import { fetchProjectById } from "@/services/generation"
@@ -28,7 +28,6 @@ import type { EmpathyMap } from "@/schemas/empathy-map.schema"
 import type { Hypothesis } from "@/schemas/hypotheses.schema"
 import type { PitchData } from "@/schemas/pitch.schema"
 import type { ScenarioData } from "@/schemas/scenario.schema"
-import type { WhatIfVector } from "@/schemas/what-if.schema"
 import type { Architecture } from "@/schemas/architecture.schema"
 import type { CanvasSections } from "@/schemas/canvas.schema"
 
@@ -67,7 +66,11 @@ export default function ProjectWorkspacePage() {
   const [hypotheses,       setHypotheses]        = useState<Hypothesis[] | null>(null)
   const [pitchData,        setPitchData]         = useState<PitchData | null>(null)
   const [scenarioData,     setScenarioData]      = useState<ScenarioData | null>(null)
-  const [whatIfVectors,    setWhatIfVectors]     = useState<WhatIfVector[] | null>(null)
+  // Just a readiness flag — WhatIfView fetches and owns its own data (see
+  // its self-contained fetchWhatIf), the same pattern CanvasView already
+  // uses. This page only needs to know whether what_if has been generated
+  // yet, for the polling loop below and hasSubsequentData on ScenarioView.
+  const [whatIfReady,      setWhatIfReady]       = useState(false)
   const [architecture,      setArchitecture]      = useState<Architecture | null>(null)
   const [canvasData,       setCanvasData]        = useState<CanvasSections | null>(null)
   // Drives the "block canvas editing while regenerating" guard — see
@@ -82,22 +85,23 @@ export default function ProjectWorkspacePage() {
     let timer: ReturnType<typeof setTimeout> | null = null
 
     async function fetchAll() {
-      const [empathy, hyps, pitch, scenario, whatIf, arch, canvas, projectResult] = await Promise.all([
+      const [empathy, hyps, pitch, scenario, whatIfResult, arch, canvas, projectResult] = await Promise.all([
         getEmpathyMap(projectId).catch(() => null),
         getHypotheses(projectId).catch(() => null),
-        getPitch(projectId, locale).catch(() => null),
+        getPitch(projectId).catch(() => null),
         getScenario(projectId).catch(() => null),
-        getWhatIfVectors(projectId).catch(() => null),
+        getWhatIf(projectId),
         getArchitecture(projectId).catch(() => null),
         getCanvas(projectId).catch(() => null),
         fetchProjectById(projectId),
       ])
       if (cancelled) return
+      const whatIf = whatIfResult.ok ? whatIfResult.data.whatIf : null
       if (empathy)  setEmpathyData(empathy)
       if (hyps)     setHypotheses(hyps)
       if (pitch)    setPitchData(pitch)
       if (scenario) setScenarioData(scenario)
-      if (whatIf?.length)  setWhatIfVectors(whatIf)
+      if (whatIf)   setWhatIfReady(true)
       if (arch)     setArchitecture(arch)
       if (canvas)   setCanvasData(canvas)
       if (projectResult.ok) setProjectStatus(projectResult.data.status)
@@ -134,6 +138,15 @@ export default function ProjectWorkspacePage() {
           <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
             {t("status.draft")}
           </span>
+          {/* Generation language — fixed at creation, independent of the
+              viewer's UI locale. Kept visible here for the same reason as
+              the sidebar badge: switching the UI locale must never look
+              like the project's content silently changed language. */}
+          {project?.language && (
+            <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+              {project.language}
+            </span>
+          )}
           <span className="shrink-0 text-[10px] text-slate-400 ml-1">· {t("projectWorkspace")}</span>
         </div>
 
@@ -163,27 +176,20 @@ export default function ProjectWorkspacePage() {
 
       <div className="flex-1 min-h-0 relative">
         {activeView === "empathy" && (empathyData
-          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} locale={locale} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
+          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "scenario" && (scenarioData
-          ? <ScenarioView projectId={projectId} locale={locale} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfVectors !== null} />
+          ? <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfReady} />
           : <GeneratingPlaceholder />
         )}
-        {activeView === "what-if" && (whatIfVectors
+        {activeView === "what-if" && (whatIfReady
           ? <WhatIfView
               projectId={projectId}
-              vectors={whatIfVectors}
+              locale={locale}
               hasSubsequentData={architecture !== null}
-              onApplied={(scenarioId) => {
-                setWhatIfVectors(prev =>
-                  prev?.map(v => ({
-                    ...v,
-                    status: v.scenarioId === scenarioId ? "applied" as const : v.status === "applied" ? null : v.status,
-                  })) ?? null
-                )
-                setActiveView("architecture")
-              }}
+              isGenerating={projectStatus === "generating"}
+              onApplied={() => setActiveView("architecture")}
             />
           : <GeneratingPlaceholder />
         )}
@@ -195,7 +201,7 @@ export default function ProjectWorkspacePage() {
           />
         )}
         {activeView === "architecture" && (architecture
-          ? <ArchitectureView projectId={projectId} locale={locale} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
+          ? <ArchitectureView projectId={projectId} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "hypotheses" && (hypotheses
@@ -206,7 +212,6 @@ export default function ProjectWorkspacePage() {
           <PitchView
             pitchData={pitchData ?? { investor: [], customer: [] }}
             projectId={projectId}
-            locale={locale}
             onMapHypotheses={() => setActiveView("hypotheses")}
           />
         )}

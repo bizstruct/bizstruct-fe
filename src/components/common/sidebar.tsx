@@ -119,6 +119,14 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                 >
                   <Folder className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                   <span className="truncate">{project.title ?? project.id}</span>
+                  {/* Generation language — fixed at creation, independent of
+                      the viewer's UI locale, so it must stay visible here
+                      (otherwise switching the UI locale looks like the
+                      system "broke" and started showing the wrong
+                      language). See B4 of the follow-up brief. */}
+                  <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide text-slate-400 border border-slate-200 rounded px-1 py-0.5">
+                    {project.language}
+                  </span>
                 </Link>
 
                 {/* ── three-dot menu ── */}

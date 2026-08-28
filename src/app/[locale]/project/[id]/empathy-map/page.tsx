@@ -8,9 +8,8 @@ import { EmpathyView } from "@/components/empathy-map/EmpathyView"
 import type { EmpathyMap } from "@/schemas/empathy-map.schema"
 
 export default function EmpathyMapPage() {
-  const params    = useParams() as { id?: string; locale?: string }
+  const params    = useParams() as { id?: string }
   const projectId = params?.id ?? ""
-  const locale    = params?.locale ?? "en"
   const history   = useProjectStore((s) => s.history)
   const project   = history.find((h) => h.id === projectId)
 
@@ -27,7 +26,6 @@ export default function EmpathyMapPage() {
     <EmpathyView
       projectId={projectId}
       projectName={project?.title ?? projectId}
-      locale={locale}
       initialData={empathyData}
     />
   )
