@@ -36,10 +36,7 @@ export async function getWhatIf(projectId: string): Promise<ApiResult<WhatIfEnve
 // Only the fields a user may edit on a draft alternative — never `status`,
 // `id`, or `moves` (moves are LLM-authored; there's no manual move editor,
 // see WhatIfView.tsx).
-export type WhatIfAlternativeEdit = Pick<
-  WhatIfAlternativeWire,
-  "title_uk" | "title_en" | "premise_uk" | "premise_en" | "expected_impact_uk" | "expected_impact_en"
->
+export type WhatIfAlternativeEdit = Pick<WhatIfAlternativeWire, "title" | "premise" | "expected_impact">
 
 export async function updateWhatIfAlternative(
   projectId: string,

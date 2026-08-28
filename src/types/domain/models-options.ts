@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.8.1/schemas/models_options.json (bizstruct-domain@v0.8.1)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/bbee62baff73b4c40eadedc7a285274bf63b15c0/schemas/models_options.json (bizstruct-domain@bbee62baff73b4c40eadedc7a285274bf63b15c0)
 
 /**
  * @minItems 3

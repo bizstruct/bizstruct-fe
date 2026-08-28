@@ -88,7 +88,7 @@ export default function ProjectWorkspacePage() {
       const [empathy, hyps, pitch, scenario, whatIfResult, arch, canvas, projectResult] = await Promise.all([
         getEmpathyMap(projectId).catch(() => null),
         getHypotheses(projectId).catch(() => null),
-        getPitch(projectId, locale).catch(() => null),
+        getPitch(projectId).catch(() => null),
         getScenario(projectId).catch(() => null),
         getWhatIf(projectId),
         getArchitecture(projectId).catch(() => null),
@@ -138,6 +138,15 @@ export default function ProjectWorkspacePage() {
           <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
             {t("status.draft")}
           </span>
+          {/* Generation language — fixed at creation, independent of the
+              viewer's UI locale. Kept visible here for the same reason as
+              the sidebar badge: switching the UI locale must never look
+              like the project's content silently changed language. */}
+          {project?.language && (
+            <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+              {project.language}
+            </span>
+          )}
           <span className="shrink-0 text-[10px] text-slate-400 ml-1">· {t("projectWorkspace")}</span>
         </div>
 
@@ -167,11 +176,11 @@ export default function ProjectWorkspacePage() {
 
       <div className="flex-1 min-h-0 relative">
         {activeView === "empathy" && (empathyData
-          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} locale={locale} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
+          ? <EmpathyView projectId={projectId} projectName={project?.title ?? projectId} initialData={empathyData} onNext={() => setActiveView("scenario")} hasSubsequentData={scenarioData !== null} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "scenario" && (scenarioData
-          ? <ScenarioView projectId={projectId} locale={locale} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfReady} />
+          ? <ScenarioView projectId={projectId} scenarioData={scenarioData} onNext={() => setActiveView("what-if")} hasSubsequentData={whatIfReady} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "what-if" && (whatIfReady
@@ -192,7 +201,7 @@ export default function ProjectWorkspacePage() {
           />
         )}
         {activeView === "architecture" && (architecture
-          ? <ArchitectureView projectId={projectId} locale={locale} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
+          ? <ArchitectureView projectId={projectId} architecture={architecture} hasCanvas={canvasData !== null} onGoToCanvas={() => setActiveView("canvas")} />
           : <GeneratingPlaceholder />
         )}
         {activeView === "hypotheses" && (hypotheses
@@ -203,7 +212,6 @@ export default function ProjectWorkspacePage() {
           <PitchView
             pitchData={pitchData ?? { investor: [], customer: [] }}
             projectId={projectId}
-            locale={locale}
             onMapHypotheses={() => setActiveView("hypotheses")}
           />
         )}

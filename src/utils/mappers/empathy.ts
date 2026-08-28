@@ -1,30 +1,19 @@
 import type { EmpathyItem } from "@/schemas/empathy-map.schema"
 
-export type RationaleLocale = "uk" | "en"
+// EmpathyItem is single-language now (part E of the data-quality-fixes
+// brief removed the text_uk/text_en pair — see bizstruct_domain.blocks.
+// empathy_map). Generation language is a project-level setting, not a
+// per-viewer locale choice, so these helpers no longer take or dispatch
+// on `locale` — they just read/write `item.text` directly.
 
-export function toRationaleLocale(locale: string): RationaleLocale {
-  return locale === "uk" ? "uk" : "en"
-}
-
-/** The field on EmpathyItem that carries the given locale's text. */
-export function textField(locale: string): "text_uk" | "text_en" {
-  return `text_${toRationaleLocale(locale)}`
-}
-
-export function getItemText(item: EmpathyItem, locale: string): string {
-  return item[textField(locale)]
-}
-
-export function addItem(items: EmpathyItem[], locale: string, text = ""): { items: EmpathyItem[]; newId: number } {
+export function addItem(items: EmpathyItem[], text = ""): { items: EmpathyItem[]; newId: number } {
   const newId = items.length ? Math.max(...items.map((q) => q.id)) + 1 : 1
-  const newItem: EmpathyItem = { id: newId, text_uk: "", text_en: "" }
-  newItem[textField(locale)] = text
+  const newItem: EmpathyItem = { id: newId, text }
   return { items: [...items, newItem], newId }
 }
 
-export function updateItem(items: EmpathyItem[], locale: string, id: number, text: string): EmpathyItem[] {
-  const field = textField(locale)
-  return items.map((q) => (q.id === id ? { ...q, [field]: text } : q))
+export function updateItem(items: EmpathyItem[], id: number, text: string): EmpathyItem[] {
+  return items.map((q) => (q.id === id ? { ...q, text } : q))
 }
 
 export function deleteItem(items: EmpathyItem[], id: number): EmpathyItem[] {

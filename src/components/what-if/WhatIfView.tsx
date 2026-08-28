@@ -16,12 +16,6 @@ import { applyWhatIfAlternative, getWhatIf, revertWhatIfAlternative } from "@/se
 import type { UnresolvedMovesDetail } from "@/services/what-if"
 import { whatIfStyles } from "./styles"
 
-type FieldLocale = "uk" | "en"
-
-function toFieldLocale(locale: string): FieldLocale {
-  return locale === "uk" ? "uk" : "en"
-}
-
 type ActionError = {
   alternativeId: string
   action: "apply" | "revert"
@@ -39,7 +33,6 @@ interface Props {
 
 export function WhatIfView({ projectId, locale, hasSubsequentData, isGenerating = false, onApplied }: Props) {
   const t = useTranslations("WhatIfView")
-  const fieldLocale = toFieldLocale(locale)
 
   const [data, setData] = useState<WhatIfDataWire | null>(null)
   const [loading, setLoading] = useState(true)
@@ -176,7 +169,7 @@ export function WhatIfView({ projectId, locale, hasSubsequentData, isGenerating 
                 <div className="space-y-4 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className={whatIfStyles.cardTitle}>
-                      {fieldLocale === "uk" ? alt.title_uk : alt.title_en}
+                      {alt.title}
                     </h3>
                     {isApplied && (
                       <span className={whatIfStyles.appliedBadge}>
@@ -187,15 +180,15 @@ export function WhatIfView({ projectId, locale, hasSubsequentData, isGenerating 
                   </div>
 
                   <p className={whatIfStyles.cardPrompt}>
-                    {fieldLocale === "uk" ? alt.premise_uk : alt.premise_en}
+                    {alt.premise}
                   </p>
 
-                  <MovesList alternative={alt} fieldLocale={fieldLocale} t={t} />
+                  <MovesList alternative={alt} t={t} />
 
                   <div className={whatIfStyles.block}>
                     <div className={whatIfStyles.blockLabel}>{t("expectedImpact")}</div>
                     <p className={whatIfStyles.blockText + " mt-1.5"}>
-                      {fieldLocale === "uk" ? alt.expected_impact_uk : alt.expected_impact_en}
+                      {alt.expected_impact}
                     </p>
                   </div>
                 </div>
@@ -294,11 +287,9 @@ export function WhatIfView({ projectId, locale, hasSubsequentData, isGenerating 
 
 function MovesList({
   alternative,
-  fieldLocale,
   t,
 }: {
   alternative: WhatIfAlternativeWire
-  fieldLocale: FieldLocale
   t: ReturnType<typeof useTranslations>
 }) {
   const grouped = ERRC_ACTION_ORDER.map((action) => ({
@@ -319,7 +310,7 @@ function MovesList({
                 <span className="font-medium text-slate-700">{move.target_section.replaceAll("_", " ")}:</span>{" "}
                 {action === "reduce" || action === "raise" ? move.new_text : move.target}
                 <span className="block text-slate-400">
-                  {fieldLocale === "uk" ? move.rationale_uk : move.rationale_en}
+                  {move.rationale}
                 </span>
               </li>
             ))}

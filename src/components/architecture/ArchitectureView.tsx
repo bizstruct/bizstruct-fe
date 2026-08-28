@@ -40,15 +40,6 @@ const PATTERN_ICONS: Record<Pattern, React.ReactNode> = {
   open_business_model:  <Globe     className="h-5 w-5" />,
 }
 
-// Architecture carries both languages inline (epicenter_rationale_uk/_en,
-// pattern_rationale_uk/_en) rather than being sliced per-locale server-side —
-// pick the field for next-intl's active locale.
-type RationaleLocale = "uk" | "en"
-
-function toRationaleLocale(locale: string): RationaleLocale {
-  return locale === "uk" ? "uk" : "en"
-}
-
 function EditableText({
   initialText,
   field,
@@ -127,19 +118,14 @@ type SaveStatus = "idle" | "dirty" | "saving" | "saved" | "error"
 
 interface Props {
   projectId:     string
-  locale:        string
   architecture:  Architecture
   hasCanvas:     boolean
   onGoToCanvas:  () => void
 }
 
-export function ArchitectureView({ projectId, locale, architecture, hasCanvas, onGoToCanvas }: Props) {
+export function ArchitectureView({ projectId, architecture, hasCanvas, onGoToCanvas }: Props) {
   const t  = useTranslations("ArchitectureView")
   const tc = useTranslations("Common.actions")
-
-  const rationaleLocale = toRationaleLocale(locale)
-  const epicenterRationaleField = `epicenter_rationale_${rationaleLocale}` as const
-  const patternRationaleField   = `pattern_rationale_${rationaleLocale}`   as const
 
   const [epicenter,      setEpicenter]      = useState<Epicenter>(architecture.epicenter)
   const [pattern,        setPattern]        = useState<Pattern>(architecture.pattern)
@@ -188,12 +174,12 @@ export function ArchitectureView({ projectId, locale, architecture, hasCanvas, o
       await Promise.all([
         patchArchitectureEpicenter(projectId, {
           epicenter: epicenter,
-          [epicenterRationaleField]: getDesc(epicenterDescRef, architecture[epicenterRationaleField]),
+          epicenter_rationale: getDesc(epicenterDescRef, architecture.epicenter_rationale),
         }),
         patchArchitecturePattern(projectId, {
           pattern: pattern,
           pattern_subtype: patternSubtype,
-          [patternRationaleField]: getDesc(patternDescRef, architecture[patternRationaleField]),
+          pattern_rationale: getDesc(patternDescRef, architecture.pattern_rationale),
         }),
       ])
       original.current = { epicenter, pattern, patternSubtype }
@@ -285,8 +271,8 @@ export function ArchitectureView({ projectId, locale, architecture, hasCanvas, o
             <div ref={epicenterDescRef} className={s.descWrap}>
               <div className={s.descLabel}>{t("epicenterDesc")}</div>
               <EditableText
-                key={epicenterRationaleField}
-                initialText={architecture[epicenterRationaleField]}
+                key="epicenter_rationale"
+                initialText={architecture.epicenter_rationale}
                 field="desc"
                 onInput={markDirty}
                 className={s.cardDesc}
@@ -338,8 +324,8 @@ export function ArchitectureView({ projectId, locale, architecture, hasCanvas, o
             <div ref={patternDescRef} className={s.descWrap}>
               <div className={s.descLabel}>{t("patternDesc")}</div>
               <EditableText
-                key={patternRationaleField}
-                initialText={architecture[patternRationaleField]}
+                key="pattern_rationale"
+                initialText={architecture.pattern_rationale}
                 field="desc"
                 onInput={markDirty}
                 className={s.cardDesc}

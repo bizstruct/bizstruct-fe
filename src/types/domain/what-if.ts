@@ -1,13 +1,12 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.8.1/schemas/what_if.json (bizstruct-domain@v0.8.1)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/bbee62baff73b4c40eadedc7a285274bf63b15c0/schemas/what_if.json (bizstruct-domain@bbee62baff73b4c40eadedc7a285274bf63b15c0)
 
 /**
  * @minItems 3
  * @maxItems 3
  */
 export type Alternatives = [WhatIfAlternative, WhatIfAlternative, WhatIfAlternative]
-export type ExpectedImpactEn = string
-export type ExpectedImpactUk = string
+export type ExpectedImpact = string
 export type Id = string
 /**
  * @minItems 3
@@ -29,8 +28,7 @@ export type ERRCAction = "eliminate" | "reduce" | "raise" | "create"
  * Required for reduce/raise (the card's text after the move); must be omitted for eliminate/create.
  */
 export type NewText = string | null
-export type RationaleEn = string
-export type RationaleUk = string
+export type Rationale = string
 export type Target = string
 /**
  * Which canvas section this move acts on. Required for all four actions — this is what makes a move concrete instead of a vague statement of intent.
@@ -45,14 +43,12 @@ export type CanvasSection =
   | "customer_segments"
   | "cost_structure"
   | "revenue_streams"
-export type PremiseEn = string
-export type PremiseUk = string
+export type Premise = string
 /**
  * Lifecycle status of a what-if (ERRC) alternative.
  */
 export type WhatIfStatus = "draft" | "applied"
-export type TitleEn = string
-export type TitleUk = string
+export type Title = string
 
 /**
  * The persisted/CRUD shape: exactly three ERRC alternatives, at most one
@@ -65,15 +61,12 @@ export interface WhatIf {
  * One ERRC-grid alternative business model built from the project's canvas.
  */
 export interface WhatIfAlternative {
-  expected_impact_en: ExpectedImpactEn
-  expected_impact_uk: ExpectedImpactUk
+  expected_impact: ExpectedImpact
   id: Id
   moves: Moves
-  premise_en: PremiseEn
-  premise_uk: PremiseUk
+  premise: Premise
   status?: WhatIfStatus
-  title_en: TitleEn
-  title_uk: TitleUk
+  title: Title
 }
 /**
  * A single ERRC action against one canvas section.
@@ -95,8 +88,7 @@ export interface WhatIfAlternative {
 export interface ERRCMove {
   action: ERRCAction
   new_text?: NewText
-  rationale_en: RationaleEn
-  rationale_uk: RationaleUk
+  rationale: Rationale
   target: Target
   target_section: CanvasSection
 }

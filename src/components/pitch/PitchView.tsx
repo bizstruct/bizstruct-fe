@@ -13,7 +13,6 @@ type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 interface Props {
   pitchData:        PitchData
   projectId:        string
-  locale:           string
   onMapHypotheses?: () => void
 }
 
@@ -36,7 +35,7 @@ function getSlideKey(titleKey: string): string {
   return titleKey.split(".").pop() ?? ""
 }
 
-export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Props) {
+export function PitchView({ pitchData, projectId, onMapHypotheses }: Props) {
   const t = useTranslations("PitchView")
 
   const [storyType,  setStoryType]  = useState<StoryType>("investor")
@@ -91,7 +90,7 @@ export function PitchView({ pitchData, projectId, locale, onMapHypotheses }: Pro
     try {
       const current            = localData[storyType][safeIdx]
       const { headline, body } = parseStep(current.content)
-      await savePitchStep(projectId, locale, storyType, current.titleKey, headline, body)
+      await savePitchStep(projectId, storyType, current.titleKey, headline, body)
       setSaveStatus("saved")
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
       saveTimerRef.current = setTimeout(() => setSaveStatus("idle"), 2000)

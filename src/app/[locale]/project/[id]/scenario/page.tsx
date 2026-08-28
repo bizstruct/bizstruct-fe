@@ -7,9 +7,8 @@ import { ScenarioView } from "@/components/scenario/ScenarioView"
 import type { ScenarioData } from "@/schemas/scenario.schema"
 
 export default function ScenarioPage() {
-  const params    = useParams() as { id?: string; locale?: string }
+  const params    = useParams() as { id?: string }
   const projectId = params?.id ?? ""
-  const locale    = params?.locale ?? "en"
 
   const [scenarioData, setScenarioData] = useState<ScenarioData | null>(null)
 
@@ -20,5 +19,5 @@ export default function ScenarioPage() {
 
   if (!scenarioData) return null
 
-  return <ScenarioView projectId={projectId} locale={locale} scenarioData={scenarioData} />
+  return <ScenarioView projectId={projectId} scenarioData={scenarioData} />
 }

@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Card } from "@/components/ui/card"
 import type { EmpathyCategory, EmpathyItem } from "@/schemas/empathy-map.schema"
-import { getItemText } from "@/utils/mappers/empathy"
 import { empathyStyles } from "./styles"
 
 const CATEGORY_ICON: Record<EmpathyCategory, React.ElementType> = {
@@ -30,7 +29,6 @@ const CATEGORY_THEME: Record<EmpathyCategory, { card: string; header: string; bo
 interface Props {
   category:               EmpathyCategory
   items:                  EmpathyItem[]
-  locale:                 string
   onUpdate:               (id: number, text: string) => void
   onDelete:               (id: number) => void
   onAdd:                  () => number
@@ -40,7 +38,7 @@ interface Props {
   onPendingDeletesChange: (ids: Set<number>) => void
 }
 
-export function EmpathyCardList({ category, items, locale, onUpdate, onDelete, onAdd, onReorder, savedAt, onHasChanges, onPendingDeletesChange }: Props) {
+export function EmpathyCardList({ category, items, onUpdate, onDelete, onAdd, onReorder, savedAt, onHasChanges, onPendingDeletesChange }: Props) {
   const t = useTranslations("EmpathyView")
 
   const [editingId,       setEditingId]       = useState<number | null>(null)
@@ -157,7 +155,7 @@ export function EmpathyCardList({ category, items, locale, onUpdate, onDelete, o
                   {editingId === q.id ? (
                     <textarea
                       autoFocus
-                      value={getItemText(q, locale)}
+                      value={q.text}
                       rows={1}
                       ref={(el) => {
                         if (el) { el.style.height = "auto"; el.style.height = `${el.scrollHeight}px` }
@@ -180,7 +178,7 @@ export function EmpathyCardList({ category, items, locale, onUpdate, onDelete, o
                       onClick={() => { if (!isPendingDelete) setEditingId(q.id) }}
                       className={cn(empathyStyles.itemText, isPendingDelete && "line-through text-slate-400 select-none")}
                     >
-                      {getItemText(q, locale)}
+                      {q.text}
                     </p>
                   )}
 

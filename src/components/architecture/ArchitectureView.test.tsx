@@ -12,12 +12,11 @@ vi.mock("@/services/architecture", () => ({
   patchArchitecturePattern: vi.fn(),
 }))
 
-function renderView(architecture: Architecture, locale = "en") {
+function renderView(architecture: Architecture, uiLocale = "en") {
   return render(
-    <NextIntlClientProvider locale={locale} messages={enMessages}>
+    <NextIntlClientProvider locale={uiLocale} messages={enMessages}>
       <ArchitectureView
         projectId="p1"
-        locale={locale}
         architecture={architecture}
         hasCanvas
         onGoToCanvas={() => {}}
@@ -26,20 +25,19 @@ function renderView(architecture: Architecture, locale = "en") {
   )
 }
 
-const RATIONALE_UK = "Достатньо довге обґрунтування епіцентру українською мовою для цього блоку."
-const RATIONALE_EN = "A rationale long enough in English for this epicenter to display properly."
-const PATTERN_RATIONALE_UK = "Достатньо довге обґрунтування патерну українською мовою для цього блоку."
-const PATTERN_RATIONALE_EN = "A rationale long enough in English for this pattern to display properly."
+// Architecture is single-language per project now (part E) — the rationale
+// text is whatever the project was generated in, unrelated to the viewer's
+// UI locale (uiLocale above is only next-intl's interface-string locale).
+const RATIONALE = "A rationale long enough in English for this epicenter to display properly."
+const PATTERN_RATIONALE = "A rationale long enough in English for this pattern to display properly."
 
 function architecture(overrides: Partial<Architecture> = {}): Architecture {
   return {
     epicenter: "customer_driven",
-    epicenter_rationale_uk: RATIONALE_UK,
-    epicenter_rationale_en: RATIONALE_EN,
+    epicenter_rationale: RATIONALE,
     pattern: "free",
     pattern_subtype: "freemium",
-    pattern_rationale_uk: PATTERN_RATIONALE_UK,
-    pattern_rationale_en: PATTERN_RATIONALE_EN,
+    pattern_rationale: PATTERN_RATIONALE,
     ...overrides,
   }
 }
@@ -65,15 +63,9 @@ describe("ArchitectureView", () => {
     expect(screen.queryByText(/subtype/i)).not.toBeInTheDocument()
   })
 
-  it("shows the English rationale when locale is en", () => {
-    renderView(architecture(), "en")
-    expect(screen.getByText(RATIONALE_EN)).toBeInTheDocument()
-    expect(screen.queryByText(RATIONALE_UK)).not.toBeInTheDocument()
-  })
-
-  it("shows the Ukrainian rationale when locale is uk", () => {
+  it("renders the project's rationale text as-is, regardless of the viewer's UI locale", () => {
     renderView(architecture(), "uk")
-    expect(screen.getByText(RATIONALE_UK)).toBeInTheDocument()
-    expect(screen.queryByText(RATIONALE_EN)).not.toBeInTheDocument()
+    expect(screen.getByText(RATIONALE)).toBeInTheDocument()
+    expect(screen.getByText(PATTERN_RATIONALE)).toBeInTheDocument()
   })
 })

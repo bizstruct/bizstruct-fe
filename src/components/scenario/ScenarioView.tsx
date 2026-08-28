@@ -30,14 +30,9 @@ const STEP_THEMES: Record<StepType, { icon: string; item: string; label: string 
   impact:  { icon: "bg-amber-100 text-amber-600",     item: "border-l-2 border-amber-300 bg-amber-50/60",     label: "text-amber-600"  },
 }
 
-// Scenario carries both languages inline (text_uk/text_en, name_uk/name_en,
-// etc.) rather than being sliced per-locale server-side — pick the field
-// for next-intl's active locale, same pattern as ArchitectureView.
-type FieldLocale = "uk" | "en"
-
-function toFieldLocale(locale: string): FieldLocale {
-  return locale === "uk" ? "uk" : "en"
-}
+// Scenario is single-language per project (part E — no more text_uk/text_en,
+// name_uk/name_en, etc. pairs); generation language is a project-level
+// setting, not the viewer's UI locale, so fields are read/written directly.
 
 function computeInitials(name: string): string {
   return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? "").join("")
@@ -47,15 +42,13 @@ type SaveStatus = "idle" | "dirty" | "saving" | "saved"
 
 interface Props {
   projectId:          string
-  locale:             string
   scenarioData:       ScenarioData
   onNext?:            () => void
   hasSubsequentData?: boolean
 }
 
-export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubsequentData }: Props) {
+export function ScenarioView({ projectId, scenarioData, onNext, hasSubsequentData }: Props) {
   const t = useTranslations("ScenarioView")
-  const fieldLocale = toFieldLocale(locale)
 
   const [data,           setData]           = useState<ScenarioData>(scenarioData)
   const [editingField,   setEditingField]   = useState<string | null>(null)
@@ -77,39 +70,34 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
   // maxItems:5 that way) — the backend is what actually enforces that
   // constraint on save, so a cast here is fine.
   function setStepText(stepType: StepType, text: string) {
-    const field = `text_${fieldLocale}` as const
     setData(prev => ({
       ...prev,
-      timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, [field]: text } : s) as ScenarioData["timeline"],
+      timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, text } : s) as ScenarioData["timeline"],
     }))
     markDirty()
   }
 
   function setPersonaField(field: "role" | "pain_point" | "name", value: string) {
-    const key = `${field}_${fieldLocale}` as const
-    setData(prev => ({ ...prev, persona: { ...prev.persona, [key]: value } }))
+    setData(prev => ({ ...prev, persona: { ...prev.persona, [field]: value } }))
     markDirty()
   }
 
   function setMetricValue(side: "before" | "after", value: string) {
-    const field = `value_${fieldLocale}` as const
-    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: value } } }))
+    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], value } } }))
     markDirty()
   }
 
   function setMetricLabel(side: "before" | "after", label: string) {
-    const field = `label_${fieldLocale}` as const
-    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: label } } }))
+    setData(prev => ({ ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], label } } }))
     markDirty()
   }
 
   // ── blur handlers — revert to original if field left empty ────────────────
 
   function blurPersonaField(field: "name" | "role" | "pain_point") {
-    const key = `${field}_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.persona[key].trim()) {
-        return { ...prev, persona: { ...prev.persona, [key]: editOriginalRef.current } }
+      if (!prev.persona[field].trim()) {
+        return { ...prev, persona: { ...prev.persona, [field]: editOriginalRef.current } }
       }
       return prev
     })
@@ -117,13 +105,12 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
   }
 
   function blurStepText(stepType: StepType) {
-    const field = `text_${fieldLocale}` as const
     setData(prev => {
       const step = prev.timeline.find(s => s.step_type === stepType)
-      if (step && !step[field].trim()) {
+      if (step && !step.text.trim()) {
         return {
           ...prev,
-          timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, [field]: editOriginalRef.current } : s) as ScenarioData["timeline"],
+          timeline: prev.timeline.map(s => s.step_type === stepType ? { ...s, text: editOriginalRef.current } : s) as ScenarioData["timeline"],
         }
       }
       return prev
@@ -132,10 +119,9 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
   }
 
   function blurMetricValue(side: "before" | "after") {
-    const field = `value_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.metrics[side][field].trim()) {
-        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: editOriginalRef.current } } }
+      if (!prev.metrics[side].value.trim()) {
+        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], value: editOriginalRef.current } } }
       }
       return prev
     })
@@ -143,10 +129,9 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
   }
 
   function blurMetricLabel(side: "before" | "after") {
-    const field = `label_${fieldLocale}` as const
     setData(prev => {
-      if (!prev.metrics[side][field].trim()) {
-        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], [field]: editOriginalRef.current } } }
+      if (!prev.metrics[side].label.trim()) {
+        return { ...prev, metrics: { ...prev.metrics, [side]: { ...prev.metrics[side], label: editOriginalRef.current } } }
       }
       return prev
     })
@@ -187,15 +172,15 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
 
   const { persona, timeline, metrics } = data
 
-  const personaName      = persona[`name_${fieldLocale}`]
-  const personaRole      = persona[`role_${fieldLocale}`]
-  const personaPainPoint = persona[`pain_point_${fieldLocale}`]
+  const personaName      = persona.name
+  const personaRole      = persona.role
+  const personaPainPoint = persona.pain_point
   const initials          = computeInitials(personaName)
 
-  const metricBeforeValue = metrics.before[`value_${fieldLocale}`]
-  const metricBeforeLabel = metrics.before[`label_${fieldLocale}`]
-  const metricAfterValue  = metrics.after[`value_${fieldLocale}`]
-  const metricAfterLabel  = metrics.after[`label_${fieldLocale}`]
+  const metricBeforeValue = metrics.before.value
+  const metricBeforeLabel = metrics.before.label
+  const metricAfterValue  = metrics.after.value
+  const metricAfterLabel  = metrics.after.label
 
   const timelineLabels: Record<StepType, string> = {
     context: t("timeline.context"),
@@ -448,7 +433,7 @@ export function ScenarioView({ projectId, locale, scenarioData, onNext, hasSubse
                     const theme   = STEP_THEMES[step.step_type]
                     const label   = timelineLabels[step.step_type]
                     const fieldId = `step.${step.step_type}`
-                    const text    = step[`text_${fieldLocale}`]
+                    const text    = step.text
                     return (
                       <div key={step.step_type} className={cn(scenarioStyles.timelineStep, theme.item)}>
                         <div className={cn(scenarioStyles.timelineStepIcon, theme.icon)}>
