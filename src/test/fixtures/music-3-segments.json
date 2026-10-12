@@ -1,0 +1,2196 @@
+{
+  "id": "01a12795-387a-7280-87d6-c610b8675bab",
+  "title": "New project",
+  "idea": "A platform for live local music: bands find venues to play, venues find bands for their quiet nights, and fans buy tickets and discover shows.",
+  "language": "en",
+  "enabledOptional": [],
+  "autoApprove": true,
+  "status": "completed",
+  "createdAt": "2026-10-10T20:50:53.178238Z",
+  "updatedAt": "2026-10-10T20:50:53.178241Z",
+  "rows": [
+    {
+      "id": "01a12795-387c-731e-bcfc-5a84ba4aa8d7",
+      "stage": "brief",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {},
+      "attemptId": "01a12795-3884-745a-bb70-e743dfaadb28",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "3a8144b1-f3c0-5be7-a673-fea9618e65a7",
+          "type": "brief",
+          "data": {
+            "gaps": [
+              "Target geographic market is not specified.",
+              "The platform's primary customer and initial market side are not specified.",
+              "The booking workflow, including availability, negotiations, contracts, and payments, is not described.",
+              "The ticketing model, fees, and revenue allocation are not specified.",
+              "It is not stated whether venues and bands can use the platform for free or pay subscription, listing, or booking fees.",
+              "Artist and venue verification, quality control, and cancellation handling are not described.",
+              "The approach to attracting enough bands, venues, and fans to create marketplace liquidity is not specified.",
+              "Competition and differentiation from existing event-discovery, ticketing, and booking platforms are not described."
+            ],
+            "industry": "Live music, event discovery, and venue booking marketplace",
+            "idea_summary": "A platform for live local music that helps bands find venues to perform, helps venues book bands for quieter nights, and enables fans to discover shows and buy tickets.",
+            "monetization_hint": "Ticket sales through the platform",
+            "existing_resources": [],
+            "customer_segment_candidates": [
+              "Local bands and independent musicians seeking performance opportunities",
+              "Music venues seeking live acts to fill quieter nights",
+              "Local live-music fans seeking show discovery and ticket purchasing"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:50:53.188760Z",
+      "finishedAt": "2026-10-10T20:50:57.771498Z"
+    },
+    {
+      "id": "01a12795-4a6d-75d4-a63f-7b3ddbfa8d40",
+      "stage": "empathy_map",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a12795-387c-731e-bcfc-5a84ba4aa8d7"
+        ]
+      },
+      "attemptId": "01a12795-4a73-77dd-9283-18165f3ee880",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+          "type": "empathy_map",
+          "data": {
+            "id": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+            "sees": [
+              "Small bars, cafés, breweries, and community venues that host music inconsistently or reserve most weekend slots for established acts.",
+              "Posters and social-media announcements for local shows, often promoted by the same venues, promoters, and bands.",
+              "Other local musicians competing for limited opening slots, festival applications, and weekend bookings.",
+              "Venues with quieter weekday nights that could benefit from live music but do not visibly advertise booking opportunities.",
+              "Fragmented opportunities across Instagram posts, venue contact pages, local Facebook groups, group chats, and word-of-mouth referrals.",
+              "Fans attending shows but leaving without joining the band’s mailing list, following its pages, or buying tickets for future gigs."
+            ],
+            "gains": [
+              "A single reliable place to discover venues actively seeking acts, especially for quieter nights and dates that fit the band’s availability.",
+              "Clear venue profiles showing genre fit, capacity, equipment, audience style, compensation approach, ticketing setup, and booking requirements.",
+              "A simple way to present verified music, live footage, past shows, audience reach, and technical needs without repeatedly rebuilding a pitch.",
+              "Confirmed bookings with visible details for date, set time, payment, ticket allocation, promotion duties, and cancellation handling.",
+              "More paid, well-matched shows that cover costs, improve the band’s live performance, and generate usable content.",
+              "Ticket sales and fan-discovery tools that help convert attendees into followers, mailing-list subscribers, and repeat concertgoers.",
+              "A trusted reputation system based on completed gigs and reliable behavior, helping the band qualify for stronger venues and better slots over time."
+            ],
+            "hears": [
+              "Bandmates say they need more shows to tighten the set, create content, and justify rehearsal time.",
+              "Other musicians share informal leads, warn about venues that pay late, and recommend promoters or bookers they trust.",
+              "Venue managers say, \"Send us your EPK,\" \"We are booked for the next few months,\" or \"Come back when you can bring a crowd.\"",
+              "Friends and family encourage Maya to keep pursuing music but also ask whether the time and travel costs are worth it.",
+              "Local promoters and venue social accounts influence which nights and artists appear credible and in demand.",
+              "She follows local venue Instagram accounts, musician groups, event calendars, streaming playlists, and short-form video platforms for announcements and scene activity."
+            ],
+            "pains": [
+              "Finding legitimate, suitable performance opportunities takes substantial time across scattered channels.",
+              "Many booking contacts do not reply, provide vague answers, or only accept submissions through informal personal networks.",
+              "The band struggles to assess whether a venue’s audience, capacity, equipment, compensation, and schedule are a good fit before investing effort.",
+              "Unclear payment terms, door-split arrangements, ticket expectations, and promotional responsibilities create financial risk.",
+              "Band-member availability, transport, rehearsal commitments, and day jobs make short-notice or low-value shows costly.",
+              "Cancellation, weak promotion, poor sound, and unexpectedly low attendance can leave the band out of pocket and demoralized.",
+              "Without a dependable stream of gigs, it is difficult to build an audience, collect live footage, and demonstrate momentum to better venues."
+            ],
+            "project_id": "01a12795-387a-7280-87d6-c610b8675bab",
+            "persona_name": "Maya Torres",
+            "says_and_does": [
+              "She sends venue bookers concise messages with links to the band’s music, live videos, social profiles, and press kit.",
+              "She posts upcoming dates, rehearsal clips, and show reminders on the band’s social channels.",
+              "She asks other musicians, \"Do you know who books that room?\" and \"Have you played there before?\"",
+              "She maintains a shared band calendar and coordinates availability with bandmates before pursuing dates.",
+              "She attends local shows, introduces herself to performers and staff, and exchanges contact details.",
+              "She follows up with venues that have not responded and keeps records of past contacts, offers, and confirmed terms.",
+              "She tells venue contacts that the band can promote the event through its social channels and mailing list."
+            ],
+            "thinks_and_feels": [
+              "She wants to be treated as a professional artist, not as someone asking for a favor when she seeks a booking.",
+              "She worries that the band is losing momentum when weeks pass without a confirmed show.",
+              "She feels uneasy about being judged mainly on follower counts or presumed ticket-selling power rather than the quality of the live set.",
+              "She wants enough paid gigs to reduce her café shifts and give the band a realistic path forward.",
+              "She privately fears accepting poor-paying or poorly organized gigs could make the band seem desperate, yet she worries about turning down any opportunity.",
+              "She dreams of building a loyal local audience that will deliberately come out to see the band, then follow it to larger rooms and nearby cities.",
+              "She values transparent expectations: set length, payment, equipment, soundcheck, ticket arrangements, promotion, and cancellation terms."
+            ],
+            "persona_demographics": "Maya is a 27-year-old independent singer-guitarist and bandleader in a mid-sized city. She works part-time in a café while performing with her four-piece indie-pop band, earns an irregular supplementary income from music, rents an apartment with a roommate, and has no children. Her band is early-stage: it has released music online, plays occasional local shows, and is trying to build a reliable regional audience."
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:50:57.779273Z",
+      "finishedAt": "2026-10-10T20:51:11.299288Z"
+    },
+    {
+      "id": "01a12795-4a6d-75d4-a63f-7b3efdcf463a",
+      "stage": "empathy_map",
+      "instanceIndex": 1,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a12795-387c-731e-bcfc-5a84ba4aa8d7"
+        ]
+      },
+      "attemptId": "01a12795-4a74-7396-8302-c027709ce0f4",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+          "type": "empathy_map",
+          "data": {
+            "id": "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+            "sees": [
+              "A busy weekend calendar but slow Tuesday through Thursday evenings, when tables and bar staff are underused.",
+              "Local bands promoting shows through social media, often with uneven audience draw and varying production quality.",
+              "Competing bars offering trivia, DJs, sports screenings, open-mic nights, and food specials to attract off-peak customers.",
+              "A fragmented stream of band emails, direct messages, referral requests, and last-minute availability inquiries.",
+              "Rising labor, beverage, rent, and operating costs that make lightly attended events unprofitable.",
+              "Regular customers looking for an easy reason to go out locally, but often unaware of smaller live shows."
+            ],
+            "gains": [
+              "Fill quieter nights with live events that reliably generate enough ticket, bar, and food revenue to justify opening and staffing.",
+              "Quickly discover suitable local acts through clear profiles showing genre, live footage, availability, technical requirements, past performance history, and audience reach.",
+              "Book performers through a simple workflow with confirmed dates, agreed terms, shared promotion tasks, and clear cancellation handling.",
+              "Use ticket sales and attendance data to judge which artists, genres, prices, and weekdays work best for the venue.",
+              "Reduce no-shows and booking risk through verified artists, ratings or references, transparent expectations, and dependable communication.",
+              "Attract new patrons who return for drinks, food, and future shows, rather than relying only on one-time ticket buyers.",
+              "Maintain a credible, varied live-music program that strengthens the venue's local reputation.",
+              "Reach success through stronger midweek attendance, higher per-event bar spend, fewer empty calendar slots, repeat customers, and less administrative time per booking."
+            ],
+            "hears": [
+              "Bartenders and floor staff say quieter nights can feel slow and make shifts less worthwhile.",
+              "Local musicians say they need more fair, reliable performance opportunities and clearer communication from venues.",
+              "Regular patrons ask what is happening during the week and mention acts they have seen at other local venues.",
+              "Other venue operators discuss no-shows, low ticket sales, difficult promoters, and the challenge of finding dependable local acts.",
+              "Friends and family encourage Marcus to protect time away from the venue and avoid taking on more administrative work.",
+              "He follows local music through Instagram, Facebook event listings, community radio, local entertainment newsletters, and word-of-mouth among promoters and musicians."
+            ],
+            "pains": [
+              "Finding acts that match the venue's sound, capacity, technical setup, and audience while also being available on quiet nights.",
+              "Spending too much time on scattered inquiries, manual artist research, back-and-forth scheduling, and event logistics.",
+              "Uncertain attendance makes it difficult to budget for staffing, artist payments, security, and stock.",
+              "Unknown or poorly vetted bands may arrive late, lack professionalism, have misleading audience claims, or create technical problems.",
+              "Artists may expect guarantees the venue cannot justify on a low-demand night.",
+              "Cancellations and last-minute lineup changes create empty calendar slots and wasted promotion spend.",
+              "Social-media promotion is unreliable, and organic reach does not consistently turn awareness into ticket sales or bar traffic.",
+              "Existing booking and discovery tools may not provide trustworthy local data on an act's reliability or ability to draw a crowd."
+            ],
+            "project_id": "01a12795-387a-7280-87d6-c610b8675bab",
+            "persona_name": "Marcus Reed",
+            "says_and_does": [
+              "He tells bands, \"Send over your live video, audience numbers, and dates you are available.\"",
+              "He reviews artist social profiles, recordings, past-event photos, and local references before replying to booking requests.",
+              "He asks promoters and other managers, \"Can this act bring people on a Wednesday?\"",
+              "He posts weekly event schedules on the venue's social channels and updates staff on expected attendance.",
+              "He tests lower-risk formats on quiet nights, such as early shows, multi-band bills, themed events, or reduced ticket prices.",
+              "He negotiates guarantees, door splits, set times, equipment needs, and promotion responsibilities by email or direct message.",
+              "He tells regulars at the bar about upcoming shows and encourages them to bring friends."
+            ],
+            "thinks_and_feels": [
+              "He feels responsible for making every night financially viable without losing the venue's identity as a place for good local music.",
+              "He worries that booking an unknown band will bring too few customers to cover staff and artist costs.",
+              "He wants to be seen as a fair supporter of the local music community, not as a venue that only books proven sellers.",
+              "He feels stretched by the volume of messages and the time required to assess artists, coordinate details, and promote each event.",
+              "He fears reputational damage from cancellations, poor sound quality, or an event that disappoints regular customers.",
+              "He hopes to build a dependable pipeline of acts and become a recognized local destination for discovering emerging talent.",
+              "He privately wants more predictable revenue so the venue creates less financial stress for his household."
+            ],
+            "persona_demographics": "Marcus is a 42-year-old general manager of a 180-capacity independent bar and music venue in a mid-sized city. He earns approximately $65,000 per year, lives with his partner, and has one school-age child. He manages programming, staffing, bar revenue, and local promotion with a small team and limited marketing budget."
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:50:57.780161Z",
+      "finishedAt": "2026-10-10T20:51:12.487271Z"
+    },
+    {
+      "id": "01a12795-4a6d-75d4-a63f-7b3fa2f36f99",
+      "stage": "empathy_map",
+      "instanceIndex": 2,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a12795-387c-731e-bcfc-5a84ba4aa8d7"
+        ]
+      },
+      "attemptId": "01a12795-4a75-7062-9296-51e3141267cf",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "acdf5ab6-b4b9-5812-8eac-36f12911940d",
+          "type": "empathy_map",
+          "data": {
+            "id": "acdf5ab6-b4b9-5812-8eac-36f12911940d",
+            "sees": [
+              "Posters for gigs in cafés, record stores, bars, and on neighborhood noticeboards, often after tickets have already gone on sale.",
+              "Friends sharing concert clips, venue photos, and last-minute show plans on social media.",
+              "A fragmented mix of venue websites, band Instagram accounts, Facebook events, ticketing pages, and local event calendars.",
+              "Small venues promoting familiar local acts alongside poorly described events with little audio, genre, or schedule information.",
+              "Weekend listings that are crowded with options, while weeknight shows can be difficult to notice or discover early.",
+              "Problems such as outdated event details, unclear set times, hidden ticket fees, and uncertainty about whether a small show will sell out."
+            ],
+            "gains": [
+              "A single local feed of relevant live shows, personalized by location, genre, preferred venues, and artists she follows.",
+              "Clear, current event information including lineup, music samples, set times, venue details, accessibility, and ticket terms.",
+              "Simple mobile ticket purchasing with transparent total pricing and immediate confirmation.",
+              "Alerts for newly announced shows, low-ticket availability, price changes, cancellations, and performances by favorite artists or at favorite venues.",
+              "Easy ways to share events, coordinate attendance, and buy tickets with friends.",
+              "Curated recommendations and social proof that help her confidently try unfamiliar local artists.",
+              "More frequent, affordable nights out that feel memorable, strengthen friendships, and visibly support the local music community."
+            ],
+            "hears": [
+              "Friends say, \"We should do something this weekend,\" often without knowing which live shows are happening.",
+              "Music-minded coworkers recommend bands, venues, and neighborhood events through casual conversation and group chats.",
+              "Friends complain about expensive major concerts and say smaller local gigs are better value and more personal.",
+              "Local musicians and venue accounts announce shows, lineup changes, and ticket links through Instagram and short-form video.",
+              "Influential recommendations come from close friends with similar taste, trusted local DJs, music journalists, venue programmers, and playlists from local radio or streaming platforms.",
+              "Family members tend to emphasize safety, transport home, and not spending too much on frequent nights out."
+            ],
+            "pains": [
+              "Event discovery is fragmented, requiring her to search multiple apps, social accounts, websites, and ticket providers.",
+              "Listings can omit essential details such as genre, set times, support acts, accessibility, age restrictions, or accurate venue information.",
+              "Added checkout fees can make an inexpensive local show feel unexpectedly costly.",
+              "She risks buying a ticket for a poorly organized event, a weak fit for her taste, or a show that is changed or cancelled.",
+              "It is hard to coordinate with friends before tickets rise in price, sell out, or interest fades.",
+              "Weeknight shows compete with work, travel time, and limited energy.",
+              "She lacks a simple trusted signal for which emerging artists and lesser-known shows are likely to be worthwhile."
+            ],
+            "project_id": "01a12795-387a-7280-87d6-c610b8675bab",
+            "persona_name": "Maya Thompson",
+            "says_and_does": [
+              "She tells friends, \"I found a show nearby on Thursday—want to come?\"",
+              "She checks Instagram stories, venue calendars, event listings, and band profiles while planning evenings and weekends.",
+              "She sends ticket links and event posts into group chats.",
+              "She compares event dates, start times, genres, venue locations, and total ticket prices before buying.",
+              "She listens to a band's clips or streamed tracks and watches short live videos before deciding whether to attend.",
+              "She buys tickets online, saves confirmation emails or mobile tickets, and adds selected shows to her calendar.",
+              "She posts photos, short videos, or venue tags from shows she attends and recommends standout acts to friends."
+            ],
+            "thinks_and_feels": [
+              "She wants live music to feel spontaneous and social, but she also wants enough reliable information to commit to a plan.",
+              "She feels excited by the possibility of finding a great unknown local artist before they become widely known.",
+              "She worries that she is missing the best shows because event information is scattered across too many channels.",
+              "She privately judges whether a show will be worth the time, travel, ticket price, and next-day fatigue, especially on a work night.",
+              "She wants to support local artists and independent venues, while still feeling confident that her ticket purchase is legitimate and the event will happen.",
+              "She feels frustrated when she discovers an appealing show only after it has sold out or already taken place.",
+              "She dreams of being the friend who always knows about the most interesting local gigs and can easily bring people together."
+            ],
+            "persona_demographics": "Maya is a 29-year-old urban professional living in a mid-sized city with an active local music scene. She earns approximately $58,000 per year, rents an apartment with a roommate, is single with no children, and regularly spends discretionary income on social outings, food, and live entertainment."
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:50:57.781276Z",
+      "finishedAt": "2026-10-10T20:51:23.914685Z"
+    },
+    {
+      "id": "01a12795-4a6d-75d4-a63f-7b40563f94ca",
+      "stage": "customer_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3ddbfa8d40"
+        ]
+      },
+      "attemptId": "01a12795-7f47-7245-97e2-ca4873cd5542",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:empathy_map_customer_scenario_persona_consistency",
+            "severity": "warning",
+            "message": "Judge check could not run: empathy_map_customer_scenario_persona_consistency: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "0967095e-1298-5219-a6f2-c2712d090129"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "0967095e-1298-5219-a6f2-c2712d090129",
+          "type": "customer_scenario",
+          "data": {
+            "id": "0967095e-1298-5219-a6f2-c2712d090129",
+            "channel_type": "digital-self-service",
+            "pricing_tier": "mid_market",
+            "empathy_map_id": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+            "open_questions": [
+              "Will bands be able to browse and apply for opportunities for free, or will they pay a subscription, booking fee, or commission?",
+              "How should the platform price ticketing and booking fees so that early-stage bands keep enough of a modest gig income?",
+              "Which booking details must be standardized before acceptance, including guarantees, door splits, ticket allocations, equipment, promotion duties, and cancellation compensation?",
+              "Should Maya have access to personal booking support for disputes, late payment, cancellations, or unclear venue requirements?",
+              "What verification and review process will make venue profiles, compensation claims, and completed-gig reputations trustworthy?",
+              "Which local launch geography can supply enough active venues, bands, and fans for Maya to find suitable dates consistently?"
+            ],
+            "relationship_type": "self-service",
+            "situation_narrative": "On a Tuesday evening after her café shift, Maya opens the platform on her phone to find a paid local date for her four-piece indie-pop band next month. She filters venue requests by weekday availability, genre fit, capacity, backline, and minimum guarantee, then finds a brewery seeking an upbeat act for a quiet Thursday. Its verified profile shows a 90-person room, a usable PA, a 45-minute set, a fixed fee plus a clearly defined ticket split, and promotion and cancellation terms. Maya sends the band’s saved performance profile, including live footage, EPK, technical needs, and the dates already confirmed by her bandmates. The venue manager accepts through the platform, and both sides confirm the set time, payment schedule, ticket allocation, and promotional responsibilities in one booking record. Maya shares the platform ticket link with the band’s followers and, after the show, uses attendee follow options to invite new listeners to the next date. The value of this booking depends on participating venues offering live slots, while the platform can also connect the resulting show to fans buying tickets.",
+            "interdependence_signal": true
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:11.303510Z",
+      "finishedAt": "2026-10-10T20:51:23.239554Z"
+    },
+    {
+      "id": "01a12795-4a6e-76b7-9994-be4132b71bb4",
+      "stage": "customer_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3efdcf463a"
+        ]
+      },
+      "attemptId": "01a12795-83eb-7362-9014-2d3995e043fe",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:empathy_map_customer_scenario_persona_consistency",
+            "severity": "warning",
+            "message": "Judge check could not run: empathy_map_customer_scenario_persona_consistency: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "873b6c07-f3a8-55e7-b217-5c5bcd4e557b"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "873b6c07-f3a8-55e7-b217-5c5bcd4e557b",
+          "type": "customer_scenario",
+          "data": {
+            "id": "873b6c07-f3a8-55e7-b217-5c5bcd4e557b",
+            "channel_type": "digital-self-service",
+            "pricing_tier": "mid_market",
+            "empathy_map_id": "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+            "open_questions": [
+              "What booking fee, ticketing fee, or subscription would Marcus consider worthwhile relative to the administrative time and attendance risk it reduces?",
+              "Should venues be able to use core act discovery for free and pay only when a booking or ticket sale is completed?",
+              "Which performance signals would Marcus trust most: verified ticket history, venue references, fan follows, ratings, or prior bar-sales data?",
+              "How should the platform handle guarantees, door splits, deposits, cancellations, replacement acts, and disputes?",
+              "Would a digital self-service workflow be sufficient for Marcus, or would he pay for dedicated support for higher-risk bookings?",
+              "Which channel is most effective for bringing local fans to the newly published ticket page: venue social accounts, platform discovery, email newsletters, or local-media partnerships?"
+            ],
+            "relationship_type": "self-service",
+            "situation_narrative": "On a Monday morning, Marcus sees that the venue has no programming for the following Thursday, a night that is usually too quiet to justify a full staff shift. Instead of sorting through old emails and social-media messages, he uses the platform to filter verified local bands by genre, Thursday availability, audience size, past attendance at similar-capacity rooms, technical needs, and cancellation record. He shortlists a soul-funk trio whose live video suits the venue and whose profile shows dependable local references and a realistic draw for a weeknight. Through the platform, Marcus proposes an early show with a modest door split, specifies the house backline and set times, and assigns promotion tasks to both parties. Once the band accepts the terms, the date is confirmed and a ticket page is automatically published for local fans. During the week, Marcus checks ticket sales and uses the shared promotion checklist rather than chasing messages across channels. He staffs the night conservatively, then reviews ticket scans, bar spend, and attendance after the show to decide whether to rebook the trio and which similar acts could help make future Thursdays profitable.",
+            "interdependence_signal": true
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:12.491871Z",
+      "finishedAt": "2026-10-10T20:51:34.759569Z"
+    },
+    {
+      "id": "01a12795-4a6e-76b7-9994-be43093c4e6d",
+      "stage": "customer_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3fa2f36f99"
+        ]
+      },
+      "attemptId": "01a12795-b090-740e-86c7-a8271263f33f",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:empathy_map_customer_scenario_persona_consistency",
+            "severity": "warning",
+            "message": "Judge check could not run: empathy_map_customer_scenario_persona_consistency: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "90a86d39-cb0e-5a1f-86fd-9d6d2466be43"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "90a86d39-cb0e-5a1f-86fd-9d6d2466be43",
+          "type": "customer_scenario",
+          "data": {
+            "id": "90a86d39-cb0e-5a1f-86fd-9d6d2466be43",
+            "channel_type": "digital-self-service",
+            "pricing_tier": "low_cost",
+            "empathy_map_id": "acdf5ab6-b4b9-5812-8eac-36f12911940d",
+            "open_questions": [
+              "Which local area should be launched first to ensure that Maya sees enough relevant shows every week?",
+              "How can the platform display all ticket fees and refund terms early enough to build trust without discouraging checkout?",
+              "What verification, update, and cancellation process will keep event details reliable for fans?",
+              "Which recommendation signals—friends’ activity, trusted local curators, listening previews, or attendance history—will most effectively help Maya choose unfamiliar acts?",
+              "Should group ticket purchasing, ticket holds, or split payments be offered to reduce coordination friction among friends?",
+              "What ticket fee or service level will Maya accept for transparent purchasing, mobile entry, and reliable alerts?",
+              "How should the platform balance self-service discovery with human local curation for emerging artists and smaller venues?"
+            ],
+            "relationship_type": "self-service",
+            "situation_narrative": "On a Tuesday lunchtime, Maya is deciding whether she has enough energy for a social plan after work on Thursday. Instead of checking several venue calendars and Instagram stories, she opens the platform’s local feed on her phone. It highlights a nearby independent venue’s quieter-night show: an indie-soul headliner she has not heard before, a short live clip, genre tags, two support acts, verified set times, accessibility details, and a clear total ticket price of $14 including fees. A recommendation notes that two friends with similar saved artists follow the headliner. Maya listens to the clips, checks that the venue is a short transit ride from her apartment, and shares the event in her group chat with a built-in ticket link. When two friends agree, she buys three mobile tickets in one checkout, receives immediate confirmation and calendar reminders, and feels confident the listing is current because the venue and artists are verified. On Thursday, the tickets are scanned at the door; after discovering a standout support act, Maya posts a short video and saves the artist to receive future show alerts.",
+            "interdependence_signal": true
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:23.920624Z",
+      "finishedAt": "2026-10-10T20:51:41.795915Z"
+    },
+    {
+      "id": "01a12795-4a6d-75d4-a63f-7b417e537c54",
+      "stage": "ideation",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3ddbfa8d40"
+        ]
+      },
+      "attemptId": "01a12795-7f48-7055-8d05-5af53ff0ff05",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "cf0e8620-0f49-56b0-aebb-004cc9f8be86",
+          "type": "ideation",
+          "data": {
+            "id": "cf0e8620-0f49-56b0-aebb-004cc9f8be86",
+            "epicenter": {
+              "tags": [
+                "customer_driven",
+                "finance_driven",
+                "multiple_epicenter"
+              ],
+              "rationale": "The strongest signal is customer-driven: Maya has a clearly expressed unmet need for a reliable, professional way to find suitable gigs, evaluate venues, secure transparent terms, and build a dependable flow of paid performances. The proposed platform directly addresses these pains and gains through venue discovery, booking, and fan conversion. It is also finance-driven because ticket sales through the platform are explicitly identified as the monetization mechanism, making transaction revenue a stated part of the concept. No existing resource, infrastructure, or partnership is provided, and the brief does not primarily frame the idea as a radically new offer that requires rebuilding every other business-model component."
+            },
+            "empathy_map_id": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+            "what_if_questions": [
+              "What if venues could no longer keep quieter-night booking opportunities private or fill them solely through personal networks, and had to publish their available slots with clear payment, equipment, and promotion terms?",
+              "What if a band’s suitability for a booking were evaluated through verified live-performance reliability and audience fit rather than follower counts or informal gatekeeper reputation?",
+              "What if every live-music booking had to function like a transparent, standardized agreement before either side committed—covering set length, compensation, ticket allocation, promotional duties, equipment, and cancellation terms?",
+              "What if venues had to share the financial downside of weak attendance or cancellation instead of leaving independent bands to absorb travel, rehearsal, and opportunity costs?",
+              "What if ticket buyers discovered local artists first and chose venues second, forcing venues to compete for artists with fairer terms and better working conditions?",
+              "What if ticketing were not merely a checkout process but required every show to give artists a meaningful way to convert attendees into repeat fans and mailing-list subscribers?",
+              "What if bands could pool their availability, transport constraints, technical requirements, and regional routing into a market-visible signal that venues had to book around rather than ignore?",
+              "What if a venue’s reputation depended as much on paying artists on time, promoting shows, and providing competent sound as an artist’s reputation depended on drawing a crowd?"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:11.304382Z",
+      "finishedAt": "2026-10-10T20:51:28.275883Z"
+    },
+    {
+      "id": "01a12795-4a6e-76b7-9994-be42b571bfb3",
+      "stage": "ideation",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3efdcf463a"
+        ]
+      },
+      "attemptId": "01a12795-83ec-7481-a79e-223040dc63e2",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "28b3f78e-ffd2-5f7f-b629-24328df1779f",
+          "type": "ideation",
+          "data": {
+            "id": "28b3f78e-ffd2-5f7f-b629-24328df1779f",
+            "epicenter": {
+              "tags": [
+                "customer_driven",
+                "finance_driven",
+                "multiple_epicenter"
+              ],
+              "rationale": "The concept responds directly to Marcus's pronounced unmet needs: filling quiet midweek nights, reducing fragmented booking administration, finding dependable local acts, and converting discovery into reliable attendance and bar revenue. It is also finance-driven because the brief explicitly identifies ticket sales through the platform as monetization, while the venue persona is strongly motivated by profitable events, predictable revenue, and lower losses from lightly attended nights. No existing resource, infrastructure, or partnership is identified, and the platform concept does not clearly establish a wholly new value proposition that requires the business model to be rebuilt beyond the marketplace itself."
+            },
+            "empathy_map_id": "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+            "what_if_questions": [
+              "What if venues never had to commit to an unknown local band for a quiet night without a credible, locally verified prediction of attendance and bar spend?",
+              "What if a venue could make every underused Tuesday-through-Thursday slot visible as a live, bookable demand signal to only the artists whose sound, availability, technical needs, and reliability fit it?",
+              "What if artists, rather than venues, had to earn access to scarce off-peak performance slots through independently evidenced professionalism, punctuality, and audience follow-through?",
+              "What if ticket buyers could not simply discover a show, but had to create a meaningful commitment early enough to let Marcus decide whether opening, staffing, and booking the night is financially justified?",
+              "What if a booked show were not treated as a fixed promise, but as a dynamic agreement that could automatically change format, lineup, compensation, or cancellation outcome as demand develops?",
+              "What if local music discovery stopped being driven by social-media reach and instead surfaced the shows most likely to give regular patrons a worthwhile midweek night out?",
+              "What if venues shared performance, attendance, cancellation, and audience-spend evidence across the local ecosystem, even when that transparency exposed unreliable acts or weak programming decisions?",
+              "What if ticketing revenue were not merely a transaction fee, but a mechanism for aligning venue, artist, and fan incentives around filling otherwise unprofitable nights?"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:12.492738Z",
+      "finishedAt": "2026-10-10T20:51:33.296876Z"
+    },
+    {
+      "id": "01a12795-4a6e-76b7-9994-be4489560a9e",
+      "stage": "ideation",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3fa2f36f99"
+        ]
+      },
+      "attemptId": "01a12795-b091-7275-ad67-10fb1da21ba8",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "5ee6843b-e2de-5b0d-b51a-922c67f88dd4",
+          "type": "ideation",
+          "data": {
+            "id": "5ee6843b-e2de-5b0d-b51a-922c67f88dd4",
+            "epicenter": {
+              "tags": [
+                "offer_driven",
+                "customer_driven",
+                "finance_driven",
+                "multiple_epicenter"
+              ],
+              "rationale": "The concept introduces a new multi-sided value proposition that combines artist-to-venue booking, local show discovery, and ticket purchasing, requiring coordinated changes across participants and workflows (offer-driven). Maya's strongly expressed pain—fragmented, unreliable discovery and difficulty judging, coordinating, and purchasing worthwhile local shows—directly motivates the fan-facing proposition (customer-driven). Ticket sales through the platform are explicitly identified as the monetization mechanism, making revenue model design a material driver as well (finance-driven). No existing resource, infrastructure, or partnership is provided to support a resource-driven classification."
+            },
+            "empathy_map_id": "acdf5ab6-b4b9-5812-8eac-36f12911940d",
+            "what_if_questions": [
+              "What if local live-music discovery did not depend on fans searching fragmented venue calendars, social feeds, band profiles, and ticketing pages, but arrived as one trusted, personally relevant local feed before plans were made?",
+              "What if every listed show had to expose standardized, continuously current details—set times, genre, support acts, accessibility, age rules, venue information, and cancellation status—even when small venues and independent bands lack dedicated staff?",
+              "What if a ticket price could never increase through hidden checkout fees, and the complete all-in price had to be visible before Maya invested time comparing shows or coordinating friends?",
+              "What if unknown local artists could not be promoted merely through polished posts or follower counts, but had to earn a trustworthy signal that the show is likely to fit a fan's taste and be worth a work-night trip?",
+              "What if booking a band for a quiet weeknight became as immediate and dependable as reserving a table, despite the real-world uncertainty of availability, negotiations, contracts, payments, and cancellations?",
+              "What if fans could coordinate attendance and commit as a group before tickets sell out or enthusiasm fades, without forcing each person to navigate separate links, prices, and ticket accounts?",
+              "What if a venue's quiet nights were not marketed only after a lineup was confirmed, but demand from nearby fans could shape which artists, genres, and show times get booked?",
+              "What if ticketing platforms had to make the legitimacy and operational reliability of every small local event visible before purchase, rather than asking fans to trust incomplete listings and social-media announcements?"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:23.921656Z",
+      "finishedAt": "2026-10-10T20:51:40.159077Z"
+    },
+    {
+      "id": "01a12795-4a6e-76b7-9994-be45527e4bdd",
+      "stage": "patterns",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "ideation": [
+          "01a12795-4a6d-75d4-a63f-7b417e537c54",
+          "01a12795-4a6e-76b7-9994-be42b571bfb3",
+          "01a12795-4a6e-76b7-9994-be4489560a9e"
+        ],
+        "customer_scenario": [
+          "01a12795-4a6d-75d4-a63f-7b40563f94ca",
+          "01a12795-4a6e-76b7-9994-be4132b71bb4",
+          "01a12795-4a6e-76b7-9994-be43093c4e6d"
+        ]
+      },
+      "attemptId": "01a12795-f66a-7335-949b-e5ec57abd6ba",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:ideation_grounds_pattern_tags",
+            "severity": "warning",
+            "message": "Judge check could not run: ideation_grounds_pattern_tags: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "1833a7dc-ae25-5a95-a960-f4feb7e36c22"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "1833a7dc-ae25-5a95-a960-f4feb7e36c22",
+          "type": "patterns",
+          "data": {
+            "id": "1833a7dc-ae25-5a95-a960-f4feb7e36c22",
+            "groups": [
+              {
+                "id": "ca90dc4f-07c3-5b89-8d8b-97cc0a6ce303",
+                "relation_type": "multi_sided",
+                "empathy_map_ids": [
+                  "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+                  "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+                  "acdf5ab6-b4b9-5812-8eac-36f12911940d"
+                ]
+              }
+            ],
+            "project_id": "01a12795-387a-7280-87d6-c610b8675bab",
+            "pattern_tags": [
+              {
+                "pattern": "multi_sided_platform",
+                "subtype": null,
+                "rationale": "Bands, venues, and fans are explicitly interdependent: bands need venue slots, venues need suitable acts to fill quiet nights, and ticket-buying fans create attendance and revenue. All three segment pairs have strong compatibility and each scenario states an interdependence signal."
+              }
+            ],
+            "branch_decision": "unified_model",
+            "pairwise_scores": [
+              {
+                "synergy": 5,
+                "conflict": 0,
+                "segment_pair": {
+                  "empathy_map_id_a": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+                  "empathy_map_id_b": "192f6754-4e89-5d1a-b90a-a59a539c04cc"
+                }
+              },
+              {
+                "synergy": 5,
+                "conflict": 0,
+                "segment_pair": {
+                  "empathy_map_id_a": "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+                  "empathy_map_id_b": "acdf5ab6-b4b9-5812-8eac-36f12911940d"
+                }
+              },
+              {
+                "synergy": 5,
+                "conflict": 0,
+                "segment_pair": {
+                  "empathy_map_id_a": "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+                  "empathy_map_id_b": "acdf5ab6-b4b9-5812-8eac-36f12911940d"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:41.802024Z",
+      "finishedAt": "2026-10-10T20:51:50.831485Z"
+    },
+    {
+      "id": "01a12796-19b3-77ef-a4c6-51a2664b6ec8",
+      "stage": "canvas",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a12795-387c-731e-bcfc-5a84ba4aa8d7"
+        ],
+        "ideation": [
+          "01a12795-4a6d-75d4-a63f-7b417e537c54",
+          "01a12795-4a6e-76b7-9994-be42b571bfb3",
+          "01a12795-4a6e-76b7-9994-be4489560a9e"
+        ],
+        "patterns": [
+          "01a12795-4a6e-76b7-9994-be45527e4bdd"
+        ],
+        "empathy_map": [
+          "01a12795-4a6d-75d4-a63f-7b3ddbfa8d40",
+          "01a12795-4a6d-75d4-a63f-7b3efdcf463a",
+          "01a12795-4a6d-75d4-a63f-7b3fa2f36f99"
+        ],
+        "customer_scenario": [
+          "01a12795-4a6d-75d4-a63f-7b40563f94ca",
+          "01a12795-4a6e-76b7-9994-be4132b71bb4",
+          "01a12795-4a6e-76b7-9994-be43093c4e6d"
+        ]
+      },
+      "attemptId": "01a12796-19b7-76fa-952f-31c9ff5bac85",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:canvas_grounded_in_customer_insights",
+            "severity": "warning",
+            "message": "Judge check could not run: canvas_grounded_in_customer_insights: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "a48502d3-b07e-5802-8a85-fba6dfeebe51"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+          "type": "canvas",
+          "data": {
+            "id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "version": 1,
+            "group_id": "ca90dc4f-07c3-5b89-8d8b-97cc0a6ce303",
+            "sections": {
+              "channels": [
+                {
+                  "id": "5fe38d95-5c75-5ccc-a09a-7fcfd101364a",
+                  "text": "Mobile self-service marketplace for venue slots, artist applications, and booking confirmation",
+                  "errc_marker": null
+                },
+                {
+                  "id": "94164775-95d3-5655-8d58-e0254514553e",
+                  "text": "Personalized local show feed with genre, venue, artist, and location filters",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e13b2a52-b950-517b-8ff9-a7b6193b9e4c",
+                  "text": "Shareable event links, group-chat sharing, and venue or artist social promotion",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3850d872-b3c7-53d4-8e4e-58162145c2d7",
+                  "text": "Ticket confirmations, calendar reminders, and alerts for changes, availability, and followed artists",
+                  "errc_marker": null
+                }
+              ],
+              "key_resources": [
+                {
+                  "id": "7ebb6111-c7a9-523f-9439-b2b13a3a4082",
+                  "text": "Verified multi-sided database of bands, venues, local shows, and fan preferences",
+                  "errc_marker": null
+                },
+                {
+                  "id": "016fc495-ea57-5528-a747-7f899f076392",
+                  "text": "Standardized booking-terms, cancellation, payment, and ticket-allocation workflow",
+                  "errc_marker": null
+                },
+                {
+                  "id": "35a0c162-1942-5c04-9431-f356c17b23cd",
+                  "text": "Ticketing, mobile entry, ticket-scan, and event-update infrastructure",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3fc99a70-3d8b-54a9-9395-ecdf106e3df8",
+                  "text": "Trust data: completed-gig reviews, venue references, attendance, and reliability records",
+                  "errc_marker": null
+                }
+              ],
+              "cost_structure": [
+                {
+                  "id": "d45bccbd-9e2c-5bc4-a56a-fa9cc243e1ae",
+                  "text": "Platform development, hosting, matching, ticketing, and mobile-entry operations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "b1daf025-98ba-55c0-acc5-2ffaa74dfb54",
+                  "text": "Payment processing, ticket delivery, refunds, and transaction support costs",
+                  "errc_marker": null
+                },
+                {
+                  "id": "1e0ad10a-b3ee-521d-b78b-577db5f1c8a7",
+                  "text": "Local supply acquisition and marketplace activation for venues, bands, and fans",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3add9409-5630-585a-92b0-7d6c48f94a47",
+                  "text": "Verification, customer support, dispute resolution, and trust-and-safety operations",
+                  "errc_marker": null
+                }
+              ],
+              "key_activities": [
+                {
+                  "id": "909f7f63-3870-58db-a107-3cb53af35d7e",
+                  "text": "Recruit and activate enough local venues, bands, and fans in a launch geography",
+                  "errc_marker": null
+                },
+                {
+                  "id": "baabef45-027e-5ccb-bafa-f1f372406505",
+                  "text": "Match artists and quiet-night slots using fit, availability, technical, and reliability signals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "03ff629e-52b9-58c8-9d39-99be086eef73",
+                  "text": "Operate transparent booking, ticketing, refunds, event updates, and mobile entry",
+                  "errc_marker": null
+                },
+                {
+                  "id": "82be7c0f-1fec-59a7-aed9-fc07560d322d",
+                  "text": "Verify profiles, moderate reviews, resolve disputes, and maintain reliable event information",
+                  "errc_marker": null
+                }
+              ],
+              "revenue_streams": [
+                {
+                  "id": "0fc2bffc-1a8c-537f-bce5-559faf52e58d",
+                  "text": "Mid-market booking transaction fees on confirmed band-venue bookings",
+                  "errc_marker": null
+                },
+                {
+                  "id": "2a3365e2-9a07-5cc8-8887-aed5b16bf54e",
+                  "text": "Mid-market venue plans or completed-booking fees for act discovery and booking administration",
+                  "errc_marker": null
+                },
+                {
+                  "id": "ec5c3c0f-8414-58b5-a608-5b7e5fe71434",
+                  "text": "Low-cost, transparent ticket service fees included in the fan’s all-in ticket price",
+                  "errc_marker": null
+                },
+                {
+                  "id": "4fc6c6c0-cb16-5d22-af05-01a710b2c2e3",
+                  "text": "Ticketing transaction fees on sales processed for platform-listed shows",
+                  "errc_marker": null
+                }
+              ],
+              "key_partnerships": [
+                {
+                  "id": "6f5bad45-5714-5d4a-9291-f98808f1b994",
+                  "text": "Independent venues supplying bookable quiet-night slots and event updates",
+                  "errc_marker": null
+                },
+                {
+                  "id": "eb0e8ebc-64bb-5037-ad46-58f4449094b5",
+                  "text": "Local bands and artist communities contributing profiles, availability, and live media",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a6341a65-beca-56b3-8883-77aed67bd249",
+                  "text": "Payment processors and ticket-scanning providers for checkout, payouts, and entry",
+                  "errc_marker": null
+                },
+                {
+                  "id": "89df55df-898f-53d1-9e9b-2b04c5a4ff10",
+                  "text": "Local music media, curators, and community partners expanding fan discovery",
+                  "errc_marker": null
+                }
+              ],
+              "customer_segments": [
+                {
+                  "id": "88e2e9fa-22f0-5682-9faf-288312cb603d",
+                  "text": "Early-stage independent local bands seeking reliable, paid, well-matched performance slots",
+                  "errc_marker": null
+                },
+                {
+                  "id": "43440246-a607-5153-ab91-0df217b1ccda",
+                  "text": "Independent venue managers filling underused weeknight capacity profitably",
+                  "errc_marker": null
+                },
+                {
+                  "id": "1310fe08-e2e3-521b-b8ad-bc89ac0a6934",
+                  "text": "Urban local-music fans seeking affordable, trustworthy weeknight plans with friends",
+                  "errc_marker": null
+                }
+              ],
+              "value_propositions": [
+                {
+                  "id": "eab07507-f0de-5994-95e2-0733185745fe",
+                  "text": "Verified venue opportunities matched to band genre, availability, technical needs, and minimum terms",
+                  "errc_marker": null
+                },
+                {
+                  "id": "0c5fbd7d-2e95-5303-9d54-33d4c3337720",
+                  "text": "Standardized booking records covering set time, pay, ticket split, promotion, equipment, and cancellations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "9fd9c321-d69a-51e4-b75c-3db1e87a0c8d",
+                  "text": "Quiet-night programming tools with vetted acts, shared promotion, and attendance performance signals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3cb83d1c-5355-535c-8827-31c4dcc4c71a",
+                  "text": "Trusted local show discovery and all-in mobile ticketing with current event details and alerts",
+                  "errc_marker": null
+                }
+              ],
+              "customer_relationships": [
+                {
+                  "id": "3392e1de-ab2e-5e0b-8924-96930092db97",
+                  "text": "Self-service profiles, filters, applications, and booking workflows for bands and venues",
+                  "errc_marker": null
+                },
+                {
+                  "id": "4253470f-ccf2-577b-9eb9-17bc316fc7b0",
+                  "text": "Transparent, mutual completed-gig reviews covering reliability, payment, promotion, and production quality",
+                  "errc_marker": null
+                },
+                {
+                  "id": "55c39682-c854-5a41-8049-d7dd5594452e",
+                  "text": "Shared booking and promotion checklists that keep responsibilities and changes visible",
+                  "errc_marker": null
+                },
+                {
+                  "id": "de9195f4-d33d-5101-8d30-4680c49a01ba",
+                  "text": "In-app support and dispute handling for late payment, cancellations, or unclear terms",
+                  "errc_marker": null
+                }
+              ]
+            },
+            "is_generated": true,
+            "empathy_map_ids": [
+              "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+              "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+              "acdf5ab6-b4b9-5812-8eac-36f12911940d"
+            ],
+            "previous_version_id": null
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:51:50.839061Z",
+      "finishedAt": "2026-10-10T20:52:02.522027Z"
+    },
+    {
+      "id": "01a12796-475e-765d-bf05-cfe9ffb27ffd",
+      "stage": "swot_errc_cycle",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "canvas": [
+          "01a12796-19b3-77ef-a4c6-51a2664b6ec8"
+        ]
+      },
+      "attemptId": "01a12796-4764-71c7-92b3-3fe0e888b4f7",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "3e122b45-08f4-5127-a8f0-31981d6f42af",
+          "type": "swot",
+          "data": {
+            "id": "3e122b45-08f4-5127-a8f0-31981d6f42af",
+            "clusters": [
+              {
+                "cluster": "value_proposition",
+                "threats": [
+                  {
+                    "text": "Bands and venues can still arrange shows through direct outreach, personal networks, social media, and informal local promotion instead of using the platform workflow.",
+                    "score": 4,
+                    "question": "substitutes_available"
+                  },
+                  {
+                    "text": "Other booking, event-discovery, or ticketing services could compete by charging lower fees or offering broader inventory, stronger discovery, or simpler workflows.",
+                    "score": 3,
+                    "question": "competitor_price_or_value_pressure"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use completed-gig, attendance, and reliability data to improve matching quality and make successful quiet-night programming more repeatable.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Expand the standardized booking workflow into a recognized local operating standard for payments, cancellations, promotion, and production responsibilities.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Turn fan discovery, group sharing, alerts, and all-in ticketing into stronger demand for platform-listed weeknight shows.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use verified artist and venue records to reduce uncertainty for first-time bookings between local acts and venues.",
+                    "score": 5
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The platform offers disconnected features that do not solve the local live-music journey end to end.",
+                    "positive_statement": "The platform offers an integrated solution for booking, promotion, discovery, and ticketing across the local live-music journey."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "Booking terms, responsibilities, cancellations, and payment conditions remain unclear and inconsistent.",
+                    "positive_statement": "Booking terms, responsibilities, cancellations, and payment conditions are made transparent and standardized."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "The propositions do not address the distinct needs of bands, venues, and fans in a mutually reinforcing way.",
+                    "positive_statement": "The propositions address distinct needs of bands, venues, and fans with mutually reinforcing value."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "Trust depends on unverified claims and lacks meaningful reliability signals.",
+                    "positive_statement": "Trust is supported by verification, reviews, references, and attendance signals."
+                  }
+                ]
+              },
+              {
+                "cluster": "cost_revenue",
+                "threats": [
+                  {
+                    "text": "Low-cost fan ticket fees and mid-market booking fees must cover payment processing, refunds, support, trust-and-safety, and activation work, creating visible pressure on margins.",
+                    "score": 5,
+                    "question": "margin_pressure"
+                  },
+                  {
+                    "text": "The canvas includes multiple revenue types and three participant groups, although early revenue may still depend heavily on active venues and their bookings in a launch geography.",
+                    "score": 3,
+                    "question": "revenue_concentration"
+                  },
+                  {
+                    "text": "Booking and ticketing revenue would decline if venues reduce quiet-night slots or if fewer fans purchase tickets for listed shows.",
+                    "score": 3,
+                    "question": "revenue_stream_decline"
+                  },
+                  {
+                    "text": "Refunds, disputes, cancellations, local supply acquisition, and customer support can vary with event volume and reliability issues.",
+                    "score": 4,
+                    "question": "cost_unpredictability"
+                  },
+                  {
+                    "text": "The need to recruit venues, bands, and fans while operating verification, dispute handling, ticketing, and entry infrastructure could cause costs to grow ahead of transaction revenue.",
+                    "score": 5,
+                    "question": "cost_outgrowing_revenue"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Increase revenue per active venue by combining venue plans or booking fees with ticketing fees from shows listed through the platform.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Convert successful quiet-night programs into recurring bookings and recurring ticket transactions.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use booking records and attendance signals to demonstrate administrative and programming value that supports venue-plan adoption.",
+                    "score": 3
+                  },
+                  {
+                    "text": "Improve economics through reusable standardized workflows for booking confirmation, ticket delivery, event updates, and mobile entry.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The model relies on a single monetization point with little revenue diversification.",
+                    "positive_statement": "The model has several monetization points across bookings, venue access, ticket service, and ticket transactions."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "Revenue sources are weakly connected to the actions that create value for users.",
+                    "positive_statement": "Revenue sources align with the platform actions that create value: confirmed bookings and ticket sales."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The cost structure omits the operational work required for trust, ticketing, support, and marketplace activation.",
+                    "positive_statement": "The cost structure explicitly covers the operational work required for trust, ticketing, support, and marketplace activation."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 7,
+                    "importance": 8,
+                    "negative_statement": "The model requires largely manual, non-repeatable delivery for each booking and ticket sale.",
+                    "positive_statement": "The model can benefit from repeat use of standardized digital booking and ticketing infrastructure."
+                  }
+                ]
+              },
+              {
+                "cluster": "infrastructure",
+                "threats": [
+                  {
+                    "text": "The supply of bookable quiet-night slots and active local-band profiles depends on independent venues and artist communities continuing to contribute availability and information.",
+                    "score": 4,
+                    "question": "resource_supply_disruption"
+                  },
+                  {
+                    "text": "The quality of matching and trust data can suffer if profiles, technical requirements, availability, event details, or reviews are incomplete or inaccurate.",
+                    "score": 4,
+                    "question": "resource_quality_risk"
+                  },
+                  {
+                    "text": "Disruption to booking, ticketing, refunds, event updates, or mobile entry would directly affect scheduled live events and customer trust.",
+                    "score": 4,
+                    "question": "key_activity_disruption"
+                  },
+                  {
+                    "text": "Poor verification, review moderation, matching, dispute resolution, or event-information maintenance could result in unsuitable bookings or unreliable customer experiences.",
+                    "score": 5,
+                    "question": "activity_quality_risk"
+                  },
+                  {
+                    "text": "Loss of participating venues would remove bookable slots, while loss of payment or ticket-scanning providers could impair checkout, payouts, or entry operations.",
+                    "score": 4,
+                    "question": "partner_loss"
+                  },
+                  {
+                    "text": "Venues, bands, and local discovery partners could participate in competing local-music, booking, or ticketing services if those alternatives provide better results.",
+                    "score": 3,
+                    "question": "partner_defection_to_competitors"
+                  },
+                  {
+                    "text": "The model depends materially on independent venues for inventory and on payment and ticket-scanning providers for core transaction and entry functions.",
+                    "score": 4,
+                    "question": "partner_over_dependence"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Build a defensible local trust dataset from completed-gig reviews, venue references, attendance, and reliability records.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Use local music media, curators, and community partners to accelerate fan discovery and marketplace activation.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Standardize event operations across booking, payouts, refunds, updates, scanning, and entry to make service delivery more repeatable.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Deepen venue and artist-community participation so the verified database becomes more useful for matching in each launch geography.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The key resources are fragmented and do not form a coherent operational system.",
+                    "positive_statement": "The key resources form a coherent operational system linking verified profiles, booking terms, trust data, ticketing, and mobile entry."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The canvas does not identify the marketplace-activation task needed to build local supply and demand.",
+                    "positive_statement": "The canvas identifies the marketplace-activation task needed to build local supply and demand in a launch geography."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "Trust and execution activities are not explicitly included, leaving reliability unmanaged.",
+                    "positive_statement": "Trust and execution activities are explicitly included through verification, moderation, dispute resolution, refunds, and event-information maintenance."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The model lacks the partner coverage needed across supply, operations, and local discovery.",
+                    "positive_statement": "The model has a diversified partner set spanning venues, artists, payment and scanning providers, and local discovery partners."
+                  }
+                ]
+              },
+              {
+                "cluster": "customer_interface",
+                "threats": [
+                  {
+                    "text": "The canvas is focused on local urban music activity and does not show evidence that its targeted launch markets are already saturated with equivalent supply.",
+                    "score": 2,
+                    "question": "market_saturation"
+                  },
+                  {
+                    "text": "The platform's share could erode if bands, venues, or fans use other ways to arrange, discover, and ticket local shows.",
+                    "score": 3,
+                    "question": "market_share_pressure"
+                  },
+                  {
+                    "text": "Bands or venues may leave after cancellations, late payment, poor matching, or disappointing promotion, while fans may leave if event information or show quality proves unreliable.",
+                    "score": 4,
+                    "question": "customer_defection"
+                  },
+                  {
+                    "text": "Live-music booking, event discovery, and ticketing are adjacent functions that can be offered by competing services and local alternatives.",
+                    "score": 3,
+                    "question": "competition_intensifying"
+                  },
+                  {
+                    "text": "Competitors could attract venue and artist promotion or capture fan attention through alternative event-discovery, social-promotion, and ticketing channels.",
+                    "score": 3,
+                    "question": "channel_threat_from_competitors"
+                  },
+                  {
+                    "text": "The mobile marketplace, personalized feed, sharing links, and alerts are directly matched to the stated user journeys; no evidence in the canvas shows these channels losing relevance.",
+                    "score": 1,
+                    "question": "channel_irrelevance"
+                  },
+                  {
+                    "text": "Because the model intermediates bookings, payments, promotions, cancellations, and event updates, unresolved disputes or inconsistent information could damage relationships across all three user groups.",
+                    "score": 4,
+                    "question": "relationship_deterioration"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use personalized feeds, followed-artist alerts, and location and genre filters to improve repeat fan discovery of relevant local shows.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Increase ticket conversion through shareable event links and group-chat sharing for affordable weeknight plans with friends.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use mutual completed-gig reviews and visible booking checklists to strengthen retention among bands and venue managers.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Develop repeat local audiences around reliable quiet-night programming at participating venues.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 10,
+                    "negative_statement": "The customer interface provides generic workflows that do not fit bands, venues, and fans.",
+                    "positive_statement": "The customer interface provides tailored workflows for bands and venues alongside a dedicated fan discovery and ticketing experience."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "The relationship design leaves users without transparency or support when booking issues arise.",
+                    "positive_statement": "The relationship design actively supports transparency and issue resolution through reviews, shared checklists, support, and dispute handling."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The channels do little to help fans discover, share, remember, or attend shows.",
+                    "positive_statement": "The channels reinforce attendance through personalized discovery, social sharing, confirmations, reminders, and change alerts."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 8,
+                    "negative_statement": "The platform has an unfocused target market with no clear initial participant groups.",
+                    "positive_statement": "The platform is focused on urban local-music fans and independent local venues and bands rather than claiming broad market coverage."
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "canvas_version": 1,
+            "environment_scan_id": null
+          }
+        },
+        {
+          "id": "bacaf02c-03a3-5741-a006-d45619943ac0",
+          "type": "swot",
+          "data": {
+            "id": "bacaf02c-03a3-5741-a006-d45619943ac0",
+            "clusters": [
+              {
+                "cluster": "value_proposition",
+                "threats": [
+                  {
+                    "text": "Bands, venues, and fans can still use direct outreach, social promotion, existing event listings, or separate ticketing tools instead of the integrated platform.",
+                    "score": 4,
+                    "question": "substitutes_available"
+                  },
+                  {
+                    "text": "Alternative booking, discovery, or ticketing services could offer lower fees, larger audiences, or more established local listings for the same needs.",
+                    "score": 4,
+                    "question": "competitor_price_or_value_pressure"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use the verified booking records and completed-gig data to establish a recognized reliability standard for local bands and venues.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Turn quiet-night attendance signals into recommendations for venue programming, band selection, and shared promotion.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Expand group ticket holds into friend invitations and coordinated ticket completion for weeknight shows.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Bundle discovery, booking, ticketing, and mobile entry as a simpler end-to-end offer for independently run local shows.",
+                    "score": 5
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The platform offers disconnected benefits that do not reinforce one another across bands, venues, and fans.",
+                    "positive_statement": "The platform creates an integrated proposition for bands, venues, and fans around the same local show."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Booking and event transactions lack the information and safeguards needed to build trust.",
+                    "positive_statement": "Standardized terms, verified opportunities, reviews, and current event details make transactions more trustworthy."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 8,
+                    "negative_statement": "The proposition is too general to solve a distinct venue programming problem.",
+                    "positive_statement": "The proposition addresses the specific problem of filling quieter weeknight venue capacity."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 7,
+                    "importance": 6,
+                    "negative_statement": "Fan ticketing offers no meaningful advantage for coordinating plans with friends.",
+                    "positive_statement": "Group ticket holds give fans a differentiated way to coordinate weeknight attendance."
+                  }
+                ]
+              },
+              {
+                "cluster": "cost_revenue",
+                "threats": [
+                  {
+                    "text": "Low-cost ticket fees, mid-market booking fees, payment processing, refunds, support, and verification can compress the margin on each transaction.",
+                    "score": 5,
+                    "question": "margin_pressure"
+                  },
+                  {
+                    "text": "The canvas has multiple fee types and three participant groups, but booking and ticket revenue may still depend heavily on a limited number of active venues and shows in each neighborhood.",
+                    "score": 3,
+                    "question": "revenue_concentration"
+                  },
+                  {
+                    "text": "If quieter-night bookings or ticket sales do not recur, both booking-related and ticketing-related revenue would weaken together.",
+                    "score": 4,
+                    "question": "revenue_stream_decline"
+                  },
+                  {
+                    "text": "Refunds, cancellations, disputes, payment support, and local marketplace activation can vary with event problems and launch conditions.",
+                    "score": 4,
+                    "question": "cost_unpredictability"
+                  },
+                  {
+                    "text": "Development, trust-and-safety, support, and local supply acquisition must be funded before dense booking and ticket volume are established.",
+                    "score": 5,
+                    "question": "cost_outgrowing_revenue"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Increase venue-plan adoption by converting booking administration, programming signals, and quiet-night tools into a recurring operational service.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Capture more value from listed shows by combining booking fees with ticket-processing fees when ticket sales occur on the platform.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use dense neighborhood activation to improve transaction volume before expanding local acquisition spending to new areas.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use attendance and reliability records to support premium analytics or higher-value venue administration offerings.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The model relies on a single revenue mechanism with little ability to monetize different participants.",
+                    "positive_statement": "The model has several linked revenue sources from booking, venue administration, ticket service, and ticket transactions."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 8,
+                    "negative_statement": "Revenue is poorly connected to completed activity and customer value.",
+                    "positive_statement": "Revenue is tied to completed bookings and ticket sales, aligning monetization with observable platform activity."
+                  },
+                  {
+                    "score": -3,
+                    "certainty": 7,
+                    "importance": 8,
+                    "negative_statement": "Fan fee positioning may constrain the funding available for ticketing and service operations.",
+                    "positive_statement": "Low-cost, transparent fan ticket fees support an accessible fan proposition."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "The cost structure omits the operational demands of running a trusted multi-sided marketplace.",
+                    "positive_statement": "The cost structure identifies the main operating demands of a trusted multi-sided marketplace."
+                  }
+                ]
+              },
+              {
+                "cluster": "infrastructure",
+                "threats": [
+                  {
+                    "text": "The platform depends on venues providing bookable quiet-night slots, bands maintaining availability, and external payment and scanning services; interruption in any of these inputs can reduce usable supply.",
+                    "score": 4,
+                    "question": "resource_supply_disruption"
+                  },
+                  {
+                    "text": "Profiles, availability, venue updates, reviews, and attendance records can become inaccurate or incomplete despite verification and completeness measures.",
+                    "score": 3,
+                    "question": "resource_quality_risk"
+                  },
+                  {
+                    "text": "Booking confirmation, ticketing, refunds, mobile entry, moderation, and dispute handling are operationally central; disruption would affect live events directly.",
+                    "score": 4,
+                    "question": "key_activity_disruption"
+                  },
+                  {
+                    "text": "Poor matching, delayed event updates, weak moderation, or inconsistent dispute resolution would undermine the platform's stated trust proposition.",
+                    "score": 4,
+                    "question": "activity_quality_risk"
+                  },
+                  {
+                    "text": "Loss of local venues, artist communities, media partners, or ticketing providers could reduce supply, discovery reach, or transaction capability in a neighborhood.",
+                    "score": 4,
+                    "question": "partner_loss"
+                  },
+                  {
+                    "text": "Venues, artists, and local promotion partners can support rival marketplaces or return to direct and alternative channels if those generate better results.",
+                    "score": 4,
+                    "question": "partner_defection_to_competitors"
+                  },
+                  {
+                    "text": "The canvas uses multiple partner categories, but local density depends materially on participating venues and community partners in each neighborhood.",
+                    "score": 3,
+                    "question": "partner_over_dependence"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use the mandatory review, attendance, and completeness records to improve matching quality as the local marketplace grows.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Build repeatable neighborhood launch playbooks with venue, artist-community, local-media, and curator partners.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use ticket-scan and event-update infrastructure to offer venues a more reliable operational layer for small local shows.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Convert verified venue references and reliability records into stronger eligibility signals for better opportunities.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The platform lacks the resources and activities needed to operate its booking, ticketing, entry, and trust workflows.",
+                    "positive_statement": "The platform specifies the core resources and activities required to operate booking, ticketing, entry, and trust workflows."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "Trust data is sparse, optional, and insufficient to distinguish reliable bands and venues.",
+                    "positive_statement": "Trust data is designed to be comprehensive, with mandatory post-gig reviews and records for every active band and venue."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "Marketplace activation is spread too broadly to build usable local density.",
+                    "positive_statement": "Neighborhood-by-neighborhood activation concentrates effort on reaching local marketplace density."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 8,
+                    "negative_statement": "The model has no meaningful partner base beyond a single operational dependency.",
+                    "positive_statement": "The model is supported by several complementary partner types rather than one named operational partner."
+                  }
+                ]
+              },
+              {
+                "cluster": "customer_interface",
+                "threats": [
+                  {
+                    "text": "The stated focus is urban local-music fans and independent venues, but the canvas does not show saturation already occurring in its neighborhood-by-neighborhood target markets.",
+                    "score": 2,
+                    "question": "market_saturation"
+                  },
+                  {
+                    "text": "The platform must retain local participation among bands, venues, and fans, who can use direct outreach and other discovery or ticketing options.",
+                    "score": 4,
+                    "question": "market_share_pressure"
+                  },
+                  {
+                    "text": "Bands or venues may leave if opportunities, pay reliability, attendance, or workflow value do not meet expectations; fans may leave if listings and alerts are not useful.",
+                    "score": 4,
+                    "question": "customer_defection"
+                  },
+                  {
+                    "text": "Live-music discovery, ticketing, and venue booking are adjacent needs that can attract competing platforms and established alternatives.",
+                    "score": 4,
+                    "question": "competition_intensifying"
+                  },
+                  {
+                    "text": "Competitors can compete for attention in social promotion, local media, artist audiences, and venue communication channels used by this model.",
+                    "score": 3,
+                    "question": "channel_threat_from_competitors"
+                  },
+                  {
+                    "text": "The mobile marketplace, personalized feed, sharing links, and reminders are directly aligned with the proposed self-service and local discovery journeys; no loss of relevance is visible in the canvas.",
+                    "score": 1,
+                    "question": "channel_irrelevance"
+                  },
+                  {
+                    "text": "Cancellations, late payment, unclear terms, poor promotion, or production issues can damage relationships even though the canvas includes checklists, reviews, and dispute handling.",
+                    "score": 4,
+                    "question": "relationship_deterioration"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use followed-artist, nearby-show, and weekly personalized alerts to turn occasional ticket buyers into repeat local-show attendees.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Leverage group-chat sharing and group ticket holds to acquire fans through existing friend groups.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Use completed-gig reviews and checklists to create a visible reputation loop that encourages reliable repeat use by bands and venues.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Deepen relationships with independent venue managers through recurring quiet-night programming workflows and performance signals.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The customer interface treats different participant groups as if they had the same needs and journey.",
+                    "positive_statement": "Dedicated workflows and channels serve the distinct jobs of bands, venue managers, and fans."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "Fan engagement relies on a static listing experience with little reason to return.",
+                    "positive_statement": "Personalized feeds, alerts, sharing, ticket confirmations, and calendar reminders support repeat fan engagement."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Booking relationships are unmanaged after matching, leaving responsibilities and problems unclear.",
+                    "positive_statement": "Shared checklists, mutual reviews, support, and dispute handling make the booking relationship explicit and accountable."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 7,
+                    "negative_statement": "The platform has broad, unfocused customer definitions that make adoption and communication unclear.",
+                    "positive_statement": "The platform targets defined local niches rather than claiming to serve every type of live-music participant."
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "4644a5a5-b284-5c72-a99d-d1f61a0503fe",
+            "canvas_version": 2,
+            "environment_scan_id": null
+          }
+        },
+        {
+          "id": "a8f23159-ebb7-5e47-8428-e0bb65b5d589",
+          "type": "errc",
+          "data": {
+            "id": "a8f23159-ebb7-5e47-8428-e0bb65b5d589",
+            "moves": [
+              {
+                "action": "raise",
+                "new_text": "Personalized local show feed with genre, venue, artist, and location filters, plus weekly recommendations and instant alerts for followed artists and nearby quiet-night shows",
+                "rationale": "This raises a customer-interface strength in response to the opportunity to use personalized feeds, followed-artist alerts, and filters to improve repeat fan discovery.",
+                "target_section": "channels",
+                "target_card_text": "Personalized local show feed with genre, venue, artist, and location filters",
+                "opposite_side_impact": "More frequent, relevant fan discovery should increase ticket conversion and give venues stronger attendance signals for programming decisions. It requires additional recommendation and notification capability in key resources and activities."
+              },
+              {
+                "action": "raise",
+                "new_text": "Shared booking and promotion checklists with required owner assignments, due dates, completion confirmation, and change alerts for every confirmed show",
+                "rationale": "This responds to the opportunity to make standardized event operations a recognized operating standard and to the threat of relationship deterioration from unclear responsibilities or inconsistent information.",
+                "target_section": "customer_relationships",
+                "target_card_text": "Shared booking and promotion checklists that keep responsibilities and changes visible",
+                "opposite_side_impact": "Clearer execution should reduce cancellations, disputes, and unreliable event information, protecting booking and ticketing revenue. On the cost side, it makes support and dispute-resolution work more repeatable."
+              },
+              {
+                "action": "raise",
+                "new_text": "Trust data with mandatory post-gig reviews, verified venue references, attendance results, reliability records, and completeness scores for every active band and venue",
+                "rationale": "This builds on the opportunity for a defensible local trust dataset while addressing the threat that incomplete or inaccurate profiles and reviews undermine matching quality.",
+                "target_section": "key_resources",
+                "target_card_text": "Trust data: completed-gig reviews, venue references, attendance, and reliability records",
+                "opposite_side_impact": "Higher-quality trust signals improve band-venue matching and give users more confidence in booking through the platform rather than relying on informal networks. Collecting and validating the added data increases verification work and requires disciplined post-event processes."
+              },
+              {
+                "action": "reduce",
+                "new_text": "Recruit and activate one dense neighborhood cluster at a time through venue, artist-community, and local-media partners rather than citywide paid acquisition",
+                "rationale": "This reduces the cost-growth risk from broad multi-sided marketplace activation while using the opportunity to accelerate discovery through local media, curators, and community partners.",
+                "target_section": "key_activities",
+                "target_card_text": "Recruit and activate enough local venues, bands, and fans in a launch geography",
+                "opposite_side_impact": "A denser launch cluster can improve match liquidity, local discovery, and repeat attendance before the platform expands to additional areas. It reduces acquisition spending and support complexity, though it temporarily limits the breadth of available inventory."
+              },
+              {
+                "action": "create",
+                "new_text": "Group ticket holds that let friends reserve a shared weeknight plan before each person completes payment",
+                "rationale": "This creates a differentiated conversion feature from the opportunity to use shareable links and group-chat sharing for affordable weeknight plans with friends.",
+                "target_section": "value_propositions",
+                "target_card_text": null,
+                "opposite_side_impact": "Group holds can turn social sharing into more completed ticket purchases and more predictable attendance for venues and bands. They add ticket-inventory reservation, expiry, and payment-reconciliation requirements on the cost side."
+              }
+            ],
+            "swot_id": "3e122b45-08f4-5127-a8f0-31981d6f42af",
+            "canvas_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "to_version": 2,
+            "from_version": 1,
+            "result_canvas_id": "4644a5a5-b284-5c72-a99d-d1f61a0503fe"
+          }
+        },
+        {
+          "id": "4644a5a5-b284-5c72-a99d-d1f61a0503fe",
+          "type": "canvas",
+          "data": {
+            "id": "4644a5a5-b284-5c72-a99d-d1f61a0503fe",
+            "version": 2,
+            "group_id": "ca90dc4f-07c3-5b89-8d8b-97cc0a6ce303",
+            "sections": {
+              "channels": [
+                {
+                  "id": "5fe38d95-5c75-5ccc-a09a-7fcfd101364a",
+                  "text": "Mobile self-service marketplace for venue slots, artist applications, and booking confirmation",
+                  "errc_marker": null
+                },
+                {
+                  "id": "94164775-95d3-5655-8d58-e0254514553e",
+                  "text": "Personalized local show feed with genre, venue, artist, and location filters, plus weekly recommendations and instant alerts for followed artists and nearby quiet-night shows",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "e13b2a52-b950-517b-8ff9-a7b6193b9e4c",
+                  "text": "Shareable event links, group-chat sharing, and venue or artist social promotion",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3850d872-b3c7-53d4-8e4e-58162145c2d7",
+                  "text": "Ticket confirmations, calendar reminders, and alerts for changes, availability, and followed artists",
+                  "errc_marker": null
+                }
+              ],
+              "key_resources": [
+                {
+                  "id": "7ebb6111-c7a9-523f-9439-b2b13a3a4082",
+                  "text": "Verified multi-sided database of bands, venues, local shows, and fan preferences",
+                  "errc_marker": null
+                },
+                {
+                  "id": "016fc495-ea57-5528-a747-7f899f076392",
+                  "text": "Standardized booking-terms, cancellation, payment, and ticket-allocation workflow",
+                  "errc_marker": null
+                },
+                {
+                  "id": "35a0c162-1942-5c04-9431-f356c17b23cd",
+                  "text": "Ticketing, mobile entry, ticket-scan, and event-update infrastructure",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3fc99a70-3d8b-54a9-9395-ecdf106e3df8",
+                  "text": "Trust data with mandatory post-gig reviews, verified venue references, attendance results, reliability records, and completeness scores for every active band and venue",
+                  "errc_marker": "raise"
+                }
+              ],
+              "cost_structure": [
+                {
+                  "id": "d45bccbd-9e2c-5bc4-a56a-fa9cc243e1ae",
+                  "text": "Platform development, hosting, matching, ticketing, and mobile-entry operations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "b1daf025-98ba-55c0-acc5-2ffaa74dfb54",
+                  "text": "Payment processing, ticket delivery, refunds, and transaction support costs",
+                  "errc_marker": null
+                },
+                {
+                  "id": "1e0ad10a-b3ee-521d-b78b-577db5f1c8a7",
+                  "text": "Local supply acquisition and marketplace activation for venues, bands, and fans",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3add9409-5630-585a-92b0-7d6c48f94a47",
+                  "text": "Verification, customer support, dispute resolution, and trust-and-safety operations",
+                  "errc_marker": null
+                }
+              ],
+              "key_activities": [
+                {
+                  "id": "909f7f63-3870-58db-a107-3cb53af35d7e",
+                  "text": "Recruit and activate one dense neighborhood cluster at a time through venue, artist-community, and local-media partners rather than citywide paid acquisition",
+                  "errc_marker": "reduce"
+                },
+                {
+                  "id": "baabef45-027e-5ccb-bafa-f1f372406505",
+                  "text": "Match artists and quiet-night slots using fit, availability, technical, and reliability signals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "03ff629e-52b9-58c8-9d39-99be086eef73",
+                  "text": "Operate transparent booking, ticketing, refunds, event updates, and mobile entry",
+                  "errc_marker": null
+                },
+                {
+                  "id": "82be7c0f-1fec-59a7-aed9-fc07560d322d",
+                  "text": "Verify profiles, moderate reviews, resolve disputes, and maintain reliable event information",
+                  "errc_marker": null
+                }
+              ],
+              "revenue_streams": [
+                {
+                  "id": "0fc2bffc-1a8c-537f-bce5-559faf52e58d",
+                  "text": "Mid-market booking transaction fees on confirmed band-venue bookings",
+                  "errc_marker": null
+                },
+                {
+                  "id": "2a3365e2-9a07-5cc8-8887-aed5b16bf54e",
+                  "text": "Mid-market venue plans or completed-booking fees for act discovery and booking administration",
+                  "errc_marker": null
+                },
+                {
+                  "id": "ec5c3c0f-8414-58b5-a608-5b7e5fe71434",
+                  "text": "Low-cost, transparent ticket service fees included in the fan’s all-in ticket price",
+                  "errc_marker": null
+                },
+                {
+                  "id": "4fc6c6c0-cb16-5d22-af05-01a710b2c2e3",
+                  "text": "Ticketing transaction fees on sales processed for platform-listed shows",
+                  "errc_marker": null
+                }
+              ],
+              "key_partnerships": [
+                {
+                  "id": "6f5bad45-5714-5d4a-9291-f98808f1b994",
+                  "text": "Independent venues supplying bookable quiet-night slots and event updates",
+                  "errc_marker": null
+                },
+                {
+                  "id": "eb0e8ebc-64bb-5037-ad46-58f4449094b5",
+                  "text": "Local bands and artist communities contributing profiles, availability, and live media",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a6341a65-beca-56b3-8883-77aed67bd249",
+                  "text": "Payment processors and ticket-scanning providers for checkout, payouts, and entry",
+                  "errc_marker": null
+                },
+                {
+                  "id": "89df55df-898f-53d1-9e9b-2b04c5a4ff10",
+                  "text": "Local music media, curators, and community partners expanding fan discovery",
+                  "errc_marker": null
+                }
+              ],
+              "customer_segments": [
+                {
+                  "id": "88e2e9fa-22f0-5682-9faf-288312cb603d",
+                  "text": "Early-stage independent local bands seeking reliable, paid, well-matched performance slots",
+                  "errc_marker": null
+                },
+                {
+                  "id": "43440246-a607-5153-ab91-0df217b1ccda",
+                  "text": "Independent venue managers filling underused weeknight capacity profitably",
+                  "errc_marker": null
+                },
+                {
+                  "id": "1310fe08-e2e3-521b-b8ad-bc89ac0a6934",
+                  "text": "Urban local-music fans seeking affordable, trustworthy weeknight plans with friends",
+                  "errc_marker": null
+                }
+              ],
+              "value_propositions": [
+                {
+                  "id": "eab07507-f0de-5994-95e2-0733185745fe",
+                  "text": "Verified venue opportunities matched to band genre, availability, technical needs, and minimum terms",
+                  "errc_marker": null
+                },
+                {
+                  "id": "0c5fbd7d-2e95-5303-9d54-33d4c3337720",
+                  "text": "Standardized booking records covering set time, pay, ticket split, promotion, equipment, and cancellations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "9fd9c321-d69a-51e4-b75c-3db1e87a0c8d",
+                  "text": "Quiet-night programming tools with vetted acts, shared promotion, and attendance performance signals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "3cb83d1c-5355-535c-8827-31c4dcc4c71a",
+                  "text": "Trusted local show discovery and all-in mobile ticketing with current event details and alerts",
+                  "errc_marker": null
+                },
+                {
+                  "id": "24076486-768e-5fa7-ad7f-34afe13569e5",
+                  "text": "Group ticket holds that let friends reserve a shared weeknight plan before each person completes payment",
+                  "errc_marker": "create"
+                }
+              ],
+              "customer_relationships": [
+                {
+                  "id": "3392e1de-ab2e-5e0b-8924-96930092db97",
+                  "text": "Self-service profiles, filters, applications, and booking workflows for bands and venues",
+                  "errc_marker": null
+                },
+                {
+                  "id": "4253470f-ccf2-577b-9eb9-17bc316fc7b0",
+                  "text": "Transparent, mutual completed-gig reviews covering reliability, payment, promotion, and production quality",
+                  "errc_marker": null
+                },
+                {
+                  "id": "55c39682-c854-5a41-8049-d7dd5594452e",
+                  "text": "Shared booking and promotion checklists with required owner assignments, due dates, completion confirmation, and change alerts for every confirmed show",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "de9195f4-d33d-5101-8d30-4680c49a01ba",
+                  "text": "In-app support and dispute handling for late payment, cancellations, or unclear terms",
+                  "errc_marker": null
+                }
+              ]
+            },
+            "is_generated": false,
+            "empathy_map_ids": [
+              "247e0ea2-4757-5a8a-9b14-c0884396ee6f",
+              "192f6754-4e89-5d1a-b90a-a59a539c04cc",
+              "acdf5ab6-b4b9-5812-8eac-36f12911940d"
+            ],
+            "previous_version_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51"
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:52:02.532504Z",
+      "finishedAt": "2026-10-10T20:52:55.481057Z",
+      "finalVersion": 1,
+      "finalCanvasId": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+      "finalSwotId": "3e122b45-08f4-5127-a8f0-31981d6f42af"
+    },
+    {
+      "id": "01a12796-475e-765d-bf05-cfeaa179fac3",
+      "stage": "storytelling",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "swot_errc_cycle": [
+          "01a12796-475e-765d-bf05-cfe9ffb27ffd"
+        ]
+      },
+      "attemptId": "01a12797-1645-74ed-b7e4-29f9eaaed4e1",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "b8fe65db-6e1a-5a9d-873b-bab9b336064a",
+          "type": "storytelling",
+          "data": {
+            "id": "b8fe65db-6e1a-5a9d-873b-bab9b336064a",
+            "goal": "pitching_investors",
+            "format": "text_and_image",
+            "canvas_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "perspective": "customer",
+            "narrative_text": "On Tuesday evening after her café shift, Maya Torres needs a paid local date next month for her four-piece indie-pop band. Finding one normally means chasing scattered posts, unanswered messages, and informal contacts. Even when a venue responds, she may not know whether its room, audience, equipment, pay, or ticket expectations justify coordinating four musicians’ day jobs, rehearsals, and transport.\n\nShe opens the mobile marketplace and filters active venue opportunities by weekday availability, indie-pop fit, capacity, backline, and minimum terms. A brewery’s quiet Thursday slot appears with a verified profile: a 90-person room, usable PA, a 45-minute set, a fixed fee, a defined ticket split, and stated promotion and cancellation terms.\n\nMaya sends her saved profile rather than rebuilding a pitch. It includes the band’s live footage, technical needs, availability, and past-show information. The venue accepts, and a standardized booking record makes the set time, payment, ticket allocation, equipment, promotion duties, and cancellation handling visible to both sides. Shared checklists reduce the risk that either party misses a commitment; completed-gig reviews give Maya a basis for trusting the venue and, after the show, strengthen her own reliability record.\n\nThe confirmed booking generates a ticket page. Maya shares its link with followers and through group chats, while fans see current show details and an all-in mobile ticket price. Ticket confirmations, reminders, and event-change alerts make attendance easier; ticket scans and attendance records also give the venue and band a clearer view of the night’s result.\n\nMaya pays no vague administrative cost for this clarity; the platform earns a transaction fee when her band-venue booking is confirmed. It also earns venue-plan or completed-booking fees for discovery and administration, plus transparent ticket service and transaction fees on tickets sold. The model depends on verified venue slots, band profiles and live media, and trust data, supported by payment and ticket-scanning partners. Its ongoing work is to activate local supply and demand, match fit and availability, operate booking and entry, and handle verification, updates, refunds, and disputes.",
+            "canvas_references": [
+              {
+                "note": "Maya represents an early-stage independent local band seeking reliable, paid, well-matched performance slots.",
+                "section": "customer_segments"
+              },
+              {
+                "note": "The story uses verified matched venue opportunities, standardized booking records, and trusted show ticketing.",
+                "section": "value_propositions"
+              },
+              {
+                "note": "Maya finds the opportunity through the mobile marketplace and shares the resulting ticket page through event links and group chats.",
+                "section": "channels"
+              },
+              {
+                "note": "Saved self-service profiles, shared booking checklists, mutual completed-gig reviews, and visible terms support the booking.",
+                "section": "customer_relationships"
+              },
+              {
+                "note": "The narrative identifies booking transaction fees, venue fees or plans, and ticket service and transaction fees.",
+                "section": "revenue_streams"
+              },
+              {
+                "note": "Verified marketplace data, booking workflows, ticketing and scanning infrastructure, and trust records make the experience possible.",
+                "section": "key_resources"
+              },
+              {
+                "note": "The platform activates the local marketplace, matches slots and artists, operates booking and ticketing, and manages verification, updates, refunds, and disputes.",
+                "section": "key_activities"
+              },
+              {
+                "note": "Independent venues, local bands, payment processors, and ticket-scanning providers support supply, checkout, payouts, and entry.",
+                "section": "key_partnerships"
+              },
+              {
+                "note": "The operational work described rests on platform and mobile-entry operations, payment and refund support, local marketplace activation, and trust-and-safety support costs.",
+                "section": "cost_structure"
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:52:55.493462Z",
+      "finishedAt": "2026-10-10T20:53:02.986578Z"
+    },
+    {
+      "id": "01a12796-475e-765d-bf05-cfeb57f2d371",
+      "stage": "future_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "swot_errc_cycle": [
+          "01a12796-475e-765d-bf05-cfe9ffb27ffd"
+        ]
+      },
+      "attemptId": "01a12797-1646-707e-819f-d41f9dfad437",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "036ea538-86fe-5fcd-9507-8ddabdce379d",
+          "type": "future_scenario",
+          "data": {
+            "id": "036ea538-86fe-5fcd-9507-8ddabdce379d",
+            "variants": [
+              {
+                "name": "Weeknight Revival",
+                "narrative": "Independent venues preserve quiet-night capacity and use programming to drive food-and-drink revenue. Fans increasingly seek affordable local weekday plans and reliably purchase tickets in advance. Payment and marketplace rules remain manageable, allowing the platform to process bookings, ticketing, refunds, and payouts with limited compliance friction.",
+                "adaptation_questions": [
+                  {
+                    "section": "value_propositions",
+                    "question": "How should the value proposition evolve if venues and fans increasingly value repeatable, ticketed weeknight programming rather than one-off event listings?"
+                  },
+                  {
+                    "section": "revenue_streams",
+                    "question": "Which mix of venue plans, booking fees, and ticketing fees would best capture value when recurring quiet-night shows generate both repeat bookings and repeat ticket sales?"
+                  },
+                  {
+                    "section": "key_activities",
+                    "question": "Which matching, attendance-analysis, and promotion activities would create the strongest advantage in making successful weeknight formats repeatable?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "What role should ongoing programming support, shared promotion checklists, and completed-gig reviews play in retaining high-performing venues and bands?"
+                  }
+                ]
+              },
+              {
+                "name": "Capacity Without Demand",
+                "narrative": "Venues continue to have underused weekday capacity and want affordable acts, but fans become more selective about paid local shows and often decide at the last minute. Advance ticket sales are inconsistent, making attendance outcomes volatile even when bands and venues can be matched. Payment and payout operations remain relatively straightforward.",
+                "adaptation_questions": [
+                  {
+                    "section": "customer_segments",
+                    "question": "How would the priority and needs of urban local-music fans change if they primarily choose shows at the last minute rather than committing to weekday plans in advance?"
+                  },
+                  {
+                    "section": "channels",
+                    "question": "How should the personalized show feed, group sharing, and alerts function if conversion depends on timely same-day discovery rather than advance purchase?"
+                  },
+                  {
+                    "section": "value_propositions",
+                    "question": "What would the venue value proposition need to emphasize when filling quiet-night capacity matters more than generating dependable advance ticket revenue?"
+                  },
+                  {
+                    "section": "revenue_streams",
+                    "question": "How should revenue streams perform if low and unpredictable ticket volume reduces ticketing-fee income while venue demand for booking support remains?"
+                  },
+                  {
+                    "section": "cost_structure",
+                    "question": "Which support, refund, promotion, and fan-acquisition costs become most difficult to sustain when attendance is volatile and ticket revenue is weak?"
+                  }
+                ]
+              },
+              {
+                "name": "Compliance Squeeze",
+                "narrative": "Venue quiet-night supply and fan interest remain sufficient for local shows, but stricter rules from regulators, banks, or payment providers increase requirements for identity checks, safeguarding funds, refunds, chargebacks, and artist payouts. Transaction operations become slower and more expensive, and failures in compliance or payment handling can quickly damage trust among venues, bands, and fans.",
+                "adaptation_questions": [
+                  {
+                    "section": "key_partnerships",
+                    "question": "Which payment-processing and ticket-scanning partnerships would be most resilient if payout, refund, identity-verification, and funds-handling requirements become stricter?"
+                  },
+                  {
+                    "section": "key_resources",
+                    "question": "Which booking, payment, verification, and audit records would become critical resources under more demanding marketplace-payment rules?"
+                  },
+                  {
+                    "section": "key_activities",
+                    "question": "How would verification, payout administration, refund handling, and dispute resolution need to operate if compliance scrutiny and chargeback risk increase?"
+                  },
+                  {
+                    "section": "cost_structure",
+                    "question": "How would compliance, verification, payment-processing, refund, and customer-support costs change under stricter transaction rules?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "What role should proactive communication about payout timing, refunds, cancellations, and data verification play in preserving trust during more complex payment operations?"
+                  }
+                ]
+              },
+              {
+                "name": "Fragmented Local Scene",
+                "narrative": "Independent venues reduce paid quiet-night programming because margins are tight, while fans also limit paid weekday outings and use free events, social platforms, or home entertainment more often. At the same time, payment rules become more demanding, raising the cost of handling the smaller volume of bookings and tickets that remains. Direct venue-band arrangements become especially attractive relative to a full-service marketplace.",
+                "adaptation_questions": [
+                  {
+                    "section": "value_propositions",
+                    "question": "What would the platform's value proposition need to look like when both bookable venue inventory and paid fan demand are scarce, while direct informal arrangements remain available?"
+                  },
+                  {
+                    "section": "key_resources",
+                    "question": "Which elements of the verified local database and trust data would remain strategically valuable when transaction volume is low and venue participation is fragmented?"
+                  },
+                  {
+                    "section": "revenue_streams",
+                    "question": "How would the platform make money if both confirmed bookings and ticket sales decline while payment-compliance costs rise?"
+                  },
+                  {
+                    "section": "key_partnerships",
+                    "question": "Which venue, artist-community, local-media, and payment partnerships would be most important to maintain access to scarce inventory and fan attention?"
+                  },
+                  {
+                    "section": "cost_structure",
+                    "question": "Which fixed platform, activation, trust-and-safety, and transaction-compliance costs would become unsustainable if local activity remains fragmented?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "How would dispute handling, reliability records, and transparent booking workflows need to demonstrate enough value to prevent bands and venues from returning to direct outreach?"
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "uncertainty_drivers": [
+              "Whether independent venues retain enough discretionary budget and quiet-night capacity to program paid local acts",
+              "Whether fans sustain willingness to buy tickets for weekday local shows rather than relying on free, last-minute, or at-home alternatives",
+              "Whether regulation and payment-industry rules make marketplace-held funds, refunds, and artist payouts materially more costly or complex"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:52:55.494357Z",
+      "finishedAt": "2026-10-10T20:53:08.743238Z"
+    },
+    {
+      "id": "01a12796-475e-765d-bf05-cfec94da49ff",
+      "stage": "pitch",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "storytelling": [
+          "01a12796-475e-765d-bf05-cfeaa179fac3"
+        ],
+        "swot_errc_cycle": [
+          "01a12796-475e-765d-bf05-cfe9ffb27ffd"
+        ]
+      },
+      "attemptId": "01a12797-3396-7688-8ea5-05ed607e3167",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:pitch_risk_analysis_grounded_in_swot",
+            "severity": "warning",
+            "message": "Judge check could not run: pitch_risk_analysis_grounded_in_swot: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "d76ded9d-b9de-5d97-bcc0-543d076b9bba"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "d76ded9d-b9de-5d97-bcc0-543d076b9bba",
+          "type": "pitch",
+          "data": {
+            "id": "d76ded9d-b9de-5d97-bcc0-543d076b9bba",
+            "hook": "After a café shift, Maya needs a paid date for her indie-pop band—not another night of chasing scattered posts, unanswered messages, and unclear venue terms. She needs to know that the room, equipment, pay, ticket expectations, and cancellation terms work before coordinating four musicians’ schedules.",
+            "swot_id": "3e122b45-08f4-5127-a8f0-31981d6f42af",
+            "canvas_id": "a48502d3-b07e-5802-8a85-fba6dfeebe51",
+            "project_id": "01a12795-387a-7280-87d6-c610b8675bab",
+            "team_info_id": null,
+            "team_section": null,
+            "risk_analysis": [
+              "Bands and venues may continue arranging shows through direct outreach, personal networks, social media, and informal promotion rather than using the platform. The response is to make the workflow meaningfully clearer than informal coordination through verified opportunities, saved artist profiles, standardized terms, shared checklists, reviews, and integrated ticketing.",
+              "Fees may face pressure from competing booking, discovery, and ticketing services that offer lower prices, broader inventory, or simpler workflows. The platform addresses this through an integrated value proposition: fit- and availability-based matching, transparent booking administration, trusted show information, and low-cost transparent ticket fees.",
+              "Margins may be constrained because booking and ticket fees must cover payment processing, refunds, support, trust-and-safety, and marketplace activation. Transparent fee design and multiple revenue streams—booking fees, venue plans or completed-booking fees, and ticketing fees—help align revenue with transaction activity, while the operating model must manage processing, refund, and support costs closely.",
+              "Costs could grow ahead of transaction revenue while the platform recruits venues, bands, and fans and operates verification, dispute handling, ticketing, and entry infrastructure. The model focuses activation in a launch geography and uses self-service profiles, filters, applications, and booking workflows to support scalable participation.",
+              "Inaccurate profiles, technical requirements, availability, event details, or reviews could weaken matching and trust. The platform mitigates this through profile verification, moderation of reviews, standardized booking terms, visible responsibilities and changes, and ongoing maintenance of reliable event information.",
+              "Failures in booking, ticketing, refunds, event updates, or mobile entry would directly disrupt scheduled events and damage trust. The platform depends on ticketing, mobile-entry, event-update infrastructure and payment and ticket-scanning partners, alongside in-app support and dispute handling for cancellations, late payments, and unclear terms.",
+              "The model depends materially on independent venues for bookable quiet-night inventory and on payment and ticket-scanning providers for checkout, payouts, and entry. It mitigates this dependency by building relationships with independent venues, artist communities, and local discovery partners, while maintaining operational focus on accurate slot information and reliable transaction workflows.",
+              "Cancellations, late payments, poor matching, disappointing promotion, or unreliable event information could cause bands, venues, and fans to leave and could damage relationships across the marketplace. Clear cancellation and payment terms, shared promotion and booking checklists, mutual completed-gig reviews, alerts for changes, and dispute handling are designed to make responsibilities visible and resolve issues consistently."
+            ],
+            "storytelling_id": "b8fe65db-6e1a-5a9d-873b-bab9b336064a",
+            "business_case_id": null,
+            "business_model_summary": "The platform gives early-stage independent bands verified, well-matched paid performance opportunities; helps independent venue managers program underused weeknight capacity with vetted acts; and gives urban local-music fans trustworthy show discovery and all-in mobile ticketing. Bands and venues use a mobile marketplace to match on genre, availability, technical requirements, capacity, and minimum terms, then confirm through standardized booking records and shared checklists. Fans discover shows through a personalized local feed, shareable event links, and reminders, and buy tickets through mobile checkout and entry. Revenue comes from booking transaction fees, venue plans or completed-booking fees, and transparent ticket service and transaction fees. The model relies on verified venue slots and band profiles, trust and attendance data, booking and ticketing workflows, and payment and ticket-scanning partners.",
+            "competitive_advantages": [
+              "A multi-sided platform advantage: bands, venues, and fans reinforce one another. Better venue inventory creates more relevant opportunities for bands; confirmed shows create inventory for fans; and ticket sales and attendance signals help venues and bands assess results.",
+              "Standardized booking records replace informal, fragmented arrangements with explicit terms for set time, pay, ticket allocation, equipment, promotion responsibilities, and cancellations—reducing ambiguity before a booking is accepted.",
+              "Trust is built into the operating workflow through verified profiles, completed-gig reviews, venue references, reliability records, and shared checklists, rather than relying solely on informal local contacts.",
+              "The model combines venue booking, current event information, all-in mobile ticketing, ticket scanning, and attendance records in one local-show journey, linking booking quality to fan experience and post-show performance signals."
+            ],
+            "financial_analysis_section": null
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T20:53:02.998876Z",
+      "finishedAt": "2026-10-10T20:53:16.357345Z"
+    }
+  ]
+}

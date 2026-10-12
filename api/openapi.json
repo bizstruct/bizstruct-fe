@@ -1,0 +1,2552 @@
+{
+  "components": {
+    "schemas": {
+      "ArtifactRecord": {
+        "description": "One persisted artifact on the wire: its id, its type and its data.",
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "description": "The artifact as the persisted model dumps it (validate with `parse_artifact`).",
+            "examples": [
+              {
+                "id": "0b1a2c3d",
+                "persona_name": "Tech-Savvy Millennial"
+              }
+            ],
+            "title": "Data",
+            "type": "object"
+          },
+          "id": {
+            "description": "Artifact id; derived with `derive_artifact_id`.",
+            "examples": [
+              "0b1a2c3d-4e5f-5a6b-8c7d-9e0f1a2b3c4d"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ArtifactType",
+            "description": "Which persisted model `data` follows.",
+            "examples": [
+              "canvas"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "data"
+        ],
+        "title": "ArtifactRecord",
+        "type": "object"
+      },
+      "ArtifactType": {
+        "description": "The 14 persisted artifact models. `swot` and `errc` both belong to the\n`swot_errc_cycle` stage.",
+        "enum": [
+          "brief",
+          "empathy_map",
+          "customer_scenario",
+          "ideation",
+          "patterns",
+          "canvas",
+          "swot",
+          "errc",
+          "storytelling",
+          "future_scenario",
+          "pitch",
+          "team_info",
+          "business_case",
+          "environment_scan"
+        ],
+        "title": "ArtifactType",
+        "type": "string"
+      },
+      "Body_login_api_auth_login_post": {
+        "properties": {
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          },
+          "grant_type": {
+            "anyOf": [
+              {
+                "pattern": "password",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "default": "",
+            "title": "Scope",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_api_auth_login_post",
+        "type": "object"
+      },
+      "ChangePasswordRequest": {
+        "description": "Model for changing a user's password.",
+        "properties": {
+          "current_password": {
+            "description": "Current plaintext password",
+            "examples": [
+              "currentpassword123"
+            ],
+            "maxLength": 128,
+            "minLength": 8,
+            "strip_whitespace": true,
+            "title": "Current Password",
+            "type": "string"
+          },
+          "new_password": {
+            "description": "New plaintext password to be hashed",
+            "examples": [
+              "newsecurepassword456"
+            ],
+            "maxLength": 128,
+            "minLength": 8,
+            "strip_whitespace": true,
+            "title": "New Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "title": "ChangePasswordRequest",
+        "type": "object"
+      },
+      "ConsistencyReport": {
+        "description": "Result of running one or more rules against a set of artifacts.",
+        "properties": {
+          "score": {
+            "description": "1 (severely inconsistent) to 5 (fully consistent). How the caller derives this from `violations` (e.g. from a judge model, or from counting errors) is not fixed here.",
+            "examples": [
+              4
+            ],
+            "maximum": 5,
+            "minimum": 1,
+            "title": "Score",
+            "type": "integer"
+          },
+          "violations": {
+            "items": {
+              "$ref": "#/components/schemas/ConsistencyViolation"
+            },
+            "title": "Violations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "score"
+        ],
+        "title": "ConsistencyReport",
+        "type": "object"
+      },
+      "ConsistencyViolation": {
+        "description": "One thing a rule found wrong, or worth flagging, between artifacts.",
+        "properties": {
+          "artifact_ids": {
+            "description": "ids of the specific artifact instances involved, so the caller can point the user at them.",
+            "examples": [
+              [
+                "patterns_001",
+                "customer_scenario_001",
+                "customer_scenario_002"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Artifact Ids",
+            "type": "array"
+          },
+          "message": {
+            "description": "Human-readable explanation, specific enough to act on.",
+            "examples": [
+              "Patterns tags MULTI_SIDED_PLATFORM, but none of the CustomerScenario instances for this project has interdependence_signal=True."
+            ],
+            "title": "Message",
+            "type": "string"
+          },
+          "rule_id": {
+            "description": "Which rule raised this (matches ConsistencyRule.id).",
+            "examples": [
+              "multi_sided_requires_signal"
+            ],
+            "title": "Rule Id",
+            "type": "string"
+          },
+          "severity": {
+            "description": "'error': the artifacts are actually inconsistent. 'warning': plausible but worth a second look (mainly reserved for judge-model results, not deterministic rules, which should mostly raise errors precisely because they're checking a hard condition).",
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "examples": [
+              "error"
+            ],
+            "title": "Severity",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule_id",
+          "severity",
+          "message",
+          "artifact_ids"
+        ],
+        "title": "ConsistencyViolation",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "description": "Standard error response payload.",
+        "properties": {
+          "detail": {
+            "description": "A human-readable description of the error",
+            "examples": [
+              "User with identifier '01920b7a-...' was not found"
+            ],
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "GenerationRequest": {
+        "additionalProperties": false,
+        "description": "Schema for creating a project and starting its generation.",
+        "properties": {
+          "autoApprove": {
+            "default": false,
+            "description": "Approve rows with error-level consistency violations automatically instead of waiting for a user decision",
+            "title": "Autoapprove",
+            "type": "boolean"
+          },
+          "enabledOptional": {
+            "description": "Optional stages to generate: business_case and/or environment_scan",
+            "examples": [
+              [
+                "environment_scan"
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Enabledoptional",
+            "type": "array"
+          },
+          "idea": {
+            "description": "Detailed unstructured business idea description",
+            "examples": [
+              "An automated AI-powered recruitment platform designed to screen candidates, schedule interviews, and provide predictive performance analytics for remote tech companies."
+            ],
+            "maxLength": 2000,
+            "minLength": 50,
+            "title": "Idea",
+            "type": "string"
+          },
+          "language": {
+            "$ref": "#/components/schemas/ProjectLanguage",
+            "description": "Generation language (immutable once set)",
+            "examples": [
+              "uk"
+            ]
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Project display name; a default is used when omitted",
+            "examples": [
+              "My SaaS Startup"
+            ],
+            "title": "Title"
+          }
+        },
+        "required": [
+          "idea",
+          "language"
+        ],
+        "title": "GenerationRequest",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "ProjectDetail": {
+        "additionalProperties": false,
+        "description": "Public representation of a project with all its rows.",
+        "properties": {
+          "autoApprove": {
+            "description": "Whether error-level violations are approved automatically",
+            "title": "Autoapprove",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "description": "Timestamp when the project was created",
+            "format": "date-time",
+            "title": "Createdat",
+            "type": "string"
+          },
+          "enabledOptional": {
+            "description": "Optional stages generated for this project",
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Enabledoptional",
+            "type": "array"
+          },
+          "id": {
+            "description": "Unique identifier of the project",
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "idea": {
+            "description": "Detailed business idea",
+            "title": "Idea",
+            "type": "string"
+          },
+          "language": {
+            "$ref": "#/components/schemas/ProjectLanguage",
+            "description": "Project generation language"
+          },
+          "rows": {
+            "description": "All rows of the project",
+            "items": {
+              "$ref": "#/components/schemas/StageRowResponse"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "status": {
+            "description": "Derived from the rows: failed if any row is in error, completed when every expected row is done, running otherwise",
+            "enum": [
+              "completed",
+              "failed",
+              "running"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "description": "Project title",
+            "title": "Title",
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Timestamp when the project was last updated",
+            "format": "date-time",
+            "title": "Updatedat",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "idea",
+          "language",
+          "enabledOptional",
+          "autoApprove",
+          "status",
+          "createdAt",
+          "updatedAt",
+          "rows"
+        ],
+        "title": "ProjectDetail",
+        "type": "object"
+      },
+      "ProjectLanguage": {
+        "enum": [
+          "uk",
+          "en"
+        ],
+        "title": "ProjectLanguage",
+        "type": "string"
+      },
+      "ProjectSnapshot": {
+        "description": "What ml (and the experiment tool) reads: project fields and all rows.",
+        "properties": {
+          "enabled_optional": {
+            "description": "Optional stages enabled for this project; the only place this is carried.",
+            "examples": [
+              [
+                "environment_scan",
+                "team_info"
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Enabled Optional",
+            "type": "array"
+          },
+          "idea": {
+            "description": "The user's business idea.",
+            "examples": [
+              "A platform that connects local farmers with consumers."
+            ],
+            "title": "Idea",
+            "type": "string"
+          },
+          "language": {
+            "description": "Generation language of the project ('uk' or 'en').",
+            "examples": [
+              "en"
+            ],
+            "title": "Language",
+            "type": "string"
+          },
+          "project_id": {
+            "description": "Project id.",
+            "examples": [
+              "project_001"
+            ],
+            "title": "Project Id",
+            "type": "string"
+          },
+          "rows": {
+            "description": "All rows of the project (or, with ?row=<id>, that row and the closure of its refs).",
+            "examples": [
+              [
+                {
+                  "artifacts": [],
+                  "id": "row_brief",
+                  "instance_index": 0,
+                  "refs": {},
+                  "retry_count": 0,
+                  "stage": "brief",
+                  "status": "done"
+                }
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/StageRow"
+            },
+            "title": "Rows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "project_id",
+          "idea",
+          "language"
+        ],
+        "title": "ProjectSnapshot",
+        "type": "object"
+      },
+      "ProjectSummary": {
+        "additionalProperties": false,
+        "description": "Public representation of a project without its rows.",
+        "properties": {
+          "autoApprove": {
+            "description": "Whether error-level violations are approved automatically",
+            "title": "Autoapprove",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "description": "Timestamp when the project was created",
+            "format": "date-time",
+            "title": "Createdat",
+            "type": "string"
+          },
+          "enabledOptional": {
+            "description": "Optional stages generated for this project",
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Enabledoptional",
+            "type": "array"
+          },
+          "id": {
+            "description": "Unique identifier of the project",
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "idea": {
+            "description": "Detailed business idea",
+            "title": "Idea",
+            "type": "string"
+          },
+          "language": {
+            "$ref": "#/components/schemas/ProjectLanguage",
+            "description": "Project generation language"
+          },
+          "status": {
+            "description": "Derived from the rows: failed if any row is in error, completed when every expected row is done, running otherwise",
+            "enum": [
+              "completed",
+              "failed",
+              "running"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "description": "Project title",
+            "title": "Title",
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "Timestamp when the project was last updated",
+            "format": "date-time",
+            "title": "Updatedat",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "idea",
+          "language",
+          "enabledOptional",
+          "autoApprove",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "title": "ProjectSummary",
+        "type": "object"
+      },
+      "ProjectUpdate": {
+        "additionalProperties": false,
+        "description": "Schema for updating an existing project.\n\nOnly the title is mutable. Attempting to modify immutable fields\nsuch as idea, language, or status triggers a 422 extra_forbidden validation error.",
+        "properties": {
+          "title": {
+            "description": "Updated project title",
+            "examples": [
+              "Renamed SaaS Startup"
+            ],
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "ProjectUpdate",
+        "type": "object"
+      },
+      "RefreshTokenRequest": {
+        "description": "Request model for refreshing access tokens.",
+        "properties": {
+          "refresh_token": {
+            "title": "Refresh Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RefreshTokenRequest",
+        "type": "object"
+      },
+      "Stage": {
+        "description": "Enum representing the different stages of a chain.",
+        "enum": [
+          "brief",
+          "empathy_map",
+          "customer_scenario",
+          "ideation",
+          "patterns",
+          "canvas",
+          "swot_errc_cycle",
+          "storytelling",
+          "future_scenario",
+          "pitch",
+          "team_info",
+          "business_case",
+          "environment_scan"
+        ],
+        "title": "Stage",
+        "type": "string"
+      },
+      "StageErrorCode": {
+        "description": "Reason a stage entered `StageStatus.ERROR`.\n\n`error` is reserved for external failures and cancellation, never for\nreaching the retry limit (that goes to `awaiting_decision` instead).",
+        "enum": [
+          "generation_failed",
+          "check_failed",
+          "queue_unavailable",
+          "canceled_by_user",
+          "stuck_timeout"
+        ],
+        "title": "StageErrorCode",
+        "type": "string"
+      },
+      "StageFailure": {
+        "description": "Why a row failed.",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/StageErrorCode",
+            "description": "Failure code.",
+            "examples": [
+              "generation_failed"
+            ]
+          },
+          "message": {
+            "description": "Human-readable explanation.",
+            "examples": [
+              "The model returned content that does not match the contract."
+            ],
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "StageFailure",
+        "type": "object"
+      },
+      "StageResult": {
+        "description": "ml -> be (hook). The final outcome of a row; ml never writes statuses.",
+        "properties": {
+          "artifacts": {
+            "description": "All artifacts of the row (for the cycle: every version). Required for success.",
+            "examples": [
+              [
+                {
+                  "data": {
+                    "id": "a1"
+                  },
+                  "id": "a1",
+                  "type": "team_info"
+                }
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/ArtifactRecord"
+            },
+            "title": "Artifacts",
+            "type": "array"
+          },
+          "attempt_id": {
+            "description": "The attempt this result belongs to.",
+            "examples": [
+              "attempt_001"
+            ],
+            "title": "Attempt Id",
+            "type": "string"
+          },
+          "consistency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsistencyReport"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The final consistency report after ml's own retries.",
+            "examples": [
+              {
+                "score": 4,
+                "violations": []
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StageFailure"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required for failed.",
+            "examples": [
+              {
+                "code": "generation_failed",
+                "message": "Invalid output."
+              }
+            ]
+          },
+          "project_id": {
+            "description": "Project id.",
+            "examples": [
+              "project_001"
+            ],
+            "title": "Project Id",
+            "type": "string"
+          },
+          "stage_row_id": {
+            "description": "The row this result is for.",
+            "examples": [
+              "row_empathy_map_0"
+            ],
+            "title": "Stage Row Id",
+            "type": "string"
+          },
+          "status": {
+            "description": "Outcome of the generation.",
+            "enum": [
+              "success",
+              "failed"
+            ],
+            "examples": [
+              "success"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "stage_row_id",
+          "attempt_id",
+          "status"
+        ],
+        "title": "StageResult",
+        "type": "object"
+      },
+      "StageRow": {
+        "description": "A stage row as be keeps it: state plus the artifacts it produced.",
+        "properties": {
+          "artifacts": {
+            "description": "Artifacts this row produced (empty until it has a result).",
+            "examples": [
+              [
+                {
+                  "data": {
+                    "id": "a1"
+                  },
+                  "id": "a1",
+                  "type": "team_info"
+                }
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/ArtifactRecord"
+            },
+            "title": "Artifacts",
+            "type": "array"
+          },
+          "attempt_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Id of the current attempt, issued by be on every attempt of its own.",
+            "examples": [
+              "attempt_001"
+            ],
+            "title": "Attempt Id"
+          },
+          "consistency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsistencyReport"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last consistency report for this row, if any.",
+            "examples": [
+              {
+                "score": 5,
+                "violations": []
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Human-readable error text, if any.",
+            "examples": [
+              "Generated content failed validation."
+            ],
+            "title": "Error"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StageErrorCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Why the row is in ERROR, if it is.",
+            "examples": [
+              "generation_failed"
+            ]
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When the row last finished.",
+            "examples": [
+              "2026-10-04T12:01:30Z"
+            ],
+            "title": "Finished At"
+          },
+          "id": {
+            "description": "Row id, assigned by be.",
+            "examples": [
+              "row_empathy_map_0"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "instance_index": {
+            "default": 0,
+            "description": "0-based order among rows of the same stage under the same parent; for empathy_map, row k covers Brief.customer_segment_candidates[k].",
+            "examples": [
+              0,
+              1
+            ],
+            "minimum": 0,
+            "title": "Instance Index",
+            "type": "integer"
+          },
+          "refs": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "description": "Upstream stage -> ids of the rows this row draws from.",
+            "examples": [
+              {
+                "empathy_map": [
+                  "row_empathy_map_0"
+                ]
+              }
+            ],
+            "propertyNames": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Refs",
+            "type": "object"
+          },
+          "retry_count": {
+            "default": 0,
+            "description": "How many retries be has counted for this row.",
+            "examples": [
+              0,
+              1
+            ],
+            "minimum": 0,
+            "title": "Retry Count",
+            "type": "integer"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/Stage",
+            "description": "The stage this row is an instance of.",
+            "examples": [
+              "empathy_map"
+            ]
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When the current attempt started.",
+            "examples": [
+              "2026-10-04T12:00:00Z"
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StageStatus",
+            "description": "Current status; only be changes it.",
+            "examples": [
+              "pending"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "stage",
+          "status"
+        ],
+        "title": "StageRow",
+        "type": "object"
+      },
+      "StageRowResponse": {
+        "additionalProperties": false,
+        "description": "Public representation of one stage row. The artifacts, the failure and\nthe consistency report are domain models and stay snake_case.",
+        "properties": {
+          "artifacts": {
+            "description": "Artifacts the row produced",
+            "items": {
+              "$ref": "#/components/schemas/ArtifactRecord"
+            },
+            "title": "Artifacts",
+            "type": "array"
+          },
+          "attemptId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Id of the current attempt",
+            "title": "Attemptid"
+          },
+          "consistency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsistencyReport"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last consistency report"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StageFailure"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Why the row is in ERROR, if it is"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When the row last finished",
+            "title": "Finishedat"
+          },
+          "id": {
+            "description": "Row id",
+            "title": "Id",
+            "type": "string"
+          },
+          "instanceIndex": {
+            "description": "0-based order among rows of the same stage under the same parent",
+            "title": "Instanceindex",
+            "type": "integer"
+          },
+          "refs": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "description": "Upstream stage -> ids of the rows this row draws from",
+            "propertyNames": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "title": "Refs",
+            "type": "object"
+          },
+          "retryCount": {
+            "description": "How many retries have been counted for this row",
+            "title": "Retrycount",
+            "type": "integer"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/Stage",
+            "description": "The stage this row is an instance of"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When the current attempt started",
+            "title": "Startedat"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StageStatus",
+            "description": "Current status of the row"
+          }
+        },
+        "required": [
+          "id",
+          "stage",
+          "instanceIndex",
+          "status",
+          "refs",
+          "attemptId",
+          "retryCount",
+          "error",
+          "consistency",
+          "artifacts",
+          "startedAt",
+          "finishedAt"
+        ],
+        "title": "StageRowResponse",
+        "type": "object"
+      },
+      "StageStatus": {
+        "description": "Lifecycle status of a single stage in the generation chain.\n\nSee `bizstruct_domain.stage_machine` for the allowed-transition table\nbetween these statuses.",
+        "enum": [
+          "pending",
+          "running",
+          "consistency_check",
+          "awaiting_decision",
+          "needs_retry",
+          "done",
+          "error"
+        ],
+        "title": "StageStatus",
+        "type": "string"
+      },
+      "TokenResponse": {
+        "description": "Response model for authentication tokens.",
+        "properties": {
+          "access_token": {
+            "title": "Access Token",
+            "type": "string"
+          },
+          "refresh_token": {
+            "title": "Refresh Token",
+            "type": "string"
+          },
+          "token_type": {
+            "default": "bearer",
+            "title": "Token Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token"
+        ],
+        "title": "TokenResponse",
+        "type": "object"
+      },
+      "UserCreate": {
+        "description": "Model for creating a new user.",
+        "properties": {
+          "email": {
+            "description": "User's email address",
+            "examples": [
+              "user@example.com"
+            ],
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User's full name",
+            "examples": [
+              "John Doe"
+            ],
+            "title": "Full Name"
+          },
+          "is_service": {
+            "default": false,
+            "description": "Indicates if the user is a service account",
+            "title": "Is Service",
+            "type": "boolean"
+          },
+          "password": {
+            "description": "Plaintext password to be hashed",
+            "examples": [
+              "securepassword123"
+            ],
+            "maxLength": 128,
+            "minLength": 8,
+            "strip_whitespace": true,
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "UserCreate",
+        "type": "object"
+      },
+      "UserResponse": {
+        "description": "Model for user data returned in responses.",
+        "properties": {
+          "created_at": {
+            "description": "Timestamp with timezone when the user was created",
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "description": "User's email address",
+            "examples": [
+              "user@example.com"
+            ],
+            "title": "Email",
+            "type": "string"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User's full name",
+            "examples": [
+              "John Doe"
+            ],
+            "title": "Full Name"
+          },
+          "id": {
+            "description": "Unique identifier for the user",
+            "examples": [
+              "018d3c1a-8c7a-7b3c-9a1d-7b2a5f1e8c9a"
+            ],
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "description": "Indicates if the user is active",
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_service": {
+            "description": "Indicates if the user is a service account",
+            "title": "Is Service",
+            "type": "boolean"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Timestamp with timezone when the user was last updated",
+            "title": "Updated At"
+          }
+        },
+        "required": [
+          "email",
+          "id",
+          "is_active",
+          "is_service",
+          "created_at"
+        ],
+        "title": "UserResponse",
+        "type": "object"
+      },
+      "UserUpdate": {
+        "description": "Model for updating user data.",
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "format": "email",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "New email address",
+            "examples": [
+              "newuser@example.com"
+            ],
+            "title": "Email"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "New full name",
+            "examples": [
+              "Jane Doe"
+            ],
+            "title": "Full Name"
+          },
+          "is_active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Indicates if the user is active",
+            "title": "Is Active"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "maxLength": 128,
+                "minLength": 8,
+                "strip_whitespace": true,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "New plaintext password to be hashed",
+            "examples": [
+              "newsecurepassword456"
+            ],
+            "title": "Password"
+          }
+        },
+        "title": "UserUpdate",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/api/auth/login"
+          }
+        },
+        "type": "oauth2"
+      }
+    }
+  },
+  "info": {
+    "description": "AI-driven business modeling SaaS backend",
+    "title": "BizStruct API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "description": "Authenticate a user and return a pair of access and refresh tokens.",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_api_auth_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Authenticate user and get tokens",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "description": "Validate a refresh token and issue a fresh pair of tokens.",
+        "operationId": "refresh_tokens_api_auth_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Refresh access token",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/generation": {
+      "post": {
+        "description": "Creates a project owned by the authenticated user with its first rows\n(the brief and the enabled optional stages), starts whatever is ready\nand returns the project. The rest of the pipeline advances on its own\nas results arrive.",
+        "operationId": "generate_project_api_generation_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create a project and start its generation",
+        "tags": [
+          "generation"
+        ]
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "description": "Retrieves paginated projects owned exclusively by the authenticated user.",
+        "operationId": "list_projects_api_projects_get",
+        "parameters": [
+          {
+            "description": "Offset items",
+            "in": "query",
+            "name": "skip",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "description": "Offset items",
+              "minimum": 0,
+              "title": "Skip",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Max items per page",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "description": "Max items per page",
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummary"
+                  },
+                  "title": "Response List Projects Api Projects Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "List current user's projects",
+        "tags": [
+          "projects"
+        ]
+      }
+    },
+    "/api/projects/{project_id}": {
+      "delete": {
+        "description": "Deletes a project owned by the current user.",
+        "operationId": "delete_project_api_projects__project_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Delete a project",
+        "tags": [
+          "projects"
+        ]
+      },
+      "get": {
+        "description": "Retrieves a single project with its rows by UUID, ensuring ownership.\n\nReading also runs the lazy watchdog: a row running for longer than the\nstuck timeout becomes an error first.",
+        "operationId": "get_project_api_projects__project_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get project details by ID",
+        "tags": [
+          "projects"
+        ]
+      },
+      "patch": {
+        "description": "Updates mutable project attributes (title only).\n\nAny attempt to modify immutable fields triggers 422 extra_forbidden.",
+        "operationId": "update_project_api_projects__project_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update project title",
+        "tags": [
+          "projects"
+        ]
+      }
+    },
+    "/api/projects/{project_id}/rows/{row_id}/approve": {
+      "post": {
+        "description": "Moves a row awaiting a decision to done, keeping its consistency report,\nand continues the pipeline. 409 if the row is not awaiting a decision.",
+        "operationId": "approve_row_api_projects__project_id__rows__row_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "row_id",
+            "required": true,
+            "schema": {
+              "title": "Row Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Approve a row that awaits a decision",
+        "tags": [
+          "projects"
+        ]
+      }
+    },
+    "/api/projects/{project_id}/rows/{row_id}/regenerate": {
+      "post": {
+        "description": "Puts the row and every dependent row back to pending (artifacts cleared,\nrow ids kept) and starts whatever is ready. 409 if the row's status does\nnot allow regeneration.",
+        "operationId": "regenerate_row_api_projects__project_id__rows__row_id__regenerate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "row_id",
+            "required": true,
+            "schema": {
+              "title": "Row Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Regenerate a row and everything that depends on it",
+        "tags": [
+          "projects"
+        ]
+      }
+    },
+    "/api/users/": {
+      "get": {
+        "operationId": "list_users_api_users__get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "skip",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Skip",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  },
+                  "title": "Response List Users Api Users  Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "List users",
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "create_user_api_users__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "operationId": "get_me_api_users_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get current logged-in user profile",
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "update_current_user_api_users_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update own profile",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/me/change-password": {
+      "post": {
+        "operationId": "change_password_api_users_me_change_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Change current user password",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/{user_id}": {
+      "get": {
+        "operationId": "get_user_by_id_api_users__user_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get user by ID",
+        "tags": [
+          "users"
+        ]
+      }
+    }
+  }
+}

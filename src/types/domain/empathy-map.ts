@@ -1,84 +1,69 @@
-// GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.9.0/schemas/empathy_map.json (bizstruct-domain@v0.9.0)
+// GENERATED FILE: do not edit. Run: pnpm sync:domain
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.17.0/schemas/empathy_map.json (bizstruct-domain@v0.17.0)
 
 /**
- * @minItems 3
- * @maxItems 6
+ * The persona's gains or desires.
+ *
+ * @minItems 1
  */
-export type Does =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type Gains = [string, ...string[]]
 /**
- * 1-based position within its section.
+ * What the persona hears from others.
+ *
+ * @minItems 1
  */
-export type Id = number
-export type Text = string
+export type Hears = [string, ...string[]]
 /**
- * @minItems 3
- * @maxItems 6
+ * Unique identifier for the empathy map.
  */
-export type Feels =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type Id = string
 /**
- * @minItems 3
- * @maxItems 6
+ * The persona's pains or frustrations.
+ *
+ * @minItems 1
  */
-export type Gains =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type Pains = [string, ...string[]]
 /**
- * @minItems 3
- * @maxItems 6
+ * Demographic information of the persona.
  */
-export type Pains =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type PersonaDemographics = string
 /**
- * @minItems 3
- * @maxItems 6
+ * Name of the persona for whom the empathy map is created.
  */
-export type Says =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type PersonaName = string
 /**
- * @minItems 3
- * @maxItems 6
+ * Identifier of the project this empathy map belongs to.
  */
-export type Thinks =
-  | [EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
-  | [EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem, EmpathyItem]
+export type ProjectId = string
+/**
+ * What the persona says and does.
+ *
+ * @minItems 1
+ */
+export type SaysAndDoes = [string, ...string[]]
+/**
+ * What the persona sees in their environment.
+ *
+ * @minItems 1
+ */
+export type Sees = [string, ...string[]]
+/**
+ * What the persona thinks and feels.
+ *
+ * @minItems 1
+ */
+export type ThinksAndFeels = [string, ...string[]]
 
-/**
- * Output of the `empathy_map` stage: the first block generated, with no
- * prior context — see bizstruct_domain.chain.STAGES.
- */
 export interface EmpathyMap {
-  does: Does
-  feels: Feels
   gains: Gains
-  pains: Pains
-  says: Says
-  thinks: Thinks
-}
-/**
- * One observation within an empathy map section.
- */
-export interface EmpathyItem {
+  hears: Hears
   id: Id
-  text: Text
+  pains: Pains
+  persona_demographics: PersonaDemographics
+  persona_name: PersonaName
+  project_id: ProjectId
+  says_and_does: SaysAndDoes
+  sees: Sees
+  thinks_and_feels: ThinksAndFeels
+  [k: string]: unknown
 }
-
-
