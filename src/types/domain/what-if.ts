@@ -1,5 +1,5 @@
 // GENERATED FILE — do not edit. Run: npm run sync:domain
-// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/bbee62baff73b4c40eadedc7a285274bf63b15c0/schemas/what_if.json (bizstruct-domain@bbee62baff73b4c40eadedc7a285274bf63b15c0)
+// Source: https://raw.githubusercontent.com/bizstruct/bizstruct-domain/v0.9.0/schemas/what_if.json (bizstruct-domain@v0.9.0)
 
 /**
  * @minItems 3
