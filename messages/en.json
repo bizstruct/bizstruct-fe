@@ -10,354 +10,282 @@
     "brand": "BizStruct AI",
     "close": "Close sidebar",
     "newProject": "New project",
-    "history": "Project history",
-    "projects": {
-      "ecoSync": "EcoSync Manufacturing",
-      "greenLogistics": "GreenLogistics UA",
-      "carbonTrack": "CarbonTrack IoT",
-      "agroEsg": "AgroESG Platform"
-    }
+    "history": "Your projects",
+    "empty": "No projects yet",
+    "signOut": "Sign out",
+    "loading": "Loading…"
   },
-  "HomePage": {
-    "hero": {
-      "title": "Structure your next project",
-      "subtitle": "Describe the idea, and AI will shape the business model, architecture, and PRD."
-    },
-    "input": {
-      "placeholder": "Enter your business idea here (for example: a service for automated CO2 tracking for factories...)",
-      "submit": "Submit idea"
-    },
-    "projects": {
-      "title": "Your active projects",
-      "items": {
-        "ecoSync": {
-          "title": "EcoSync platform",
-          "description": "AI-native ESG automation for manufacturing",
-          "status": "Q3 MVP"
-        },
-        "smartGrid": {
-          "title": "SmartGrid Automation",
-          "description": "AI-powered energy grid optimization",
-          "status": "Beta"
-        },
-        "carbonTrack": {
-          "title": "CarbonTrack IoT",
-          "description": "Direct integration with emissions sensors",
-          "status": "Planning"
-        },
-        "bioWaste": {
-          "title": "BioWaste Circular",
-          "description": "Waste management for agricultural complexes",
-          "status": "Research"
-        }
-      }
-    },
+  "Auth": {
+    "loginTitle": "Sign in",
+    "registerTitle": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Name (optional)",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?",
+    "passwordHint": "At least 8 characters",
     "errors": {
-      "unexpected": "An unexpected error occurred"
+      "invalid": "Wrong email or password",
+      "exists": "An account with this email already exists",
+      "generic": "Something went wrong. Try again.",
+      "unreachable": "The server is unreachable",
+      "validation": "Check the email and the password (8+ characters)"
     }
   },
-  "Generation": {
-    "title": "Generating business models",
-    "subtitle": "AI is sequentially analyzing the idea and forming several strategic options.",
-    "stages": {
-      "analyzing": {
-        "title": "Analyzing the input idea...",
-        "description": "Evaluating context, market signals and potential risks."
-      },
-      "structuring": {
-        "title": "Market and competitor analysis...",
-        "description": "Structuring business logic, audience, and monetization channels."
-      },
-      "generatingModels": {
-        "title": "Generating business model architectures...",
-        "description": "Forming multiple variants with different strengths."
-      }
-    }
-  },
-  "ModelSelection": {
-    "label": "Business model options",
-    "title": "Choose the strongest concept",
-    "fields": {
-      "targetAudience": "Target audience",
-      "valueProposition": "Value proposition",
-      "description": "Description",
-      "keyMetric": "Key metric",
-      "timeToValue": "Time to value",
-      "score": "Viability score",
-      "scoreRationale": "Why this score"
-    },
-    "selectModel": "Select this model",
-    "regenerate": "Regenerate",
-    "validate": "Validate",
-    "validating": "Validating…",
-    "editHint": "Click to edit",
-    "prevAriaLabel": "Previous",
-    "nextAriaLabel": "Next",
-    "goToModelAriaLabel": "Go to model {n}",
+  "Home": {
+    "title": "Structure your next business idea",
+    "subtitle": "Describe the idea. The pipeline builds the brief, the segments, the business model canvas, the SWOT/ERRC cycle and the pitch.",
+    "ideaLabel": "Your idea",
+    "ideaPlaceholder": "An app that delivers boxes of fresh produce from local farms to busy city parents…",
+    "counter": "{count} / {max} characters (at least {min})",
+    "language": "Generation language",
+    "languageUk": "Ukrainian",
+    "languageEn": "English",
+    "optional": "Optional stages",
+    "advanced": "Advanced",
+    "autoApprove": "Approve automatically",
+    "autoApproveHint": "Rows with consistency errors continue without waiting for you",
+    "submit": "Start generation",
+    "submitting": "Starting…",
     "errors": {
-      "kind": {
-        "not_found": "This project no longer exists.",
-        "validation": "The server rejected this data.",
-        "server": "The server returned an error.",
-        "network": "Could not reach the server.",
-        "timeout": "The request timed out.",
-        "config": "The app is misconfigured."
-      },
-      "selectFailed": "Could not save your selection.",
-      "saveFailed": "Could not save your changes.",
-      "regenerateFailed": "Could not regenerate models.",
-      "validateRequestFailed": "Could not start validation.",
-      "retry": "Retry"
+      "tooShort": "The idea must be at least {min} characters",
+      "tooLong": "The idea must be at most {max} characters",
+      "generic": "Could not start the generation"
+    },
+    "projectsTitle": "Your projects",
+    "noProjects": "No projects yet. Start with an idea above.",
+    "loadError": "Could not load the projects",
+    "created": "Created"
+  },
+  "Status": {
+    "project": {
+      "running": "In progress",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "row": {
+      "pending": "Waiting",
+      "running": "Running",
+      "consistency_check": "Checking",
+      "awaiting_decision": "Needs your decision",
+      "needs_retry": "Needs retry",
+      "done": "Done",
+      "error": "Error"
     }
   },
-  "WorkspacePage": {
-    "status": {
-      "draft": "Draft"
-    },
-    "projectWorkspace": "Project Workspace",
-    "views": {
-      "empathy": "Empathy Map",
-      "scenario": "User Scenario",
-      "whatIf": "What-If",
+  "Stages": {
+    "brief": "Brief",
+    "empathy_map": "Empathy map",
+    "customer_scenario": "Customer scenario",
+    "ideation": "Ideation",
+    "patterns": "Patterns",
+    "canvas": "Business model canvas",
+    "swot_errc_cycle": "SWOT / ERRC cycle",
+    "storytelling": "Storytelling",
+    "future_scenario": "Future scenarios",
+    "pitch": "Pitch",
+    "team_info": "Team",
+    "business_case": "Business case",
+    "environment_scan": "Environment scan"
+  },
+  "ErrorCodes": {
+    "generation_failed": "Generation failed",
+    "check_failed": "Consistency check failed",
+    "queue_unavailable": "The queue is unavailable",
+    "canceled_by_user": "Canceled",
+    "stuck_timeout": "Timed out"
+  },
+  "Project": {
+    "tabs": {
+      "progress": "Progress",
+      "brief": "Brief",
+      "segments": "Segments",
+      "patterns": "Patterns",
       "canvas": "Canvas",
-      "architecture": "Architecture",
-      "hypotheses": "Hypothesis Map",
+      "swot": "SWOT / ERRC",
+      "story": "Storytelling",
+      "future": "Future",
       "pitch": "Pitch"
-    }
+    },
+    "loading": "Loading the project…",
+    "notFound": "Project not found",
+    "loadError": "Could not load the project",
+    "live": "Updating every 4 seconds",
+    "stopped": "Generation finished",
+    "back": "All projects",
+    "notReady": "This part is not generated yet",
+    "language": "Language"
   },
-  "EmpathyView": {
-    "title": "Empathy Map",
-    "subtitle": "Target audience: Corporate Env Manager",
+  "Progress": {
+    "title": "Pipeline",
+    "instance": "#{n}",
+    "retries": "retries: {n}",
+    "duration": "{s} s",
+    "violations": "Consistency",
+    "score": "score {n}/5",
+    "rule": "Rule",
+    "severity": {
+      "error": "error",
+      "warning": "warning"
+    },
+    "noViolations": "No violations",
+    "dependsOn": "after {stages}",
+    "errorTitle": "Error",
+    "noRows": "not created yet",
+    "optionalBadge": "optional"
+  },
+  "Actions": {
+    "approve": "Approve",
     "regenerate": "Regenerate",
-    "save": "Save",
-    "saved": "Saved!",
-    "empty": "Empty — click + to add",
-    "newItem": "New item",
-    "categories": {
-      "says": "What says (Says)",
-      "thinks": "What thinks (Thinks)",
-      "does": "What does (Does)",
-      "feels": "What feels (Feels)",
+    "retry": "Retry",
+    "delete": "Delete project",
+    "cancel": "Cancel",
+    "working": "Working…",
+    "failed": "The action failed",
+    "conflict": "This is no longer possible for the row (it changed). The page was refreshed."
+  },
+  "Regenerate": {
+    "title": "Regenerate this row?",
+    "body": "“{stage}” will be generated again. Its current result is discarded.",
+    "dependents": "These rows depend on it and will be reset too:",
+    "none": "No other rows depend on it.",
+    "confirm": "Regenerate"
+  },
+  "Delete": {
+    "title": "Delete this project?",
+    "body": "The project and everything generated for it will be removed. This cannot be undone.",
+    "confirm": "Delete"
+  },
+  "Views": {
+    "brief": {
+      "summary": "Idea summary",
+      "industry": "Industry",
+      "segments": "Customer segment candidates",
+      "resources": "Existing resources",
+      "gaps": "Gaps",
+      "monetization": "Monetization hint",
+      "none": "none"
+    },
+    "empathy": {
+      "segment": "Segment",
+      "persona": "Persona",
+      "demographics": "Demographics",
+      "sees": "Sees",
+      "hears": "Hears",
+      "thinksAndFeels": "Thinks and feels",
+      "saysAndDoes": "Says and does",
       "pains": "Pains",
       "gains": "Gains"
-    }
-  },
-  "CanvasView": {
-    "title": "Business Model Canvas",
-    "loadError": "Could not load the canvas from the server.",
-    "retry": "Retry",
-    "generatingLock": "The project is still generating — editing is disabled until it finishes.",
-    "generatePitch": "Generate Pitch",
-    "empty": "Empty",
-    "save": "Save",
-    "saving": "Saving…",
-    "saved": "Saved",
-    "newItemPlaceholder": "Type and click Save…",
-    "regenerate": "Regenerate",
-    "regenerating": "Regenerating…",
-    "validateBtn": "Validate",
-    "validating": "Validating…",
-    "validated": "Validated",
-    "validateFailed": "Invalid",
-    "legend": {
-      "new": "New",
-      "modified": "Modified",
-      "reordered": "Reordered",
-      "pendingDelete": "Pending delete"
     },
-    "sections": {
-      "keyPartners": "Key Partners",
-      "keyActivities": "Key Activities",
-      "keyResources": "Key Resources",
-      "valuePropositions": "Value Propositions",
-      "customerRelationships": "Customer Relationships",
-      "channels": "Channels",
-      "customerSegments": "Customer Segments",
-      "costStructure": "Cost Structure",
-      "revenueStreams": "Revenue Streams"
-    }
-  },
-  "HypothesesView": {
-    "title": "Hypothesis Mapping · Importance vs Evidence",
-    "save": "Save",
-    "saving": "Saving…",
-    "saved": "Saved",
-    "syncCanvas": "Sync Canvas",
-    "addItem": "Add item",
-    "newItemPlaceholder": "Describe your hypothesis…",
-    "confirm": "Add",
-    "cancel": "Cancel",
-    "dragToReclassify": "Drag to reclassify",
-    "dropHere": "Drop here",
-    "axis": {
-      "importance": "IMPORTANCE",
-      "evidence": "EVIDENCE",
-      "high": "HIGH",
-      "low": "LOW"
+    "scenario": {
+      "title": "Customer scenario",
+      "narrative": "Situation",
+      "channel": "Channel",
+      "relationship": "Relationship",
+      "pricing": "Pricing tier",
+      "interdependence": "Interdependence signal",
+      "yes": "yes",
+      "no": "no",
+      "questions": "Open questions"
     },
-    "quadrants": {
-      "q1": "INVESTIGATE",
-      "q2": "VALIDATED",
-      "q3": "IGNORE",
-      "q4": "PARKED"
-    },
-    "categories": {
-      "desirability": "Desirability",
-      "viability": "Viability",
-      "feasibility": "Feasibility"
-    }
-  },
-  "PitchView": {
-    "title": "Pitch Generator",
-    "regenerate": "Regenerate",
-    "previous": "← Previous",
-    "next": "Next →",
-    "mapHypotheses": "Map Hypotheses",
-    "noContent": "No pitch content yet. Generate a pitch first.",
-    "headlinePlaceholder": "Add a headline…",
-    "bodyPlaceholder": "Add content…",
-    "saveStatus": {
-      "idle": "Saved",
-      "dirty": "Save",
-      "saving": "Saving…",
-      "saved": "Saved"
-    },
-    "validateStatus": {
-      "idle": "Validate",
-      "validating": "Validating…",
-      "valid": "Validated",
-      "invalid": "Failed"
-    },
-    "storyTypes": {
-      "investor": "Investor Story",
-      "customer": "Customer Story"
-    },
-    "investor": {
-      "hook": "The Hook",
-      "problem": "The Problem",
-      "solution": "The Solution",
-      "traction": "Traction",
-      "ask": "The Ask"
-    },
-    "customer": {
-      "opening": "Opening",
-      "empathy": "Empathy",
-      "transformation": "Transformation",
-      "socialProof": "Social Proof",
-      "invitation": "Invitation"
-    }
-  },
-  "ScenarioView": {
-    "title": "User Scenario",
-    "subtitle": "Persona journey from pain point to measurable outcome",
-    "save": "Save",
-    "saved": "Saved!",
-    "validate": "Validate",
-    "regenerate": "Regenerate",
-    "nextStep": "What-If",
-    "resultTitle": "Implementation result",
-    "persona": {
-      "sectionTitle": "Persona",
-      "roleLabel": "Role",
-      "painPointLabel": "Pain point"
-    },
-    "timeline": {
-      "sectionTitle": "User Journey",
-      "context": "Context",
-      "goal": "Goal",
-      "action": "Action in the product",
-      "result": "Result",
-      "impact": "Impact"
-    },
-    "metrics": {
-      "before": "Manual Excel data collection",
-      "after": "Ready report with AI analytics"
-    }
-  },
-  "WhatIfView": {
-    "creativeBrainstorming": "Creative brainstorming",
-    "title": "ERRC Alternatives",
-    "subtitle": "Three Blue Ocean Strategy alternatives, built from your own canvas — each one eliminates, reduces, raises, or creates something concrete.",
-    "expectedImpact": "Expected impact",
-    "applyAlternative": "Apply this alternative",
-    "confirmApply": "Confirm — this will change your canvas",
-    "cancel": "Cancel",
-    "applying": "Applying…",
-    "applied": "Applied",
-    "revert": "Revert",
-    "reverting": "Reverting…",
-    "revertUnavailable": "Cannot revert (no snapshot)",
-    "appliedToCanvas": "Canvas updated.",
-    "viewCanvas": "View canvas →",
-    "regenerateNote": "These alternatives were generated once, from your canvas and architecture, and aren't regenerated automatically.",
-    "retry": "Retry",
-    "action": {
-      "eliminate": "Eliminate",
-      "reduce": "Reduce",
-      "raise": "Raise",
-      "create": "Create"
-    },
-    "errors": {
-      "kind": {
-        "not_found": "This project no longer exists.",
-        "validation": "Some of this alternative's moves no longer match your canvas.",
-        "server": "The server returned an error.",
-        "network": "Could not reach the server.",
-        "timeout": "The request timed out.",
-        "config": "The app is misconfigured."
-      },
-      "unresolvedMove": "{action} in {section}: “{target}” — no matching card found"
-    },
-    "generatingLock": "The project is still generating — applying or reverting is disabled until it finishes."
-  },
-  "ArchitectureView": {
-    "title": "Architectural Model Profile",
-    "subtitle": "The architectural framework defined by AI based on your inputs. It will serve as the foundation for Business Model Canvas generation.",
-    "changeConceptBtn": "Change concept",
-    "validateBtn": "Validate",
-    "validating": "Validating…",
-    "validated": "Validated",
-    "validateFailed": "Invalid",
-    "generating": "Generating…",
-    "generateCanvas": "Generate full Business Model Canvas",
-    "epicenterLabel": "Business model epicenter",
-    "patternLabel": "Business model pattern",
-    "subtypeLabel": "Subtype",
-    "determined": "Determined",
-    "systemSelection": "System selection",
-    "epicenterDesc": "Rationale",
-    "patternDesc": "Rationale",
-    "epicenters": {
-      "resource_driven": "Resource-driven",
-      "offer_driven": "Offer-driven",
-      "customer_driven": "Customer-driven",
-      "finance_driven": "Finance-driven",
-      "multiple_epicenter": "Multiple epicenter"
+    "ideation": {
+      "title": "Ideation",
+      "epicenter": "Epicenter",
+      "rationale": "Rationale",
+      "whatIf": "What if…"
     },
     "patterns": {
-      "unbundling": "Unbundling",
-      "long_tail": "Long Tail",
-      "multi_sided_platform": "Multi-sided Platform",
-      "free": "Free",
-      "open_business_model": "Open Business Model"
+      "branch": "Decision",
+      "unified_model": "One canvas for all segments",
+      "split_model": "Separate canvases",
+      "groups": "Canvas groups",
+      "relation": "Relation",
+      "segments": "Segments",
+      "tags": "Business model patterns",
+      "noTags": "No patterns were tagged",
+      "pairs": "Segment pair scores",
+      "synergy": "Synergy",
+      "conflict": "Conflict",
+      "noPairs": "A single segment has no pairs",
+      "rationale": "Rationale"
     },
-    "subtypes": {
-      "freemium": "Freemium",
-      "ad_supported": "Ad-supported",
-      "bait_and_hook": "Bait & Hook",
-      "outside_in": "Outside-In",
-      "inside_out": "Inside-Out"
+    "canvas": {
+      "version": "Version",
+      "final": "FINAL",
+      "previous": "Previous version chain",
+      "derivedFrom": "from version {n}",
+      "markers": {
+        "eliminate": "Eliminated",
+        "reduce": "Reduce",
+        "raise": "Raise",
+        "create": "Create"
+      },
+      "legend": "ERRC markers show what the cycle changed to produce this version",
+      "sections": {
+        "customer_segments": "Customer segments",
+        "value_propositions": "Value propositions",
+        "channels": "Channels",
+        "customer_relationships": "Customer relationships",
+        "revenue_streams": "Revenue streams",
+        "key_resources": "Key resources",
+        "key_activities": "Key activities",
+        "key_partnerships": "Key partnerships",
+        "cost_structure": "Cost structure"
+      },
+      "canvasN": "Canvas {n}",
+      "covers": "Covers: {segments}",
+      "empty": "empty"
+    },
+    "swot": {
+      "version": "Version {n}",
+      "clusters": {
+        "value_proposition": "Value proposition",
+        "cost_revenue": "Costs and revenue",
+        "infrastructure": "Infrastructure",
+        "customer_interface": "Customer interface"
+      },
+      "axis": "Strengths and weaknesses",
+      "positive": "Strength",
+      "negative": "Weakness",
+      "importance": "Importance",
+      "certainty": "Certainty",
+      "score": "Score",
+      "opportunities": "Opportunities",
+      "threats": "Threats",
+      "catalog": "Threat catalog",
+      "moves": "ERRC moves to the next version",
+      "movesFrom": "Moves from version {from} to {to}",
+      "action": "Action",
+      "section": "Section",
+      "target": "Card",
+      "newText": "New text",
+      "impact": "Opposite-side impact",
+      "rationale": "Rationale",
+      "noMoves": "This is the last version: no moves follow it",
+      "noSwot": "No SWOT for this version"
+    },
+    "story": {
+      "goal": "Goal",
+      "format": "Format",
+      "perspective": "Perspective",
+      "references": "Canvas references",
+      "narrative": "Story"
+    },
+    "future": {
+      "drivers": "Uncertainty drivers",
+      "variants": "Scenarios",
+      "questions": "Adaptation questions"
+    },
+    "pitch": {
+      "hook": "Hook",
+      "summary": "Business model summary",
+      "advantages": "Competitive advantages",
+      "risks": "Risk analysis",
+      "team": "Team",
+      "financial": "Financial analysis",
+      "pitchN": "Pitch for canvas {n}"
     }
-  },
-  "Common": {
-    "actions": {
-      "add": "Add",
-      "save": "Save",
-      "cancel": "Cancel",
-      "delete": "Delete",
-      "edit": "Edit"
-    },
-    "loading": "Loading…",
-    "error": "Something went wrong"
   }
 }

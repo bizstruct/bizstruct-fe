@@ -1,0 +1,2332 @@
+{
+  "id": "01a1275d-afec-7009-a3e6-132c74208221",
+  "title": "New project",
+  "idea": "An app that delivers boxes of fresh produce from local farms to busy city parents.",
+  "language": "en",
+  "enabledOptional": [],
+  "autoApprove": true,
+  "status": "completed",
+  "createdAt": "2026-10-10T19:50:13.740753Z",
+  "updatedAt": "2026-10-10T19:50:13.740756Z",
+  "rows": [
+    {
+      "id": "01a1275d-afef-703d-9123-3857a26d8aec",
+      "stage": "brief",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {},
+      "attemptId": "01a1275d-aff7-7465-9c57-1647b6efa7ad",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "f89fc840-fffd-5ff1-afd1-f16ff1f7b46c",
+          "type": "brief",
+          "data": {
+            "gaps": [
+              "The specific geographic market is not stated.",
+              "The app's ordering, subscription, and delivery model is not specified.",
+              "The size, contents, pricing, and delivery frequency of produce boxes are not stated.",
+              "Partnerships with local farms and logistics providers are not described.",
+              "The competitive differentiation from grocery delivery or produce subscription services is not stated.",
+              "Food quality control, inventory management, and handling of seasonal availability are not described."
+            ],
+            "industry": "Local food delivery and grocery technology",
+            "idea_summary": "A mobile app that delivers boxes of fresh produce sourced from local farms to busy parents living in cities.",
+            "monetization_hint": null,
+            "existing_resources": [],
+            "customer_segment_candidates": [
+              "Busy city parents seeking convenient access to fresh local produce"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:13.751265Z",
+      "finishedAt": "2026-10-10T19:50:17.456741Z"
+    },
+    {
+      "id": "01a1275d-be73-76aa-ac4b-4a0617d8f60c",
+      "stage": "empathy_map",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a1275d-afef-703d-9123-3857a26d8aec"
+        ]
+      },
+      "attemptId": "01a1275d-be77-71c7-ad17-49992fa8f1ee",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "264ab398-bd3d-58a6-a604-de7065f0f3ad",
+          "type": "empathy_map",
+          "data": {
+            "id": "264ab398-bd3d-58a6-a604-de7065f0f3ad",
+            "sees": [
+              "Small neighborhood grocery stores with limited or inconsistent produce quality.",
+              "Supermarket produce that is convenient but often travels long distances and does not clearly show its source.",
+              "Grocery-delivery apps, meal-kit promotions, and prepared-food options competing for attention on her phone.",
+              "Other parents juggling school drop-offs, work schedules, after-school activities, and dinner.",
+              "Children who need snacks, lunches, and family meals prepared despite a packed weekday schedule.",
+              "Seasonal farmers' markets that look appealing but operate at times that are difficult for her family to attend regularly.",
+              "Produce that sometimes spoils in the refrigerator before the family uses it."
+            ],
+            "gains": [
+              "A simple, reliable way to receive fresh produce at a predictable time that fits family routines.",
+              "High-quality produce that stays fresh long enough to be used across several meals and lunchboxes.",
+              "Easy customization or substitution options that reflect household preferences and children's eating habits.",
+              "Transparent information about farm origin, seasonality, and handling that makes local sourcing credible.",
+              "Clear pricing, flexible order frequency, and the ability to skip deliveries during travel or busy periods.",
+              "Quick meal ideas, storage guidance, and child-friendly recipes that help turn each box into usable meals.",
+              "Less grocery-related decision fatigue and fewer emergency trips to buy food.",
+              "A feeling that she is supporting local farms while feeding her family well.",
+              "Success measured by fewer wasted groceries, smoother weekday meals, children eating more produce, and time reclaimed for work or family."
+            ],
+            "hears": [
+              "Other parents say grocery shopping and meal planning are among the hardest recurring household tasks.",
+              "Her partner asks what is available for dinner and helps coordinate household errands.",
+              "Friends recommend grocery-delivery services when schedules are especially busy.",
+              "Children express preferences for familiar fruits, crunchy snacks, and foods they recognize.",
+              "Newsletters, social-media posts, and local community groups promote farmers' markets, sustainable food, and local businesses.",
+              "Health-oriented media emphasizes serving children more fruit and vegetables and reducing highly processed food.",
+              "Recommendations from trusted parent friends and clear customer reviews influence her more than broad advertising."
+            ],
+            "pains": [
+              "Limited time for store visits, farmers' markets, meal planning, and food preparation.",
+              "Unreliable delivery timing can disrupt school pickup, work meetings, and family routines.",
+              "High delivery fees or unclear pricing make recurring orders feel difficult to justify.",
+              "Variable produce quality, ripeness, and shelf life can lead to waste.",
+              "Fixed boxes may include items her children will not eat or that she does not know how to use.",
+              "Seasonal availability can make it hard to plan predictable family meals.",
+              "She lacks clear, trustworthy information about where produce came from and how fresh it is.",
+              "Managing substitutions, missing items, and customer-service issues adds friction instead of saving time."
+            ],
+            "project_id": "01a1275d-afec-7009-a3e6-132c74208221",
+            "persona_name": "Maya Chen",
+            "says_and_does": [
+              "She tells friends, \"I want to buy more local food, but I never make it to the market.\"",
+              "She compares delivery windows, fees, and customer ratings before trying a grocery service.",
+              "She places grocery orders late at night or during short breaks between work and family responsibilities.",
+              "She checks produce on arrival and puts the most perishable items where the family can see them.",
+              "She asks other parents which delivery services have been reliable.",
+              "She chooses familiar fruits and vegetables for school lunches and quick weekday meals.",
+              "She says, \"Convenience matters, but I do not want to compromise on freshness.\"",
+              "She looks for recipes online when she receives or buys an unfamiliar vegetable."
+            ],
+            "thinks_and_feels": [
+              "She wants her children to grow up eating fresh, varied food, not relying on packaged convenience items.",
+              "She feels guilty when busy weeks lead to rushed dinners or too few vegetables on the table.",
+              "She wants local food to be genuinely fresher and more responsible, but she needs proof rather than vague sustainability claims.",
+              "She worries about paying a premium for produce her family may not eat or that may arrive bruised or overly ripe.",
+              "She feels mentally overloaded by the repeated decisions of planning meals, checking the refrigerator, and arranging groceries.",
+              "She wants a dependable routine that makes her feel like she is caring well for her family without sacrificing work or rest.",
+              "She quietly worries that an unfamiliar seasonal box could create more cooking decisions rather than solving them."
+            ],
+            "persona_demographics": "Maya is a 36-year-old working parent living in a dense urban neighborhood with her partner and two children aged 4 and 8. She works full-time in a professional role, has a middle-to-upper-middle household income, and manages much of the family's weekday food planning and grocery purchasing."
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:17.463609Z",
+      "finishedAt": "2026-10-10T19:50:30.417388Z"
+    },
+    {
+      "id": "01a1275d-be73-76aa-ac4b-4a0732dfbd17",
+      "stage": "customer_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a1275d-be73-76aa-ac4b-4a0617d8f60c"
+        ]
+      },
+      "attemptId": "01a1275d-f114-777e-98e9-d422d71a411a",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:empathy_map_customer_scenario_persona_consistency",
+            "severity": "warning",
+            "message": "Judge check could not run: empathy_map_customer_scenario_persona_consistency: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "f924439e-c73e-5ac2-be0b-93713e171c01"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "f924439e-c73e-5ac2-be0b-93713e171c01",
+          "type": "customer_scenario",
+          "data": {
+            "id": "f924439e-c73e-5ac2-be0b-93713e171c01",
+            "channel_type": "digital-self-service",
+            "pricing_tier": "mid_market",
+            "empathy_map_id": "264ab398-bd3d-58a6-a604-de7065f0f3ad",
+            "open_questions": [
+              "Which delivery windows and handoff options would be reliable enough for parents managing work meetings and school pickup?",
+              "Should customers choose a fully customizable box, a curated family box with substitutions, or a combination of both?",
+              "What farm-origin, harvest-date, and freshness information is most useful and credible without making ordering feel complicated?",
+              "What price, delivery fee, and minimum order would Maya consider worthwhile compared with supermarket and grocery-delivery alternatives?",
+              "Would a flexible subscription with skipping and frequency controls reduce decision fatigue more effectively than one-off ordering?",
+              "When produce quality or availability changes, what proactive communication and support level would preserve Maya's trust?",
+              "Would recipe, storage, and lunchbox guidance be best delivered in the app, as box inserts, or through personalized notifications?"
+            ],
+            "relationship_type": "self-service",
+            "situation_narrative": "On a Tuesday evening after the children are asleep, Maya opens the app on her phone while planning the next school week's lunches and dinners. Instead of trying to fit in a supermarket trip or hoping to reach the weekend farmers' market, she selects a produce box for delivery to her apartment building on Thursday evening, after school pickup. She reviews the listed farms, harvest dates, expected shelf life, and price before ordering. Maya swaps an unfamiliar leafy vegetable for extra apples and cucumbers that her children will eat, then adds a child-friendly recipe and storage tips to her saved plan. The delivery arrives within its promised time window; she checks that the produce is firm and undamaged, puts the berries and greens where they will be used first, and uses the recipe ideas to make two low-effort weekday meals. The predictable box reduces her late-night grocery decisions while giving her credible evidence that the food is fresh and locally sourced.",
+            "interdependence_signal": false
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:30.420884Z",
+      "finishedAt": "2026-10-10T19:50:40.978843Z"
+    },
+    {
+      "id": "01a1275d-be73-76aa-ac4b-4a0821639ed5",
+      "stage": "ideation",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "empathy_map": [
+          "01a1275d-be73-76aa-ac4b-4a0617d8f60c"
+        ]
+      },
+      "attemptId": "01a1275d-f115-74d2-944e-94e76a7f8d36",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "f800728d-1216-5037-be2d-4b2dd9c1c6f1",
+          "type": "ideation",
+          "data": {
+            "id": "f800728d-1216-5037-be2d-4b2dd9c1c6f1",
+            "epicenter": {
+              "tags": [
+                "customer_driven"
+              ],
+              "rationale": "The concept is primarily driven by Maya's clearly expressed unmet need for dependable, convenient access to fresh local produce despite severe time constraints. Her pains include difficulty visiting farmers' markets, unreliable delivery, variable quality and shelf life, food waste, and decision fatigue; her desired gains are predictable delivery, trusted provenance, flexible ordering, and less meal-planning burden. The brief names no existing resources or partnerships to leverage, and it provides no new pricing or cost-model signal."
+            },
+            "empathy_map_id": "264ab398-bd3d-58a6-a604-de7065f0f3ad",
+            "what_if_questions": [
+              "What if local farms—not grocery warehouses—could replenish a city family's produce supply around the family's actual meal and school-lunch rhythm, rather than a retailer's fixed delivery schedule?",
+              "What if a produce delivery service had to guarantee that every item would remain usable long enough for several family meals, with the cost of spoilage borne by the service rather than Maya?",
+              "What if parents could receive seasonal local produce without having to decide what to cook, interpret unfamiliar vegetables, or risk receiving foods their children will not eat?",
+              "What if the provenance, harvest timing, handling, and expected shelf life of every item had to be as visible and verifiable as a parcel's delivery tracking?",
+              "What if local-food delivery eliminated fixed boxes entirely, even though seasonal farm supply is inherently variable and difficult to forecast?",
+              "What if delivery windows were designed around school pickup and work-meeting constraints, with no requirement for a parent to be available to receive the box?",
+              "What if customers paid only for produce their household actually uses, rather than accepting the waste risk typically embedded in grocery and subscription delivery?",
+              "What if farmers' market freshness and local-farm connection were available every week without requiring families to visit a market, while preserving enough farm economics to make the model viable?"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:30.421758Z",
+      "finishedAt": "2026-10-10T19:50:45.780447Z"
+    },
+    {
+      "id": "01a1275d-be73-76aa-ac4b-4a09f88ab04c",
+      "stage": "patterns",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "ideation": [
+          "01a1275d-be73-76aa-ac4b-4a0821639ed5"
+        ],
+        "customer_scenario": [
+          "01a1275d-be73-76aa-ac4b-4a0732dfbd17"
+        ]
+      },
+      "attemptId": "01a1275e-2d18-772a-9415-908df786fbb0",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:ideation_grounds_pattern_tags",
+            "severity": "warning",
+            "message": "Judge check could not run: ideation_grounds_pattern_tags: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "9e08e0e1-57f6-5a04-a597-d63f91c749be"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "9e08e0e1-57f6-5a04-a597-d63f91c749be",
+          "type": "patterns",
+          "data": {
+            "id": "9e08e0e1-57f6-5a04-a597-d63f91c749be",
+            "groups": [
+              {
+                "id": "9ff81444-ba35-55c2-9c0e-e0f7bda0c41a",
+                "relation_type": "segmented",
+                "empathy_map_ids": [
+                  "264ab398-bd3d-58a6-a604-de7065f0f3ad"
+                ]
+              }
+            ],
+            "project_id": "01a1275d-afec-7009-a3e6-132c74208221",
+            "pattern_tags": [],
+            "branch_decision": "unified_model",
+            "pairwise_scores": []
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:45.784465Z",
+      "finishedAt": "2026-10-10T19:50:51.898171Z"
+    },
+    {
+      "id": "01a1275e-44fc-7100-bbfb-50e1ae4969e4",
+      "stage": "canvas",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "brief": [
+          "01a1275d-afef-703d-9123-3857a26d8aec"
+        ],
+        "ideation": [
+          "01a1275d-be73-76aa-ac4b-4a0821639ed5"
+        ],
+        "patterns": [
+          "01a1275d-be73-76aa-ac4b-4a09f88ab04c"
+        ],
+        "empathy_map": [
+          "01a1275d-be73-76aa-ac4b-4a0617d8f60c"
+        ],
+        "customer_scenario": [
+          "01a1275d-be73-76aa-ac4b-4a0732dfbd17"
+        ]
+      },
+      "attemptId": "01a1275e-44ff-7641-a6b2-31566a934ab5",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:canvas_grounded_in_customer_insights",
+            "severity": "warning",
+            "message": "Judge check could not run: canvas_grounded_in_customer_insights: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "423e7bfb-d153-5b82-aa31-dd7e04714ff5"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "423e7bfb-d153-5b82-aa31-dd7e04714ff5",
+          "type": "canvas",
+          "data": {
+            "id": "423e7bfb-d153-5b82-aa31-dd7e04714ff5",
+            "version": 1,
+            "group_id": "9ff81444-ba35-55c2-9c0e-e0f7bda0c41a",
+            "sections": {
+              "channels": [
+                {
+                  "id": "fbb6abf6-b8ba-5fab-8d63-6eada932a517",
+                  "text": "Mobile app for box selection, swaps, scheduling, and skip controls",
+                  "errc_marker": null
+                },
+                {
+                  "id": "d1ed7321-09b5-5085-9d30-8d17865e3bdf",
+                  "text": "In-app item pages showing farms, harvest dates, shelf life, and prices",
+                  "errc_marker": null
+                },
+                {
+                  "id": "151b2e24-f661-5244-94a8-9ac1518a3428",
+                  "text": "Delivery tracking and proactive notifications for timing or availability changes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "bbbb18cb-b6fd-526b-88fb-d94475f0848e",
+                  "text": "Personalized app notifications with recipes, storage, and lunchbox guidance",
+                  "errc_marker": null
+                }
+              ],
+              "key_resources": [
+                {
+                  "id": "92193bc6-8514-51c6-81e4-11f103deacbc",
+                  "text": "Parent preference, substitution, and delivery-window data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "7da8d3fc-e985-51c2-a100-cdf53060cf43",
+                  "text": "Mobile app for customization, scheduling, provenance, and meal guidance",
+                  "errc_marker": null
+                },
+                {
+                  "id": "23d05f35-86b7-51e3-abc8-dd07c8dbcc04",
+                  "text": "Reliable local-farm supply and item-level harvest and handling data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "ceb41a60-88c0-500f-957f-0d5e272904f4",
+                  "text": "Urban delivery capacity with secure apartment handoff options",
+                  "errc_marker": null
+                }
+              ],
+              "cost_structure": [
+                {
+                  "id": "e3ead179-8aa4-5344-b49b-f76e5e9bf068",
+                  "text": "Local produce purchasing and quality or spoilage guarantees",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f663ec39-3a49-50d5-a80e-ce4535e416eb",
+                  "text": "Last-mile urban delivery, timed windows, and secure handoff operations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "254c74a8-22aa-5967-b32e-d045a29bb51f",
+                  "text": "Mobile app, order customization, tracking, and notification infrastructure",
+                  "errc_marker": null
+                },
+                {
+                  "id": "aa95cb22-7b02-535b-80f9-5c90e370463e",
+                  "text": "Customer support, refunds, replacements, and proactive availability communication",
+                  "errc_marker": null
+                }
+              ],
+              "key_activities": [
+                {
+                  "id": "3d35a347-52cf-5e6c-a134-426a96873b29",
+                  "text": "Match seasonal farm supply to household preferences and family-box plans",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f2033ef7-5c9a-56e8-b847-0bf83a65b7cf",
+                  "text": "Maintain accurate harvest, origin, shelf-life, price, and availability information",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f3d6e92b-ba30-5768-bb6f-dc9b4aaeb6a7",
+                  "text": "Plan and execute reliable delivery windows around school and work routines",
+                  "errc_marker": null
+                },
+                {
+                  "id": "05e6e296-5c65-59aa-bf2a-c084ca5212c9",
+                  "text": "Create practical recipe, storage, and lunchbox guidance for each box",
+                  "errc_marker": null
+                }
+              ],
+              "revenue_streams": [
+                {
+                  "id": "e4f6ceac-c275-5e19-888e-d42842c6b4d3",
+                  "text": "Mid-market payment for one-off customizable produce boxes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e4afe980-c207-5bf9-9d22-8665fce9259b",
+                  "text": "Mid-market recurring family-box payments with flexible delivery frequency",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a76a13c5-7a72-5581-9baa-0a12767267d1",
+                  "text": "Delivery fee disclosed before checkout",
+                  "errc_marker": null
+                },
+                {
+                  "id": "53aef71d-2a14-5320-8ad1-efc364092764",
+                  "text": "Optional paid add-ons of extra family-preferred produce items",
+                  "errc_marker": null
+                }
+              ],
+              "key_partnerships": [
+                {
+                  "id": "422927b5-2d80-5c1a-960f-1944334c6b2a",
+                  "text": "Local farms supplying seasonal produce and verified harvest information",
+                  "errc_marker": null
+                },
+                {
+                  "id": "eb9033fc-be1d-5587-86df-0fae1f38c1de",
+                  "text": "Urban last-mile delivery partners with scheduled and no-contact handoffs",
+                  "errc_marker": null
+                },
+                {
+                  "id": "c9459d99-68f7-5dfc-b18b-ef81f258f986",
+                  "text": "Apartment-building access or secure-drop partners where needed",
+                  "errc_marker": null
+                },
+                {
+                  "id": "095b9606-74eb-5392-8528-63a1a4af515c",
+                  "text": "Recipe and food-storage experts for family-friendly seasonal guidance",
+                  "errc_marker": null
+                }
+              ],
+              "customer_segments": [
+                {
+                  "id": "ff934fe6-09d9-583d-8841-826b3be84565",
+                  "text": "Maya: full-time urban parent managing weekday family food purchasing",
+                  "errc_marker": null
+                },
+                {
+                  "id": "59337873-f1a9-5f66-a9b2-4c4bfe211d5b",
+                  "text": "Time-constrained city household needing reliable produce for meals and school lunches",
+                  "errc_marker": null
+                }
+              ],
+              "value_propositions": [
+                {
+                  "id": "43e304ca-fc9f-5d96-9119-3b49c23df2bf",
+                  "text": "Family-customizable local produce boxes matched to children’s preferences",
+                  "errc_marker": null
+                },
+                {
+                  "id": "0f2ec230-6d29-54b2-9354-082bca51f63c",
+                  "text": "School-pickup-friendly delivery windows and no-contact handoff options",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e9f450b0-a44f-5883-ac43-5373832c2096",
+                  "text": "Item-level farm origin, harvest date, handling, and expected shelf-life visibility",
+                  "errc_marker": null
+                },
+                {
+                  "id": "bc0f3980-e238-5ca2-9b28-7f93ef9e4b8b",
+                  "text": "Meal, lunchbox, and storage guidance that turns seasonal produce into low-effort meals",
+                  "errc_marker": null
+                }
+              ],
+              "customer_relationships": [
+                {
+                  "id": "07e4a273-605a-5192-996b-7a2020818fd5",
+                  "text": "Self-service ordering with curated family boxes and item substitutions",
+                  "errc_marker": null
+                },
+                {
+                  "id": "6df911ed-c288-5732-89e9-72336474b4a6",
+                  "text": "Flexible recurring plan with frequency controls and travel skips",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a1e967f6-569b-581e-8675-ceaf7958cab8",
+                  "text": "Proactive alerts before substitutions, delays, or freshness changes affect an order",
+                  "errc_marker": null
+                },
+                {
+                  "id": "80b1a2ec-cc0b-5b90-81be-ff3785e3a01f",
+                  "text": "In-app issue reporting and prompt resolution for missing or damaged produce",
+                  "errc_marker": null
+                }
+              ]
+            },
+            "is_generated": true,
+            "empathy_map_ids": [
+              "264ab398-bd3d-58a6-a604-de7065f0f3ad"
+            ],
+            "previous_version_id": null
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:50:51.903421Z",
+      "finishedAt": "2026-10-10T19:51:02.971995Z"
+    },
+    {
+      "id": "01a1275e-703f-7281-9d9b-92761fdb7823",
+      "stage": "swot_errc_cycle",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "canvas": [
+          "01a1275e-44fc-7100-bbfb-50e1ae4969e4"
+        ]
+      },
+      "attemptId": "01a1275e-7043-7709-a9c4-983c1984fa53",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "ea0d3ac5-e3f8-5f2f-887d-1858ef259ac6",
+          "type": "swot",
+          "data": {
+            "id": "ea0d3ac5-e3f8-5f2f-887d-1858ef259ac6",
+            "clusters": [
+              {
+                "cluster": "value_proposition",
+                "threats": [
+                  {
+                    "text": "Supermarkets, farmers' markets, conventional grocery delivery, and meal-planning alternatives can all meet parts of the need for family produce and convenience. The canvas does not show a switching barrier beyond the combined experience.",
+                    "score": 4,
+                    "question": "substitutes_available"
+                  },
+                  {
+                    "text": "Competitors could match delivery convenience or offer broader grocery selection and lower-priced produce. The detailed provenance, freshness visibility, and family guidance provide some differentiating value, but the model is positioned at mid-market pricing.",
+                    "score": 4,
+                    "question": "competitor_price_or_value_pressure"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use the provenance and harvest-date data to make freshness and local sourcing a more visible reason to choose the service over generic grocery delivery.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Expand family-specific meal, lunchbox, and storage guidance into a stronger habit-forming service layer around each delivery.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use preference and substitution data to improve personalization and reduce unwanted items in recurring boxes.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Offer themed seasonal boxes or child-friendly produce discovery experiences that make seasonal variability more appealing to families.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The offer does not materially reduce the effort of buying, receiving, and using produce for busy parents.",
+                    "positive_statement": "The offer addresses busy parents' practical needs with customizable produce boxes, school-pickup-friendly delivery, and meal guidance."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The freshness proposition lacks credible, item-level transparency for customers.",
+                    "positive_statement": "Item-level farm origin, harvest, handling, and shelf-life information creates a transparent freshness proposition."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 8,
+                    "negative_statement": "Seasonal local produce is insufficiently aligned with family preferences and household routines.",
+                    "positive_statement": "Family preference matching and swap options make seasonal local produce more relevant to children and household routines."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 6,
+                    "importance": 7,
+                    "negative_statement": "The proposition is a bundle of features that may be hard for customers to distinguish from ordinary produce delivery.",
+                    "positive_statement": "The proposition combines sourcing, delivery, and usage guidance into a differentiated family produce experience."
+                  }
+                ]
+              },
+              {
+                "cluster": "cost_revenue",
+                "threats": [
+                  {
+                    "text": "Margins may be squeezed by local produce purchasing, spoilage guarantees, timed urban delivery, customer support, refunds, and replacements. Mid-market box pricing may leave limited room to absorb these costs.",
+                    "score": 5,
+                    "question": "margin_pressure"
+                  },
+                  {
+                    "text": "Revenue comes from several transaction types, but all are tied to urban family produce-box customers. No dependence on a named customer or single contract is visible.",
+                    "score": 2,
+                    "question": "revenue_concentration"
+                  },
+                  {
+                    "text": "Recurring plans can be paused through frequency controls and travel skips, while one-off ordering is discretionary. Either source could decline if households reduce produce-box purchases.",
+                    "score": 3,
+                    "question": "revenue_stream_decline"
+                  },
+                  {
+                    "text": "Seasonal supply, availability changes, spoilage, substitutions, delivery exceptions, refunds, and replacements can make costs variable. The canvas explicitly includes proactive communication and guarantees, indicating exposure to these events.",
+                    "score": 4,
+                    "question": "cost_unpredictability"
+                  },
+                  {
+                    "text": "Serving more orders may require more timed last-mile capacity, secure handoffs, support, and replacement handling. The canvas does not show operating leverage or cost controls that ensure revenue grows faster than these costs.",
+                    "score": 4,
+                    "question": "cost_outgrowing_revenue"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Increase average order value through extra family-preferred produce add-ons that fit the existing box and delivery flow.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Use recurring family-box plans to increase predictable revenue and improve delivery planning.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use household preference and frequency data to better match supply with demand and reduce spoilage-related costs.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Create premium tiers around tighter delivery windows, enhanced family customization, or expanded guidance if customers value the convenience.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The model relies on a single undiversified way of earning revenue.",
+                    "positive_statement": "The model has both one-off and recurring box payments, delivery fees, and paid add-ons."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "Revenue is based mainly on irregular, unpredictable purchases.",
+                    "positive_statement": "Recurring plans with flexible frequency can support repeat purchasing while preserving customer control."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 6,
+                    "negative_statement": "Delivery pricing is unclear until late in the purchasing process.",
+                    "positive_statement": "Delivery fees are disclosed before checkout, improving price transparency."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "The cost structure overlooks the major expenses required to deliver the promise.",
+                    "positive_statement": "The cost structure explicitly recognizes major operating demands such as local purchasing, spoilage guarantees, timed delivery, support, and replacements."
+                  }
+                ]
+              },
+              {
+                "cluster": "infrastructure",
+                "threats": [
+                  {
+                    "text": "The model depends on reliable local-farm supply and seasonal availability. A supply interruption would directly affect box composition, substitutions, and the ability to fulfill recurring plans.",
+                    "score": 5,
+                    "question": "resource_supply_disruption"
+                  },
+                  {
+                    "text": "Produce quality and the accuracy of harvest, handling, and shelf-life data are central resources. Quality failures would undermine both the freshness promise and customer confidence.",
+                    "score": 5,
+                    "question": "resource_quality_risk"
+                  },
+                  {
+                    "text": "Matching supply to preferences, maintaining live item data, and executing timed urban delivery are operationally interdependent. Disruption in any one can prevent a reliable order from reaching the customer.",
+                    "score": 4,
+                    "question": "key_activity_disruption"
+                  },
+                  {
+                    "text": "Poor substitutions, inaccurate freshness information, weak meal guidance, or missed delivery windows would conflict directly with the stated value proposition. The canvas recognizes these activities but does not show quality-control mechanisms.",
+                    "score": 4,
+                    "question": "activity_quality_risk"
+                  },
+                  {
+                    "text": "Loss of farms, last-mile delivery providers, apartment-access partners, or content experts could impair supply, delivery, access, or guidance. Multiple partnership types are named, though no backup arrangements are shown.",
+                    "score": 4,
+                    "question": "partner_loss"
+                  },
+                  {
+                    "text": "Local farms and delivery partners could also work with competing food-delivery models. The canvas gives no indication of exclusive arrangements or partner-retention mechanisms.",
+                    "score": 3,
+                    "question": "partner_defection_to_competitors"
+                  },
+                  {
+                    "text": "The service relies materially on external farms for verified seasonal supply and on last-mile partners for school- and work-compatible delivery. Apartment access may also depend on third parties in the target urban setting.",
+                    "score": 4,
+                    "question": "partner_over_dependence"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use preference, substitution, and delivery-window data to improve supply matching, route planning, and box personalization over time.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Develop deeper farm data integration to strengthen verified provenance and make harvest, handling, and shelf-life information more reliable.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Build apartment-access and secure-drop partnerships to improve handoff success in dense urban areas.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use recipe and food-storage experts to produce reusable seasonal content that increases the value of each box without changing the physical product.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The model lacks the resources required to support its sourcing, transparency, delivery, and guidance promises.",
+                    "positive_statement": "The model identifies the supply, delivery, data, app, and expert resources needed to support its promise."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "Key activities are poorly aligned with the customer promise.",
+                    "positive_statement": "Key activities closely align with the value proposition: preference matching, accurate information, reliable timed delivery, and practical guidance."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Critical operating capabilities depend on unaddressed or missing partnerships.",
+                    "positive_statement": "Partnerships cover farms, last-mile delivery, building access, and content expertise."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 7,
+                    "importance": 8,
+                    "negative_statement": "The operation has little ability to manage routine changes in supply and delivery.",
+                    "positive_statement": "The operation is designed to communicate availability, substitution, freshness, and delivery changes proactively."
+                  }
+                ]
+              },
+              {
+                "cluster": "customer_interface",
+                "threats": [
+                  {
+                    "text": "The canvas targets a specific urban-parent produce-delivery use case, but it gives no evidence that this niche is already saturated. Saturation is plausible in local food delivery, not visible in the canvas.",
+                    "score": 3,
+                    "question": "market_saturation"
+                  },
+                  {
+                    "text": "The target households can use alternative grocery and produce options, so share could be pressured if the service is not consistently more convenient or valuable. No customer-acquisition advantage is shown.",
+                    "score": 3,
+                    "question": "market_share_pressure"
+                  },
+                  {
+                    "text": "Customers can use skip controls and one-off purchases, which lower commitment and make departure easy. Poor substitutions, freshness problems, or inconvenient delivery performance could accelerate switching.",
+                    "score": 4,
+                    "question": "customer_defection"
+                  },
+                  {
+                    "text": "The model operates in local food delivery and grocery technology, where other services can compete for the same urban household routine. The canvas does not identify a protected market position.",
+                    "score": 4,
+                    "question": "competition_intensifying"
+                  },
+                  {
+                    "text": "The mobile app is an owned customer channel, reducing direct channel capture risk. However, competing apps can still compete for customer attention and app usage.",
+                    "score": 2,
+                    "question": "channel_threat_from_competitors"
+                  },
+                  {
+                    "text": "App-based selection, scheduling, tracking, and notifications are tightly matched to the stated busy urban-parent segment. The canvas provides little indication that these channels are becoming irrelevant.",
+                    "score": 1,
+                    "question": "channel_irrelevance"
+                  },
+                  {
+                    "text": "The relationship depends on reliable proactive communication when substitutions, freshness changes, delays, missing items, or damage occur. Repeated exceptions could erode trust despite the planned support and resolution process.",
+                    "score": 4,
+                    "question": "relationship_deterioration"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use personalized notifications and practical family guidance to increase repeat ordering and reduce the risk that delivered produce goes unused.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use recurring-plan controls, travel skips, and proactive substitution alerts to position flexibility as an advantage over rigid subscription boxes.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use delivery tracking and secure handoff options to build trust with apartment-dwelling urban households.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Refine segmentation using observed preferences, delivery windows, and ordering frequency to tailor boxes and communication more precisely.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The target customer is vague and lacks a clear recurring use case.",
+                    "positive_statement": "The target customer is clearly defined as a time-constrained urban parent or household managing family meals and school lunches."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "Customers lack a coherent channel for managing orders and resolving delivery issues.",
+                    "positive_statement": "The mobile app supports the core customer journey through selection, swaps, scheduling, skips, tracking, information, and issue reporting."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The relationship model offers little control or communication when supply and delivery conditions change.",
+                    "positive_statement": "Flexible recurring plans, proactive alerts, and prompt issue resolution are designed to maintain trust amid seasonal changes."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 7,
+                    "negative_statement": "Customer engagement ends at checkout and does not help households use the produce.",
+                    "positive_statement": "Personalized recipe, storage, and lunchbox notifications extend engagement beyond the purchase transaction."
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "423e7bfb-d153-5b82-aa31-dd7e04714ff5",
+            "canvas_version": 1,
+            "environment_scan_id": null
+          }
+        },
+        {
+          "id": "eb11de5f-97ac-5d5a-841f-19e2c17c7d04",
+          "type": "swot",
+          "data": {
+            "id": "eb11de5f-97ac-5d5a-841f-19e2c17c7d04",
+            "clusters": [
+              {
+                "cluster": "value_proposition",
+                "threats": [
+                  {
+                    "text": "Families can replace the service with supermarkets, grocery-delivery services, farmers' markets, or their own produce shopping. The canvas offers differentiation, but the underlying need can readily be met in other ways.",
+                    "score": 4,
+                    "question": "substitutes_available"
+                  },
+                  {
+                    "text": "Competitors could offer produce delivery at lower prices or add comparable customization and scheduling features. The canvas supports value differentiation, but its mid-market positioning and local sourcing may make price comparison important.",
+                    "score": 4,
+                    "question": "competitor_price_or_value_pressure"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use the detailed freshness and farm-information layer to make informed swaps and build trust in local seasonal supply.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Expand the child discovery and reward experience into repeat family participation around trying seasonal produce.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Deepen meal and lunchbox guidance into more personalized recommendations based on family preferences and selected items.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Turn the school-pickup-compatible delivery proposition into a distinctive convenience position for weekday family routines.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The offer is insufficiently tailored to the practical food and scheduling needs of busy urban families.",
+                    "positive_statement": "The offer is clearly tailored to busy urban families through customizable produce, school-pickup delivery, and low-effort meal support."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Produce quality and freshness are opaque, giving families little basis for trust before ordering.",
+                    "positive_statement": "Item-level origin, harvest, handling, shelf-life, and freshness information creates a transparent and trust-oriented produce proposition."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 6,
+                    "negative_statement": "The proposition gives children little reason to engage with unfamiliar seasonal produce.",
+                    "positive_statement": "Discovery cards, taste challenges, and reward progress make seasonal produce more engaging for children."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The model delivers produce without adequately helping households turn it into usable meals and lunches.",
+                    "positive_statement": "The proposition combines product delivery with preparation, lunchbox, and storage guidance that can reduce household effort."
+                  }
+                ]
+              },
+              {
+                "cluster": "cost_revenue",
+                "threats": [
+                  {
+                    "text": "Mid-market pricing must absorb local produce purchasing, spoilage guarantees, urban delivery, technology, and service recovery. The canvas does not show a strong premium revenue source to offset these costs.",
+                    "score": 4,
+                    "question": "margin_pressure"
+                  },
+                  {
+                    "text": "Revenue is spread across one-off and recurring boxes, fees, and add-ons, but all streams depend on the same family-produce purchase behavior. There is no evidence of dependence on a named customer or single payment stream.",
+                    "score": 2,
+                    "question": "revenue_concentration"
+                  },
+                  {
+                    "text": "Recurring box payments could decline if households skip deliveries, reduce frequency, or prefer one-off ordering; the plan deliberately makes those controls easy. This is plausible rather than already demonstrated.",
+                    "score": 3,
+                    "question": "revenue_stream_decline"
+                  },
+                  {
+                    "text": "Seasonal local supply, spoilage guarantees, substitutions, refunds, and urban handoffs can make purchasing and fulfillment costs variable. The canvas includes management activities but no stated cost-control mechanism for supply volatility.",
+                    "score": 4,
+                    "question": "cost_unpredictability"
+                  },
+                  {
+                    "text": "Urban delivery and service-support costs could rise faster than box revenue if route density and repeat ordering do not scale sufficiently. Route clustering helps, but the economics are not evidenced in the canvas.",
+                    "score": 4,
+                    "question": "cost_outgrowing_revenue"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Increase basket value through optional add-ons that reflect recorded family preferences.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use recurring plans and next-box previews to improve order regularity and make delivery-route planning more efficient.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use route clusters and limited delivery blocks to improve delivery density as the local customer base grows.",
+                    "score": 3
+                  },
+                  {
+                    "text": "Use accurate availability, shelf-life, and substitution information to reduce refunds, replacements, and avoidable spoilage.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 3,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The model relies on a single narrow revenue source with little ability to capture additional customer value.",
+                    "positive_statement": "The model has several related revenue sources: one-off boxes, recurring plans, delivery fees, and optional add-ons."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "Revenue depends predominantly on irregular one-off purchases with limited repeat purchasing.",
+                    "positive_statement": "Recurring family-box payments with flexible frequency can provide a repeat-purchase revenue base."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "The delivery design provides little visible mechanism for controlling costly urban last-mile operations.",
+                    "positive_statement": "Neighborhood route clusters and two delivery blocks per day show an effort to control last-mile delivery costs."
+                  },
+                  {
+                    "score": 2,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The canvas overlooks quality-failure and service-recovery costs associated with fresh produce delivery.",
+                    "positive_statement": "The canvas recognizes spoilage guarantees, refunds, replacements, and proactive communication as costs that must be managed."
+                  }
+                ]
+              },
+              {
+                "cluster": "infrastructure",
+                "threats": [
+                  {
+                    "text": "The model depends on reliable local-farm produce and item-level harvest and handling data. Seasonal supply disruption or missing information would directly affect box fulfillment and the transparency promise.",
+                    "score": 4,
+                    "question": "resource_supply_disruption"
+                  },
+                  {
+                    "text": "Fresh produce quality, shelf life, and the accuracy of farm-provided handling information are central resources. Failures would undermine both quality guarantees and visible freshness status.",
+                    "score": 4,
+                    "question": "resource_quality_risk"
+                  },
+                  {
+                    "text": "Disruption in supply matching, information maintenance, or scheduled last-mile execution could prevent correct boxes from reaching households in the promised window.",
+                    "score": 4,
+                    "question": "key_activity_disruption"
+                  },
+                  {
+                    "text": "The canvas requires accurate item data, preference matching, substitutions, and school/work-timed delivery; errors in any of these activities would be highly visible to parents.",
+                    "score": 4,
+                    "question": "activity_quality_risk"
+                  },
+                  {
+                    "text": "Loss of a farm, delivery, apartment-access, or expert partner could weaken sourcing, fulfillment, access, or guidance. Multiple partner categories are listed, but no redundancy is specified.",
+                    "score": 3,
+                    "question": "partner_loss"
+                  },
+                  {
+                    "text": "Delivery and farm partners could also support competing local-food services, but the canvas provides no evidence of exclusivity or partner switching already occurring.",
+                    "score": 2,
+                    "question": "partner_defection_to_competitors"
+                  },
+                  {
+                    "text": "The model materially relies on farm suppliers for verified data and on last-mile partners for scheduled apartment handoffs. These dependencies are core, although the number of partners is not stated.",
+                    "score": 4,
+                    "question": "partner_over_dependence"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use preference, substitution, and delivery-window data to improve supply matching, box planning, and route allocation over time.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Develop stronger data integrations with farms to improve the reliability of harvest, handling, shelf-life, and availability records.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Build secure-drop and apartment-access partnerships to increase the number of urban households that can be served reliably.",
+                    "score": 3
+                  },
+                  {
+                    "text": "Use recipe and storage experts to strengthen the practical family guidance associated with each seasonal box.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The infrastructure leaves major gaps between produce sourcing, box planning, customer information, and urban fulfillment.",
+                    "positive_statement": "The infrastructure covers the critical chain from local farm supply and data through personalization to scheduled urban handoff."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 9,
+                    "negative_statement": "The model lacks the operational capability to keep its detailed product, freshness, and availability information accurate.",
+                    "positive_statement": "Detailed activities for harvest, shelf-life, price, and availability data support the transparency promise."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The model lacks the external partners needed to source, deliver, access buildings, and support families.",
+                    "positive_statement": "The model has multiple partnership types for farms, delivery, building access, and food guidance."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "Urban fulfillment is broadly specified without an operational design for reliable and secure handoffs.",
+                    "positive_statement": "Delivery operations are designed around route clusters, defined delivery blocks, and secure handoffs."
+                  }
+                ]
+              },
+              {
+                "cluster": "customer_interface",
+                "threats": [
+                  {
+                    "text": "The canvas targets a defined group of busy urban families, but it provides no evidence that this segment or its delivery demand is already saturated.",
+                    "score": 2,
+                    "question": "market_saturation"
+                  },
+                  {
+                    "text": "Other grocery and food-delivery offers may compete for the same household food budget and convenience occasions. The specialized family proposition offers some defense, but share pressure is plausible.",
+                    "score": 3,
+                    "question": "market_share_pressure"
+                  },
+                  {
+                    "text": "Flexible frequency changes, travel skips, and one-off ordering reduce commitment and make it easy for customers to pause or leave. Strong previews and communication may mitigate this, but the risk is visible in the design.",
+                    "score": 4,
+                    "question": "customer_defection"
+                  },
+                  {
+                    "text": "The local food delivery and grocery technology setting plausibly attracts rivals that improve convenience, customization, or provenance features. No direct competitor activity is shown on the canvas.",
+                    "score": 3,
+                    "question": "competition_intensifying"
+                  },
+                  {
+                    "text": "The model's primary channel is its own mobile app, so competitors cannot directly take it over. They can still compete for customer attention through their own apps and notifications.",
+                    "score": 2,
+                    "question": "channel_threat_from_competitors"
+                  },
+                  {
+                    "text": "Mobile ordering, tracking, and notifications are tightly integrated with the service, and the canvas gives no sign that these channels are losing relevance to the target parents.",
+                    "score": 1,
+                    "question": "channel_irrelevance"
+                  },
+                  {
+                    "text": "Late deliveries, unwanted substitutions, freshness changes, or poorly resolved damaged-item claims could quickly weaken trust with time-constrained parents. The canvas includes proactive alerts and issue resolution, reducing but not eliminating this exposure.",
+                    "score": 4,
+                    "question": "relationship_deterioration"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use next-box previews, personalized notifications, and one-tap plan controls to retain families while respecting changing weekly schedules.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Use preference and interaction data to personalize recipes, lunchbox ideas, swaps, and child discovery content.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Build trust and repeat use through proactive alerts and prompt recovery when items are unavailable, delayed, missing, or damaged.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use delivery tracking and secure-handoff options to make the service more compatible with apartment and school-pickup routines.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 10,
+                    "negative_statement": "Parents have limited control over box contents, delivery timing, and recurring-order commitments.",
+                    "positive_statement": "The customer interface gives parents substantial control through customization, swaps, scheduling, frequency changes, skips, and advance next-box previews."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Customers receive limited communication or support when substitutions, delays, and produce issues occur.",
+                    "positive_statement": "Proactive notifications, delivery tracking, and issue reporting support clear communication when availability or fulfillment changes."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 7,
+                    "negative_statement": "The channel functions only as a transaction tool and provides little ongoing value between purchases.",
+                    "positive_statement": "The app's farm, freshness, price, recipe, storage, and lunchbox content reinforces engagement beyond checkout."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The target customer is too broadly defined for the service to address a distinct routine or need.",
+                    "positive_statement": "The canvas identifies a focused core segment of time-constrained urban households with school-lunch and meal needs."
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "canvas_version": 2,
+            "environment_scan_id": null
+          }
+        },
+        {
+          "id": "28cb6d93-65fd-5208-bf49-839afb67fee3",
+          "type": "swot",
+          "data": {
+            "id": "28cb6d93-65fd-5208-bf49-839afb67fee3",
+            "clusters": [
+              {
+                "cluster": "value_proposition",
+                "threats": [
+                  {
+                    "text": "Standard grocers, farmers' markets, meal kits, and other grocery-delivery options can meet the underlying need for household produce, even if they provide less family-specific guidance and transparency.",
+                    "score": 4,
+                    "question": "substitutes_available"
+                  },
+                  {
+                    "text": "Competitors could combine produce delivery with lower prices, broader grocery baskets, or faster delivery, challenging the value of a mid-market produce-box offer.",
+                    "score": 3,
+                    "question": "competitor_price_or_value_pressure"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Use the visible freshness and provenance data to make trust and product transparency a stronger reason to choose the service.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Expand the child-friendly discovery and reward features into a repeatable family engagement advantage.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Turn the family-approved swap guarantee into a clear premium service promise for households that need dependable meal planning.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Use meal and lunchbox guidance to increase the perceived value of seasonal produce that customers may otherwise find inconvenient.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The proposition is generic and poorly aligned with the routines and needs of busy families.",
+                    "positive_statement": "The proposition is highly tailored to family routines, children's preferences, and school-day meal needs."
+                  },
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "Customers receive little credible information about provenance, freshness, or expected product condition.",
+                    "positive_statement": "Detailed farm, harvest, handling, shelf-life, and freshness information creates a transparent and trust-building offer."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "Substitutions remain unpredictable and can undermine customers' planned meals and trust.",
+                    "positive_statement": "Pre-set swap rules and instant credits make substitutions predictable and protect family meal plans."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 7,
+                    "negative_statement": "Customers are left to work out how to use unfamiliar seasonal produce on their own.",
+                    "positive_statement": "Meal, storage, lunchbox, and discovery guidance helps customers convert seasonal produce into practical family use."
+                  }
+                ]
+              },
+              {
+                "cluster": "cost_revenue",
+                "threats": [
+                  {
+                    "text": "Local sourcing, spoilage or quality guarantees, instant swap credits, urban delivery, and support/refund obligations can put significant pressure on the mid-market price point.",
+                    "score": 5,
+                    "question": "margin_pressure"
+                  },
+                  {
+                    "text": "Revenue is centered on urban family households and produce-box purchasing, though it includes one-off, recurring, fee, and add-on components.",
+                    "score": 2,
+                    "question": "revenue_concentration"
+                  },
+                  {
+                    "text": "Flexible skips and frequency changes make it easy for households to reduce recurring order volume when the service is less useful to them.",
+                    "score": 3,
+                    "question": "revenue_stream_decline"
+                  },
+                  {
+                    "text": "Seasonal availability changes, spoilage, substitutions, refunds, and last-mile handoffs make produce and fulfillment costs difficult to keep fully predictable.",
+                    "score": 4,
+                    "question": "cost_unpredictability"
+                  },
+                  {
+                    "text": "Customization, detailed data maintenance, proactive communication, and two delivery blocks per day may add operating cost faster than order revenue if delivery density is insufficient.",
+                    "score": 4,
+                    "question": "cost_outgrowing_revenue"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Personalized weekly produce, lunchbox, and meal-kit bundles can raise revenue per household beyond the base produce box.",
+                    "score": 5
+                  },
+                  {
+                    "text": "The flexible recurring plan can convert busy households from occasional purchases into more stable repeat revenue.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Neighborhood route clustering and delivery blocks can improve delivery density as the local customer base grows.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Freshness and swap protections may support willingness to pay if they reduce perceived risk from buying produce without selecting it in person.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The model relies on a single, inflexible way of earning revenue.",
+                    "positive_statement": "Recurring family-box payments, one-off boxes, delivery fees, and paid bundles provide several monetization mechanisms."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "Rigid recurring purchasing could cause customers to avoid or cancel the service.",
+                    "positive_statement": "Flexible frequency, skips, previews, and family-preferred add-ons can support recurring purchasing while giving households control."
+                  },
+                  {
+                    "score": 3,
+                    "certainty": 8,
+                    "importance": 10,
+                    "negative_statement": "The delivery design provides no visible mechanism for controlling costly urban fulfillment.",
+                    "positive_statement": "Route clusters and defined delivery blocks provide a stated basis for managing urban last-mile delivery costs."
+                  },
+                  {
+                    "score": -4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The model can deliver its service promise with simple, low-cost operations.",
+                    "positive_statement": "The offer's transparency, quality guarantees, customization, and support requirements are matched by potentially expensive operating commitments."
+                  }
+                ]
+              },
+              {
+                "cluster": "infrastructure",
+                "threats": [
+                  {
+                    "text": "Seasonality and local-farm reliance can interrupt availability, but the stated backup sources for high-demand core categories provide meaningful mitigation.",
+                    "score": 3,
+                    "question": "resource_supply_disruption"
+                  },
+                  {
+                    "text": "Perishable produce can vary in freshness and handling quality; the model's detailed freshness promise makes any quality shortfall especially visible to customers.",
+                    "score": 4,
+                    "question": "resource_quality_risk"
+                  },
+                  {
+                    "text": "Disruption to supply matching, item-data maintenance, or scheduled urban delivery can directly prevent accurate and timely box fulfillment.",
+                    "score": 4,
+                    "question": "key_activity_disruption"
+                  },
+                  {
+                    "text": "Inaccurate shelf-life, availability, price, or swap information would conflict with the model's transparency and family-approved substitution promise.",
+                    "score": 4,
+                    "question": "activity_quality_risk"
+                  },
+                  {
+                    "text": "Loss of a delivery, building-access, farm, or expert partner could impair parts of the service, although backup farms are specified for core produce categories.",
+                    "score": 3,
+                    "question": "partner_loss"
+                  },
+                  {
+                    "text": "The canvas provides no direct evidence that its partners are tied exclusively to the service or likely to move to competitors.",
+                    "score": 2,
+                    "question": "partner_defection_to_competitors"
+                  },
+                  {
+                    "text": "Reliable fulfillment depends heavily on external farms, last-mile partners, and, where needed, secure apartment-access partners; only farm sourcing has stated backups.",
+                    "score": 4,
+                    "question": "partner_over_dependence"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "The backup-farm requirement can be extended into a resilient seasonal sourcing network for high-demand family staples.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Item-level harvest, handling, shelf-life, and availability data can improve supply matching and reduce unsuitable substitutions.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Neighborhood delivery clusters and secure handoff partnerships can improve fulfillment reliability in dense urban areas.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Recipe and food-storage experts can deepen the practical usefulness of each box and distinguish the guidance capability.",
+                    "score": 3
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 10,
+                    "negative_statement": "The model lacks a clear view of the resources required to deliver its service promise.",
+                    "positive_statement": "The model identifies the core resources needed for a data-rich, customized local-produce service."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "Core produce availability depends on single farm sources with no stated fallback options.",
+                    "positive_statement": "At least two qualified backup farms for each high-demand core category reduce dependence on a single farm source."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 10,
+                    "importance": 10,
+                    "negative_statement": "The operating activities needed to fulfill the proposition are vague or incomplete.",
+                    "positive_statement": "Key activities explicitly cover supply matching, item-data accuracy, delivery execution, and family guidance creation."
+                  },
+                  {
+                    "score": -4,
+                    "certainty": 9,
+                    "importance": 9,
+                    "negative_statement": "The service can operate reliably with little coordination across external parties.",
+                    "positive_statement": "The service depends on coordinated farms, delivery providers, access partners, and experts across a perishable fulfillment chain."
+                  }
+                ]
+              },
+              {
+                "cluster": "customer_interface",
+                "threats": [
+                  {
+                    "text": "The canvas gives no direct indication that the targeted urban-parent produce-delivery market is already saturated, though the segment is narrowly defined.",
+                    "score": 2,
+                    "question": "market_saturation"
+                  },
+                  {
+                    "text": "Because the target household need can be served by several food-shopping alternatives, retaining share will depend on consistently delivering the tailored convenience promised.",
+                    "score": 4,
+                    "question": "market_share_pressure"
+                  },
+                  {
+                    "text": "Customers can easily skip, change frequency, or use one-off purchases, so service failures or reduced relevance can translate into lower repeat ordering.",
+                    "score": 3,
+                    "question": "customer_defection"
+                  },
+                  {
+                    "text": "The local food delivery and grocery technology setting makes intensified competition for urban household food spending plausible.",
+                    "score": 4,
+                    "question": "competition_intensifying"
+                  },
+                  {
+                    "text": "The owned mobile app is not shown as dependent on a competitor-controlled sales channel, although competitors can offer competing apps.",
+                    "score": 2,
+                    "question": "channel_threat_from_competitors"
+                  },
+                  {
+                    "text": "There is little evidence that mobile self-service, tracking, and notifications are becoming irrelevant to the busy urban households described.",
+                    "score": 1,
+                    "question": "channel_irrelevance"
+                  },
+                  {
+                    "text": "The relationship could deteriorate if substitutions, freshness changes, delivery timing, or issue resolution fail to meet the highly specific expectations created by the service.",
+                    "score": 3,
+                    "question": "relationship_deterioration"
+                  }
+                ],
+                "opportunities": [
+                  {
+                    "text": "Personalized next-box previews and recommended swaps can increase engagement by making each order feel tailored before fulfillment.",
+                    "score": 5
+                  },
+                  {
+                    "text": "Recipes, storage advice, lunchbox guidance, and child discovery cards can create recurring app engagement between deliveries.",
+                    "score": 4
+                  },
+                  {
+                    "text": "Proactive availability and freshness alerts can strengthen trust by demonstrating control rather than surprising customers with changes.",
+                    "score": 4
+                  },
+                  {
+                    "text": "The focused urban-parent segment can support more precise messaging around school pickup, weekday routines, and family meal planning.",
+                    "score": 4
+                  }
+                ],
+                "axis_statements": [
+                  {
+                    "score": 5,
+                    "certainty": 10,
+                    "importance": 10,
+                    "negative_statement": "Customers have limited control over what they receive and when they receive it.",
+                    "positive_statement": "The app gives customers extensive control over selection, swaps, scheduling, frequency, and skips."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 10,
+                    "importance": 9,
+                    "negative_statement": "Customers receive little advance communication or support when orders change or problems occur.",
+                    "positive_statement": "Proactive notifications, next-box previews, tracking, and issue resolution create a responsive relationship model."
+                  },
+                  {
+                    "score": 4,
+                    "certainty": 9,
+                    "importance": 8,
+                    "negative_statement": "The customer definition is too broad to support a focused service experience.",
+                    "positive_statement": "The interface addresses the distinct needs of time-constrained urban parents and city households planning meals and school lunches."
+                  },
+                  {
+                    "score": -3,
+                    "certainty": 9,
+                    "importance": 7,
+                    "negative_statement": "The model reaches and serves customers through a broad set of channels beyond its own app.",
+                    "positive_statement": "Customer access is concentrated in the mobile app and depends on customers engaging with its notifications and self-service tools."
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "433a5937-56af-5a4d-b585-ecb2c147e6df",
+            "canvas_version": 3,
+            "environment_scan_id": null
+          }
+        },
+        {
+          "id": "3b53043d-7264-5aca-b407-cd985793f5da",
+          "type": "errc",
+          "data": {
+            "id": "3b53043d-7264-5aca-b407-cd985793f5da",
+            "moves": [
+              {
+                "action": "raise",
+                "new_text": "Item-level farm origin, harvest date, handling, expected shelf life, and a plain-language freshness status visible before every box selection and swap",
+                "rationale": "This raises the proven transparency strength and answers the opportunity to make freshness and local sourcing a more visible reason to choose the service over generic grocery delivery.",
+                "target_section": "value_propositions",
+                "target_card_text": "Item-level farm origin, harvest date, handling, and expected shelf-life visibility",
+                "opposite_side_impact": "The richer pre-purchase information can increase trust and repeat purchases, but requires more rigorous farm-data capture and item-data maintenance. It can also reduce refunds caused by mismatched freshness expectations."
+              },
+              {
+                "action": "raise",
+                "new_text": "Flexible recurring plan with weekly delivery as the default, one-tap frequency changes, travel skips, and a personalized next-box preview three days before fulfillment",
+                "rationale": "This builds on the recurring-plan strength and the opportunity to use preference and frequency data to improve predictable revenue, supply matching, and spoilage control.",
+                "target_section": "customer_relationships",
+                "target_card_text": "Flexible recurring plan with frequency controls and travel skips",
+                "opposite_side_impact": "A default weekly cadence improves revenue predictability and demand planning while preserving customer control. The preview creates additional supply-matching and substitution-planning work before fulfillment."
+              },
+              {
+                "action": "reduce",
+                "new_text": "Last-mile urban delivery through neighborhood route clusters, two school- and work-compatible delivery blocks per day, and secure handoff operations",
+                "rationale": "This responds to the margin-pressure and cost-outgrowing-revenue threats created by expensive timed urban delivery, while retaining the core convenience proposition.",
+                "target_section": "cost_structure",
+                "target_card_text": "Last-mile urban delivery, timed windows, and secure handoff operations",
+                "opposite_side_impact": "Customers receive fewer bespoke delivery slots, but retain delivery periods designed around school and work routines. Route clustering lowers delivery cost per order and supports more dependable capacity as volume grows."
+              },
+              {
+                "action": "create",
+                "new_text": "Seasonal child-friendly produce discovery cards with a taste challenge, simple preparation idea, and reward progress in each family box",
+                "rationale": "This captures the opportunity to offer themed seasonal boxes or child-friendly produce discovery experiences and strengthens differentiation against grocery-delivery substitutes.",
+                "target_section": "value_propositions",
+                "target_card_text": null,
+                "opposite_side_impact": "The discovery layer can increase family engagement, repeat ordering, and willingness to accept seasonal variety. It adds lightweight content creation and box-insert or in-app experience costs."
+              }
+            ],
+            "swot_id": "ea0d3ac5-e3f8-5f2f-887d-1858ef259ac6",
+            "canvas_id": "423e7bfb-d153-5b82-aa31-dd7e04714ff5",
+            "to_version": 2,
+            "from_version": 1,
+            "result_canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25"
+          }
+        },
+        {
+          "id": "a72b302c-c160-5147-9035-32eeb441bc72",
+          "type": "errc",
+          "data": {
+            "id": "a72b302c-c160-5147-9035-32eeb441bc72",
+            "moves": [
+              {
+                "action": "raise",
+                "new_text": "In-app item pages showing farms, harvest dates, shelf life, prices, and one-tap recommended swaps ranked by freshness, family preferences, and meal fit before checkout",
+                "rationale": "This answers the opportunity to use detailed freshness and farm information for informed swaps and to deepen personalization. It builds on the strength of item-level transparency.",
+                "target_section": "channels",
+                "target_card_text": "In-app item pages showing farms, harvest dates, shelf life, and prices",
+                "opposite_side_impact": "More informed swaps should reduce unwanted substitutions, refunds, and replacement costs. It requires the supply-matching and item-data activities to keep swap recommendations accurate in real time."
+              },
+              {
+                "action": "raise",
+                "new_text": "Optional paid add-ons expanded from individual extra items to personalized weekly family-preferred produce, lunchbox, and meal-kit bundles with clearly stated bundle savings",
+                "rationale": "This addresses the opportunity to increase basket value using recorded family preferences and the threat of margin pressure under mid-market box pricing.",
+                "target_section": "revenue_streams",
+                "target_card_text": "Optional paid add-ons of extra family-preferred produce items",
+                "opposite_side_impact": "Higher-value bundles increase picking, packing, and inventory-planning complexity, but can improve basket density and make farm purchasing more predictable. The value side gains more complete meal and lunchbox support for families."
+              },
+              {
+                "action": "raise",
+                "new_text": "Local farms supplying seasonal produce and verified harvest information, with at least two qualified backup farm sources for each high-demand core produce category",
+                "rationale": "This responds to the threats of supply disruption, quality risk, and partner over-dependence. It also supports the opportunity for stronger farm-data reliability.",
+                "target_section": "key_partnerships",
+                "target_card_text": "Local farms supplying seasonal produce and verified harvest information",
+                "opposite_side_impact": "Backup supply improves the ability to preserve promised box contents, freshness information, and delivery reliability for customers. It may increase supplier-management and qualification costs on the cost side."
+              },
+              {
+                "action": "create",
+                "new_text": "Family-approved swap guarantee: parents can pre-set acceptable replacements by item, freshness status, and meal use, with instant credit for any swap outside those rules",
+                "rationale": "This creates a trust and control layer from the opportunity to make informed swaps using freshness data. It directly mitigates the relationship-deterioration threat from unwanted substitutions and freshness changes.",
+                "target_section": "value_propositions",
+                "target_card_text": null,
+                "opposite_side_impact": "The guarantee increases the need for precise preference data, real-time availability matching, and controlled service-recovery credits. In return, it can strengthen recurring-plan retention and reduce defections caused by unwanted substitutions."
+              }
+            ],
+            "swot_id": "eb11de5f-97ac-5d5a-841f-19e2c17c7d04",
+            "canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "to_version": 3,
+            "from_version": 2,
+            "result_canvas_id": "433a5937-56af-5a4d-b585-ecb2c147e6df"
+          }
+        },
+        {
+          "id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+          "type": "canvas",
+          "data": {
+            "id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "version": 2,
+            "group_id": "9ff81444-ba35-55c2-9c0e-e0f7bda0c41a",
+            "sections": {
+              "channels": [
+                {
+                  "id": "fbb6abf6-b8ba-5fab-8d63-6eada932a517",
+                  "text": "Mobile app for box selection, swaps, scheduling, and skip controls",
+                  "errc_marker": null
+                },
+                {
+                  "id": "d1ed7321-09b5-5085-9d30-8d17865e3bdf",
+                  "text": "In-app item pages showing farms, harvest dates, shelf life, and prices",
+                  "errc_marker": null
+                },
+                {
+                  "id": "151b2e24-f661-5244-94a8-9ac1518a3428",
+                  "text": "Delivery tracking and proactive notifications for timing or availability changes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "bbbb18cb-b6fd-526b-88fb-d94475f0848e",
+                  "text": "Personalized app notifications with recipes, storage, and lunchbox guidance",
+                  "errc_marker": null
+                }
+              ],
+              "key_resources": [
+                {
+                  "id": "92193bc6-8514-51c6-81e4-11f103deacbc",
+                  "text": "Parent preference, substitution, and delivery-window data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "7da8d3fc-e985-51c2-a100-cdf53060cf43",
+                  "text": "Mobile app for customization, scheduling, provenance, and meal guidance",
+                  "errc_marker": null
+                },
+                {
+                  "id": "23d05f35-86b7-51e3-abc8-dd07c8dbcc04",
+                  "text": "Reliable local-farm supply and item-level harvest and handling data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "ceb41a60-88c0-500f-957f-0d5e272904f4",
+                  "text": "Urban delivery capacity with secure apartment handoff options",
+                  "errc_marker": null
+                }
+              ],
+              "cost_structure": [
+                {
+                  "id": "e3ead179-8aa4-5344-b49b-f76e5e9bf068",
+                  "text": "Local produce purchasing and quality or spoilage guarantees",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f663ec39-3a49-50d5-a80e-ce4535e416eb",
+                  "text": "Last-mile urban delivery through neighborhood route clusters, two school- and work-compatible delivery blocks per day, and secure handoff operations",
+                  "errc_marker": "reduce"
+                },
+                {
+                  "id": "254c74a8-22aa-5967-b32e-d045a29bb51f",
+                  "text": "Mobile app, order customization, tracking, and notification infrastructure",
+                  "errc_marker": null
+                },
+                {
+                  "id": "aa95cb22-7b02-535b-80f9-5c90e370463e",
+                  "text": "Customer support, refunds, replacements, and proactive availability communication",
+                  "errc_marker": null
+                }
+              ],
+              "key_activities": [
+                {
+                  "id": "3d35a347-52cf-5e6c-a134-426a96873b29",
+                  "text": "Match seasonal farm supply to household preferences and family-box plans",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f2033ef7-5c9a-56e8-b847-0bf83a65b7cf",
+                  "text": "Maintain accurate harvest, origin, shelf-life, price, and availability information",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f3d6e92b-ba30-5768-bb6f-dc9b4aaeb6a7",
+                  "text": "Plan and execute reliable delivery windows around school and work routines",
+                  "errc_marker": null
+                },
+                {
+                  "id": "05e6e296-5c65-59aa-bf2a-c084ca5212c9",
+                  "text": "Create practical recipe, storage, and lunchbox guidance for each box",
+                  "errc_marker": null
+                }
+              ],
+              "revenue_streams": [
+                {
+                  "id": "e4f6ceac-c275-5e19-888e-d42842c6b4d3",
+                  "text": "Mid-market payment for one-off customizable produce boxes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e4afe980-c207-5bf9-9d22-8665fce9259b",
+                  "text": "Mid-market recurring family-box payments with flexible delivery frequency",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a76a13c5-7a72-5581-9baa-0a12767267d1",
+                  "text": "Delivery fee disclosed before checkout",
+                  "errc_marker": null
+                },
+                {
+                  "id": "53aef71d-2a14-5320-8ad1-efc364092764",
+                  "text": "Optional paid add-ons of extra family-preferred produce items",
+                  "errc_marker": null
+                }
+              ],
+              "key_partnerships": [
+                {
+                  "id": "422927b5-2d80-5c1a-960f-1944334c6b2a",
+                  "text": "Local farms supplying seasonal produce and verified harvest information",
+                  "errc_marker": null
+                },
+                {
+                  "id": "eb9033fc-be1d-5587-86df-0fae1f38c1de",
+                  "text": "Urban last-mile delivery partners with scheduled and no-contact handoffs",
+                  "errc_marker": null
+                },
+                {
+                  "id": "c9459d99-68f7-5dfc-b18b-ef81f258f986",
+                  "text": "Apartment-building access or secure-drop partners where needed",
+                  "errc_marker": null
+                },
+                {
+                  "id": "095b9606-74eb-5392-8528-63a1a4af515c",
+                  "text": "Recipe and food-storage experts for family-friendly seasonal guidance",
+                  "errc_marker": null
+                }
+              ],
+              "customer_segments": [
+                {
+                  "id": "ff934fe6-09d9-583d-8841-826b3be84565",
+                  "text": "Maya: full-time urban parent managing weekday family food purchasing",
+                  "errc_marker": null
+                },
+                {
+                  "id": "59337873-f1a9-5f66-a9b2-4c4bfe211d5b",
+                  "text": "Time-constrained city household needing reliable produce for meals and school lunches",
+                  "errc_marker": null
+                }
+              ],
+              "value_propositions": [
+                {
+                  "id": "43e304ca-fc9f-5d96-9119-3b49c23df2bf",
+                  "text": "Family-customizable local produce boxes matched to children’s preferences",
+                  "errc_marker": null
+                },
+                {
+                  "id": "0f2ec230-6d29-54b2-9354-082bca51f63c",
+                  "text": "School-pickup-friendly delivery windows and no-contact handoff options",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e9f450b0-a44f-5883-ac43-5373832c2096",
+                  "text": "Item-level farm origin, harvest date, handling, expected shelf life, and a plain-language freshness status visible before every box selection and swap",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "bc0f3980-e238-5ca2-9b28-7f93ef9e4b8b",
+                  "text": "Meal, lunchbox, and storage guidance that turns seasonal produce into low-effort meals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "8098157c-f921-57e2-b129-1b08ed29908a",
+                  "text": "Seasonal child-friendly produce discovery cards with a taste challenge, simple preparation idea, and reward progress in each family box",
+                  "errc_marker": "create"
+                }
+              ],
+              "customer_relationships": [
+                {
+                  "id": "07e4a273-605a-5192-996b-7a2020818fd5",
+                  "text": "Self-service ordering with curated family boxes and item substitutions",
+                  "errc_marker": null
+                },
+                {
+                  "id": "6df911ed-c288-5732-89e9-72336474b4a6",
+                  "text": "Flexible recurring plan with weekly delivery as the default, one-tap frequency changes, travel skips, and a personalized next-box preview three days before fulfillment",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "a1e967f6-569b-581e-8675-ceaf7958cab8",
+                  "text": "Proactive alerts before substitutions, delays, or freshness changes affect an order",
+                  "errc_marker": null
+                },
+                {
+                  "id": "80b1a2ec-cc0b-5b90-81be-ff3785e3a01f",
+                  "text": "In-app issue reporting and prompt resolution for missing or damaged produce",
+                  "errc_marker": null
+                }
+              ]
+            },
+            "is_generated": false,
+            "empathy_map_ids": [
+              "264ab398-bd3d-58a6-a604-de7065f0f3ad"
+            ],
+            "previous_version_id": "423e7bfb-d153-5b82-aa31-dd7e04714ff5"
+          }
+        },
+        {
+          "id": "433a5937-56af-5a4d-b585-ecb2c147e6df",
+          "type": "canvas",
+          "data": {
+            "id": "433a5937-56af-5a4d-b585-ecb2c147e6df",
+            "version": 3,
+            "group_id": "9ff81444-ba35-55c2-9c0e-e0f7bda0c41a",
+            "sections": {
+              "channels": [
+                {
+                  "id": "fbb6abf6-b8ba-5fab-8d63-6eada932a517",
+                  "text": "Mobile app for box selection, swaps, scheduling, and skip controls",
+                  "errc_marker": null
+                },
+                {
+                  "id": "d1ed7321-09b5-5085-9d30-8d17865e3bdf",
+                  "text": "In-app item pages showing farms, harvest dates, shelf life, prices, and one-tap recommended swaps ranked by freshness, family preferences, and meal fit before checkout",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "151b2e24-f661-5244-94a8-9ac1518a3428",
+                  "text": "Delivery tracking and proactive notifications for timing or availability changes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "bbbb18cb-b6fd-526b-88fb-d94475f0848e",
+                  "text": "Personalized app notifications with recipes, storage, and lunchbox guidance",
+                  "errc_marker": null
+                }
+              ],
+              "key_resources": [
+                {
+                  "id": "92193bc6-8514-51c6-81e4-11f103deacbc",
+                  "text": "Parent preference, substitution, and delivery-window data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "7da8d3fc-e985-51c2-a100-cdf53060cf43",
+                  "text": "Mobile app for customization, scheduling, provenance, and meal guidance",
+                  "errc_marker": null
+                },
+                {
+                  "id": "23d05f35-86b7-51e3-abc8-dd07c8dbcc04",
+                  "text": "Reliable local-farm supply and item-level harvest and handling data",
+                  "errc_marker": null
+                },
+                {
+                  "id": "ceb41a60-88c0-500f-957f-0d5e272904f4",
+                  "text": "Urban delivery capacity with secure apartment handoff options",
+                  "errc_marker": null
+                }
+              ],
+              "cost_structure": [
+                {
+                  "id": "e3ead179-8aa4-5344-b49b-f76e5e9bf068",
+                  "text": "Local produce purchasing and quality or spoilage guarantees",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f663ec39-3a49-50d5-a80e-ce4535e416eb",
+                  "text": "Last-mile urban delivery through neighborhood route clusters, two school- and work-compatible delivery blocks per day, and secure handoff operations",
+                  "errc_marker": null
+                },
+                {
+                  "id": "254c74a8-22aa-5967-b32e-d045a29bb51f",
+                  "text": "Mobile app, order customization, tracking, and notification infrastructure",
+                  "errc_marker": null
+                },
+                {
+                  "id": "aa95cb22-7b02-535b-80f9-5c90e370463e",
+                  "text": "Customer support, refunds, replacements, and proactive availability communication",
+                  "errc_marker": null
+                }
+              ],
+              "key_activities": [
+                {
+                  "id": "3d35a347-52cf-5e6c-a134-426a96873b29",
+                  "text": "Match seasonal farm supply to household preferences and family-box plans",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f2033ef7-5c9a-56e8-b847-0bf83a65b7cf",
+                  "text": "Maintain accurate harvest, origin, shelf-life, price, and availability information",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f3d6e92b-ba30-5768-bb6f-dc9b4aaeb6a7",
+                  "text": "Plan and execute reliable delivery windows around school and work routines",
+                  "errc_marker": null
+                },
+                {
+                  "id": "05e6e296-5c65-59aa-bf2a-c084ca5212c9",
+                  "text": "Create practical recipe, storage, and lunchbox guidance for each box",
+                  "errc_marker": null
+                }
+              ],
+              "revenue_streams": [
+                {
+                  "id": "e4f6ceac-c275-5e19-888e-d42842c6b4d3",
+                  "text": "Mid-market payment for one-off customizable produce boxes",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e4afe980-c207-5bf9-9d22-8665fce9259b",
+                  "text": "Mid-market recurring family-box payments with flexible delivery frequency",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a76a13c5-7a72-5581-9baa-0a12767267d1",
+                  "text": "Delivery fee disclosed before checkout",
+                  "errc_marker": null
+                },
+                {
+                  "id": "53aef71d-2a14-5320-8ad1-efc364092764",
+                  "text": "Optional paid add-ons expanded from individual extra items to personalized weekly family-preferred produce, lunchbox, and meal-kit bundles with clearly stated bundle savings",
+                  "errc_marker": "raise"
+                }
+              ],
+              "key_partnerships": [
+                {
+                  "id": "422927b5-2d80-5c1a-960f-1944334c6b2a",
+                  "text": "Local farms supplying seasonal produce and verified harvest information, with at least two qualified backup farm sources for each high-demand core produce category",
+                  "errc_marker": "raise"
+                },
+                {
+                  "id": "eb9033fc-be1d-5587-86df-0fae1f38c1de",
+                  "text": "Urban last-mile delivery partners with scheduled and no-contact handoffs",
+                  "errc_marker": null
+                },
+                {
+                  "id": "c9459d99-68f7-5dfc-b18b-ef81f258f986",
+                  "text": "Apartment-building access or secure-drop partners where needed",
+                  "errc_marker": null
+                },
+                {
+                  "id": "095b9606-74eb-5392-8528-63a1a4af515c",
+                  "text": "Recipe and food-storage experts for family-friendly seasonal guidance",
+                  "errc_marker": null
+                }
+              ],
+              "customer_segments": [
+                {
+                  "id": "ff934fe6-09d9-583d-8841-826b3be84565",
+                  "text": "Maya: full-time urban parent managing weekday family food purchasing",
+                  "errc_marker": null
+                },
+                {
+                  "id": "59337873-f1a9-5f66-a9b2-4c4bfe211d5b",
+                  "text": "Time-constrained city household needing reliable produce for meals and school lunches",
+                  "errc_marker": null
+                }
+              ],
+              "value_propositions": [
+                {
+                  "id": "43e304ca-fc9f-5d96-9119-3b49c23df2bf",
+                  "text": "Family-customizable local produce boxes matched to children’s preferences",
+                  "errc_marker": null
+                },
+                {
+                  "id": "0f2ec230-6d29-54b2-9354-082bca51f63c",
+                  "text": "School-pickup-friendly delivery windows and no-contact handoff options",
+                  "errc_marker": null
+                },
+                {
+                  "id": "e9f450b0-a44f-5883-ac43-5373832c2096",
+                  "text": "Item-level farm origin, harvest date, handling, expected shelf life, and a plain-language freshness status visible before every box selection and swap",
+                  "errc_marker": null
+                },
+                {
+                  "id": "bc0f3980-e238-5ca2-9b28-7f93ef9e4b8b",
+                  "text": "Meal, lunchbox, and storage guidance that turns seasonal produce into low-effort meals",
+                  "errc_marker": null
+                },
+                {
+                  "id": "8098157c-f921-57e2-b129-1b08ed29908a",
+                  "text": "Seasonal child-friendly produce discovery cards with a taste challenge, simple preparation idea, and reward progress in each family box",
+                  "errc_marker": null
+                },
+                {
+                  "id": "f23dbdff-4532-5667-ae46-39af385005cc",
+                  "text": "Family-approved swap guarantee: parents can pre-set acceptable replacements by item, freshness status, and meal use, with instant credit for any swap outside those rules",
+                  "errc_marker": "create"
+                }
+              ],
+              "customer_relationships": [
+                {
+                  "id": "07e4a273-605a-5192-996b-7a2020818fd5",
+                  "text": "Self-service ordering with curated family boxes and item substitutions",
+                  "errc_marker": null
+                },
+                {
+                  "id": "6df911ed-c288-5732-89e9-72336474b4a6",
+                  "text": "Flexible recurring plan with weekly delivery as the default, one-tap frequency changes, travel skips, and a personalized next-box preview three days before fulfillment",
+                  "errc_marker": null
+                },
+                {
+                  "id": "a1e967f6-569b-581e-8675-ceaf7958cab8",
+                  "text": "Proactive alerts before substitutions, delays, or freshness changes affect an order",
+                  "errc_marker": null
+                },
+                {
+                  "id": "80b1a2ec-cc0b-5b90-81be-ff3785e3a01f",
+                  "text": "In-app issue reporting and prompt resolution for missing or damaged produce",
+                  "errc_marker": null
+                }
+              ]
+            },
+            "is_generated": false,
+            "empathy_map_ids": [
+              "264ab398-bd3d-58a6-a604-de7065f0f3ad"
+            ],
+            "previous_version_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25"
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:51:02.979356Z",
+      "finishedAt": "2026-10-10T19:52:30.309544Z",
+      "finalVersion": 2,
+      "finalCanvasId": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+      "finalSwotId": "eb11de5f-97ac-5d5a-841f-19e2c17c7d04"
+    },
+    {
+      "id": "01a1275e-703f-7281-9d9b-9277e7aa83d8",
+      "stage": "storytelling",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "swot_errc_cycle": [
+          "01a1275e-703f-7281-9d9b-92761fdb7823"
+        ]
+      },
+      "attemptId": "01a1275f-c571-70af-a41f-8edd4bf0966f",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "94b0cf8d-7804-50fe-aa03-102e6d286c4f",
+          "type": "storytelling",
+          "data": {
+            "id": "94b0cf8d-7804-50fe-aa03-102e6d286c4f",
+            "goal": "pitching_investors",
+            "format": "text_and_image",
+            "canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "perspective": "customer",
+            "narrative_text": "On Tuesday evening, after her children are asleep, Maya Chen opens the mobile app to plan next week’s lunches and dinners. As a full-time urban parent, she has little room for supermarket visits or farmers’ markets, and an unreliable delivery can collide with school pickup or work.\n\nMaya selects a family-customizable local produce box for Thursday evening, choosing a school-pickup-compatible delivery window and a no-contact handoff for her apartment. Before she commits, the app shows each item’s farm, harvest date, handling information, expected shelf life, plain-language freshness status, and price. She replaces an unfamiliar leafy vegetable with extra apples and cucumbers her children are more likely to eat.\n\nThe app gives Maya a personalized next-box preview three days before fulfillment and lets her adjust frequency or skip a week when travel intervenes. It also sends proactive alerts if availability, substitutions, timing, or freshness changes affect her order. If an item is missing or damaged, she can report it in the app for prompt resolution.\n\nMaya pays a disclosed delivery fee plus a mid-market recurring family-box payment, with the option to buy extra preferred produce. In return, she receives produce suited to her household, meal and lunchbox ideas, storage guidance, and seasonal child-friendly discovery cards that make unfamiliar food easier to try. The box is designed to reduce waste and late-night grocery decisions while helping her use fresh produce across weekday meals.\n\nBehind her order, local farms provide seasonal produce and verified harvest information. The business combines Maya’s preference and delivery-window data with a mobile customization and provenance platform, then coordinates neighborhood delivery routes, secure apartment handoffs, and two delivery blocks compatible with school and work routines. Recipe and food-storage experts support the practical guidance included with each box.",
+            "canvas_references": [
+              {
+                "note": "Maya is the protagonist: a full-time urban parent managing weekday family food purchasing.",
+                "section": "customer_segments"
+              },
+              {
+                "note": "The story uses customizable family boxes, school-pickup-friendly delivery, item-level freshness and farm information, meal guidance, and child-friendly discovery cards.",
+                "section": "value_propositions"
+              },
+              {
+                "note": "Maya finds, selects, swaps, schedules, and receives updates through the mobile app, item pages, tracking, and notifications.",
+                "section": "channels"
+              },
+              {
+                "note": "The narrative covers self-service substitutions, flexible recurring delivery, next-box previews, proactive alerts, and in-app issue resolution.",
+                "section": "customer_relationships"
+              },
+              {
+                "note": "Maya pays recurring family-box payments, a disclosed delivery fee, and can purchase optional extra produce.",
+                "section": "revenue_streams"
+              },
+              {
+                "note": "The service relies on parent preference data, the mobile app, verified farm and handling data, and urban delivery capacity.",
+                "section": "key_resources"
+              },
+              {
+                "note": "It matches seasonal supply to preferences, maintains product information, executes delivery windows, and creates meal and storage guidance.",
+                "section": "key_activities"
+              },
+              {
+                "note": "Local farms, last-mile delivery and secure-drop partners, and recipe and storage experts enable the offer.",
+                "section": "key_partnerships"
+              },
+              {
+                "note": "The operating model includes produce purchasing and quality guarantees, clustered urban delivery and secure handoffs, app infrastructure, and customer support.",
+                "section": "cost_structure"
+              }
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:52:30.321752Z",
+      "finishedAt": "2026-10-10T19:52:38.123127Z"
+    },
+    {
+      "id": "01a1275e-703f-7281-9d9b-927868b3d2d3",
+      "stage": "future_scenario",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "swot_errc_cycle": [
+          "01a1275e-703f-7281-9d9b-92761fdb7823"
+        ]
+      },
+      "attemptId": "01a1275f-c572-7368-b8aa-2627685d3c0b",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": []
+      },
+      "artifacts": [
+        {
+          "id": "7ed56a0d-4db4-5eb3-bb10-958ce2c57bb0",
+          "type": "future_scenario",
+          "data": {
+            "id": "7ed56a0d-4db4-5eb3-bb10-958ce2c57bb0",
+            "variants": [
+              {
+                "name": "Trusted Local Routine",
+                "narrative": "Local farms provide dependable seasonal volume and accurate item-level provenance data, while neighborhood delivery density makes scheduled urban handoffs efficient. Busy parents continue to value freshness transparency, child-friendly customization, and school-pickup-compatible convenience enough to sustain recurring mid-market purchases. The service becomes part of the weekly household routine rather than an occasional specialty purchase.",
+                "adaptation_questions": [
+                  {
+                    "section": "revenue_streams",
+                    "question": "How should recurring family-box payments, delivery fees, and preferred-produce add-ons be balanced if strong retention and route density make the weekly plan the dominant purchase pattern?"
+                  },
+                  {
+                    "section": "key_activities",
+                    "question": "Which supply-matching and personalization activities would most strengthen the advantage created by reliable farm data and stable recurring demand?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "What role should next-box previews, taste challenges, and proactive guidance play in making the service feel indispensable to families rather than merely convenient?"
+                  }
+                ]
+              },
+              {
+                "name": "Abundant Produce, Reluctant Payers",
+                "narrative": "Farms can supply varied local produce with credible harvest and freshness information, and delivery remains operationally feasible. However, households become more price-sensitive and compare every box with supermarket promotions, mass grocery-delivery subscriptions, and lower-cost pickup options. Parents appreciate transparency and local sourcing but reserve recurring delivery for selected weeks or use the service only when its convenience is clearly worth the price.",
+                "adaptation_questions": [
+                  {
+                    "section": "value_propositions",
+                    "question": "Which parts of the family-customized, provenance-rich, and meal-guidance proposition would remain compelling enough to justify a mid-market price when lower-cost substitutes are readily available?"
+                  },
+                  {
+                    "section": "revenue_streams",
+                    "question": "How would the business make money if customers shift from predictable recurring boxes toward more selective one-off purchases and only occasional add-ons?"
+                  },
+                  {
+                    "section": "customer_segments",
+                    "question": "Which urban-parent households would still prioritize school-pickup-compatible delivery and verified local freshness despite heightened food-budget pressure?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "How should flexible skips, frequency controls, and next-box previews function when retaining trust matters but customers are actively minimizing discretionary commitments?"
+                  }
+                ]
+              },
+              {
+                "name": "Costly City, Strong Demand",
+                "narrative": "Parents increasingly seek reliable, transparent local produce and value the service's help with lunchboxes and weekday meals. At the same time, urban labor, congestion, secure apartment access, and failed-handoff costs rise, making narrow delivery windows expensive even as demand grows. Farms may still produce good supply, but fulfilling the promise at a mid-market price becomes the central constraint.",
+                "adaptation_questions": [
+                  {
+                    "section": "cost_structure",
+                    "question": "How would last-mile, secure-handoff, support, replacement, and spoilage costs change if delivery-window reliability becomes substantially more expensive?"
+                  },
+                  {
+                    "section": "key_partnerships",
+                    "question": "Which delivery and apartment-access partnerships would be most important for protecting scheduled handoffs and route density under worsening urban delivery economics?"
+                  },
+                  {
+                    "section": "channels",
+                    "question": "How should delivery tracking and availability notifications be used if customers need to participate more actively in avoiding failed or costly handoffs?"
+                  },
+                  {
+                    "section": "revenue_streams",
+                    "question": "What role would transparently disclosed delivery fees and optional add-ons need to play if box payments alone no longer cover rising fulfillment costs?"
+                  }
+                ]
+              },
+              {
+                "name": "Fragile Supply, Convenience Reset",
+                "narrative": "Weather variability, harvest disruptions, and inconsistent farm data make local assortment and freshness predictions less reliable. Simultaneously, busy parents become less tolerant of substitutions and more willing to use large grocery platforms that offer broad inventory and fast replacement. The app can still source seasonal local produce, but its promised box composition, item-level freshness status, and recurring routine are repeatedly tested.",
+                "adaptation_questions": [
+                  {
+                    "section": "key_resources",
+                    "question": "Which farm-supply, harvest-data, and preference-data resources would be most critical to preserve trust when seasonal availability and shelf-life certainty deteriorate?"
+                  },
+                  {
+                    "section": "key_activities",
+                    "question": "How would supply matching and information-maintenance activities need to respond when substitutions and changing freshness status become routine rather than exceptional?"
+                  },
+                  {
+                    "section": "value_propositions",
+                    "question": "What would the transparency and family-customization proposition need to look like if exact item availability cannot be reliably promised?"
+                  },
+                  {
+                    "section": "customer_relationships",
+                    "question": "What role should proactive substitution, delay, and freshness-change communication play when customers are deciding whether to remain with the recurring plan?"
+                  },
+                  {
+                    "section": "cost_structure",
+                    "question": "How would quality guarantees, refunds, replacements, and proactive communication costs evolve under frequent supply disruption and customer defection risk?"
+                  }
+                ]
+              }
+            ],
+            "canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "uncertainty_drivers": [
+              "Reliability and seasonal volatility of local-farm supply, including the availability of item-level harvest, handling, and shelf-life data",
+              "Urban last-mile delivery economics and apartment-handoff reliability at the service's required school- and work-compatible windows",
+              "Busy urban parents' willingness to pay a mid-market premium for local, transparent, family-customized produce rather than use grocery-delivery substitutes"
+            ]
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:52:30.322714Z",
+      "finishedAt": "2026-10-10T19:52:49.325717Z"
+    },
+    {
+      "id": "01a1275e-703f-7281-9d9b-9279b90b8aca",
+      "stage": "pitch",
+      "instanceIndex": 0,
+      "status": "done",
+      "refs": {
+        "storytelling": [
+          "01a1275e-703f-7281-9d9b-9277e7aa83d8"
+        ],
+        "swot_errc_cycle": [
+          "01a1275e-703f-7281-9d9b-92761fdb7823"
+        ]
+      },
+      "attemptId": "01a1275f-e3f7-7788-8e26-57912e0f69ed",
+      "retryCount": 0,
+      "error": null,
+      "consistency": {
+        "score": 5,
+        "violations": [
+          {
+            "rule_id": "judge_unavailable:pitch_risk_analysis_grounded_in_swot",
+            "severity": "warning",
+            "message": "Judge check could not run: pitch_risk_analysis_grounded_in_swot: FakeJudgeModel has no scripted reply",
+            "artifact_ids": [
+              "337e23fe-11c7-564d-b7f5-4047aab13c7f"
+            ]
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "id": "337e23fe-11c7-564d-b7f5-4047aab13c7f",
+          "type": "pitch",
+          "data": {
+            "id": "337e23fe-11c7-564d-b7f5-4047aab13c7f",
+            "hook": "After her children are asleep, Maya needs to plan weekday meals without another supermarket trip—and she cannot risk a delivery that conflicts with school pickup or work.",
+            "swot_id": "eb11de5f-97ac-5d5a-841f-19e2c17c7d04",
+            "canvas_id": "77ef7e97-fd7f-5124-a1a5-493359e98a25",
+            "project_id": "01a1275d-afec-7009-a3e6-132c74208221",
+            "team_info_id": null,
+            "team_section": null,
+            "risk_analysis": [
+              "Substitutes and price/value pressure are high because families can use supermarkets, grocery delivery, farmers’ markets, or their own shopping, and competitors may offer lower-priced delivery or comparable features. The model addresses this through family-specific swaps, school- and work-compatible delivery windows, item-level provenance and freshness information, and practical meal and storage guidance that extend value beyond produce access alone.",
+              "Margins may be pressured by local produce purchasing, spoilage guarantees, urban last-mile delivery, technology, and customer service at mid-market pricing. Neighborhood route clustering, two defined delivery blocks, recurring boxes, and optional paid extra-produce add-ons are the stated mechanisms that support more efficient fulfillment and additional basket value.",
+              "Costs may be unpredictable because seasonal supply, spoilage, substitutions, refunds, and secure urban handoffs can vary. The business manages the customer impact through supply matching, accurate availability and freshness information, proactive notices before changes affect orders, and in-app issue reporting with prompt resolution.",
+              "The service relies on local farms for dependable produce and verified harvest and handling information, and on last-mile partners for scheduled apartment handoffs. It mitigates this dependency through named farm, delivery, and apartment-access partnerships, while maintaining item-level origin, handling, shelf-life, and availability information as a core operating activity.",
+              "Execution failures in preference matching, item data, substitutions, or timed delivery would be highly visible to busy parents and could erode trust. The app provides pre-fulfillment next-box previews, proactive alerts for substitutions, delays, and freshness changes, delivery tracking, and a direct path to report missing or damaged items for resolution.",
+              "Customer defection is a material risk because customers can easily skip, change frequency, order one-off boxes, or move to alternatives. The model seeks to sustain repeat use through weekly-default recurring delivery, flexible controls for travel and changing needs, personalized previews, family-preference matching, and guidance that helps households use each box.",
+              "Urban delivery and support costs could outgrow revenue if route density and repeat ordering do not scale enough. The operating design uses neighborhood route clusters and recurring delivery as the stated approach to concentrate deliveries and support more efficient last-mile operations."
+            ],
+            "storytelling_id": "94b0cf8d-7804-50fe-aa03-102e6d286c4f",
+            "business_case_id": null,
+            "business_model_summary": "The app serves full-time urban parents and time-constrained city households with family-customizable local produce boxes, child-friendly seasonal discovery, and practical meal, lunchbox, and storage guidance. Customers use the mobile app to select and swap items, see farm origin, harvest, handling, shelf-life, freshness, and price information, and schedule school- and work-compatible delivery windows with no-contact handoffs. Revenue comes from mid-market one-off and recurring family-box payments, disclosed delivery fees, and optional extra produce add-ons. The model depends on local-farm supply and verified item data, a customization and provenance platform, urban last-mile delivery capacity, and recipe and food-storage expertise.",
+            "competitive_advantages": [
+              "The model combines family-level customization with operationally relevant delivery scheduling: parents can swap items around children’s preferences and choose among delivery blocks designed around school and work routines, rather than accepting a generic produce box or broad delivery window.",
+              "Item-level transparency is built into the purchase decision. Farm origin, harvest date, handling information, expected shelf life, plain-language freshness status, and price are visible before selection or swaps, supporting informed choices and making the freshness promise tangible.",
+              "The service is designed for produce use, not only produce delivery: meal, lunchbox, and storage guidance, plus child-friendly discovery cards, help households turn seasonal items into low-effort weekday food and reduce waste.",
+              "A flexible recurring model pairs weekly-default ordering with a personalized next-box preview, advance adjustments, and travel skips, giving busy households continuity without locking them into a fixed box."
+            ],
+            "financial_analysis_section": null
+          }
+        }
+      ],
+      "startedAt": "2026-10-10T19:52:38.135820Z",
+      "finishedAt": "2026-10-10T19:53:01.582919Z"
+    }
+  ]
+}

@@ -1,10 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import { PanelLeft } from "lucide-react"
 import { Sidebar } from "@/components/common/sidebar"
 import { Button } from "@/components/ui/button"
+import { setUnauthorizedHandler } from "@/lib/api/http"
+import { PUBLIC_PAGES } from "@/lib/route-guard"
+import { usePathname, useRouter } from "@/i18n/routing"
 
 interface AppShellProps {
   children: React.ReactNode
@@ -13,6 +16,18 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const t = useTranslations("AppShell")
+  const pathname = usePathname()
+  const router = useRouter()
+
+  // A 401 that survived the BFF's refresh means the session is gone: go to the login page.
+  useEffect(() => {
+    setUnauthorizedHandler(() => router.replace("/login"))
+    return () => setUnauthorizedHandler(null)
+  }, [router])
+
+  if ((PUBLIC_PAGES as readonly string[]).includes(pathname)) {
+    return <div className="h-screen w-full overflow-y-auto bg-white">{children}</div>
+  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
