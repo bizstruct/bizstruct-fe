@@ -73,6 +73,13 @@
       "needs_retry": "Needs retry",
       "done": "Done",
       "error": "Error"
+    },
+    "state": {
+      "done": "Done",
+      "running": "Running",
+      "attention": "Needs attention",
+      "error": "Error",
+      "waiting": "Waiting"
     }
   },
   "Stages": {
@@ -99,7 +106,6 @@
   },
   "Project": {
     "tabs": {
-      "progress": "Progress",
       "brief": "Brief",
       "segments": "Segments",
       "patterns": "Patterns",
@@ -116,7 +122,10 @@
     "stopped": "Generation finished",
     "back": "All projects",
     "notReady": "This part is not generated yet",
-    "language": "Language"
+    "language": "Language",
+    "progress": "{done} of {total} stages done",
+    "generating": "Generating this part…",
+    "waitingFor": "Waiting for the earlier stages"
   },
   "Progress": {
     "title": "Pipeline",

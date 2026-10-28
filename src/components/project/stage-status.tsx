@@ -3,46 +3,48 @@
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import type { Project, Row } from "@/lib/api/projects"
-import { durationSeconds, stageColumns } from "@/lib/mappers/progress"
+import { durationSeconds } from "@/lib/mappers/progress"
+import { stateOf } from "@/lib/mappers/tab-stages"
+import { STAGES, type StageId } from "@/types/domain/stages"
 import { Panel } from "./primitives"
 import { RowActions } from "./row-actions"
+import { StateIcon } from "./state-icon"
 import { RowStatusChip } from "./status-chip"
 
 interface Props {
   project: Project
+  stages: readonly StageId[]
   onProject: (project: Project) => void
   onRefresh: () => void
 }
 
-export function ProgressView({ project, onProject, onRefresh }: Props) {
+/** The status of the stages behind a tab, shown on the tab itself: one block per stage with its rows, errors, consistency violations and actions. */
+export function StageStatusPanel({ project, stages, onProject, onRefresh }: Props) {
   const t = useTranslations("Progress")
   const ts = useTranslations("Stages")
-  const columns = stageColumns(project.rows, project.enabledOptional)
 
   return (
-    <div className="flex items-start gap-4 overflow-x-auto pb-2" data-testid="stage-graph">
-      {columns.map((column) => (
-        <div key={column.layer} className="flex w-64 shrink-0 flex-col gap-3" data-layer={column.layer}>
-          {column.stages.map(({ definition, rows }) => {
-            const parents = [...definition.depends_on, ...definition.optional_depends_on]
-            return (
-              <Panel key={definition.id} data-stage={definition.id} className="space-y-2 p-3">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-slate-900">{ts(definition.id)}</h3>
-                  {definition.is_optional ? <Badge>{t("optionalBadge")}</Badge> : null}
-                </div>
-                {parents.length > 0 ? (
-                  <p className="text-xs text-slate-400">{t("dependsOn", { stages: parents.map((p) => ts(p)).join(", ") })}</p>
-                ) : null}
-                {rows.length === 0 ? <p className="text-xs text-slate-400">{t("noRows")}</p> : null}
-                {rows.map((row) => (
-                  <RowCard key={row.id} row={row} project={project} showIndex={definition.allows_multiple_instances} onProject={onProject} onRefresh={onRefresh} />
-                ))}
-              </Panel>
-            )
-          })}
-        </div>
-      ))}
+    <div className="grid gap-3" data-testid="stage-status">
+      {stages.map((id) => {
+        const definition = STAGES.find((s) => s.id === id)!
+        const rows = project.rows.filter((r) => r.stage === id).sort((a, b) => a.instanceIndex - b.instanceIndex)
+        const state = stateOf(project.rows, [id])
+        return (
+          <Panel key={id} data-stage={id} data-state={state} className="space-y-2 p-3">
+            <div className="flex items-center gap-2">
+              <StateIcon state={state} />
+              <h3 className="text-sm font-semibold text-slate-900">{ts(id)}</h3>
+              {definition.is_optional ? <Badge>{t("optionalBadge")}</Badge> : null}
+            </div>
+            {rows.length === 0 ? <p className="text-xs text-slate-400">{t("noRows")}</p> : null}
+            <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+              {rows.map((row) => (
+                <RowCard key={row.id} row={row} project={project} showIndex={definition.allows_multiple_instances} onProject={onProject} onRefresh={onRefresh} />
+              ))}
+            </div>
+          </Panel>
+        )
+      })}
     </div>
   )
 }

@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Project, Row } from "@/lib/api/projects"
 import { FARM, MUSIC, fixture } from "@/test/fixtures"
 import { MESSAGES, renderIntl } from "@/test/render"
-import { ProgressView } from "./progress-view"
+import { TAB_IDS, stagesOfTab } from "@/lib/mappers/tab-stages"
+import { StageStatusPanel } from "./stage-status"
 
 vi.mock("@/i18n/routing", async () => (await import("@/test/routing-mock")).routingMock)
 const api = vi.hoisted(() => ({ approveRow: vi.fn(), regenerateRow: vi.fn() }))
@@ -17,29 +18,34 @@ beforeEach(() => {
   api.regenerateRow.mockReset()
 })
 
-function show(project: Project) {
+const ALL_STAGES = TAB_IDS.flatMap((tab) => stagesOfTab(tab, []))
+
+function show(project: Project, stages = ALL_STAGES) {
   const onProject = vi.fn()
   const onRefresh = vi.fn()
-  renderIntl(<ProgressView project={project} onProject={onProject} onRefresh={onRefresh} />)
+  renderIntl(<StageStatusPanel project={project} stages={stages} onProject={onProject} onRefresh={onRefresh} />)
   return { onProject, onRefresh }
 }
 
-describe("ProgressView", () => {
-  it("draws the stage graph from stages.json in dependency order, without the disabled optional stages", () => {
-    show(fixture(FARM))
-    const graph = screen.getByTestId("stage-graph")
-    const stages = [...graph.querySelectorAll("[data-stage]")].map((n) => n.getAttribute("data-stage"))
-    expect(stages).toEqual(["brief", "empathy_map", "customer_scenario", "ideation", "patterns", "canvas", "swot_errc_cycle", "storytelling", "future_scenario", "pitch"])
-    expect(stages).not.toContain("business_case")
-    const layers = [...graph.querySelectorAll("[data-layer]")].map((n) => Number(n.getAttribute("data-layer")))
-    expect(layers).toEqual([...layers].sort((a, b) => a - b))
+describe("StageStatusPanel", () => {
+  it("shows one block per stage it is given, in that order, with the state of each", () => {
+    show(fixture(FARM), stagesOfTab("segments", []))
+    const blocks = [...screen.getByTestId("stage-status").querySelectorAll("[data-stage]")]
+    expect(blocks.map((n) => n.getAttribute("data-stage"))).toEqual(["empathy_map", "customer_scenario", "ideation"])
+    expect(blocks.map((n) => n.getAttribute("data-state"))).toEqual(["done", "done", "done"])
   })
 
   it("titles every stage in the interface language", () => {
     show(fixture(FARM))
     expect(screen.getByRole("heading", { name: MESSAGES.en.Stages.swot_errc_cycle })).toBeInTheDocument()
-    // customer scenario and ideation both come after the empathy map
-    expect(screen.getAllByText("after Empathy map")).toHaveLength(2)
+    for (const id of ALL_STAGES) expect(screen.getByRole("heading", { name: MESSAGES.en.Stages[id] })).toBeInTheDocument()
+  })
+
+  it("marks a stage that has no rows yet as waiting", () => {
+    const project = fixture(FARM)
+    show({ ...project, rows: project.rows.filter((r) => r.stage !== "pitch") }, ["pitch"])
+    expect(screen.getByText("not created yet")).toBeInTheDocument()
+    expect(screen.getByTestId("stage-status").querySelector('[data-stage="pitch"]')).toHaveAttribute("data-state", "waiting")
   })
 
   it("shows a done chip for every row of the finished farm project", () => {
@@ -50,7 +56,7 @@ describe("ProgressView", () => {
 
   it("numbers the rows of a multi-instance stage (music: three empathy maps)", () => {
     show(fixture(MUSIC))
-    const node = screen.getByTestId("stage-graph").querySelector('[data-stage="empathy_map"]') as HTMLElement
+    const node = screen.getByTestId("stage-status").querySelector('[data-stage="empathy_map"]') as HTMLElement
     expect(within(node).getByText("#1")).toBeInTheDocument()
     expect(within(node).getByText("#2")).toBeInTheDocument()
     expect(within(node).getByText("#3")).toBeInTheDocument()

@@ -73,6 +73,13 @@
       "needs_retry": "Потрібен повтор",
       "done": "Готово",
       "error": "Помилка"
+    },
+    "state": {
+      "done": "Готово",
+      "running": "Виконується",
+      "attention": "Потрібна увага",
+      "error": "Помилка",
+      "waiting": "Очікує"
     }
   },
   "Stages": {
@@ -99,7 +106,6 @@
   },
   "Project": {
     "tabs": {
-      "progress": "Прогрес",
       "brief": "Бриф",
       "segments": "Сегменти",
       "patterns": "Патерни",
@@ -116,7 +122,10 @@
     "stopped": "Генерацію завершено",
     "back": "Усі проєкти",
     "notReady": "Цю частину ще не згенеровано",
-    "language": "Мова"
+    "language": "Мова",
+    "progress": "Готово {done} з {total} етапів",
+    "generating": "Ця частина генерується…",
+    "waitingFor": "Очікує попередніх етапів"
   },
   "Progress": {
     "title": "Конвеєр",
