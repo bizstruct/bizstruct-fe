@@ -17,11 +17,6 @@ const MARKER: Record<Marker, { tone: React.ComponentProps<typeof Badge>["tone"];
   create: { tone: "info", icon: Plus, card: "border-sky-300 bg-sky-50/60" },
 }
 
-/** The nine blocks in the Business Model Canvas reading order. */
-const ORDER: (keyof CanvasSections)[] = [
-  "key_partnerships", "key_activities", "key_resources", "value_propositions", "customer_relationships", "channels", "customer_segments", "cost_structure", "revenue_streams",
-]
-
 const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> = {
   key_partnerships: { icon: Handshake, accent: "slate" },
   key_activities: { icon: Activity, accent: "sky" },
