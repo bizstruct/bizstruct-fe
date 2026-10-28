@@ -26,14 +26,14 @@ export function AppShell({ children }: AppShellProps) {
   }, [router])
 
   if ((PUBLIC_PAGES as readonly string[]).includes(pathname)) {
-    return <div className="h-screen w-full overflow-y-auto bg-white">{children}</div>
+    return <div className="h-screen w-full overflow-y-auto bg-slate-50">{children}</div>
   }
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-      <div className="flex-1 flex flex-col h-full min-w-0 relative bg-white">
+      <div className="flex-1 flex flex-col h-full min-w-0 relative bg-slate-50">
         <div
           className={`absolute top-3 left-4 z-50 transition-opacity duration-200 ${
             isSidebarOpen ? "opacity-0 pointer-events-none" : "opacity-100"

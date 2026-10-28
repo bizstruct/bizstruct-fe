@@ -17,22 +17,29 @@ const MARKER: Record<Marker, { tone: React.ComponentProps<typeof Badge>["tone"];
   create: { tone: "info", icon: Plus, card: "border-sky-300 bg-sky-50/60" },
 }
 
-/** The nine blocks in the Business Model Canvas reading order, each placed on the classic 10-column board. */
+/** The nine blocks in the Business Model Canvas reading order. */
 const ORDER: (keyof CanvasSections)[] = [
   "key_partnerships", "key_activities", "key_resources", "value_propositions", "customer_relationships", "channels", "customer_segments", "cost_structure", "revenue_streams",
 ]
 
-const PLACE: Record<keyof CanvasSections, { area: string; icon: LucideIcon; accent: Accent }> = {
-  key_partnerships: { area: "lg:col-span-2 lg:row-span-2 lg:col-start-1 lg:row-start-1", icon: Handshake, accent: "slate" },
-  key_activities: { area: "lg:col-span-2 lg:col-start-3 lg:row-start-1", icon: Activity, accent: "sky" },
-  key_resources: { area: "lg:col-span-2 lg:col-start-3 lg:row-start-2", icon: Boxes, accent: "sky" },
-  value_propositions: { area: "lg:col-span-2 lg:row-span-2 lg:col-start-5 lg:row-start-1", icon: Gem, accent: "indigo" },
-  customer_relationships: { area: "lg:col-span-2 lg:col-start-7 lg:row-start-1", icon: Heart, accent: "violet" },
-  channels: { area: "lg:col-span-2 lg:col-start-7 lg:row-start-2", icon: Truck, accent: "violet" },
-  customer_segments: { area: "lg:col-span-2 lg:row-span-2 lg:col-start-9 lg:row-start-1", icon: Users, accent: "emerald" },
-  cost_structure: { area: "lg:col-span-5 lg:col-start-1 lg:row-start-3", icon: Wallet, accent: "red" },
-  revenue_streams: { area: "lg:col-span-5 lg:col-start-6 lg:row-start-3", icon: Coins, accent: "amber" },
+const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> = {
+  key_partnerships: { icon: Handshake, accent: "slate" },
+  key_activities: { icon: Activity, accent: "sky" },
+  key_resources: { icon: Boxes, accent: "sky" },
+  value_propositions: { icon: Gem, accent: "indigo" },
+  customer_relationships: { icon: Heart, accent: "violet" },
+  channels: { icon: Truck, accent: "violet" },
+  customer_segments: { icon: Users, accent: "emerald" },
+  cost_structure: { icon: Wallet, accent: "red" },
+  revenue_streams: { icon: Coins, accent: "amber" },
 }
+
+/**
+ * The classic board: five columns (the second and the fourth stack two blocks) over a cost/revenue row.
+ * Columns, not a rigid row grid, so one long block never pushes its neighbour's partner away.
+ */
+const COLUMNS: (keyof CanvasSections)[][] = [["key_partnerships"], ["key_activities", "key_resources"], ["value_propositions"], ["customer_relationships", "channels"], ["customer_segments"]]
+const BOTTOM: (keyof CanvasSections)[][] = [["cost_structure"], ["revenue_streams"]]
 
 /** One selector per canvas flow (several only for a split Patterns), shared by Canvas, SWOT, Story, Future and Pitch. */
 export function CanvasPicker({ flows, value, onChange }: { flows: CanvasFlow[]; value: number; onChange: (index: number) => void }) {
@@ -119,42 +126,48 @@ export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flo
 
 function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
   const t = useTranslations("Views.canvas")
+  const block = (section: keyof CanvasSections) => {
+    const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
+    const { icon, accent } = PLACE[section]
+    const a = ACCENT[accent]
+    return (
+      <div key={section} data-section={section} className={cn("flex flex-col gap-2.5 rounded-2xl border p-3.5", a.soft, a.ring)}>
+        <h4 className={cn("flex items-center gap-2 text-xs font-bold uppercase tracking-wider", a.text)}>
+          <IconBadge icon={icon} accent={accent} className="size-6 shrink-0 rounded-lg" /> {t(`sections.${section}`)}
+        </h4>
+        {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
+        <ul className="space-y-2">
+          {cards.map((card) => {
+            const marker = card.errc_marker ? MARKER[card.errc_marker] : null
+            return (
+              <li
+                key={card.id}
+                data-card={card.id}
+                data-marker={card.errc_marker ?? undefined}
+                className={cn("rounded-xl border bg-white p-2.5 text-[13px] leading-snug text-slate-800 shadow-sm shadow-slate-200/50", marker ? marker.card : "border-white")}
+              >
+                {marker && card.errc_marker ? (
+                  <Badge tone={marker.tone} className="mb-1.5" data-testid="errc-marker">
+                    <marker.icon aria-hidden />
+                    {t(`markers.${card.errc_marker}`)}
+                  </Badge>
+                ) : null}
+                <p>{card.text}</p>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    )
+  }
   return (
-    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-10" data-testid="canvas-grid">
-      {ORDER.map((section) => {
-        const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
-        const { area, icon, accent } = PLACE[section]
-        const a = ACCENT[accent]
-        return (
-          <div key={section} data-section={section} className={cn("flex flex-col gap-2.5 rounded-2xl border p-3.5", a.soft, a.ring, area)}>
-            <h4 className={cn("flex items-center gap-2 text-xs font-bold uppercase tracking-wider", a.text)}>
-              <IconBadge icon={icon} accent={accent} className="size-6 rounded-lg" /> {t(`sections.${section}`)}
-            </h4>
-            {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
-            <ul className="space-y-2">
-              {cards.map((card) => {
-                const marker = card.errc_marker ? MARKER[card.errc_marker] : null
-                return (
-                  <li
-                    key={card.id}
-                    data-card={card.id}
-                    data-marker={card.errc_marker ?? undefined}
-                    className={cn("rounded-xl border bg-white p-2.5 text-[13px] leading-snug text-slate-800 shadow-sm shadow-slate-200/50", marker ? marker.card : "border-white")}
-                  >
-                    {marker && card.errc_marker ? (
-                      <Badge tone={marker.tone} className="mb-1.5" data-testid="errc-marker">
-                        <marker.icon aria-hidden />
-                        {t(`markers.${card.errc_marker}`)}
-                      </Badge>
-                    ) : null}
-                    <p>{card.text}</p>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )
-      })}
+    <div className="space-y-3" data-testid="canvas-grid">
+      <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-5">
+        {COLUMNS.map((column) => (
+          <div key={column[0]} className="space-y-3">{column.map(block)}</div>
+        ))}
+      </div>
+      <div className="grid items-start gap-3 md:grid-cols-2">{BOTTOM.map((column) => column.map(block))}</div>
     </div>
   )
 }

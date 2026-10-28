@@ -73,7 +73,7 @@ describe("StageStatusPanel", () => {
   it("shows the consistency violations of a row: rule id, severity and message", () => {
     const project = fixture(FARM)
     show(project)
-    const scenario = within(screen.getByTestId("row-customer_scenario-0"))
+    const scenario = within(screen.getByTestId("problems-customer_scenario-0"))
     const violation = row(project, "customer_scenario").consistency!.violations![0]
     expect(scenario.getByText(violation.rule_id)).toBeInTheDocument()
     expect(scenario.getByText("warning")).toBeInTheDocument()
@@ -84,7 +84,7 @@ describe("StageStatusPanel", () => {
     const project = fixture(FARM)
     const pitch = row(project, "pitch")
     show(patch(project, pitch, { status: "error", error: { code: "stuck_timeout", message: "No result within 1800 seconds." }, finishedAt: null }))
-    const alert = within(screen.getByTestId("row-pitch-0")).getByRole("alert")
+    const alert = within(screen.getByTestId("problems-pitch-0")).getByRole("alert")
     expect(alert).toHaveTextContent("Timed out")
     expect(alert).toHaveTextContent("No result within 1800 seconds.")
   })
