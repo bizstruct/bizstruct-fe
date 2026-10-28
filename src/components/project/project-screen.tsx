@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { useLocale, useTranslations } from "next-intl"
+import { motion } from "motion/react"
 import { Loader2, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -12,7 +13,7 @@ import { deleteProject } from "@/lib/api/projects"
 import { buildProjectView } from "@/lib/mappers/project"
 import { TAB_IDS, stageProgress, stagesOfTab, stateOf, type TabId } from "@/lib/mappers/tab-stages"
 import { Link, useRouter } from "@/i18n/routing"
-import { NotReady } from "./primitives"
+import { NotReady, Reveal } from "./primitives"
 import { StageStatusPanel } from "./stage-status"
 import { StateIcon } from "./state-icon"
 import { ProjectStatusChip } from "./status-chip"
@@ -50,14 +51,14 @@ export function ProjectScreen({ id }: { id: string }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 px-6 py-8">
-      <Header project={project} polling={polling} />
+    <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6">
+      <Reveal><Header project={project} polling={polling} /></Reveal>
       {error ? <p role="alert" className="text-xs text-amber-700">{t("loadError")}</p> : null}
 
       <Tabs defaultValue="brief">
-        <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
+        <TabsList className="group-data-horizontal/tabs:h-auto w-full flex-wrap justify-start gap-1 rounded-2xl border border-slate-200/80 bg-white p-1.5 shadow-sm shadow-slate-200/40">
           {TAB_IDS.map((tab) => (
-            <TabsTrigger key={tab} value={tab} className="h-9 flex-none gap-2 rounded-lg px-3 text-sm data-active:bg-indigo-50 data-active:text-indigo-900">
+            <TabsTrigger key={tab} value={tab} className="h-10 flex-none gap-2 rounded-xl px-3.5 text-sm font-medium after:hidden data-active:bg-indigo-50 data-active:text-indigo-900 data-active:shadow-none">
               <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
               {t(`tabs.${tab}`)}
             </TabsTrigger>
@@ -68,9 +69,9 @@ export function ProjectScreen({ id }: { id: string }) {
             const stages = stagesOfTab(tab, project.enabledOptional)
             const state = stateOf(project.rows, stages)
             return (
-              <TabsContent key={tab} value={tab} className="space-y-4">
-                <StageStatusPanel project={project} stages={stages} onProject={replace} onRefresh={() => void refresh()} />
-                {content[tab].ready ? content[tab].node : <Pending running={state === "running"} />}
+              <TabsContent key={tab} value={tab} className="space-y-5">
+                <Reveal><StageStatusPanel project={project} stages={stages} onProject={replace} onRefresh={() => void refresh()} /></Reveal>
+                <Reveal delay={0.08}>{content[tab].ready ? content[tab].node : <Pending running={state === "running"} />}</Reveal>
               </TabsContent>
             )
           })}
@@ -112,11 +113,12 @@ function Header({ project, polling }: { project: NonNullable<ReturnType<typeof u
   }
 
   return (
-    <header className="space-y-4 rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-white to-indigo-50/60 p-6 shadow-sm">
+    <header className="relative space-y-4 overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-indigo-50 p-6 shadow-sm shadow-slate-200/50 sm:p-8">
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-gradient-to-br from-indigo-200/50 to-violet-200/30 blur-3xl" />
       <Link href="/" className="text-xs text-slate-500 hover:text-slate-800">← {t("back")}</Link>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
-          <h1 className="truncate text-2xl font-semibold tracking-tight text-slate-900">{project.title}</h1>
+          <h1 className="truncate text-3xl font-bold tracking-tight text-slate-900">{project.title}</h1>
           <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
             <ProjectStatusChip status={project.status} />
             <span>{t("language")}: {project.language.toUpperCase()}</span>
@@ -159,10 +161,12 @@ function ProgressBar({ project }: { project: NonNullable<ReturnType<typeof usePr
         <span>{t("progress", { done, total })}</span>
         <span>{percent}%</span>
       </div>
-      <div role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done} className="h-2 overflow-hidden rounded-full bg-slate-100">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
-          style={{ width: `${percent}%` }}
+      <div role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done} className="h-2.5 overflow-hidden rounded-full bg-slate-200/70">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${percent}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className={`h-full rounded-full ${failed ? "bg-red-500" : done === total ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-indigo-500 to-violet-500"}`}
         />
       </div>
     </div>

@@ -1,8 +1,10 @@
 "use client"
 
+import { BookOpen, Quote } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { Fact, humanize, NotReady, Panel, Section } from "../primitives"
+import { Fact, humanize, IconBadge, NotReady, Panel, Section } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -17,28 +19,35 @@ export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flow
       {!story ? (
         <NotReady message={tp("notReady")} />
       ) : (
-        <Panel className="space-y-5" data-testid="story-panel">
-          <dl className="grid gap-4 sm:grid-cols-3">
+        <div className="space-y-4" data-testid="story-panel">
+          <dl className="grid gap-3 sm:grid-cols-3">
             <Fact label={t("goal")}>{humanize(story.goal)}</Fact>
             <Fact label={t("format")}>{humanize(story.format)}</Fact>
             <Fact label={t("perspective")}>{humanize(story.perspective)}</Fact>
           </dl>
-          <Section title={t("narrative")}>
-            <p className="whitespace-pre-line text-sm leading-relaxed text-slate-800">{story.narrative_text}</p>
-          </Section>
-          <Section title={t("references")}>
-            <ul className="space-y-1.5 text-sm">
-              {story.canvas_references.map((ref, i) => (
-                <li key={i} className="text-slate-700">
-                  <span className="mr-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-600">{tc(`sections.${ref.section}`)}</span>
-                  {ref.note}
-                </li>
-              ))}
-            </ul>
-          </Section>
-        </Panel>
+          <Panel className="space-y-4 p-6 sm:p-8">
+            <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+              <IconBadge icon={BookOpen} accent="violet" /> {t("narrative")}
+            </h3>
+            <div className="relative">
+              <Quote aria-hidden className="absolute -left-1 -top-2 size-8 text-violet-100" />
+              <p className="relative whitespace-pre-line pl-4 text-base leading-8 text-slate-800">{story.narrative_text}</p>
+            </div>
+          </Panel>
+          <Panel>
+            <Section title={t("references")}>
+              <ul className="space-y-2.5 text-sm">
+                {story.canvas_references.map((ref, i) => (
+                  <li key={i} className="flex flex-wrap items-start gap-2.5 leading-relaxed text-slate-700">
+                    <Badge tone="accent" className="mt-0.5">{tc(`sections.${ref.section}`)}</Badge>
+                    <span className="min-w-0 flex-1">{ref.note}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          </Panel>
+        </div>
       )}
     </div>
   )
 }
-

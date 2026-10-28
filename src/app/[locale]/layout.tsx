@@ -2,13 +2,14 @@ import type { Metadata } from "next"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist_Mono, Inter } from "next/font/google"
 import { AppShell } from "@/components/common/app-shell"
 import { routing } from "@/i18n/routing"
 import "@/styles/globals.css"
 
-const geistSans = Geist({ variable: "--font-sans", subsets: ["latin"] })
-const geistMono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] })
+// Inter has a Cyrillic subset; the interface is Ukrainian first.
+const inter = Inter({ variable: "--font-inter", subsets: ["latin", "cyrillic"] })
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
 
 type LocaleLayoutProps = {
   children: React.ReactNode
@@ -52,7 +53,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900`}>
+      <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppShell>{children}</AppShell>
         </NextIntlClientProvider>

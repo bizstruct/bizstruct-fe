@@ -1,9 +1,11 @@
 "use client"
 
+import { GitBranch, Layers, Link2, Tags } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { Fact, humanize, NotReady, Panel, Section } from "../primitives"
+import { cn } from "@/lib/utils"
+import { humanize, NotReady, Panel, Section } from "../primitives"
 
 export function PatternsView({ view }: { view: ProjectView }) {
   const t = useTranslations("Views.patterns")
@@ -16,19 +18,26 @@ export function PatternsView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center gap-4 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 text-white shadow-lg shadow-indigo-200 sm:p-6">
+        <span aria-hidden className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+          <GitBranch className="size-6" />
+        </span>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-100">{t("branch")}</p>
+          <p className="text-xl font-bold">{t(patterns.branch_decision)}</p>
+        </div>
+      </div>
+
       <Panel className="space-y-4">
-        <dl className="grid gap-4 sm:grid-cols-2">
-          <Fact label={t("branch")}>{t(patterns.branch_decision)}</Fact>
-        </dl>
-        <Section title={t("groups")}>
-          <ul className="space-y-2" data-testid="pattern-groups">
+        <Section title={t("groups")} icon={Layers} accent="violet">
+          <ul className="grid gap-3 md:grid-cols-2" data-testid="pattern-groups">
             {patterns.groups.map((group, index) => (
-              <li key={group.id} className="rounded-lg border border-slate-200 p-3 text-sm">
+              <li key={group.id} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium text-slate-900">#{index + 1}</span>
+                  <span className="flex size-6 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">#{index + 1}</span>
                   <Badge tone="accent">{humanize(group.relation_type)}</Badge>
                 </div>
-                <p className="mt-1 text-slate-700">{group.empathy_map_ids.map(labelOf).join(", ")}</p>
+                <p className="mt-2 font-medium text-slate-800">{group.empathy_map_ids.map(labelOf).join(", ")}</p>
               </li>
             ))}
           </ul>
@@ -36,16 +45,18 @@ export function PatternsView({ view }: { view: ProjectView }) {
       </Panel>
 
       <Panel className="space-y-3">
-        <Section title={t("tags")}>
+        <Section title={t("tags")} icon={Tags} accent="sky">
           {patterns.pattern_tags.length === 0 ? (
             <p className="text-sm text-slate-400">{t("noTags")}</p>
           ) : (
-            <ul className="space-y-2" data-testid="pattern-tags">
+            <ul className="grid gap-3 md:grid-cols-2" data-testid="pattern-tags">
               {patterns.pattern_tags.map((tag) => (
-                <li key={tag.pattern} className="rounded-lg border border-slate-200 p-3 text-sm">
-                  <Badge tone="info">{humanize(tag.pattern)}</Badge>
-                  {tag.subtype ? <Badge className="ml-1.5">{humanize(tag.subtype)}</Badge> : null}
-                  <p className="mt-1.5 text-slate-700"><span className="font-medium">{t("rationale")}: </span>{tag.rationale}</p>
+                <li key={tag.pattern} className="rounded-xl border border-sky-200 bg-sky-50/40 p-4 text-sm">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <Badge tone="info" className="px-2.5 py-1 text-xs">{humanize(tag.pattern)}</Badge>
+                    {tag.subtype ? <Badge className="px-2.5 py-1 text-xs">{humanize(tag.subtype)}</Badge> : null}
+                  </div>
+                  <p className="mt-2 leading-relaxed text-slate-700"><span className="font-semibold">{t("rationale")}: </span>{tag.rationale}</p>
                 </li>
               ))}
             </ul>
@@ -54,27 +65,27 @@ export function PatternsView({ view }: { view: ProjectView }) {
       </Panel>
 
       <Panel className="space-y-3">
-        <Section title={t("pairs")}>
+        <Section title={t("pairs")} icon={Link2} accent="emerald">
           {patterns.pairwise_scores.length === 0 ? (
             <p className="text-sm text-slate-400">{t("noPairs")}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm" data-testid="pair-scores">
-                <thead className="text-xs uppercase text-slate-400">
+                <thead className="text-xs uppercase tracking-wide text-slate-400">
                   <tr>
-                    <th className="py-1 pr-4 font-medium">{t("segments")}</th>
-                    <th className="py-1 pr-4 font-medium">{t("synergy")}</th>
-                    <th className="py-1 font-medium">{t("conflict")}</th>
+                    <th className="py-2 pr-4 font-semibold">{t("segments")}</th>
+                    <th className="py-2 pr-4 font-semibold">{t("synergy")}</th>
+                    <th className="py-2 font-semibold">{t("conflict")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {patterns.pairwise_scores.map((pair, i) => (
                     <tr key={i} className="border-t border-slate-100">
-                      <td className="py-1.5 pr-4 text-slate-800">
+                      <td className="py-2.5 pr-4 font-medium text-slate-800">
                         {labelOf(pair.segment_pair.empathy_map_id_a)} / {labelOf(pair.segment_pair.empathy_map_id_b)}
                       </td>
-                      <td className="py-1.5 pr-4">{pair.synergy}</td>
-                      <td className="py-1.5">{pair.conflict}</td>
+                      <td className="py-2.5 pr-4"><ScoreMeter value={pair.synergy} max={5} tone="emerald" /></td>
+                      <td className="py-2.5"><ScoreMeter value={pair.conflict} max={7} tone="red" /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -84,5 +95,17 @@ export function PatternsView({ view }: { view: ProjectView }) {
         </Section>
       </Panel>
     </div>
+  )
+}
+
+/** A number with a bar beside it; the domain scales are synergy 0..5 and conflict -7..0, so the bar shows the magnitude. */
+function ScoreMeter({ value, max, tone }: { value: number; max: number; tone: "emerald" | "red" }) {
+  return (
+    <span className="flex items-center gap-2">
+      <span className="w-5 font-semibold tabular-nums text-slate-800">{value}</span>
+      <span aria-hidden className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-100">
+        <span className={cn("block h-full rounded-full", tone === "emerald" ? "bg-emerald-500" : "bg-red-500")} style={{ width: `${Math.min(100, (Math.abs(value) / max) * 100)}%` }} />
+      </span>
+    </span>
   )
 }

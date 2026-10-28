@@ -1,9 +1,13 @@
 "use client"
 
+import { Compass, Waypoints } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BulletList, NotReady, Panel, Section } from "../primitives"
+import { BulletList, IconBadge, NotReady, Panel, Reveal, Section, type Accent } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
+
+const VARIANT_ACCENT: Accent[] = ["sky", "violet", "amber", "pink"]
 
 export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.future")
@@ -19,26 +23,30 @@ export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flo
       ) : (
         <>
           <Panel>
-            <Section title={t("drivers")}>
+            <Section title={t("drivers")} icon={Compass} accent="indigo">
               <BulletList items={future.uncertainty_drivers} />
             </Section>
           </Panel>
           <div className="grid gap-4 lg:grid-cols-2" data-testid="future-variants">
-            {future.variants.map((variant) => (
-              <Panel key={variant.name} className="space-y-3">
-                <h3 className="text-base font-semibold text-slate-900">{variant.name}</h3>
-                <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
-                <Section title={t("questions")}>
-                  <ul className="space-y-1.5 text-sm">
-                    {variant.adaptation_questions.map((q, i) => (
-                      <li key={i} className="text-slate-700">
-                        <span className="mr-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-600">{tc(`sections.${q.section}`)}</span>
-                        {q.question}
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-              </Panel>
+            {future.variants.map((variant, n) => (
+              <Reveal key={variant.name} delay={n * 0.07}>
+                <Panel className="h-full space-y-4">
+                  <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+                    <IconBadge icon={Waypoints} accent={VARIANT_ACCENT[n % VARIANT_ACCENT.length]} /> {variant.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
+                  <Section title={t("questions")}>
+                    <ul className="space-y-2.5 text-sm">
+                      {variant.adaptation_questions.map((q, i) => (
+                        <li key={i} className="flex flex-wrap items-start gap-2.5 leading-relaxed text-slate-700">
+                          <Badge tone="accent" className="mt-0.5">{tc(`sections.${q.section}`)}</Badge>
+                          <span className="min-w-0 flex-1">{q.question}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </Section>
+                </Panel>
+              </Reveal>
             ))}
           </div>
         </>
