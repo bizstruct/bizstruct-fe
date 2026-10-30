@@ -57,12 +57,12 @@ export function ProjectScreen({ id }: { id: string }) {
         */}
         <div className="shrink-0 px-4 pb-5 pt-3 sm:px-6">
           <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
-            <TabsList className="group-data-horizontal/tabs:h-auto grid w-full grid-flow-col auto-cols-fr gap-1 overflow-x-auto rounded-none bg-transparent p-1.5 pb-2.5">
+            <TabsList className="group-data-horizontal/tabs:h-auto grid w-full grid-flow-col auto-cols-fr gap-0 overflow-x-auto rounded-none bg-transparent p-0">
               {TAB_IDS.map((tab) => (
                 <TabsTrigger
                   key={tab}
                   value={tab}
-                  className="h-10 min-w-28 flex-none gap-2 rounded-xl border-transparent px-3 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/15 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/15"
+                  className="h-12 min-w-28 flex-none gap-2 rounded-none border-transparent px-3 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/15 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/15"
                 >
                   <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
                   {t(`tabs.${tab}`)}
