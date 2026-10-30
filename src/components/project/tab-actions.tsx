@@ -45,8 +45,9 @@ export function TabActions({ project, stages, available, onProject, onRefresh }:
       size="icon"
       aria-label={t("regenerate")}
       data-regen=""
+      // Positioned with a margin, not a translate: the button's own pressed style translates it, which moved it out from under the pointer mid-click.
       // Sits exactly over the state icon and swaps with it on hover (the tab bar hides the icon), so no tile, no tooltip box.
-      className="absolute left-2.5 top-1/2 size-7 -translate-y-1/2 rounded-lg text-indigo-900 opacity-0 transition-opacity hover:bg-transparent dark:hover:bg-transparent hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100"
+      className="absolute left-2.5 top-1/2 -mt-3.5 size-7 rounded-lg text-indigo-900 opacity-0 transition-opacity hover:bg-transparent dark:hover:bg-transparent hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100"
       {...extra}
     >
       {icon}
