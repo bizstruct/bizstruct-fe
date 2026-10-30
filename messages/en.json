@@ -37,7 +37,7 @@
     }
   },
   "Home": {
-    "title": "Structure your next business idea",
+    "title": "Structure your business idea",
     "ideaLabel": "Your idea",
     "ideaPlaceholder": "Describe your idea in a few sentences, for example: an app that delivers boxes of fresh produce from local farms to busy city parents…",
     "counter": "{count} / {max}",

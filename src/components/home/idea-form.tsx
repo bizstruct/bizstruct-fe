@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useLocale, useTranslations } from "next-intl"
-import { ArrowUp, Check, SlidersHorizontal } from "lucide-react"
+import { Check, Loader2, SlidersHorizontal, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { notifyProjectsChanged } from "@/hooks/use-projects"
 import { createProject } from "@/lib/api/projects"
@@ -48,21 +48,21 @@ export function IdeaForm() {
 
   return (
     <form onSubmit={submit} className="space-y-3" noValidate>
-      <div className="rounded-2xl border border-slate-200 bg-white transition-colors focus-within:border-indigo-500">
+      <div className="rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-black/10 transition-all focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-500/10">
         <label htmlFor="idea" className="sr-only">{t("ideaLabel")}</label>
         <textarea
           id="idea"
           name="idea"
           value={idea}
-          rows={3}
+          rows={4}
           placeholder={t("ideaPlaceholder")}
           aria-invalid={showProblem}
           aria-describedby="idea-help"
           onChange={(e) => setIdea(e.target.value)}
           onBlur={() => setTouched(true)}
-          className="field-sizing-content block max-h-72 min-h-28 w-full resize-none rounded-2xl bg-transparent px-5 pt-4 text-[15px] leading-relaxed text-slate-900 outline-none placeholder:text-slate-400"
+          className="field-sizing-content block max-h-80 min-h-36 w-full resize-none rounded-3xl bg-transparent px-6 pt-5 text-base leading-relaxed text-slate-900 outline-none placeholder:text-slate-400"
         />
-        <div className="flex items-center justify-between gap-3 px-3 pb-3 pl-5">
+        <div className="flex items-center justify-between gap-3 px-4 pb-4 pl-6">
           {/* No standing counter: the length rules (be: 50-2000) speak up only when they matter. */}
           <p id="idea-help" className="min-w-0 truncate text-xs text-slate-500">
             {showProblem ? (
@@ -72,16 +72,18 @@ export function IdeaForm() {
             ) : null}
           </p>
           <div className="flex shrink-0 items-center gap-1.5">
-            <Button type="button" variant="ghost" size="icon" aria-label={t("options")} aria-expanded={showOptions} onClick={() => setShowOptions((v) => !v)} className="size-9 rounded-xl text-slate-500 hover:text-slate-900">
+            <Button type="button" variant="ghost" size="icon" aria-label={t("options")} aria-expanded={showOptions} onClick={() => setShowOptions((v) => !v)} className="size-10 rounded-full text-slate-500 hover:text-slate-900">
               <SlidersHorizontal className="size-4" />
             </Button>
             <Button
               type="submit"
+              size="icon"
               disabled={submitting}
               aria-label={submitting ? t("submitting") : t("submit")}
-              className="h-9 rounded-xl bg-indigo-600 px-4 font-medium text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300"
+              title={t("submit")}
+              className="size-10 rounded-full bg-indigo-600 text-[#fff] shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300"
             >
-              {submitting ? t("submitting") : t("submit")} <ArrowUp className="size-4" aria-hidden />
+              {submitting ? <Loader2 className="size-[18px] animate-spin" aria-hidden /> : <Sparkles className="size-[18px]" aria-hidden />}
             </Button>
           </div>
         </div>
