@@ -32,7 +32,7 @@ describe("ProjectScreen", () => {
     expect(screen.queryByRole("tab", { name: /Progress/ })).not.toBeInTheDocument()
     expect(screen.getByRole("progressbar", { name: "10 of 10 stages done" })).toHaveAttribute("aria-valuenow", "10")
     for (const tab of screen.getAllByRole("tab")) expect(within(tab).getByRole("img", { name: "Done" })).toBeInTheDocument()
-    // Regenerate is one icon at the end of the bar, not a panel per stage
+    // Regenerate sits on the selected tab, not in a panel per stage
     expect(screen.getByRole("button", { name: "Regenerate" })).toBeInTheDocument()
   })
 
@@ -48,6 +48,8 @@ describe("ProjectScreen", () => {
     await screen.findAllByRole("tab")
 
     expect(within(screen.getByRole("tab", { name: /Pitch/ })).getByRole("img", { name: "Running" })).toBeInTheDocument()
+    // one regeneration at a time: nothing is offered while a stage is being generated
+    expect(screen.queryByRole("button", { name: "Regenerate" })).not.toBeInTheDocument()
     expect(within(screen.getByRole("tab", { name: /Brief/ })).getByRole("img", { name: "Done" })).toBeInTheDocument()
   })
 

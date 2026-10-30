@@ -26,10 +26,10 @@ function panel(project: Project, stages: StageId[]) {
   return { onProject, onRefresh }
 }
 
-function tabActions(project: Project, stages: StageId[]) {
+function tabActions(project: Project, stages: StageId[], available = true) {
   const onProject = vi.fn()
   const onRefresh = vi.fn()
-  renderIntl(<TabActions project={project} stages={stages} onProject={onProject} onRefresh={onRefresh} />)
+  renderIntl(<TabActions project={project} stages={stages} available={available} onProject={onProject} onRefresh={onRefresh} />)
   return { onProject, onRefresh }
 }
 
@@ -103,6 +103,11 @@ describe("TabActions (Regenerate in the tab bar)", () => {
   it("is absent while nothing in the tab can be regenerated", () => {
     const project = fixture(FARM)
     tabActions(patch(project, row(project, "pitch"), { status: "running", finishedAt: null }), ["pitch"])
+    expect(screen.queryByRole("button", { name: "Regenerate" })).not.toBeInTheDocument()
+  })
+
+  it("is absent while another stage is being generated, even if this tab could be regenerated", () => {
+    tabActions(fixture(FARM), ["canvas"], false)
     expect(screen.queryByRole("button", { name: "Regenerate" })).not.toBeInTheDocument()
   })
 
