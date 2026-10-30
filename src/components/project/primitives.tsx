@@ -122,7 +122,7 @@ export function SegmentedControl<T extends string | number>({ items, value, onCh
 /** Flat tabs with a lavender line under the chosen one: the quiet sibling of SegmentedControl for a single row. */
 export function UnderlineTabs<T extends string>({ items, value, onChange, label, className }: { items: readonly SegmentedItem<T>[]; value: T; onChange: (value: T) => void; label?: string; className?: string }) {
   return (
-    <div role="tablist" aria-label={label} className={cn("flex gap-8", className)}>
+    <div role="tablist" aria-label={label} className={cn("flex gap-12", className)}>
       {items.map((item) => {
         const selected = item.id === value
         return (
