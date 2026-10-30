@@ -48,46 +48,54 @@ export function ProjectScreen({ id }: { id: string }) {
   const failed = project.status === "failed"
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-5 px-4 py-6 sm:px-6">
-      {error ? <p role="alert" className="text-xs text-amber-700">{t("loadError")}</p> : null}
-
-      <Tabs defaultValue="brief">
-        {/* One bar, pinned while the page scrolls: the tabs say where each stage stands, the line along its bottom edge says how far the whole project is. */}
-        <div className="sticky top-3 z-20 flex items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
-          <TabsList className="group-data-horizontal/tabs:h-auto flex-1 flex-wrap justify-start gap-1 rounded-none bg-transparent p-1.5 pb-2">
-            {TAB_IDS.map((tab) => (
-              <TabsTrigger key={tab} value={tab} className="h-10 flex-none gap-2 rounded-xl px-3.5 text-sm font-medium after:hidden data-active:bg-indigo-50 data-active:text-indigo-900 data-active:shadow-none">
-                <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
-                {t(`tabs.${tab}`)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <span className="shrink-0 pr-4 text-xs tabular-nums text-slate-500" aria-hidden>{done}/{total}</span>
-          <div
-            role="progressbar"
-            aria-label={t("progress", { done, total })}
-            aria-valuemin={0}
-            aria-valuemax={total}
-            aria-valuenow={done}
-            className="absolute inset-x-0 bottom-0 h-0.5 bg-slate-200/70"
-          >
+    <div className="flex h-full min-h-0 flex-col">
+      <Tabs defaultValue="brief" className="h-full min-h-0 gap-0">
+        {/*
+          The bar sits above the scrolling area instead of floating over it, so the content is cut off at the same
+          gap that separates them at rest: nothing ever slides behind or past the bar. The tabs say where each stage
+          stands; the line along the bottom edge says how far the whole project is.
+        */}
+        <div className="shrink-0 px-4 pb-5 pt-3 sm:px-6">
+          <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
+            <TabsList className="group-data-horizontal/tabs:h-auto flex-1 flex-wrap justify-start gap-1 rounded-none bg-transparent p-1.5 pb-2">
+              {TAB_IDS.map((tab) => (
+                <TabsTrigger key={tab} value={tab} className="h-10 flex-none gap-2 rounded-xl px-3.5 text-sm font-medium after:hidden data-active:bg-indigo-50 data-active:text-indigo-900 data-active:shadow-none">
+                  <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
+                  {t(`tabs.${tab}`)}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            <span className="shrink-0 pr-4 text-xs tabular-nums text-slate-500" aria-hidden>{done}/{total}</span>
             <div
-              style={{ width: `${percent}%` }}
-              className={`h-full transition-[width] duration-700 ease-out ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
-            />
+              role="progressbar"
+              aria-label={t("progress", { done, total })}
+              aria-valuemin={0}
+              aria-valuemax={total}
+              aria-valuenow={done}
+              className="absolute inset-x-0 bottom-0 h-0.5 bg-slate-200/70"
+            >
+              <div
+                style={{ width: `${percent}%` }}
+                className={`h-full transition-[width] duration-700 ease-out ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
+              />
+            </div>
           </div>
+          {error ? <p role="alert" className="mx-auto mt-3 max-w-6xl text-xs text-amber-700">{t("loadError")}</p> : null}
         </div>
-        <div className="pt-5">
-          {TAB_IDS.map((tab) => {
-            const stages = stagesOfTab(tab, project.enabledOptional)
-            const state = stateOf(project.rows, stages)
-            return (
-              <TabsContent key={tab} value={tab} className="space-y-5">
-                <Reveal><StageStatusPanel project={project} stages={stages} onProject={replace} onRefresh={() => void refresh()} /></Reveal>
-                <Reveal delay={0.08}>{content[tab].ready ? content[tab].node : <Pending running={state === "running"} />}</Reveal>
-              </TabsContent>
-            )
-          })}
+
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+            {TAB_IDS.map((tab) => {
+              const stages = stagesOfTab(tab, project.enabledOptional)
+              const state = stateOf(project.rows, stages)
+              return (
+                <TabsContent key={tab} value={tab} className="space-y-5">
+                  <Reveal><StageStatusPanel project={project} stages={stages} onProject={replace} onRefresh={() => void refresh()} /></Reveal>
+                  <Reveal delay={0.08}>{content[tab].ready ? content[tab].node : <Pending running={state === "running"} />}</Reveal>
+                </TabsContent>
+              )
+            })}
+          </div>
         </div>
       </Tabs>
     </div>
