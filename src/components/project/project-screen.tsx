@@ -62,7 +62,7 @@ export function ProjectScreen({ id }: { id: string }) {
                 <TabsTrigger
                   key={tab}
                   value={tab}
-                  className="h-12 min-w-28 flex-none gap-2 rounded-none border-transparent px-3 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/15 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/15"
+                  className="h-12 min-w-28 flex-none gap-2 rounded-none border-transparent px-3 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/10 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/[0.22]"
                 >
                   <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
                   {t(`tabs.${tab}`)}
