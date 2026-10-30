@@ -74,6 +74,6 @@ describe("register", () => {
 
   it("is available in Ukrainian", () => {
     renderIntl(<AuthForm mode="register" />, "uk")
-    expect(screen.getByRole("heading", { name: "Створення облікового запису" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Створіть свій акаунт" })).toBeInTheDocument()
   })
 })

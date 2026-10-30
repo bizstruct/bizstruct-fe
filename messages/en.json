@@ -18,8 +18,6 @@
     "darkTheme": "Dark theme"
   },
   "Auth": {
-    "loginTitle": "Sign in",
-    "registerTitle": "Create an account",
     "email": "Email",
     "password": "Password",
     "fullName": "Name (optional)",
@@ -34,7 +32,11 @@
       "generic": "Something went wrong. Try again.",
       "unreachable": "The server is unreachable",
       "validation": "Check the email and the password (8+ characters)"
-    }
+    },
+    "loginLead": "Welcome",
+    "loginAccent": "back",
+    "registerLead": "Create your",
+    "registerAccent": "account"
   },
   "Home": {
     "title": "Structure your business idea",

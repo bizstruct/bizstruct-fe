@@ -36,13 +36,15 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     setError(messageFor(result))
   }
 
-  const inputClass = "h-12 rounded-xl border-slate-200 bg-white px-4 text-[15px] shadow-lg shadow-black/5 focus-visible:border-indigo-400 focus-visible:ring-4 focus-visible:ring-indigo-500/10"
+  const inputClass = "h-12 rounded-xl border-slate-300 bg-white px-4 text-[15px] shadow-lg shadow-black/5 focus-visible:border-indigo-400 focus-visible:ring-4 focus-visible:ring-indigo-500/10"
 
   return (
-    <div className="nocturne-grid flex min-h-full w-full items-center justify-center px-4 py-16">
-      <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards flex w-full max-w-sm flex-col gap-6 duration-500">
-        {/* The headline stays for screen readers and the tab title; the placeholders do the labelling visually. */}
-        <h1 className="sr-only">{isRegister ? t("registerTitle") : t("loginTitle")}</h1>
+    <div className="nocturne-grid flex min-h-full w-full flex-col items-center gap-10 px-4 pb-16 pt-[14vh]">
+      <h1 className="animate-in fade-in slide-in-from-bottom-3 fill-mode-backwards text-center text-4xl font-medium leading-[1.1] tracking-tight text-slate-900 duration-500 sm:text-5xl">
+        {isRegister ? t("registerLead") : t("loginLead")}{" "}
+        <span className="text-indigo-600 dark:text-indigo-400">{isRegister ? t("registerAccent") : t("loginAccent")}</span>
+      </h1>
+      <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards flex w-full max-w-sm flex-col gap-6 delay-100 duration-500">
         <form onSubmit={submit} className="space-y-3">
           <label htmlFor="email" className="sr-only">{t("email")}</label>
           <Input id="email" name="email" type="email" placeholder={t("email")} autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
@@ -58,9 +60,9 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           {error ? <p role="alert" className="px-1 text-sm text-red-700">{error}</p> : null}
           <Button type="submit" size="lg" className="h-12 w-full rounded-xl text-[15px] font-medium bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
         </form>
-        <p className="text-center text-sm text-slate-500">
-          {isRegister ? t("haveAccount") : t("noAccount")}{" "}
-          <Link href={isRegister ? "/login" : "/register"} className="font-medium text-indigo-700 hover:underline">{isRegister ? t("signIn") : t("signUp")}</Link>
+        <p className="space-y-1 text-center text-sm text-slate-500">
+          <span className="block">{isRegister ? t("haveAccount") : t("noAccount")}</span>
+          <Link href={isRegister ? "/login" : "/register"} className="block font-medium text-indigo-700 hover:underline">{isRegister ? t("signIn") : t("signUp")}</Link>
         </p>
       </div>
     </div>

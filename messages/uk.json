@@ -18,8 +18,6 @@
     "darkTheme": "Темна тема"
   },
   "Auth": {
-    "loginTitle": "Вхід",
-    "registerTitle": "Створення облікового запису",
     "email": "Email",
     "password": "Пароль",
     "fullName": "Ім’я (необов’язково)",
@@ -34,7 +32,11 @@
       "generic": "Щось пішло не так. Спробуйте ще раз.",
       "unreachable": "Сервер недоступний",
       "validation": "Перевірте пошту та пароль (8+ символів)"
-    }
+    },
+    "loginLead": "Раді бачити",
+    "loginAccent": "знову",
+    "registerLead": "Створіть свій",
+    "registerAccent": "акаунт"
   },
   "Home": {
     "title": "Структуруйте свою бізнес-ідею",
