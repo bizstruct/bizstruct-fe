@@ -56,7 +56,6 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           ) : null}
           <label htmlFor="password" className="sr-only">{t("password")}</label>
           <Input id="password" name="password" type="password" placeholder={t("password")} autoComplete={isRegister ? "new-password" : "current-password"} required minLength={isRegister ? 8 : undefined} value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
-          {isRegister ? <p className="px-1 text-xs text-slate-500">{t("passwordHint")}</p> : null}
           {error ? <p role="alert" className="px-1 text-sm text-red-700">{error}</p> : null}
           <Button type="submit" size="lg" className="h-12 w-full rounded-xl text-[15px] font-medium bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
         </form>

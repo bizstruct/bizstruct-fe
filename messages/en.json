@@ -25,7 +25,6 @@
     "signUp": "Create account",
     "noAccount": "No account yet?",
     "haveAccount": "Already have an account?",
-    "passwordHint": "At least 8 characters",
     "errors": {
       "invalid": "Wrong email or password",
       "exists": "An account with this email already exists",
