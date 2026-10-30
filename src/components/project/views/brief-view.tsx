@@ -14,14 +14,10 @@ export function BriefView({ view }: { view: ProjectView }) {
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-slate-200 bg-white">
-        <div className="flex gap-4 p-5">
-          <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-700 ring-1 ring-inset ring-indigo-500/25">
-            <Lightbulb className="size-5" />
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-medium text-slate-500">{t("summary")}</p>
-            <p className="mt-1.5 text-pretty text-[17px] font-medium leading-8 tracking-[-0.01em] text-slate-900" data-testid="brief-summary">{brief.idea_summary}</p>
-          </div>
+        <div className="p-5">
+          <Section title={t("summary")} icon={Lightbulb} accent="indigo">
+            <p className="text-pretty text-lg font-medium leading-8 text-slate-900" data-testid="brief-summary">{brief.idea_summary}</p>
+          </Section>
         </div>
         <dl className="grid border-t border-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-slate-200">
           <Meta icon={Factory} label={t("industry")}>{brief.industry}</Meta>

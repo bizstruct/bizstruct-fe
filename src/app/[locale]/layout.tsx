@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
-import { Geist_Mono, Inter } from "next/font/google"
+import { Geist_Mono, Onest } from "next/font/google"
 import { AppShell } from "@/components/common/app-shell"
 import { routing } from "@/i18n/routing"
 import "@/styles/globals.css"
@@ -10,8 +10,8 @@ import "@/styles/globals.css"
 // Runs before paint so the page never flashes light: Nocturne unless the user chose the light theme.
 const THEME_SCRIPT = `try{if(localStorage.getItem("bizstruct-theme")!=="light")document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}`
 
-// Inter has a Cyrillic subset; the interface is Ukrainian first.
-const inter = Inter({ variable: "--font-inter", subsets: ["latin", "cyrillic"] })
+// Onest: a warm geometric sans drawn with Cyrillic in mind; the interface is Ukrainian first.
+const onest = Onest({ variable: "--font-onest", subsets: ["latin", "cyrillic"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
 
 type LocaleLayoutProps = {
@@ -59,7 +59,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
+      <body className={`${onest.variable} ${geistMono.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppShell>{children}</AppShell>
         </NextIntlClientProvider>
