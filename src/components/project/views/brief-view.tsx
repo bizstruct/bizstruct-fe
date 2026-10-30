@@ -3,7 +3,7 @@
 import { Boxes, Coins, Factory, Lightbulb, SearchX, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BulletList, NotReady, Panel, Section } from "../primitives"
+import { BulletList, IconBadge, NotReady, Panel, Section, type Accent } from "../primitives"
 
 export function BriefView({ view }: { view: ProjectView }) {
   const t = useTranslations("Views.brief")
@@ -20,8 +20,8 @@ export function BriefView({ view }: { view: ProjectView }) {
           </Section>
         </div>
         <dl className="grid border-t border-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-slate-200">
-          <Meta icon={Factory} label={t("industry")}>{brief.industry}</Meta>
-          {brief.monetization_hint ? <Meta icon={Coins} label={t("monetization")}>{brief.monetization_hint}</Meta> : null}
+          <Meta icon={Factory} accent="sky" label={t("industry")}>{brief.industry}</Meta>
+          {brief.monetization_hint ? <Meta icon={Coins} accent="amber" label={t("monetization")}>{brief.monetization_hint}</Meta> : null}
         </dl>
       </div>
 
@@ -47,14 +47,14 @@ export function BriefView({ view }: { view: ProjectView }) {
 }
 
 /** One labelled fact under the summary: icon and label on one line, the value under them, flush with the icon like every other card. */
-function Meta({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: React.ReactNode }) {
+function Meta({ icon, accent, label, children }: { icon: LucideIcon; accent: Accent; label: string; children: React.ReactNode }) {
   return (
     <div className="px-5 py-4 not-first:border-t not-first:border-slate-200 sm:not-first:border-t-0">
-      <dt className="flex items-center gap-2 text-xs font-medium text-slate-500">
-        <Icon aria-hidden className="size-4 shrink-0 text-slate-400" />
+      <dt className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+        <IconBadge icon={icon} accent={accent} className="size-7 rounded-lg" />
         {label}
       </dt>
-      <dd className="mt-1.5 text-sm leading-relaxed text-slate-800">{children}</dd>
+      <dd className="mt-3 text-sm leading-relaxed text-slate-800">{children}</dd>
     </div>
   )
 }
