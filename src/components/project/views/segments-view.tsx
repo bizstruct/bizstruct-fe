@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Brain, Check, ChevronDown, Ear, Eye, Frown, Lightbulb, MessageCircle, Route, Sparkles } from "lucide-react"
+import { Brain, Check, ChevronDown, Ear, Eye, Frown, Lightbulb, MessageCircle, Route, Smile } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -113,7 +113,7 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
 
       <div className="grid gap-3 md:grid-cols-2">
         <Highlight title={t("pains")} items={map.pains} icon={Frown} accent="red" />
-        <Highlight title={t("gains")} items={map.gains} icon={Sparkles} accent="emerald" />
+        <Highlight title={t("gains")} items={map.gains} icon={Smile} accent="emerald" />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

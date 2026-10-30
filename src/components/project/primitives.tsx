@@ -21,7 +21,7 @@ export type Accent = "indigo" | "sky" | "violet" | "pink" | "amber" | "red" | "e
 
 const BRAND = { soft: "bg-indigo-50", ring: "border-indigo-200", text: "text-indigo-700", bar: "bg-indigo-500", icon: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-400" }
 
-/** Mono-accent: every accent is the brand lavender except red, which stays for what is a risk or a pain. Tailwind needs whole class names, so red lists its own. */
+/** Mono-accent: every accent is the brand lavender, so no card or marker stands out by colour alone. Kept as a record so a view can still name what it means. */
 export const ACCENT: Record<Accent, { soft: string; ring: string; text: string; bar: string; icon: string; dot: string }> = {
   indigo: BRAND,
   sky: BRAND,
@@ -30,7 +30,7 @@ export const ACCENT: Record<Accent, { soft: string; ring: string; text: string; 
   amber: BRAND,
   emerald: BRAND,
   slate: BRAND,
-  red: { soft: "bg-red-50", ring: "border-red-200", text: "text-red-700", bar: "bg-red-500", icon: "bg-red-100 text-red-600", dot: "bg-red-400" },
+  red: BRAND,
 }
 
 export function IconBadge({ icon: Icon, accent = "indigo", className }: { icon: LucideIcon; accent?: Accent; className?: string }) {
