@@ -42,35 +42,36 @@ export function SegmentsView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-end gap-4">
-        <div className="min-w-0 flex-1">
-          <UnderlineTabs
-            label={t("part")}
-            value={part}
-            onChange={setPart}
-            items={[
-              { id: "empathy", label: <PartLabel text={t("tab")} segment={segment} part="empathy" /> },
-              { id: "scenario", label: <PartLabel text={ts("title")} segment={segment} part="scenario" /> },
-              { id: "ideation", label: <PartLabel text={ti("title")} segment={segment} part="ideation" /> },
-            ]}
-          />
-        </div>
+      <div className="relative border-b border-slate-200">
         {view.segments.length > 1 ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger className="mb-1.5 inline-flex max-w-56 shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50" aria-label={t("segment")}>
-              <span className="truncate">{segment.label}</span>
-              <ChevronDown aria-hidden className="size-3.5 shrink-0 text-slate-400" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {view.segments.map((s, i) => (
-                <DropdownMenuItem key={s.empathyRow.id} onSelect={() => setSelected(i)}>
-                  <span className="flex-1">{s.label}</span>
-                  {i === index ? <Check aria-hidden className="size-3.5 text-indigo-500" /> : null}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex justify-end pb-2 sm:absolute sm:inset-y-0 sm:right-0 sm:items-center sm:pb-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="inline-flex max-w-56 shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50" aria-label={t("segment")}>
+                <span className="truncate">{segment.label}</span>
+                <ChevronDown aria-hidden className="size-3.5 shrink-0 text-slate-400" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {view.segments.map((s, i) => (
+                  <DropdownMenuItem key={s.empathyRow.id} onSelect={() => setSelected(i)}>
+                    <span className="flex-1">{s.label}</span>
+                    {i === index ? <Check aria-hidden className="size-3.5 text-indigo-500" /> : null}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : null}
+        <UnderlineTabs
+          className="justify-center"
+          label={t("part")}
+          value={part}
+          onChange={setPart}
+          items={[
+            { id: "empathy", label: <PartLabel text={t("tab")} segment={segment} part="empathy" /> },
+            { id: "scenario", label: <PartLabel text={ts("title")} segment={segment} part="scenario" /> },
+            { id: "ideation", label: <PartLabel text={ti("title")} segment={segment} part="ideation" /> },
+          ]}
+        />
       </div>
       <Reveal key={`${segment.empathyRow.id}-${part}`} className="space-y-5">
         {part === "empathy" ? <EmpathyPanel segment={segment} /> : null}
