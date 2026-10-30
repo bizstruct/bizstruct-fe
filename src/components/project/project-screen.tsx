@@ -52,8 +52,8 @@ export function ProjectScreen({ id }: { id: string }) {
       {error ? <p role="alert" className="text-xs text-amber-700">{t("loadError")}</p> : null}
 
       <Tabs defaultValue="brief">
-        {/* One bar: the tabs say where each stage stands, the line along its bottom edge says how far the whole project is. */}
-        <div className="relative flex items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm shadow-slate-200/40">
+        {/* One bar, pinned while the page scrolls: the tabs say where each stage stands, the line along its bottom edge says how far the whole project is. */}
+        <div className="sticky top-3 z-20 flex items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
           <TabsList className="group-data-horizontal/tabs:h-auto flex-1 flex-wrap justify-start gap-1 rounded-none bg-transparent p-1.5 pb-2">
             {TAB_IDS.map((tab) => (
               <TabsTrigger key={tab} value={tab} className="h-10 flex-none gap-2 rounded-xl px-3.5 text-sm font-medium after:hidden data-active:bg-indigo-50 data-active:text-indigo-900 data-active:shadow-none">
