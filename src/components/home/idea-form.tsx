@@ -64,7 +64,7 @@ export function IdeaForm() {
         />
         <div className="flex items-center justify-between gap-3 px-4 pb-4 pl-6">
           {/* No standing counter: the length rules (be: 50-2000) speak up only when they matter. */}
-          <p id="idea-help" className="min-w-0 truncate text-xs text-slate-500">
+          <p id="idea-help" className={`min-w-0 truncate text-xs ${length > IDEA_MAX ? "text-red-700" : "text-slate-500"}`}>
             {showProblem ? (
               <span role="alert" className="text-red-700">{t(`errors.${problem}`, { min: IDEA_MIN, max: IDEA_MAX })}</span>
             ) : length > IDEA_MAX * 0.9 ? (
