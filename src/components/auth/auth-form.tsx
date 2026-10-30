@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { login, register } from "@/lib/api/auth"
 import type { ApiResult } from "@/lib/api/http"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { Link, useRouter } from "@/i18n/routing"
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
@@ -17,6 +18,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const isRegister = mode === "register"
+  const hydrated = useHydrated()
 
   function messageFor(result: Extract<ApiResult<unknown>, { ok: false }>): string {
     if (result.kind === "unauthorized") return t("errors.invalid")
@@ -45,7 +47,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         <span className="text-indigo-600 dark:text-indigo-400">{isRegister ? t("registerAccent") : t("loginAccent")}</span>
       </h1>
       <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards flex w-full max-w-sm flex-col gap-6 delay-100 duration-500">
-        <form onSubmit={submit} className="space-y-3">
+        <form onSubmit={submit} method="post" className="space-y-3">
           <label htmlFor="email" className="sr-only">{t("email")}</label>
           <Input id="email" name="email" type="email" placeholder={t("email")} autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
           {isRegister ? (
@@ -57,7 +59,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           <label htmlFor="password" className="sr-only">{t("password")}</label>
           <Input id="password" name="password" type="password" placeholder={t("password")} autoComplete={isRegister ? "new-password" : "current-password"} required minLength={isRegister ? 8 : undefined} value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
           {error ? <p role="alert" className="px-1 text-sm text-red-700">{error}</p> : null}
-          <Button type="submit" size="lg" className="h-12 w-full rounded-xl text-[15px] font-medium bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
+          <Button type="submit" size="lg" className="h-12 w-full rounded-xl text-[15px] font-medium bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy || !hydrated}>{isRegister ? t("signUp") : t("signIn")}</Button>
         </form>
         <p className="space-y-1 text-center text-sm text-slate-500">
           <span className="block">{isRegister ? t("haveAccount") : t("noAccount")}</span>

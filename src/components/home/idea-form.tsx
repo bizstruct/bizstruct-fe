@@ -6,6 +6,7 @@ import { Check, Loader2, SlidersHorizontal, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { notifyProjectsChanged } from "@/hooks/use-projects"
 import { createProject } from "@/lib/api/projects"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { useRouter } from "@/i18n/routing"
 import { detectLanguage, preferredLanguage } from "@/lib/language"
 import { IDEA_MAX, IDEA_MIN, ideaProblem, OPTIONAL_STAGES, type OptionalStage } from "@/lib/validation/idea"
@@ -16,6 +17,7 @@ export function IdeaForm() {
   const ts = useTranslations("Stages")
   const locale = useLocale()
   const router = useRouter()
+  const hydrated = useHydrated()
   const [idea, setIdea] = useState("")
   const [optional, setOptional] = useState<OptionalStage[]>([])
   const [autoApprove, setAutoApprove] = useState(false)
@@ -47,7 +49,7 @@ export function IdeaForm() {
   const toggle = (stage: OptionalStage) => setOptional((current) => (current.includes(stage) ? current.filter((s) => s !== stage) : [...current, stage]))
 
   return (
-    <form onSubmit={submit} className="space-y-3" noValidate>
+    <form onSubmit={submit} method="post" className="space-y-3" noValidate>
       <div className="rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-black/10 transition-all focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-500/10">
         <label htmlFor="idea" className="sr-only">{t("ideaLabel")}</label>
         <textarea
@@ -78,7 +80,7 @@ export function IdeaForm() {
             <Button
               type="submit"
               size="icon"
-              disabled={submitting}
+              disabled={submitting || !hydrated}
               aria-label={submitting ? t("submitting") : t("submit")}
               title={t("submit")}
               className="size-10 rounded-full bg-indigo-600 text-[#fff] shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300"
