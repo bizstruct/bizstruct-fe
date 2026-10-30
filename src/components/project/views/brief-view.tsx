@@ -1,9 +1,9 @@
 "use client"
 
-import { Boxes, Lightbulb, SearchX, Users } from "lucide-react"
+import { Boxes, Coins, Factory, Lightbulb, SearchX, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BulletList, Fact, NotReady, Panel, Section } from "../primitives"
+import { BulletList, NotReady, Panel, Section } from "../primitives"
 
 export function BriefView({ view }: { view: ProjectView }) {
   const t = useTranslations("Views.brief")
@@ -13,19 +13,23 @@ export function BriefView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-slate-200 border-l-indigo-500 bg-white p-4 sm:p-5 border-l-4">
-        <p className="flex items-center gap-2 text-xs font-medium text-indigo-700">
-          <Lightbulb className="size-4" aria-hidden /> {t("summary")}
-        </p>
-        <p className="mt-2 text-base font-medium leading-relaxed text-slate-900 sm:text-lg" data-testid="brief-summary">{brief.idea_summary}</p>
+      <div className="rounded-2xl border border-slate-200 bg-white">
+        <div className="flex gap-4 p-5">
+          <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-700 ring-1 ring-inset ring-indigo-500/25">
+            <Lightbulb className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs font-medium text-slate-500">{t("summary")}</p>
+            <p className="mt-1.5 text-pretty text-[17px] font-medium leading-8 tracking-[-0.01em] text-slate-900" data-testid="brief-summary">{brief.idea_summary}</p>
+          </div>
+        </div>
+        <dl className="grid border-t border-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-slate-200">
+          <Meta icon={Factory} label={t("industry")}>{brief.industry}</Meta>
+          {brief.monetization_hint ? <Meta icon={Coins} label={t("monetization")}>{brief.monetization_hint}</Meta> : null}
+        </dl>
       </div>
 
-      <dl className="grid gap-3 sm:grid-cols-2">
-        <Fact label={t("industry")}>{brief.industry}</Fact>
-        {brief.monetization_hint ? <Fact label={t("monetization")}>{brief.monetization_hint}</Fact> : null}
-      </dl>
-
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid items-start gap-4 lg:grid-cols-3">
         <Panel>
           <Section title={t("segments")} icon={Users} accent="emerald">
             <BulletList items={brief.customer_segment_candidates} accent="emerald" />
@@ -41,6 +45,19 @@ export function BriefView({ view }: { view: ProjectView }) {
             <BulletList items={brief.gaps} empty={t("none")} accent="amber" />
           </Section>
         </Panel>
+      </div>
+    </div>
+  )
+}
+
+/** One labelled fact under the summary: a small icon, the label, the value. */
+function Meta({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3 px-5 py-3.5 not-first:border-t not-first:border-slate-200 sm:not-first:border-t-0">
+      <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-slate-400" />
+      <div className="min-w-0">
+        <dt className="text-xs font-medium text-slate-500">{label}</dt>
+        <dd className="mt-0.5 text-sm leading-relaxed text-slate-800">{children}</dd>
       </div>
     </div>
   )
