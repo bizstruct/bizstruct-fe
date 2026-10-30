@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useTranslations } from "next-intl"
-import { Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { login, register } from "@/lib/api/auth"
@@ -37,36 +36,32 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     setError(messageFor(result))
   }
 
+  const inputClass = "h-12 rounded-xl border-slate-200 bg-white px-4 text-[15px] shadow-lg shadow-black/5 focus-visible:border-indigo-400 focus-visible:ring-4 focus-visible:ring-indigo-500/10"
+
   return (
     <div className="nocturne-grid flex min-h-full w-full items-center justify-center px-4 py-16">
-      <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards duration-500 flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8">
-      <div className="space-y-3">
-        <span aria-hidden className="flex size-11 items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700"><Sparkles className="size-5" /></span>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">{isRegister ? t("registerTitle") : t("loginTitle")}</h1>
-      </div>
-      <form onSubmit={submit} className="space-y-4">
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="text-sm font-medium text-slate-800">{t("email")}</label>
-          <Input id="email" name="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        {isRegister ? (
-          <div className="space-y-1.5">
-            <label htmlFor="fullName" className="text-sm font-medium text-slate-800">{t("fullName")}</label>
-            <Input id="fullName" name="fullName" autoComplete="name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-          </div>
-        ) : null}
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="text-sm font-medium text-slate-800">{t("password")}</label>
-          <Input id="password" name="password" type="password" autoComplete={isRegister ? "new-password" : "current-password"} required minLength={isRegister ? 8 : undefined} value={password} onChange={(e) => setPassword(e.target.value)} />
-          {isRegister ? <p className="text-xs text-slate-500">{t("passwordHint")}</p> : null}
-        </div>
-        {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
-        <Button type="submit" size="lg" className="h-11 w-full rounded-xl font-semibold bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
-      </form>
-      <p className="text-sm text-slate-500">
-        {isRegister ? t("haveAccount") : t("noAccount")}{" "}
-        <Link href={isRegister ? "/login" : "/register"} className="font-medium text-indigo-700 hover:underline">{isRegister ? t("signIn") : t("signUp")}</Link>
-      </p>
+      <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards flex w-full max-w-sm flex-col gap-6 duration-500">
+        {/* The headline stays for screen readers and the tab title; the placeholders do the labelling visually. */}
+        <h1 className="sr-only">{isRegister ? t("registerTitle") : t("loginTitle")}</h1>
+        <form onSubmit={submit} className="space-y-3">
+          <label htmlFor="email" className="sr-only">{t("email")}</label>
+          <Input id="email" name="email" type="email" placeholder={t("email")} autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
+          {isRegister ? (
+            <>
+              <label htmlFor="fullName" className="sr-only">{t("fullName")}</label>
+              <Input id="fullName" name="fullName" placeholder={t("fullName")} autoComplete="name" value={fullName} onChange={(e) => setFullName(e.target.value)} className={inputClass} />
+            </>
+          ) : null}
+          <label htmlFor="password" className="sr-only">{t("password")}</label>
+          <Input id="password" name="password" type="password" placeholder={t("password")} autoComplete={isRegister ? "new-password" : "current-password"} required minLength={isRegister ? 8 : undefined} value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} />
+          {isRegister ? <p className="px-1 text-xs text-slate-500">{t("passwordHint")}</p> : null}
+          {error ? <p role="alert" className="px-1 text-sm text-red-700">{error}</p> : null}
+          <Button type="submit" size="lg" className="h-12 w-full rounded-xl text-[15px] font-medium bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
+        </form>
+        <p className="text-center text-sm text-slate-500">
+          {isRegister ? t("haveAccount") : t("noAccount")}{" "}
+          <Link href={isRegister ? "/login" : "/register"} className="font-medium text-indigo-700 hover:underline">{isRegister ? t("signIn") : t("signUp")}</Link>
+        </p>
       </div>
     </div>
   )
