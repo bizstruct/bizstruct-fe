@@ -18,11 +18,11 @@ export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flow
         <NotReady message={tp("notReady")} />
       ) : (
         <div className="space-y-4" data-testid="pitch-panel">
-          <div className="rounded-2xl border border-slate-200 border-l-4 border-l-indigo-500 bg-white p-6 sm:p-8">
+          <div className="rounded-2xl border border-slate-200 border-l-4 border-l-indigo-500 bg-white p-4 sm:p-5">
             <p className="flex items-center gap-2 text-xs font-medium text-indigo-700">
               <Rocket className="size-4" aria-hidden /> {t("hook")}
             </p>
-            <p className="mt-3 text-xl font-medium leading-relaxed text-slate-900 sm:text-2xl">{pitch.hook}</p>
+            <p className="mt-2 text-base font-medium leading-relaxed text-slate-900 sm:text-lg">{pitch.hook}</p>
           </div>
 
           <Panel>
