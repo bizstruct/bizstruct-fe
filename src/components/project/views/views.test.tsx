@@ -53,10 +53,11 @@ describe("SegmentsView", () => {
 
   it("lets the user switch between the three music segments", () => {
     renderIntl(<SegmentsView view={music} />)
-    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Maya Torres", "Marcus Reed", "Maya Thompson", "Empathy map", "Customer scenario", "Ideation"])
+    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Empathy map", "Customer scenario", "Ideation"])
     expect(screen.getByRole("heading", { name: "Maya Torres" })).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("tab", { name: "Marcus Reed" }))
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Segment" }), { button: 0, ctrlKey: false, pointerType: "mouse" })
+    fireEvent.click(screen.getByRole("menuitem", { name: "Marcus Reed" }))
 
     expect(screen.getByRole("heading", { name: "Marcus Reed" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Maya Torres" })).not.toBeInTheDocument()

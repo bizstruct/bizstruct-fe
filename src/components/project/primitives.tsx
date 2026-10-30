@@ -118,3 +118,29 @@ export function SegmentedControl<T extends string | number>({ items, value, onCh
     </div>
   )
 }
+
+/** Flat tabs with a lavender line under the chosen one: the quiet sibling of SegmentedControl for a single row. */
+export function UnderlineTabs<T extends string>({ items, value, onChange, label }: { items: readonly SegmentedItem<T>[]; value: T; onChange: (value: T) => void; label?: string }) {
+  return (
+    <div role="tablist" aria-label={label} className="flex gap-5 border-b border-slate-200">
+      {items.map((item) => {
+        const selected = item.id === value
+        return (
+          <button
+            key={item.id}
+            role="tab"
+            type="button"
+            aria-selected={selected}
+            onClick={() => onChange(item.id)}
+            className={cn(
+              "-mb-px inline-flex items-center gap-1.5 border-b-2 pb-2 text-sm font-medium transition-colors",
+              selected ? "border-indigo-500 text-slate-900" : "border-transparent text-slate-500 hover:text-slate-800",
+            )}
+          >
+            {item.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}

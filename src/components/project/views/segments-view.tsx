@@ -1,14 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Brain, Ear, Eye, Frown, Lightbulb, MessageCircle, Route, Sparkles } from "lucide-react"
+import { Brain, Check, ChevronDown, Ear, Eye, Frown, Lightbulb, MessageCircle, Route, Sparkles } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
 import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
 import type { StageId } from "@/types/domain/stages"
-import { ACCENT, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, SegmentedControl, type Accent } from "../primitives"
+import { ACCENT, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
 import { RowStatusChip } from "../status-chip"
 
 type Part = "empathy" | "scenario" | "ideation"
@@ -41,26 +42,36 @@ export function SegmentsView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-5">
-      {view.segments.length > 1 ? (
-        <SegmentedControl
-          id="segments"
-          label={t("segment")}
-          value={index}
-          onChange={setSelected}
-          items={view.segments.map((s, i) => ({ id: i, label: s.label }))}
-        />
-      ) : null}
-      <SegmentedControl
-        id="segment-part"
-        label={t("part")}
-        value={part}
-        onChange={setPart}
-        items={[
-          { id: "empathy", label: <PartLabel text={t("tab")} segment={segment} part="empathy" /> },
-          { id: "scenario", label: <PartLabel text={ts("title")} segment={segment} part="scenario" /> },
-          { id: "ideation", label: <PartLabel text={ti("title")} segment={segment} part="ideation" /> },
-        ]}
-      />
+      <div className="flex items-end gap-4">
+        <div className="min-w-0 flex-1">
+          <UnderlineTabs
+            label={t("part")}
+            value={part}
+            onChange={setPart}
+            items={[
+              { id: "empathy", label: <PartLabel text={t("tab")} segment={segment} part="empathy" /> },
+              { id: "scenario", label: <PartLabel text={ts("title")} segment={segment} part="scenario" /> },
+              { id: "ideation", label: <PartLabel text={ti("title")} segment={segment} part="ideation" /> },
+            ]}
+          />
+        </div>
+        {view.segments.length > 1 ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="mb-1.5 inline-flex max-w-56 shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50" aria-label={t("segment")}>
+              <span className="truncate">{segment.label}</span>
+              <ChevronDown aria-hidden className="size-3.5 shrink-0 text-slate-400" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {view.segments.map((s, i) => (
+                <DropdownMenuItem key={s.empathyRow.id} onSelect={() => setSelected(i)}>
+                  <span className="flex-1">{s.label}</span>
+                  {i === index ? <Check aria-hidden className="size-3.5 text-indigo-500" /> : null}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
+      </div>
       <Reveal key={`${segment.empathyRow.id}-${part}`} className="space-y-5">
         {part === "empathy" ? <EmpathyPanel segment={segment} /> : null}
         {part === "scenario" ? <ScenarioPanel segment={segment} /> : null}
