@@ -15,7 +15,10 @@
     "signOut": "Sign out",
     "loading": "Loading…",
     "lightTheme": "Light theme",
-    "darkTheme": "Dark theme"
+    "darkTheme": "Dark theme",
+    "group_today": "Today",
+    "group_week": "Last 7 days",
+    "group_earlier": "Earlier"
   },
   "Auth": {
     "email": "Email",

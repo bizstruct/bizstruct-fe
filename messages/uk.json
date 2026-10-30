@@ -15,7 +15,10 @@
     "signOut": "Вийти",
     "loading": "Завантаження…",
     "lightTheme": "Світла тема",
-    "darkTheme": "Темна тема"
+    "darkTheme": "Темна тема",
+    "group_today": "Сьогодні",
+    "group_week": "Останні 7 днів",
+    "group_earlier": "Раніше"
   },
   "Auth": {
     "email": "Email",

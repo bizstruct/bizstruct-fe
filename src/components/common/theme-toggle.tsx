@@ -16,7 +16,7 @@ const subscribe = (notify: () => void) => {
 const isDark = () => document.documentElement.classList.contains("dark")
 
 /** Nocturne (dark) is the default; the choice is remembered in localStorage. */
-export function ThemeToggle() {
+export function ThemeToggle({ iconOnly = false }: { iconOnly?: boolean }) {
   const t = useTranslations("Sidebar")
   const dark = useSyncExternalStore(subscribe, isDark, () => true)
 
@@ -31,8 +31,16 @@ export function ThemeToggle() {
   }
 
   return (
-    <Button variant="ghost" size="sm" className="w-full justify-start text-slate-600" onClick={toggle}>
-      {dark ? <Sun /> : <Moon />} {dark ? t("lightTheme") : t("darkTheme")}
+    <Button
+      variant="ghost"
+      size={iconOnly ? "icon" : "sm"}
+      className={iconOnly ? "size-9 rounded-xl text-slate-500 hover:text-slate-900" : "w-full justify-start text-slate-600"}
+      onClick={toggle}
+      aria-label={dark ? t("lightTheme") : t("darkTheme")}
+      title={dark ? t("lightTheme") : t("darkTheme")}
+    >
+      {dark ? <Sun /> : <Moon />}
+      {iconOnly ? null : dark ? t("lightTheme") : t("darkTheme")}
     </Button>
   )
 }

@@ -18,6 +18,7 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 // actions.ts. Every path it used to cover now has a real route handler
 // (verified against every API_ROUTES entry), so it's removed rather than
 // fixed in place.
-const nextConfig: NextConfig = {};
+// The dev indicator sits bottom-right so it never covers the sidebar footer.
+const nextConfig: NextConfig = { devIndicators: { position: "bottom-right" } };
 
 export default withNextIntl(nextConfig);
