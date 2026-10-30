@@ -41,13 +41,27 @@ describe("ideaProblem (50-2000 characters)", () => {
   })
 })
 
+const setBrowserLanguages = (languages: string[]) => Object.defineProperty(window.navigator, "languages", { value: languages, configurable: true })
+const START = { name: "Start generation" }
+
 describe("IdeaForm", () => {
+  beforeEach(() => setBrowserLanguages(["en-US"]))
+
+  it("is one text box and one button: no language choice, options folded away", () => {
+    renderIntl(<IdeaForm />)
+    expect(screen.getByLabelText("Your idea")).toBeInTheDocument()
+    expect(screen.getByRole("button", START)).toBeInTheDocument()
+    expect(screen.queryByRole("radio")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Business case")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Approve automatically/)).not.toBeInTheDocument()
+  })
+
   it("shows the character counter and, after a failed submit, why the idea is rejected", async () => {
     renderIntl(<IdeaForm />)
     fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: "too short" } })
     expect(screen.getByText("9 / 2000 characters (at least 50)")).toBeInTheDocument()
 
-    fireEvent.submit(screen.getByRole("button", { name: "Start generation" }).closest("form")!)
+    fireEvent.submit(screen.getByRole("button", START).closest("form")!)
 
     expect(await screen.findByRole("alert")).toHaveTextContent("The idea must be at least 50 characters")
     expect(createProject).not.toHaveBeenCalled()
@@ -56,19 +70,17 @@ describe("IdeaForm", () => {
   it("rejects an idea over 2000 characters", async () => {
     renderIntl(<IdeaForm />)
     fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: idea(IDEA_MAX + 1) } })
-    fireEvent.submit(screen.getByRole("button", { name: "Start generation" }).closest("form")!)
+    fireEvent.submit(screen.getByRole("button", START).closest("form")!)
     expect(await screen.findByRole("alert")).toHaveTextContent("at most 2000")
     expect(createProject).not.toHaveBeenCalled()
   })
 
-  it("offers only business case and environment scan, and hides auto-approve under Advanced", async () => {
+  it("offers only business case and environment scan, and auto-approve, behind the options button", () => {
     renderIntl(<IdeaForm />)
+    fireEvent.click(screen.getByRole("button", { name: "Options" }))
     expect(screen.getByLabelText("Business case")).toBeInTheDocument()
     expect(screen.getByLabelText("Environment scan")).toBeInTheDocument()
     expect(screen.queryByLabelText("Team")).not.toBeInTheDocument()
-    expect(screen.queryByLabelText(/Approve automatically/)).not.toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole("button", { name: "Advanced" }))
     expect(screen.getByLabelText(/Approve automatically/)).not.toBeChecked()
   })
 
@@ -76,28 +88,42 @@ describe("IdeaForm", () => {
     createProject.mockResolvedValue({ ok: true, data: { id: "p-123" } })
     renderIntl(<IdeaForm />, "en")
     fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: `  ${idea(60)}  ` } })
+    fireEvent.click(screen.getByRole("button", { name: "Options" }))
     fireEvent.click(screen.getByLabelText("Environment scan"))
-    fireEvent.click(screen.getByRole("button", { name: "Advanced" }))
     fireEvent.click(screen.getByLabelText(/Approve automatically/))
-    fireEvent.click(screen.getByLabelText("Ukrainian"))
 
-    fireEvent.click(screen.getByRole("button", { name: "Start generation" }))
+    fireEvent.click(screen.getByRole("button", START))
 
     await waitFor(() => expect(createProject).toHaveBeenCalledOnce())
-    expect(createProject).toHaveBeenCalledWith({ idea: idea(60), language: "uk", enabledOptional: ["environment_scan"], autoApprove: true })
+    expect(createProject).toHaveBeenCalledWith({ idea: idea(60), language: "en", enabledOptional: ["environment_scan"], autoApprove: true })
     expect(router.push).toHaveBeenCalledWith("/project/p-123")
   })
 
-  it("defaults to the language of the interface", () => {
-    renderIntl(<IdeaForm />, "uk")
-    expect(screen.getByLabelText("Українська")).toBeChecked()
+  it("generates in the language the idea is written in, whatever the browser says", async () => {
+    createProject.mockResolvedValue({ ok: true, data: { id: "p-1" } })
+    renderIntl(<IdeaForm />, "en")
+    const ukrainian = "Сервіс для власників невеликих кав’ярень в Україні, що прогнозує денний попит на випічку"
+    fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: ukrainian } })
+    fireEvent.click(screen.getByRole("button", START))
+    await waitFor(() => expect(createProject).toHaveBeenCalledOnce())
+    expect(createProject.mock.calls[0][0].language).toBe("uk")
+  })
+
+  it("falls back to the browser language when the text is too short to tell", async () => {
+    setBrowserLanguages(["uk-UA", "en"])
+    createProject.mockResolvedValue({ ok: true, data: { id: "p-1" } })
+    renderIntl(<IdeaForm />, "en")
+    fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: "1234567890".repeat(6) } }) // 60 characters, no letters
+    fireEvent.click(screen.getByRole("button", START))
+    await waitFor(() => expect(createProject).toHaveBeenCalledOnce())
+    expect(createProject.mock.calls[0][0].language).toBe("uk")
   })
 
   it("shows be's validation message and stays on the page when the request fails", async () => {
     createProject.mockResolvedValue({ ok: false, kind: "validation", status: 422, detail: "idea: too short" })
     renderIntl(<IdeaForm />)
     fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: idea(60) } })
-    fireEvent.click(screen.getByRole("button", { name: "Start generation" }))
+    fireEvent.click(screen.getByRole("button", START))
     expect(await screen.findByRole("alert")).toHaveTextContent("idea: too short")
     expect(router.push).not.toHaveBeenCalled()
   })

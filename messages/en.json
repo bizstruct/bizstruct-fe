@@ -38,15 +38,10 @@
   },
   "Home": {
     "title": "Structure your next business idea",
-    "subtitle": "Describe the idea. The pipeline builds the brief, the segments, the business model canvas, the SWOT/ERRC cycle and the pitch.",
+    "subtitle": "Describe it in a few sentences. You get a brief, segments, a canvas, SWOT and a pitch.",
     "ideaLabel": "Your idea",
     "ideaPlaceholder": "An app that delivers boxes of fresh produce from local farms to busy city parents…",
     "counter": "{count} / {max} characters (at least {min})",
-    "language": "Generation language",
-    "languageUk": "Ukrainian",
-    "languageEn": "English",
-    "optional": "Optional stages",
-    "advanced": "Advanced",
     "autoApprove": "Approve automatically",
     "autoApproveHint": "Rows with consistency errors continue without waiting for you",
     "submit": "Start generation",
@@ -56,13 +51,9 @@
       "tooLong": "The idea must be at most {max} characters",
       "generic": "Could not start the generation"
     },
-    "projectsTitle": "Your projects",
-    "noProjects": "No projects yet. Start with an idea above.",
-    "loadError": "Could not load the projects",
-    "created": "Created",
-    "eyebrow": "Osterwalder Business Model Canvas",
     "titleLead": "Structure your next",
-    "titleAccent": "business idea"
+    "titleAccent": "business idea",
+    "options": "Options"
   },
   "Status": {
     "project": {
