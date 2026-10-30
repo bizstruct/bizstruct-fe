@@ -31,7 +31,6 @@ describe("ProjectScreen", () => {
 
     expect(screen.queryByRole("tab", { name: /Progress/ })).not.toBeInTheDocument()
     expect(screen.getByRole("progressbar", { name: "10 of 10 stages done" })).toHaveAttribute("aria-valuenow", "10")
-    expect(screen.getByText("10/10")).toBeInTheDocument()
     for (const tab of screen.getAllByRole("tab")) expect(within(tab).getByRole("img", { name: "Done" })).toBeInTheDocument()
     // the first tab already shows its stage's row: chip, duration and the regenerate action
     expect(screen.getByTestId("row-brief-0")).toBeInTheDocument()

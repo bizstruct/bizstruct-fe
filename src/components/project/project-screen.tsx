@@ -57,15 +57,18 @@ export function ProjectScreen({ id }: { id: string }) {
         */}
         <div className="shrink-0 px-4 pb-5 pt-3 sm:px-6">
           <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
-            <TabsList className="group-data-horizontal/tabs:h-auto flex-1 flex-wrap justify-start gap-1 rounded-none bg-transparent p-1.5 pb-2">
+            <TabsList className="group-data-horizontal/tabs:h-auto grid w-full grid-flow-col auto-cols-fr gap-1 overflow-x-auto rounded-none bg-transparent p-1.5 pb-2.5">
               {TAB_IDS.map((tab) => (
-                <TabsTrigger key={tab} value={tab} className="h-10 flex-none gap-2 rounded-xl px-3.5 text-sm font-medium after:hidden data-active:bg-indigo-50 data-active:text-indigo-900 data-active:shadow-none">
+                <TabsTrigger
+                  key={tab}
+                  value={tab}
+                  className="h-10 min-w-28 flex-none gap-2 rounded-xl border-transparent px-3 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/15 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/15"
+                >
                   <StateIcon state={stateOf(project.rows, stagesOfTab(tab, project.enabledOptional))} />
                   {t(`tabs.${tab}`)}
                 </TabsTrigger>
               ))}
             </TabsList>
-            <span className="shrink-0 pr-4 text-xs tabular-nums text-slate-500" aria-hidden>{done}/{total}</span>
             <div
               role="progressbar"
               aria-label={t("progress", { done, total })}
@@ -83,8 +86,8 @@ export function ProjectScreen({ id }: { id: string }) {
           {error ? <p role="alert" className="mx-auto mt-3 max-w-6xl text-xs text-amber-700">{t("loadError")}</p> : null}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 sm:px-6">
+          <div className="mx-auto max-w-6xl pb-10">
             {TAB_IDS.map((tab) => {
               const stages = stagesOfTab(tab, project.enabledOptional)
               const state = stateOf(project.rows, stages)
