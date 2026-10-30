@@ -9,8 +9,7 @@ import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
 import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
 import type { StageId } from "@/types/domain/stages"
-import { ACCENT, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
-import { RowStatusChip } from "../status-chip"
+import { BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
 
 type Part = "empathy" | "scenario" | "ideation"
 
@@ -107,10 +106,7 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
           {initials(map.persona_name)}
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-xl font-bold tracking-tight text-slate-900">{map.persona_name}</h3>
-            <RowStatusChip status={segment.empathyRow.status} />
-          </div>
+          <h3 className="text-xl font-bold tracking-tight text-slate-900">{map.persona_name}</h3>
           <p className="mt-1 text-sm leading-relaxed text-slate-600">{map.persona_demographics}</p>
         </div>
       </div>
@@ -133,11 +129,9 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
   )
 }
 
-/** Pains and gains are what the rest of the pipeline is built on, so they get the loud colors. */
 function Highlight({ title, items, icon, accent }: { title: string; items: readonly string[]; icon: typeof Eye; accent: Accent }) {
-  const a = ACCENT[accent]
   return (
-    <div className={`rounded-2xl border p-4 ${a.soft} ${a.ring}`}>
+    <div className="rounded-2xl border border-slate-200/80 p-4">
       <Section title={title} icon={icon} accent={accent}>
         <BulletList items={items} accent={accent} />
       </Section>
@@ -156,7 +150,7 @@ function ScenarioPanel({ segment }: { segment: SegmentView }) {
         <IconBadge icon={Route} accent="violet" /> {t("title")}
       </h3>
       <Section title={t("narrative")}>
-        <blockquote className="border-l-4 border-violet-300 bg-violet-50/50 py-2 pl-4 pr-3 text-sm leading-relaxed text-slate-700">{s.situation_narrative}</blockquote>
+        <blockquote className="border-l-2 border-indigo-300 py-1 pl-4 text-sm leading-relaxed text-slate-700">{s.situation_narrative}</blockquote>
       </Section>
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {s.channel_type ? <Fact label={t("channel")}>{humanize(s.channel_type)}</Fact> : null}
@@ -196,7 +190,7 @@ function IdeationPanel({ segment }: { segment: SegmentView }) {
       <Section title={t("whatIf")}>
         <ol className="grid gap-2.5 md:grid-cols-2">
           {i.what_if_questions.map((q, n) => (
-            <li key={n} className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50/50 p-3 text-sm leading-relaxed text-slate-800">
+            <li key={n} className="flex gap-3 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed text-slate-800">
               <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-900">{n + 1}</span>
               <span>{q}</span>
             </li>
