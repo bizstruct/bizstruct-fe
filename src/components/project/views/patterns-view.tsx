@@ -18,23 +18,18 @@ export function PatternsView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4 rounded-2xl border border-slate-200 border-l-4 border-l-indigo-500 bg-white p-5 sm:p-6">
-        <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
-          <GitBranch className="size-6" />
-        </span>
-        <div>
-          <p className="text-xs font-medium text-slate-500">{t("branch")}</p>
-          <p className="text-xl font-medium text-slate-900">{t(patterns.branch_decision)}</p>
-        </div>
-      </div>
-
       <Panel className="space-y-4">
+        <p className="flex flex-wrap items-center gap-x-2 text-sm text-slate-500">
+          <GitBranch aria-hidden className="size-4 text-indigo-500" />
+          {t("branch")}
+          <span className="font-semibold text-slate-900">{t(patterns.branch_decision)}</span>
+        </p>
         <Section title={t("groups")} icon={Layers} accent="violet">
-          <ul className="grid gap-3 md:grid-cols-2" data-testid="pattern-groups">
+          <ul className={cn("grid gap-3", patterns.groups.length > 1 && "md:grid-cols-2")} data-testid="pattern-groups">
             {patterns.groups.map((group, index) => (
-              <li key={group.id} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 text-sm">
+              <li key={group.id} className="rounded-xl border border-slate-200/80 p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="flex size-6 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">#{index + 1}</span>
+                  <span className="flex size-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">#{index + 1}</span>
                   <Badge tone="accent">{humanize(group.relation_type)}</Badge>
                 </div>
                 <p className="mt-2 font-medium text-slate-800">{group.empathy_map_ids.map(labelOf).join(", ")}</p>
@@ -44,14 +39,12 @@ export function PatternsView({ view }: { view: ProjectView }) {
         </Section>
       </Panel>
 
-      <Panel className="space-y-3">
-        <Section title={t("tags")} icon={Tags} accent="sky">
-          {patterns.pattern_tags.length === 0 ? (
-            <p className="text-sm text-slate-400">{t("noTags")}</p>
-          ) : (
+      {patterns.pattern_tags.length > 0 ? (
+        <Panel className="space-y-3">
+          <Section title={t("tags")} icon={Tags} accent="sky">
             <ul className="grid gap-3 md:grid-cols-2" data-testid="pattern-tags">
               {patterns.pattern_tags.map((tag) => (
-                <li key={tag.pattern} className="rounded-xl border border-sky-200 bg-sky-50/40 p-4 text-sm">
+                <li key={tag.pattern} className="rounded-xl border border-slate-200/80 p-4 text-sm">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <Badge tone="info" className="px-2.5 py-1 text-xs">{humanize(tag.pattern)}</Badge>
                     {tag.subtype ? <Badge className="px-2.5 py-1 text-xs">{humanize(tag.subtype)}</Badge> : null}
@@ -60,15 +53,13 @@ export function PatternsView({ view }: { view: ProjectView }) {
                 </li>
               ))}
             </ul>
-          )}
-        </Section>
-      </Panel>
+          </Section>
+        </Panel>
+      ) : null}
 
-      <Panel className="space-y-3">
-        <Section title={t("pairs")} icon={Link2} accent="emerald">
-          {patterns.pairwise_scores.length === 0 ? (
-            <p className="text-sm text-slate-400">{t("noPairs")}</p>
-          ) : (
+      {patterns.pairwise_scores.length > 0 ? (
+        <Panel className="space-y-3">
+          <Section title={t("pairs")} icon={Link2} accent="emerald">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm" data-testid="pair-scores">
                 <thead className="text-xs uppercase tracking-wide text-slate-400">
@@ -91,9 +82,20 @@ export function PatternsView({ view }: { view: ProjectView }) {
                 </tbody>
               </table>
             </div>
-          )}
-        </Section>
-      </Panel>
+          </Section>
+        </Panel>
+      ) : null}
+
+      {patterns.pattern_tags.length === 0 || patterns.pairwise_scores.length === 0 ? (
+        <ul className="space-y-1.5 px-1 text-sm text-slate-400">
+          {patterns.pattern_tags.length === 0 ? (
+            <li className="flex items-center gap-2"><Tags aria-hidden className="size-4" />{t("tags")}: <span>{t("noTags")}</span></li>
+          ) : null}
+          {patterns.pairwise_scores.length === 0 ? (
+            <li className="flex items-center gap-2"><Link2 aria-hidden className="size-4" />{t("pairs")}: <span>{t("noPairs")}</span></li>
+          ) : null}
+        </ul>
+      ) : null}
     </div>
   )
 }
