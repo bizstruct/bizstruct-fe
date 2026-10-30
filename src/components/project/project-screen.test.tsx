@@ -32,8 +32,8 @@ describe("ProjectScreen", () => {
     expect(screen.queryByRole("tab", { name: /Progress/ })).not.toBeInTheDocument()
     expect(screen.getByRole("progressbar", { name: "10 of 10 stages done" })).toHaveAttribute("aria-valuenow", "10")
     for (const tab of screen.getAllByRole("tab")) expect(within(tab).getByRole("img", { name: "Done" })).toBeInTheDocument()
-    // the first tab already shows its stage's row: chip, duration and the regenerate action
-    expect(screen.getByTestId("row-brief-0")).toBeInTheDocument()
+    // Regenerate is one icon at the end of the bar, not a panel per stage
+    expect(screen.getByRole("button", { name: "Regenerate" })).toBeInTheDocument()
   })
 
   it("shows a running stage on its tab and a generating notice instead of an empty view", async () => {

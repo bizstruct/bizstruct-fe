@@ -10,6 +10,7 @@ import { TAB_IDS, stageProgress, stagesOfTab, stateOf, type TabId } from "@/lib/
 import { NotReady, Reveal } from "./primitives"
 import { StageStatusPanel } from "./stage-status"
 import { StateIcon } from "./state-icon"
+import { TabActions } from "./tab-actions"
 import { BriefView } from "./views/brief-view"
 import { CanvasView } from "./views/canvas-view"
 import { FutureView } from "./views/future-view"
@@ -24,6 +25,7 @@ export function ProjectScreen({ id }: { id: string }) {
   const { project, error, loading, refresh, replace } = useProject(id)
   const view = useMemo(() => (project ? buildProjectView(project) : null), [project])
   const [flowIndex, setFlowIndex] = useState(0)
+  const [tab, setTab] = useState<TabId>("brief")
 
   if (loading && !project) return <p className="p-8 text-sm text-slate-500">{t("loading")}</p>
   if (!project || !view) {
@@ -49,7 +51,7 @@ export function ProjectScreen({ id }: { id: string }) {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <Tabs defaultValue="brief" className="h-full min-h-0 gap-0">
+      <Tabs value={tab} onValueChange={(value) => setTab(value as TabId)} className="h-full min-h-0 gap-0">
         {/*
           The bar sits above the scrolling area instead of floating over it, so the content is cut off at the same
           gap that separates them at rest: nothing ever slides behind or past the bar. The tabs say where each stage
@@ -57,7 +59,7 @@ export function ProjectScreen({ id }: { id: string }) {
         */}
         <div className="shrink-0 px-4 pb-5 pt-3 sm:px-6">
           <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
-            <TabsList className="group-data-horizontal/tabs:h-auto grid w-full grid-flow-col auto-cols-fr gap-0 overflow-x-auto rounded-none bg-transparent p-0">
+            <TabsList className="group-data-horizontal/tabs:h-auto grid min-w-0 flex-1 grid-flow-col auto-cols-fr gap-0 overflow-x-auto rounded-none bg-transparent p-0">
               {TAB_IDS.map((tab) => (
                 <TabsTrigger
                   key={tab}
@@ -69,6 +71,7 @@ export function ProjectScreen({ id }: { id: string }) {
                 </TabsTrigger>
               ))}
             </TabsList>
+            <TabActions project={project} stages={stagesOfTab(tab, project.enabledOptional)} onProject={replace} onRefresh={() => void refresh()} />
             <div
               role="progressbar"
               aria-label={t("progress", { done, total })}

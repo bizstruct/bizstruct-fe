@@ -2,9 +2,10 @@ import { fireEvent, screen, waitFor, within } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Project, Row } from "@/lib/api/projects"
 import { FARM, MUSIC, fixture } from "@/test/fixtures"
-import { MESSAGES, renderIntl } from "@/test/render"
-import { TAB_IDS, stagesOfTab } from "@/lib/mappers/tab-stages"
+import { renderIntl } from "@/test/render"
+import type { StageId } from "@/types/domain/stages"
 import { StageStatusPanel } from "./stage-status"
+import { TabActions } from "./tab-actions"
 
 vi.mock("@/i18n/routing", async () => (await import("@/test/routing-mock")).routingMock)
 const api = vi.hoisted(() => ({ approveRow: vi.fn(), regenerateRow: vi.fn() }))
@@ -18,61 +19,29 @@ beforeEach(() => {
   api.regenerateRow.mockReset()
 })
 
-const ALL_STAGES = TAB_IDS.flatMap((tab) => stagesOfTab(tab, []))
-
-function show(project: Project, stages = ALL_STAGES) {
+function panel(project: Project, stages: StageId[]) {
   const onProject = vi.fn()
   const onRefresh = vi.fn()
   renderIntl(<StageStatusPanel project={project} stages={stages} onProject={onProject} onRefresh={onRefresh} />)
   return { onProject, onRefresh }
 }
 
+function tabActions(project: Project, stages: StageId[]) {
+  const onProject = vi.fn()
+  const onRefresh = vi.fn()
+  renderIntl(<TabActions project={project} stages={stages} onProject={onProject} onRefresh={onRefresh} />)
+  return { onProject, onRefresh }
+}
+
 describe("StageStatusPanel", () => {
-  it("shows one block per stage it is given, in that order, with the state of each", () => {
-    show(fixture(FARM), stagesOfTab("segments", []))
-    const blocks = [...screen.getByTestId("stage-status").querySelectorAll("[data-stage]")]
-    expect(blocks.map((n) => n.getAttribute("data-stage"))).toEqual(["empathy_map", "customer_scenario", "ideation"])
-    expect(blocks.map((n) => n.getAttribute("data-state"))).toEqual(["done", "done", "done"])
-  })
-
-  it("titles every stage in the interface language", () => {
-    show(fixture(FARM))
-    expect(screen.getByRole("heading", { name: MESSAGES.en.Stages.swot_errc_cycle })).toBeInTheDocument()
-    for (const id of ALL_STAGES) expect(screen.getByRole("heading", { name: MESSAGES.en.Stages[id] })).toBeInTheDocument()
-  })
-
-  it("marks a stage that has no rows yet as waiting", () => {
-    const project = fixture(FARM)
-    show({ ...project, rows: project.rows.filter((r) => r.stage !== "pitch") }, ["pitch"])
-    expect(screen.getByText("not created yet")).toBeInTheDocument()
-    expect(screen.getByTestId("stage-status").querySelector('[data-stage="pitch"]')).toHaveAttribute("data-state", "waiting")
-  })
-
-  it("shows a done chip for every row of the finished farm project", () => {
-    show(fixture(FARM))
-    const chips = screen.getAllByText("Done")
-    expect(chips).toHaveLength(fixture(FARM).rows.length)
-  })
-
-  it("numbers the rows of a multi-instance stage (music: three empathy maps)", () => {
-    show(fixture(MUSIC))
-    const node = screen.getByTestId("stage-status").querySelector('[data-stage="empathy_map"]') as HTMLElement
-    expect(within(node).getByText("#1")).toBeInTheDocument()
-    expect(within(node).getByText("#2")).toBeInTheDocument()
-    expect(within(node).getByText("#3")).toBeInTheDocument()
-  })
-
-  it("shows how long each row ran, from startedAt and finishedAt", () => {
-    const project = fixture(FARM)
-    show(project)
-    const brief = row(project, "brief")
-    const seconds = ((Date.parse(brief.finishedAt!) - Date.parse(brief.startedAt!)) / 1000).toFixed(1)
-    expect(within(screen.getByTestId("row-brief-0")).getByText(`${seconds} s`)).toBeInTheDocument()
+  it("shows nothing for a stage that went through cleanly: its state is the icon on the tab", () => {
+    panel(fixture(FARM), ["brief"])
+    expect(screen.queryByTestId("stage-status")).not.toBeInTheDocument()
   })
 
   it("shows the consistency violations of a row: rule id, severity and message", () => {
     const project = fixture(FARM)
-    show(project)
+    panel(project, ["customer_scenario"])
     const scenario = within(screen.getByTestId("problems-customer_scenario-0"))
     const violation = row(project, "customer_scenario").consistency!.violations![0]
     expect(scenario.getByText(violation.rule_id)).toBeInTheDocument()
@@ -80,31 +49,33 @@ describe("StageStatusPanel", () => {
     expect(scenario.getByText(violation.message)).toBeInTheDocument()
   })
 
-  it("shows a row's error with its translated code and message", () => {
+  it("shows no Regenerate button and no duration for a finished row: both live elsewhere", () => {
+    panel(fixture(FARM), ["customer_scenario"])
+    expect(screen.queryByRole("button", { name: "Regenerate" })).not.toBeInTheDocument()
+    expect(screen.queryByText(/\d+\.\d s/)).not.toBeInTheDocument()
+  })
+
+  it("shows a row's error with its translated code and message, and a Retry button", () => {
     const project = fixture(FARM)
     const pitch = row(project, "pitch")
-    show(patch(project, pitch, { status: "error", error: { code: "stuck_timeout", message: "No result within 1800 seconds." }, finishedAt: null }))
-    const alert = within(screen.getByTestId("problems-pitch-0")).getByRole("alert")
-    expect(alert).toHaveTextContent("Timed out")
-    expect(alert).toHaveTextContent("No result within 1800 seconds.")
+    panel(patch(project, pitch, { status: "error", error: { code: "stuck_timeout", message: "No result within 1800 seconds." }, finishedAt: null }), ["pitch"])
+    const problems = within(screen.getByTestId("problems-pitch-0"))
+    expect(problems.getByRole("alert")).toHaveTextContent("Timed out")
+    expect(problems.getByRole("alert")).toHaveTextContent("No result within 1800 seconds.")
+    expect(problems.getByRole("button", { name: "Retry" })).toBeInTheDocument()
   })
 
-  it("shows a running row without actions", () => {
+  it("shows nothing for a row that is still running", () => {
     const project = fixture(FARM)
-    show(patch(project, row(project, "pitch"), { status: "running", finishedAt: null }))
-    const pitch = within(screen.getByTestId("row-pitch-0"))
-    expect(pitch.getByText("Running")).toBeInTheDocument()
-    expect(pitch.queryByRole("button")).not.toBeInTheDocument()
+    panel(patch(project, row(project, "pitch"), { status: "running", finishedAt: null, consistency: null }), ["pitch"])
+    expect(screen.queryByTestId("stage-status")).not.toBeInTheDocument()
   })
-})
 
-describe("row actions", () => {
-  it("offers Approve and Regenerate on a row awaiting a decision, and approve calls be and hands back the project", async () => {
+  it("offers Approve and Regenerate on a row awaiting a decision, and Approve calls be and hands back the project", async () => {
     const project = fixture(FARM)
     const patterns = row(project, "patterns")
-    const waiting = patch(project, patterns, { status: "awaiting_decision" })
     api.approveRow.mockResolvedValue({ ok: true, data: project })
-    const { onProject } = show(waiting)
+    const { onProject } = panel(patch(project, patterns, { status: "awaiting_decision" }), ["patterns"])
 
     const actions = within(screen.getByTestId(`actions-${patterns.id}`))
     expect(actions.getByRole("button", { name: "Regenerate" })).toBeInTheDocument()
@@ -114,21 +85,33 @@ describe("row actions", () => {
     expect(api.approveRow).toHaveBeenCalledWith(project.id, patterns.id)
   })
 
-  it("offers only Regenerate on a done row and Retry on a row in error", () => {
+  it("tells the user and reloads when be answers 409 (the row changed meanwhile)", async () => {
     const project = fixture(FARM)
-    const failed = patch(project, row(project, "pitch"), { status: "error", error: { code: "generation_failed", message: "x" } })
-    show(failed)
-    expect(within(screen.getByTestId("row-brief-0")).getByRole("button", { name: "Regenerate" })).toBeInTheDocument()
-    expect(within(screen.getByTestId("row-brief-0")).queryByRole("button", { name: "Approve" })).not.toBeInTheDocument()
-    expect(within(screen.getByTestId("row-pitch-0")).getByRole("button", { name: "Retry" })).toBeInTheDocument()
+    const patterns = row(project, "patterns")
+    api.approveRow.mockResolvedValue({ ok: false, kind: "conflict", status: 409, detail: "Cannot approve" })
+    const { onProject, onRefresh } = panel(patch(project, patterns, { status: "awaiting_decision" }), ["patterns"])
+
+    fireEvent.click(within(screen.getByTestId(`actions-${patterns.id}`)).getByRole("button", { name: "Approve" }))
+
+    expect(await screen.findByText(/This is no longer possible for the row/)).toBeInTheDocument()
+    expect(onRefresh).toHaveBeenCalled()
+    expect(onProject).not.toHaveBeenCalled()
+  })
+})
+
+describe("TabActions (Regenerate in the tab bar)", () => {
+  it("is absent while nothing in the tab can be regenerated", () => {
+    const project = fixture(FARM)
+    tabActions(patch(project, row(project, "pitch"), { status: "running", finishedAt: null }), ["pitch"])
+    expect(screen.queryByRole("button", { name: "Regenerate" })).not.toBeInTheDocument()
   })
 
   it("asks for confirmation before regenerating and names the rows that will be reset", async () => {
     const project = fixture(FARM)
     api.regenerateRow.mockResolvedValue({ ok: true, data: project })
-    const { onProject } = show(project)
+    const { onProject } = tabActions(project, ["canvas"])
 
-    fireEvent.click(within(screen.getByTestId("row-canvas-0")).getByRole("button", { name: "Regenerate" }))
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }))
 
     const dialog = await screen.findByRole("dialog")
     expect(within(dialog).getByText(/“Business model canvas” will be generated again/)).toBeInTheDocument()
@@ -143,34 +126,47 @@ describe("row actions", () => {
 
   it("lists every other row as a dependent of the brief", async () => {
     const project = fixture(MUSIC)
-    show(project)
-    fireEvent.click(within(screen.getByTestId("row-brief-0")).getByRole("button", { name: "Regenerate" }))
+    tabActions(project, ["brief"])
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }))
     const dialog = await screen.findByRole("dialog")
     expect(within(within(dialog).getByTestId("dependents")).getAllByRole("listitem")).toHaveLength(project.rows.length - 1)
   })
 
   it("says nothing depends on a row that nothing refs (the pitch)", async () => {
-    show(fixture(FARM))
-    fireEvent.click(within(screen.getByTestId("row-pitch-0")).getByRole("button", { name: "Regenerate" }))
-    const dialog = await screen.findByRole("dialog")
-    expect(within(dialog).getByText("No other rows depend on it.")).toBeInTheDocument()
+    tabActions(fixture(FARM), ["pitch"])
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }))
+    expect(within(await screen.findByRole("dialog")).getByText("No other rows depend on it.")).toBeInTheDocument()
   })
 
   it("does nothing when the confirmation is cancelled", async () => {
-    show(fixture(FARM))
-    fireEvent.click(within(screen.getByTestId("row-canvas-0")).getByRole("button", { name: "Regenerate" }))
+    tabActions(fixture(FARM), ["canvas"])
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }))
     fireEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "Cancel" }))
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument())
     expect(api.regenerateRow).not.toHaveBeenCalled()
   })
 
-  it("tells the user and reloads when be answers 409 (the row changed meanwhile)", async () => {
-    const project = fixture(FARM)
-    const waiting = patch(project, row(project, "patterns"), { status: "awaiting_decision" })
-    api.approveRow.mockResolvedValue({ ok: false, kind: "conflict", status: 409, detail: "Cannot approve" })
-    const { onProject, onRefresh } = show(waiting)
+  it("asks which row when the tab holds several (three empathy maps under Segments)", async () => {
+    const project = fixture(MUSIC)
+    api.regenerateRow.mockResolvedValue({ ok: true, data: project })
+    tabActions(project, ["empathy_map", "customer_scenario", "ideation"])
 
-    fireEvent.click(within(screen.getByTestId(`actions-${row(project, "patterns").id}`)).getByRole("button", { name: "Approve" }))
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Regenerate" }), { button: 0, ctrlKey: false, pointerType: "mouse" })
+    const items = (await screen.findAllByRole("menuitem")).map((i) => i.textContent?.trim())
+    expect(items.slice(0, 3)).toEqual(["Empathy map #1", "Empathy map #2", "Empathy map #3"])
+    expect(items).toContain("Ideation #1")
+
+    fireEvent.click(screen.getByRole("menuitem", { name: "Empathy map #2" }))
+    const dialog = await screen.findByRole("dialog")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Regenerate" }))
+    await waitFor(() => expect(api.regenerateRow).toHaveBeenCalledWith(project.id, row(project, "empathy_map", 1).id))
+  })
+
+  it("keeps the dialog open with the message and reloads when be answers 409", async () => {
+    api.regenerateRow.mockResolvedValue({ ok: false, kind: "conflict", status: 409, detail: "Cannot regenerate" })
+    const { onProject, onRefresh } = tabActions(fixture(FARM), ["canvas"])
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate" }))
+    fireEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: "Regenerate" }))
 
     expect(await screen.findByText(/This is no longer possible for the row/)).toBeInTheDocument()
     expect(onRefresh).toHaveBeenCalled()
