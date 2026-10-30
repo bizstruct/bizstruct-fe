@@ -19,16 +19,18 @@ export function Reveal({ children, delay = 0, className }: { children: React.Rea
 
 export type Accent = "indigo" | "sky" | "violet" | "pink" | "amber" | "red" | "emerald" | "slate"
 
-/** Tailwind needs whole class names, so each accent lists its own. */
+const BRAND = { soft: "bg-indigo-50", ring: "border-indigo-200", text: "text-indigo-700", bar: "bg-indigo-500", icon: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-400" }
+
+/** Mono-accent: every accent is the brand lavender except red, which stays for what is a risk or a pain. Tailwind needs whole class names, so red lists its own. */
 export const ACCENT: Record<Accent, { soft: string; ring: string; text: string; bar: string; icon: string; dot: string }> = {
-  indigo: { soft: "bg-indigo-50", ring: "border-indigo-200", text: "text-indigo-700", bar: "bg-indigo-500", icon: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-400" },
-  sky: { soft: "bg-sky-50", ring: "border-sky-200", text: "text-sky-700", bar: "bg-sky-500", icon: "bg-sky-100 text-sky-600", dot: "bg-sky-400" },
-  violet: { soft: "bg-violet-50", ring: "border-violet-200", text: "text-violet-700", bar: "bg-violet-500", icon: "bg-violet-100 text-violet-600", dot: "bg-violet-400" },
-  pink: { soft: "bg-pink-50", ring: "border-pink-200", text: "text-pink-700", bar: "bg-pink-500", icon: "bg-pink-100 text-pink-600", dot: "bg-pink-400" },
-  amber: { soft: "bg-amber-50", ring: "border-amber-200", text: "text-amber-800", bar: "bg-amber-500", icon: "bg-amber-100 text-amber-600", dot: "bg-amber-400" },
+  indigo: BRAND,
+  sky: BRAND,
+  violet: BRAND,
+  pink: BRAND,
+  amber: BRAND,
+  emerald: BRAND,
+  slate: BRAND,
   red: { soft: "bg-red-50", ring: "border-red-200", text: "text-red-700", bar: "bg-red-500", icon: "bg-red-100 text-red-600", dot: "bg-red-400" },
-  emerald: { soft: "bg-emerald-50", ring: "border-emerald-200", text: "text-emerald-700", bar: "bg-emerald-500", icon: "bg-emerald-100 text-emerald-600", dot: "bg-emerald-400" },
-  slate: { soft: "bg-slate-50", ring: "border-slate-200", text: "text-slate-700", bar: "bg-slate-400", icon: "bg-slate-100 text-slate-600", dot: "bg-slate-400" },
 }
 
 export function IconBadge({ icon: Icon, accent = "indigo", className }: { icon: LucideIcon; accent?: Accent; className?: string }) {
