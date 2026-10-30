@@ -39,7 +39,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const inputClass = "h-12 rounded-xl border-slate-300 bg-white px-4 text-[15px] shadow-lg shadow-black/5 focus-visible:border-indigo-400 focus-visible:ring-4 focus-visible:ring-indigo-500/10"
 
   return (
-    <div className="nocturne-grid flex min-h-full w-full flex-col items-center gap-10 px-4 pb-16 pt-[14vh]">
+    <div className="nocturne-grid flex min-h-full w-full flex-col items-center justify-center gap-10 px-4 py-16">
       <h1 className="animate-in fade-in slide-in-from-bottom-3 fill-mode-backwards text-center text-4xl font-medium leading-[1.1] tracking-tight text-slate-900 duration-500 sm:text-5xl">
         {isRegister ? t("registerLead") : t("loginLead")}{" "}
         <span className="text-indigo-600 dark:text-indigo-400">{isRegister ? t("registerAccent") : t("loginAccent")}</span>
