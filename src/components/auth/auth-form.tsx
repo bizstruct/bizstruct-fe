@@ -39,12 +39,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
 
   return (
-    <div className="relative flex min-h-full w-full items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-violet-100 px-4 py-16">
-      <div aria-hidden className="pointer-events-none absolute -left-24 -top-24 size-96 rounded-full bg-indigo-200/40 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-24 -right-24 size-96 rounded-full bg-violet-200/40 blur-3xl" />
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: "easeOut" }} className="relative flex w-full max-w-sm flex-col gap-6 rounded-3xl border border-white/80 bg-white/90 p-8 shadow-2xl shadow-indigo-200/50 backdrop-blur">
+    <div className="nocturne-grid flex min-h-full w-full items-center justify-center px-4 py-16">
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: "easeOut" }} className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8">
       <div className="space-y-3">
-        <span aria-hidden className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-[#fff] shadow-lg shadow-indigo-200"><Sparkles className="size-5" /></span>
+        <span aria-hidden className="flex size-11 items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700"><Sparkles className="size-5" /></span>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">{isRegister ? t("registerTitle") : t("loginTitle")}</h1>
       </div>
       <form onSubmit={submit} className="space-y-4">
@@ -64,7 +62,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           {isRegister ? <p className="text-xs text-slate-500">{t("passwordHint")}</p> : null}
         </div>
         {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
-        <Button type="submit" size="lg" className="h-11 w-full rounded-xl text-[#fff] bg-gradient-to-r from-indigo-500 to-violet-500 font-semibold shadow-md shadow-indigo-200 hover:from-indigo-600 hover:to-violet-600" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
+        <Button type="submit" size="lg" className="h-11 w-full rounded-xl font-semibold bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300" disabled={busy}>{isRegister ? t("signUp") : t("signIn")}</Button>
       </form>
       <p className="text-sm text-slate-500">
         {isRegister ? t("haveAccount") : t("noAccount")}{" "}

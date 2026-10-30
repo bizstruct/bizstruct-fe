@@ -44,7 +44,7 @@ export function IdeaForm() {
   const toggle = (stage: OptionalStage) => setOptional((current) => (current.includes(stage) ? current.filter((s) => s !== stage) : [...current, stage]))
 
   return (
-    <form onSubmit={submit} className="space-y-6 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl shadow-indigo-100/50 sm:p-8" noValidate>
+    <form onSubmit={submit} className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8" noValidate>
       <div className="space-y-2">
         <label htmlFor="idea" className="text-sm font-semibold text-slate-800">{t("ideaLabel")}</label>
         <Textarea id="idea" name="idea" value={idea} rows={6} placeholder={t("ideaPlaceholder")} aria-invalid={showProblem} aria-describedby="idea-help" onChange={(e) => setIdea(e.target.value)} onBlur={() => setTouched(true)} />
@@ -101,7 +101,7 @@ export function IdeaForm() {
       </div>
 
       {serverError ? <p role="alert" className="text-sm text-red-700">{serverError}</p> : null}
-      <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full rounded-xl text-[#fff] bg-gradient-to-r from-indigo-500 to-violet-500 text-base font-semibold shadow-lg shadow-indigo-200 transition-transform hover:scale-[1.01] hover:from-indigo-600 hover:to-violet-600 sm:w-auto sm:px-8">{submitting ? t("submitting") : t("submit")}</Button>
+      <Button type="submit" size="lg" disabled={submitting} className="h-11 w-full rounded-xl font-semibold bg-indigo-600 text-[#fff] hover:bg-indigo-700 dark:bg-indigo-400 dark:text-[#12141c] dark:hover:bg-indigo-300 sm:w-auto sm:px-8">{submitting ? t("submitting") : t("submit")}</Button>
     </form>
   )
 }

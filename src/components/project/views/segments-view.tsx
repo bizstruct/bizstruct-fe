@@ -57,7 +57,7 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
   return (
     <Panel className="space-y-5 p-5 sm:p-6" data-testid="empathy-panel">
       <div className="flex flex-wrap items-center gap-4">
-        <span aria-hidden className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-500 text-lg font-bold text-[#fff] shadow-md shadow-indigo-200">
+        <span aria-hidden className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 text-lg font-semibold text-indigo-700">
           {initials(map.persona_name)}
         </span>
         <div className="min-w-0 flex-1">

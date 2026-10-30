@@ -18,13 +18,13 @@ export function PatternsView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-5 text-[#fff] shadow-lg shadow-indigo-200 sm:p-6">
-        <span aria-hidden className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff]/15">
+      <div className="flex items-center gap-4 rounded-2xl border border-slate-200 border-l-4 border-l-indigo-500 bg-white p-5 sm:p-6">
+        <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
           <GitBranch className="size-6" />
         </span>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#e0e4ff]">{t("branch")}</p>
-          <p className="text-xl font-bold">{t(patterns.branch_decision)}</p>
+          <p className="text-xs font-medium text-slate-500">{t("branch")}</p>
+          <p className="text-xl font-medium text-slate-900">{t(patterns.branch_decision)}</p>
         </div>
       </div>
 

@@ -113,12 +113,11 @@ function Header({ project, polling }: { project: NonNullable<ReturnType<typeof u
   }
 
   return (
-    <header className="relative space-y-4 overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-indigo-50 p-6 shadow-sm shadow-slate-200/50 sm:p-8">
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-gradient-to-br from-indigo-200/50 to-violet-200/30 blur-3xl" />
+    <header className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
       <Link href="/" className="text-xs text-slate-500 hover:text-slate-800">← {t("back")}</Link>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
-          <h1 className="truncate text-3xl font-bold tracking-tight text-slate-900">{project.title}</h1>
+          <h1 className="truncate text-3xl font-medium tracking-tight text-slate-900">{project.title}</h1>
           <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
             <ProjectStatusChip status={project.status} />
             <span>{t("language")}: {project.language.toUpperCase()}</span>
@@ -166,7 +165,7 @@ function ProgressBar({ project }: { project: NonNullable<ReturnType<typeof usePr
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className={`h-full rounded-full ${failed ? "bg-red-500" : done === total ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-indigo-500 to-violet-500"}`}
+          className={`h-full rounded-full ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
         />
       </div>
     </div>

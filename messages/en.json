@@ -59,7 +59,10 @@
     "projectsTitle": "Your projects",
     "noProjects": "No projects yet. Start with an idea above.",
     "loadError": "Could not load the projects",
-    "created": "Created"
+    "created": "Created",
+    "eyebrow": "Osterwalder Business Model Canvas",
+    "titleLead": "Structure your next",
+    "titleAccent": "business idea"
   },
   "Status": {
     "project": {

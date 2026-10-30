@@ -13,12 +13,11 @@ export function BriefView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-500 to-violet-500 p-6 text-[#fff] shadow-lg shadow-indigo-200 sm:p-8">
-        <div aria-hidden className="absolute -right-10 -top-10 size-48 rounded-full bg-[#fff]/10 blur-2xl" />
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#e0e4ff]">
+      <div className="rounded-2xl border border-slate-200 border-l-indigo-500 bg-white p-6 sm:p-8 border-l-4">
+        <p className="flex items-center gap-2 text-xs font-medium text-indigo-700">
           <Lightbulb className="size-4" aria-hidden /> {t("summary")}
         </p>
-        <p className="relative mt-3 text-xl font-medium leading-relaxed sm:text-2xl" data-testid="brief-summary">{brief.idea_summary}</p>
+        <p className="mt-3 text-xl font-medium leading-relaxed text-slate-900 sm:text-2xl" data-testid="brief-summary">{brief.idea_summary}</p>
       </div>
 
       <dl className="grid gap-3 sm:grid-cols-2">
