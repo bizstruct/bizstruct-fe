@@ -56,15 +56,23 @@ describe("IdeaForm", () => {
     expect(screen.queryByLabelText(/Approve automatically/)).not.toBeInTheDocument()
   })
 
-  it("shows the character counter and, after a failed submit, why the idea is rejected", async () => {
+  it("shows no counter while the idea is far from the limit and, after a failed submit, why it is rejected", async () => {
     renderIntl(<IdeaForm />)
     fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: "too short" } })
-    expect(screen.getByText("9 / 2000 characters (at least 50)")).toBeInTheDocument()
+    expect(screen.queryByText(/\/ 2000/)).not.toBeInTheDocument()
 
     fireEvent.submit(screen.getByRole("button", START).closest("form")!)
 
     expect(await screen.findByRole("alert")).toHaveTextContent("The idea must be at least 50 characters")
     expect(createProject).not.toHaveBeenCalled()
+  })
+
+  it("shows the count only when the idea nears 2000 characters", () => {
+    renderIntl(<IdeaForm />)
+    fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: idea(1800) } })
+    expect(screen.queryByText(/\/ 2000/)).not.toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: idea(1801) } })
+    expect(screen.getByText("1801 / 2000")).toBeInTheDocument()
   })
 
   it("rejects an idea over 2000 characters", async () => {

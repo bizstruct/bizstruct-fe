@@ -38,10 +38,9 @@
   },
   "Home": {
     "title": "Structure your next business idea",
-    "subtitle": "Describe it in a few sentences. You get a brief, segments, a canvas, SWOT and a pitch.",
     "ideaLabel": "Your idea",
-    "ideaPlaceholder": "An app that delivers boxes of fresh produce from local farms to busy city parents…",
-    "counter": "{count} / {max} characters (at least {min})",
+    "ideaPlaceholder": "Describe your idea in a few sentences, for example: an app that delivers boxes of fresh produce from local farms to busy city parents…",
+    "counter": "{count} / {max}",
     "autoApprove": "Approve automatically",
     "autoApproveHint": "Rows with consistency errors continue without waiting for you",
     "submit": "Start generation",

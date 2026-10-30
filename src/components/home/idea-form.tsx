@@ -25,6 +25,7 @@ export function IdeaForm() {
   const [serverError, setServerError] = useState<string | null>(null)
 
   const problem = ideaProblem(idea)
+  const length = idea.trim().length
   const showProblem = touched && problem !== null
 
   // Read from the browser when needed, never during render on the server.
@@ -62,12 +63,13 @@ export function IdeaForm() {
           className="field-sizing-content block max-h-72 min-h-28 w-full resize-none rounded-2xl bg-transparent px-5 pt-4 text-[15px] leading-relaxed text-slate-900 outline-none placeholder:text-slate-400"
         />
         <div className="flex items-center justify-between gap-3 px-3 pb-3 pl-5">
+          {/* No standing counter: the length rules (be: 50-2000) speak up only when they matter. */}
           <p id="idea-help" className="min-w-0 truncate text-xs text-slate-500">
             {showProblem ? (
               <span role="alert" className="text-red-700">{t(`errors.${problem}`, { min: IDEA_MIN, max: IDEA_MAX })}</span>
-            ) : (
-              t("counter", { count: idea.trim().length, max: IDEA_MAX, min: IDEA_MIN })
-            )}
+            ) : length > IDEA_MAX * 0.9 ? (
+              t("counter", { count: length, max: IDEA_MAX })
+            ) : null}
           </p>
           <div className="flex shrink-0 items-center gap-1.5">
             <Button type="button" variant="ghost" size="icon" aria-label={t("options")} aria-expanded={showOptions} onClick={() => setShowOptions((v) => !v)} className="size-9 rounded-xl text-slate-500 hover:text-slate-900">
