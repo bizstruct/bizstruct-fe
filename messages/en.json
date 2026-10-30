@@ -185,7 +185,9 @@
       "thinksAndFeels": "Thinks and feels",
       "saysAndDoes": "Says and does",
       "pains": "Pains",
-      "gains": "Gains"
+      "gains": "Gains",
+      "tab": "Empathy map",
+      "part": "Part of the segment"
     },
     "scenario": {
       "title": "Customer scenario",

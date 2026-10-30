@@ -4,14 +4,37 @@ import { useState } from "react"
 import { Brain, Ear, Eye, Frown, Lightbulb, MessageCircle, Route, Sparkles } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
+import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
+import type { StageId } from "@/types/domain/stages"
 import { ACCENT, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, SegmentedControl, type Accent } from "../primitives"
 import { RowStatusChip } from "../status-chip"
+
+type Part = "empathy" | "scenario" | "ideation"
+
+/** Only a part that is not finished shows a dot: red for an error, pulsing while it runs, muted while it waits. */
+const PART_DOT: Partial<Record<StageState, string>> = { error: "bg-red-500", attention: "bg-red-500", running: "animate-pulse bg-indigo-400", waiting: "bg-slate-300" }
+
+function PartLabel({ text, segment, part }: { text: string; segment: SegmentView; part: Part }) {
+  const row = { empathy: segment.empathyRow, scenario: segment.scenarioRow, ideation: segment.ideationRow }[part]
+  const stage: StageId = { empathy: "empathy_map", scenario: "customer_scenario", ideation: "ideation" }[part] as StageId
+  const dot = PART_DOT[row ? stateOf([row], [stage]) : "waiting"]
+  return (
+    <>
+      {text}
+      {dot ? <span aria-hidden className={cn("size-1.5 rounded-full", dot)} /> : null}
+    </>
+  )
+}
 
 export function SegmentsView({ view }: { view: ProjectView }) {
   const tp = useTranslations("Project")
   const t = useTranslations("Views.empathy")
+  const ts = useTranslations("Views.scenario")
+  const ti = useTranslations("Views.ideation")
   const [selected, setSelected] = useState(0)
+  const [part, setPart] = useState<Part>("empathy")
   if (view.segments.length === 0) return <NotReady message={tp("notReady")} />
   const index = Math.min(selected, view.segments.length - 1)
   const segment = view.segments[index]
@@ -27,10 +50,21 @@ export function SegmentsView({ view }: { view: ProjectView }) {
           items={view.segments.map((s, i) => ({ id: i, label: s.label }))}
         />
       ) : null}
-      <Reveal key={segment.empathyRow.id} className="space-y-5">
-        <EmpathyPanel segment={segment} />
-        <ScenarioPanel segment={segment} />
-        <IdeationPanel segment={segment} />
+      <SegmentedControl
+        id="segment-part"
+        label={t("part")}
+        value={part}
+        onChange={setPart}
+        items={[
+          { id: "empathy", label: <PartLabel text={t("tab")} segment={segment} part="empathy" /> },
+          { id: "scenario", label: <PartLabel text={ts("title")} segment={segment} part="scenario" /> },
+          { id: "ideation", label: <PartLabel text={ti("title")} segment={segment} part="ideation" /> },
+        ]}
+      />
+      <Reveal key={`${segment.empathyRow.id}-${part}`} className="space-y-5">
+        {part === "empathy" ? <EmpathyPanel segment={segment} /> : null}
+        {part === "scenario" ? <ScenarioPanel segment={segment} /> : null}
+        {part === "ideation" ? <IdeationPanel segment={segment} /> : null}
       </Reveal>
     </div>
   )

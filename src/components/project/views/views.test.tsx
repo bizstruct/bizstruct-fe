@@ -41,16 +41,19 @@ describe("BriefView", () => {
 describe("SegmentsView", () => {
   it("shows the farm persona with their pains, the scenario and the ideation", () => {
     renderIntl(<SegmentsView view={farm} />)
-    expect(screen.queryByRole("tab")).not.toBeInTheDocument() // one segment: no selector
+    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Empathy map", "Customer scenario", "Ideation"]) // one segment: only the part selector
     expect(screen.getByRole("heading", { name: "Maya Chen" })).toBeInTheDocument()
     expect(screen.getByText("Limited time for store visits, farmers' markets, meal planning, and food preparation.")).toBeInTheDocument()
+    expect(screen.queryByTestId("scenario-panel")).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("tab", { name: "Customer scenario" }))
     expect(within(screen.getByTestId("scenario-panel")).getByText(/On a Tuesday evening after the children are asleep, Maya opens the app/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("tab", { name: "Ideation" }))
     expect(within(screen.getByTestId("ideation-panel")).getByText("customer driven")).toBeInTheDocument()
   })
 
   it("lets the user switch between the three music segments", () => {
     renderIntl(<SegmentsView view={music} />)
-    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Maya Torres", "Marcus Reed", "Maya Thompson"])
+    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["Maya Torres", "Marcus Reed", "Maya Thompson", "Empathy map", "Customer scenario", "Ideation"])
     expect(screen.getByRole("heading", { name: "Maya Torres" })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole("tab", { name: "Marcus Reed" }))
@@ -58,6 +61,7 @@ describe("SegmentsView", () => {
     expect(screen.getByRole("heading", { name: "Marcus Reed" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Maya Torres" })).not.toBeInTheDocument()
     // the scenario and the ideation follow the selected segment
+    fireEvent.click(screen.getByRole("tab", { name: "Customer scenario" }))
     const scenario = music.segments[1].scenario!
     expect(within(screen.getByTestId("scenario-panel")).getByText(scenario.situation_narrative)).toBeInTheDocument()
   })
