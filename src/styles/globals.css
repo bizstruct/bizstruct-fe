@@ -127,5 +127,7 @@
   }
   html {
     @apply font-sans;
+    /* The interface is dense (canvas, SWOT): 14px root makes every rem-based size 12.5% smaller than the 16px default. */
+    font-size: 14px;
   }
 }
