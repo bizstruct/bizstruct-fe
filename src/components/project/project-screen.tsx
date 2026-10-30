@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react"
 import { useLocale, useTranslations } from "next-intl"
-import { motion } from "motion/react"
 import { Loader2, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -161,11 +160,9 @@ function ProgressBar({ project }: { project: NonNullable<ReturnType<typeof usePr
         <span>{percent}%</span>
       </div>
       <div role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done} className="h-2.5 overflow-hidden rounded-full bg-slate-200/70">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${percent}%` }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className={`h-full rounded-full ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
+        <div
+          style={{ width: `${percent}%` }}
+          className={`h-full rounded-full transition-[width] duration-700 ease-out ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
         />
       </div>
     </div>

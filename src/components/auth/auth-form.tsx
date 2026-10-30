@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useTranslations } from "next-intl"
-import { motion } from "motion/react"
 import { Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -40,7 +39,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <div className="nocturne-grid flex min-h-full w-full items-center justify-center px-4 py-16">
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: "easeOut" }} className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8">
+      <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-backwards duration-500 flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8">
       <div className="space-y-3">
         <span aria-hidden className="flex size-11 items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700"><Sparkles className="size-5" /></span>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">{isRegister ? t("registerTitle") : t("loginTitle")}</h1>
@@ -68,7 +67,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         {isRegister ? t("haveAccount") : t("noAccount")}{" "}
         <Link href={isRegister ? "/login" : "/register"} className="font-medium text-indigo-700 hover:underline">{isRegister ? t("signIn") : t("signUp")}</Link>
       </p>
-      </motion.div>
+      </div>
     </div>
   )
 }

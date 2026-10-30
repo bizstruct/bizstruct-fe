@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils"
 /** Domain enums arrive as snake_case ids (channel_type, pitching_investors): show them as words. */
 export const humanize = (id: string): string => id.replace(/_/g, " ")
 
-/** Fades and lifts its children in; `delay` staggers siblings. */
+/** Fades and lifts its children in; `delay` staggers siblings. Pure CSS, so content is never left invisible if scripts are slow or blocked. */
 export function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
-    <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay, ease: "easeOut" }} className={className}>
+    <div className={cn("animate-in fade-in slide-in-from-bottom-3 fill-mode-backwards duration-500", className)} style={{ animationDelay: `${delay}s` }}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 
