@@ -9,6 +9,7 @@ import { logout } from "@/lib/api/auth"
 import { groupByRecency } from "@/lib/mappers/recency"
 import { cn } from "@/lib/utils"
 import { Link, usePathname, useRouter } from "@/i18n/routing"
+import { ProjectMenu } from "./project-menu"
 import { ThemeToggle } from "./theme-toggle"
 
 const STATUS_DOT = { running: "animate-pulse bg-sky-500", completed: "bg-emerald-500", failed: "bg-red-500" } as const
@@ -70,20 +71,22 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                 {items.map((p) => {
                   const active = pathname?.endsWith(`/project/${p.id}`)
                   return (
-                    <Link
-                      key={p.id}
-                      href={`/project/${p.id}`}
-                      title={p.title}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors",
-                        active ? "bg-indigo-50 font-medium text-indigo-900" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
-                      )}
-                    >
-                      {active ? <span aria-hidden className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-indigo-500" /> : null}
-                      <span aria-hidden className={cn("size-2 shrink-0 rounded-full", STATUS_DOT[p.status])} />
-                      <span className="truncate">{p.title}</span>
-                    </Link>
+                    <div key={p.id} className="group/item relative">
+                      <Link
+                        href={`/project/${p.id}`}
+                        title={p.title}
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "relative flex items-center gap-2.5 rounded-xl py-2 pl-3 pr-9 text-sm transition-colors",
+                          active ? "bg-indigo-50 font-medium text-indigo-900" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                        )}
+                      >
+                        {active ? <span aria-hidden className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-indigo-500" /> : null}
+                        <span aria-hidden className={cn("size-2 shrink-0 rounded-full", STATUS_DOT[p.status])} />
+                        <span className="truncate">{p.title}</span>
+                      </Link>
+                      <ProjectMenu project={p} />
+                    </div>
                   )
                 })}
               </section>

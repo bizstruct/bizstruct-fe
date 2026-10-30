@@ -123,7 +123,7 @@ describe("forward", () => {
   it("refuses paths the viewer does not use, without calling be", async () => {
     const { fetchImpl } = backend({})
     const jar = new Jar({ [ACCESS_COOKIE]: "a", [REFRESH_COOKIE]: "r" })
-    for (const [method, path] of [["GET", "/api/internal/projects/x"], ["POST", "/api/internal/hook"], ["GET", "/api/users/"], ["POST", "/api/users/me/change-password"], ["PATCH", `/api/projects/${ID}`], ["GET", "/api/projects/not-a-uuid"]]) {
+    for (const [method, path] of [["GET", "/api/internal/projects/x"], ["POST", "/api/internal/hook"], ["GET", "/api/users/"], ["POST", "/api/users/me/change-password"], ["PUT", `/api/projects/${ID}`], ["PATCH", "/api/users/me"], ["GET", "/api/projects/not-a-uuid"]]) {
       expect((await forward({ method, path, jar, fetchImpl, baseUrl: BASE })).status).toBe(404)
     }
     expect(fetchImpl).not.toHaveBeenCalled()
@@ -137,6 +137,8 @@ describe("isAllowed", () => {
     expect(isAllowed("GET", "/api/projects")).toBe(true)
     expect(isAllowed("GET", `/api/projects/${ID}`)).toBe(true)
     expect(isAllowed("DELETE", `/api/projects/${ID}`)).toBe(true)
+    expect(isAllowed("PATCH", `/api/projects/${ID}`)).toBe(true)
+    expect(isAllowed("PATCH", "/api/projects")).toBe(false)
     expect(isAllowed("POST", `/api/projects/${ID}/rows/${ID}/regenerate`)).toBe(true)
     expect(isAllowed("DELETE", "/api/projects")).toBe(false)
   })

@@ -295,5 +295,25 @@
       "financial": "Financial analysis",
       "pitchN": "Pitch for canvas {n}"
     }
+  },
+  "ProjectMenu": {
+    "options": "Project options",
+    "rename": "Rename",
+    "details": "Details",
+    "delete": "Delete",
+    "renameTitle": "Rename the project",
+    "renameLabel": "Title",
+    "save": "Save",
+    "detailsTitle": "Project details",
+    "idea": "Idea",
+    "language": "Language",
+    "created": "Created",
+    "status": "Status",
+    "optional": "Optional stages",
+    "autoApprove": "Approves automatically",
+    "yes": "yes",
+    "no": "no",
+    "none": "none",
+    "close": "Close"
   }
 }

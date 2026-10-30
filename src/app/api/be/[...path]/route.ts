@@ -8,7 +8,7 @@ type Context = { params: Promise<{ path: string[] }> }
 async function handle(request: Request, { params }: Context) {
   const { path } = await params
   const search = new URL(request.url).search
-  const json = request.method === "POST" ? await request.json().catch(() => undefined) : undefined
+  const json = request.method === "POST" || request.method === "PATCH" ? await request.json().catch(() => undefined) : undefined
   try {
     const response = await forward({ method: request.method, path: `/api/${path.join("/")}${search}`, json, jar: await cookies() })
     if (response.status === 204) return new NextResponse(null, { status: 204 })
@@ -22,4 +22,5 @@ async function handle(request: Request, { params }: Context) {
 
 export const GET = handle
 export const POST = handle
+export const PATCH = handle
 export const DELETE = handle

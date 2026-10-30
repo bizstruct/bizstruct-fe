@@ -26,6 +26,10 @@ export const getProject = (id: string, signal?: AbortSignal): Promise<ApiResult<
 export const createProject = (body: GenerationRequest): Promise<ApiResult<Project>> =>
   request<Project>("/api/be/generation", { method: "POST", json: body })
 
+/** be lets the title change and nothing else (the idea, language and status are fixed). */
+export const renameProject = (id: string, title: string): Promise<ApiResult<ProjectSummary>> =>
+  request<ProjectSummary>(`${BASE}/${id}`, { method: "PATCH", json: { title } })
+
 export const deleteProject = (id: string): Promise<ApiResult<void>> => request<void>(`${BASE}/${id}`, { method: "DELETE" })
 
 export const approveRow = (projectId: string, rowId: string): Promise<ApiResult<Project>> =>
