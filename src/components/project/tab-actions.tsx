@@ -21,7 +21,7 @@ interface Props {
 
 /**
  * Regenerate for the open tab. It takes the place of the tab's state icon when the pointer is on it (the tab
- * bar renders it over the icon, on the selected tab only). It asks which row when the tab holds several (three
+ * bar renders it over the icon, on the selected tab only; the bar hides the state icon meanwhile). It asks which row when the tab holds several (three
  * empathy maps, three stages under Segments), then confirms before anything is reset.
  */
 export function TabActions({ project, stages, available, onProject, onRefresh }: Props) {
@@ -44,12 +44,12 @@ export function TabActions({ project, stages, available, onProject, onRefresh }:
       variant="ghost"
       size="icon"
       aria-label={t("regenerate")}
-      title={t("regenerate")}
-      // Opaque like the bar, tinted like the selected tab: it hides the state icon beneath while it is shown.
-      className="absolute left-3.5 top-1/2 size-7 -translate-y-1/2 overflow-hidden rounded-lg bg-white text-indigo-900 opacity-0 transition-opacity before:absolute before:inset-0 before:bg-indigo-500/10 hover:bg-white hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100 dark:before:bg-indigo-400/[0.22]"
+      data-regen=""
+      // Sits exactly over the state icon and swaps with it on hover (the tab bar hides the icon), so no tile, no tooltip box.
+      className="absolute left-2.5 top-1/2 size-7 -translate-y-1/2 rounded-lg text-indigo-900 opacity-0 transition-opacity hover:bg-transparent dark:hover:bg-transparent hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100"
       {...extra}
     >
-      <span className="relative">{icon}</span>
+      {icon}
     </Button>
   )
 

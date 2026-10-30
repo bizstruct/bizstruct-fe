@@ -63,12 +63,15 @@ export function ProjectScreen({ id }: { id: string }) {
           <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
             <TabsList className="group-data-horizontal/tabs:h-auto grid min-w-0 flex-1 grid-flow-col auto-cols-fr gap-0 overflow-x-auto rounded-none bg-transparent p-0">
               {TAB_IDS.map((id) => (
-                <div key={id} className="relative flex">
+                <div key={id} className="group/cell relative flex">
                   <TabsTrigger
                     value={id}
                     className="h-12 min-w-28 flex-1 justify-start gap-2.5 rounded-none border-transparent px-4 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/10 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/[0.22]"
                   >
-                    <StateIcon state={stateOf(project.rows, stagesOfTab(id, project.enabledOptional))} />
+                    <StateIcon
+                      state={stateOf(project.rows, stagesOfTab(id, project.enabledOptional))}
+                      className={id === tab ? "transition-opacity group-has-[[data-regen]:hover]/cell:opacity-0 group-has-[[data-regen]:focus-visible]/cell:opacity-0" : undefined}
+                    />
                     {t(`tabs.${id}`)}
                   </TabsTrigger>
                   {id === tab ? (
