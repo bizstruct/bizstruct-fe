@@ -25,7 +25,7 @@ export function BriefView({ view }: { view: ProjectView }) {
         </dl>
       </div>
 
-      <div className="grid items-start gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         <Panel>
           <Section title={t("segments")} icon={Users} accent="emerald">
             <BulletList items={brief.customer_segment_candidates} accent="emerald" />
@@ -46,15 +46,15 @@ export function BriefView({ view }: { view: ProjectView }) {
   )
 }
 
-/** One labelled fact under the summary: a small icon, the label, the value. */
+/** One labelled fact under the summary: icon and label on one line, the value under them, flush with the icon like every other card. */
 function Meta({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: React.ReactNode }) {
   return (
-    <div className="flex gap-3 px-5 py-3.5 not-first:border-t not-first:border-slate-200 sm:not-first:border-t-0">
-      <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-slate-400" />
-      <div className="min-w-0">
-        <dt className="text-xs font-medium text-slate-500">{label}</dt>
-        <dd className="mt-0.5 text-sm leading-relaxed text-slate-800">{children}</dd>
-      </div>
+    <div className="px-5 py-4 not-first:border-t not-first:border-slate-200 sm:not-first:border-t-0">
+      <dt className="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <Icon aria-hidden className="size-4 shrink-0 text-slate-400" />
+        {label}
+      </dt>
+      <dd className="mt-1.5 text-sm leading-relaxed text-slate-800">{children}</dd>
     </div>
   )
 }
