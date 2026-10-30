@@ -60,7 +60,7 @@ export function IdeaForm() {
           aria-describedby="idea-help"
           onChange={(e) => setIdea(e.target.value)}
           onBlur={() => setTouched(true)}
-          className="field-sizing-content block max-h-[45vh] min-h-36 w-full resize-none rounded-3xl bg-transparent px-6 pt-5 text-base leading-relaxed text-slate-900 outline-none placeholder:text-slate-400"
+          className="field-sizing-content block max-h-[30vh] min-h-36 w-full resize-none rounded-3xl bg-transparent px-6 pt-5 text-base leading-relaxed text-slate-900 outline-none placeholder:text-slate-400"
         />
         <div className="flex items-center justify-between gap-3 px-4 pb-4 pl-6">
           {/* No standing counter: the length rules (be: 50-2000) speak up only when they matter. */}
