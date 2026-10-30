@@ -13,9 +13,9 @@ export function BriefView({ view }: { view: ProjectView }) {
 
   return (
     <div className="space-y-4">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-600 to-violet-600 p-6 text-white shadow-lg shadow-indigo-200 sm:p-8">
-        <div aria-hidden className="absolute -right-10 -top-10 size-48 rounded-full bg-white/10 blur-2xl" />
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-indigo-100">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-500 to-violet-500 p-6 text-[#fff] shadow-lg shadow-indigo-200 sm:p-8">
+        <div aria-hidden className="absolute -right-10 -top-10 size-48 rounded-full bg-[#fff]/10 blur-2xl" />
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#e0e4ff]">
           <Lightbulb className="size-4" aria-hidden /> {t("summary")}
         </p>
         <p className="relative mt-3 text-xl font-medium leading-relaxed sm:text-2xl" data-testid="brief-summary">{brief.idea_summary}</p>

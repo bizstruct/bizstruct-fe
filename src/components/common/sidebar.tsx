@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useProjects } from "@/hooks/use-projects"
 import { logout } from "@/lib/api/auth"
 import { Link, usePathname, useRouter } from "@/i18n/routing"
+import { ThemeToggle } from "./theme-toggle"
 
 interface SidebarProps {
   isOpen: boolean
@@ -37,7 +38,7 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       </div>
 
       <div className="p-3.5">
-        <Link href="/" className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition-all hover:from-indigo-700 hover:to-violet-700">
+        <Link href="/" className="inline-flex h-10 w-full items-center justify-start gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 text-sm font-semibold text-[#fff] shadow-md shadow-indigo-200 transition-all hover:from-indigo-600 hover:to-violet-600">
           <Plus className="h-4 w-4" />
           {t("newProject")}
         </Link>
@@ -60,7 +61,8 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="border-t border-slate-100 p-3">
+      <div className="space-y-0.5 border-t border-slate-100 p-3">
+        <ThemeToggle />
         <Button variant="ghost" size="sm" className="w-full justify-start text-slate-600" onClick={() => void signOut()}>
           <LogOut /> {t("signOut")}
         </Button>

@@ -85,38 +85,129 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0c0f1f;
+  --foreground: #f0f2fb;
+  --card: #131733;
+  --card-foreground: #f0f2fb;
+  --popover: #131733;
+  --popover-foreground: #f0f2fb;
+  --primary: #8b8cff;
+  --primary-foreground: #0c0f1f;
+  --secondary: #1a1f3d;
+  --secondary-foreground: #f0f2fb;
+  --muted: #1a1f3d;
+  --muted-foreground: #99a1c6;
+  --accent: #1a1f3d;
+  --accent-foreground: #f0f2fb;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: #272d52;
+  --input: #363e6b;
+  --ring: #8b8cff;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar: #0c0f1f;
+  --sidebar-foreground: #f0f2fb;
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-accent: #1a1f3d;
+  --sidebar-accent-foreground: #f0f2fb;
+  --sidebar-border: #272d52;
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/* Nocturne: the dark theme. Tailwind colors are CSS variables, so remapping the scales here
+   recolors every utility (bg-slate-50, text-indigo-700, border-emerald-200 ...) without touching components.
+   slate runs inverted (900 is the lightest text); the accent scales become dark tints at 50-300 and bright at 400-900. */
+.dark {
+  color-scheme: dark;
+  --color-white: #131733;
+  --color-black: #000;
+  --color-slate-50: #0c0f1f;
+  --color-slate-100: #1a1f3d;
+  --color-slate-200: #272d52;
+  --color-slate-300: #363e6b;
+  --color-slate-400: #7e87b0;
+  --color-slate-500: #99a1c6;
+  --color-slate-600: #b3bad8;
+  --color-slate-700: #ccd1ea;
+  --color-slate-800: #e1e4f4;
+  --color-slate-900: #f0f2fb;
+  --color-slate-950: #ffffff;
+  --color-indigo-50: hsl(239 40% 13%);
+  --color-indigo-100: hsl(239 42% 19%);
+  --color-indigo-200: hsl(239 44% 28%);
+  --color-indigo-300: hsl(239 50% 40%);
+  --color-indigo-400: hsl(239 80% 64%);
+  --color-indigo-500: hsl(239 80% 60%);
+  --color-indigo-600: hsl(239 88% 72%);
+  --color-indigo-700: hsl(239 90% 79%);
+  --color-indigo-800: hsl(239 92% 86%);
+  --color-indigo-900: hsl(239 94% 92%);
+  --color-sky-50: hsl(199 40% 13%);
+  --color-sky-100: hsl(199 42% 19%);
+  --color-sky-200: hsl(199 44% 28%);
+  --color-sky-300: hsl(199 50% 40%);
+  --color-sky-400: hsl(199 80% 64%);
+  --color-sky-500: hsl(199 80% 60%);
+  --color-sky-600: hsl(199 88% 72%);
+  --color-sky-700: hsl(199 90% 79%);
+  --color-sky-800: hsl(199 92% 86%);
+  --color-sky-900: hsl(199 94% 92%);
+  --color-violet-50: hsl(262 40% 13%);
+  --color-violet-100: hsl(262 42% 19%);
+  --color-violet-200: hsl(262 44% 28%);
+  --color-violet-300: hsl(262 50% 40%);
+  --color-violet-400: hsl(262 80% 64%);
+  --color-violet-500: hsl(262 80% 60%);
+  --color-violet-600: hsl(262 88% 72%);
+  --color-violet-700: hsl(262 90% 79%);
+  --color-violet-800: hsl(262 92% 86%);
+  --color-violet-900: hsl(262 94% 92%);
+  --color-pink-50: hsl(330 40% 13%);
+  --color-pink-100: hsl(330 42% 19%);
+  --color-pink-200: hsl(330 44% 28%);
+  --color-pink-300: hsl(330 50% 40%);
+  --color-pink-400: hsl(330 80% 64%);
+  --color-pink-500: hsl(330 80% 60%);
+  --color-pink-600: hsl(330 88% 72%);
+  --color-pink-700: hsl(330 90% 79%);
+  --color-pink-800: hsl(330 92% 86%);
+  --color-pink-900: hsl(330 94% 92%);
+  --color-amber-50: hsl(38 40% 13%);
+  --color-amber-100: hsl(38 42% 19%);
+  --color-amber-200: hsl(38 44% 28%);
+  --color-amber-300: hsl(38 50% 40%);
+  --color-amber-400: hsl(38 80% 64%);
+  --color-amber-500: hsl(38 80% 60%);
+  --color-amber-600: hsl(38 88% 72%);
+  --color-amber-700: hsl(38 90% 79%);
+  --color-amber-800: hsl(38 92% 86%);
+  --color-amber-900: hsl(38 94% 92%);
+  --color-red-50: hsl(2 40% 13%);
+  --color-red-100: hsl(2 42% 19%);
+  --color-red-200: hsl(2 44% 28%);
+  --color-red-300: hsl(2 50% 40%);
+  --color-red-400: hsl(2 80% 64%);
+  --color-red-500: hsl(2 80% 60%);
+  --color-red-600: hsl(2 88% 72%);
+  --color-red-700: hsl(2 90% 79%);
+  --color-red-800: hsl(2 92% 86%);
+  --color-red-900: hsl(2 94% 92%);
+  --color-emerald-50: hsl(158 40% 13%);
+  --color-emerald-100: hsl(158 42% 19%);
+  --color-emerald-200: hsl(158 44% 28%);
+  --color-emerald-300: hsl(158 50% 40%);
+  --color-emerald-400: hsl(158 80% 64%);
+  --color-emerald-500: hsl(158 80% 60%);
+  --color-emerald-600: hsl(158 88% 72%);
+  --color-emerald-700: hsl(158 90% 79%);
+  --color-emerald-800: hsl(158 92% 86%);
+  --color-emerald-900: hsl(158 94% 92%);
+}
+
 
 @layer base {
   * {

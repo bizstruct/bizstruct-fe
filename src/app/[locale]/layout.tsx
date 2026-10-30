@@ -7,6 +7,9 @@ import { AppShell } from "@/components/common/app-shell"
 import { routing } from "@/i18n/routing"
 import "@/styles/globals.css"
 
+// Runs before paint so the page never flashes light: Nocturne unless the user chose the light theme.
+const THEME_SCRIPT = `try{if(localStorage.getItem("bizstruct-theme")!=="light")document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}`
+
 // Inter has a Cyrillic subset; the interface is Ukrainian first.
 const inter = Inter({ variable: "--font-inter", subsets: ["latin", "cyrillic"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
@@ -52,7 +55,10 @@ export default async function RootLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-slate-50 text-slate-900`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppShell>{children}</AppShell>

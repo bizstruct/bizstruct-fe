@@ -13,7 +13,9 @@
     "history": "Your projects",
     "empty": "No projects yet",
     "signOut": "Sign out",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme"
   },
   "Auth": {
     "loginTitle": "Sign in",

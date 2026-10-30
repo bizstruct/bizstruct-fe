@@ -108,7 +108,7 @@ export function SegmentedControl<T extends string | number>({ items, value, onCh
             onClick={() => onChange(item.id)}
             className={cn("relative rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors", selected ? "text-indigo-900" : "text-slate-600 hover:text-slate-900")}
           >
-            {selected ? <motion.span layoutId={`seg-${id}`} className="absolute inset-0 rounded-lg bg-white shadow-sm" transition={{ type: "spring", stiffness: 500, damping: 38 }} /> : null}
+            {selected ? <motion.span layoutId={`seg-${id}`} className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-indigo-500/30" transition={{ type: "spring", stiffness: 500, damping: 38 }} /> : null}
             <span className="relative z-10 inline-flex items-center gap-1.5">{item.label}</span>
           </button>
         )

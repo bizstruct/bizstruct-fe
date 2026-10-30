@@ -136,13 +136,13 @@ function AxisChart({ scores, label }: { scores: number[]; label: string }) {
     <div className="h-36 w-full" role="img" aria-label={`${label}: ${scores.join(", ")}`}>
       <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 144 }}>
         <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -24 }}>
-          <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
-          <YAxis domain={[-5, 5]} ticks={[-5, 0, 5]} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
-          <ReferenceLine y={0} stroke="#cbd5e1" />
-          <Tooltip cursor={{ fill: "#f1f5f9" }} contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 12 }} formatter={(value) => [value, label]} />
+          <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-slate-400)" }} />
+          <YAxis domain={[-5, 5]} ticks={[-5, 0, 5]} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-slate-400)" }} />
+          <ReferenceLine y={0} stroke="var(--color-slate-300)" />
+          <Tooltip cursor={{ fill: "var(--color-slate-100)" }} contentStyle={{ borderRadius: 12, border: "1px solid var(--color-slate-200)", background: "var(--color-white)", color: "var(--color-slate-800)", fontSize: 12 }} formatter={(value) => [value, label]} />
           <Bar dataKey="score" radius={[6, 6, 6, 6]} maxBarSize={36} isAnimationActive={false}>
             {data.map((d) => (
-              <Cell key={d.name} fill={d.score >= 0 ? "#10b981" : "#ef4444"} />
+              <Cell key={d.name} fill={d.score >= 0 ? "var(--color-emerald-500)" : "var(--color-red-500)"} />
             ))}
           </Bar>
         </BarChart>

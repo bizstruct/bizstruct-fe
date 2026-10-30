@@ -13,7 +13,9 @@
     "history": "Ваші проєкти",
     "empty": "Проєктів ще немає",
     "signOut": "Вийти",
-    "loading": "Завантаження…"
+    "loading": "Завантаження…",
+    "lightTheme": "Світла тема",
+    "darkTheme": "Темна тема"
   },
   "Auth": {
     "loginTitle": "Вхід",

@@ -101,7 +101,7 @@ export function IdeaForm() {
       </div>
 
       {serverError ? <p role="alert" className="text-sm text-red-700">{serverError}</p> : null}
-      <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-base font-semibold shadow-lg shadow-indigo-200 transition-transform hover:scale-[1.01] hover:from-indigo-700 hover:to-violet-700 sm:w-auto sm:px-8">{submitting ? t("submitting") : t("submit")}</Button>
+      <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full rounded-xl text-[#fff] bg-gradient-to-r from-indigo-500 to-violet-500 text-base font-semibold shadow-lg shadow-indigo-200 transition-transform hover:scale-[1.01] hover:from-indigo-600 hover:to-violet-600 sm:w-auto sm:px-8">{submitting ? t("submitting") : t("submit")}</Button>
     </form>
   )
 }
