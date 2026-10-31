@@ -140,9 +140,15 @@ describe("CanvasView", () => {
     expect(markers().sort()).toEqual(["Create", "Raise", "Raise", "Raise"])
   })
 
-  it("says which version an ERRC-produced canvas came from, and which segments the canvas covers", () => {
+  it("names the covered segments only when the canvas covers more than one", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    expect(screen.getByText(/Covers: Maya Chen/)).toHaveTextContent("Covers: Maya Chen · Changes from version 1")
+    expect(screen.queryByText(/Covers:/)).not.toBeInTheDocument() // one segment: nothing to tell apart
+    expect(screen.queryByText(/Changes from version/)).not.toBeInTheDocument()
+  })
+
+  it("lists every covered segment for a canvas shared by several", () => {
+    renderIntl(<CanvasView view={music} {...flow} />)
+    expect(screen.getByText("Covers: Maya Torres, Marcus Reed, Maya Thompson")).toBeInTheDocument()
   })
 
   it("does not show a FINAL badge when be did not name a final version", () => {

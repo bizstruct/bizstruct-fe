@@ -223,7 +223,6 @@
     "canvas": {
       "version": "Версія",
       "final": "ФІНАЛЬНА",
-      "derivedFrom": "Зміни відносно версії {n}",
       "markers": {
         "eliminate": "Усунути",
         "reduce": "Зменшити",

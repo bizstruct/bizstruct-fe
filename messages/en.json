@@ -223,7 +223,6 @@
     "canvas": {
       "version": "Version",
       "final": "FINAL",
-      "derivedFrom": "Changes from version {n}",
       "markers": {
         "eliminate": "Eliminated",
         "reduce": "Reduce",

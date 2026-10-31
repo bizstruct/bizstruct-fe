@@ -129,10 +129,7 @@ export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flo
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-500">
-          {t("covers", { segments: flow.segments.map((s) => s.label).join(", ") })}
-          {current.errcIn ? <span className="text-slate-400"> · {t("derivedFrom", { n: current.errcIn.from_version })}</span> : null}
-        </p>
+        {flow.segments.length > 1 ? <p className="text-sm text-slate-500">{t("covers", { segments: flow.segments.map((s) => s.label).join(", ") })}</p> : <span />}
         <CanvasRail
           flows={view.canvases}
           flowIndex={flowIndex}
