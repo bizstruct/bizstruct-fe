@@ -70,12 +70,12 @@ export interface StickerData {
   id?: string
 }
 
-/** The one sticker of the project views: the text, plus an optional caption, meta element and number. */
+/** The one sticker of the project views: the text (centred in the sticker), plus an optional caption, meta element and number. */
 export function Sticker({ text, tag, meta, number, id, className, ...props }: StickerData & Omit<React.ComponentProps<"div">, "children" | "id">) {
   return (
-    <div data-sticker={id ?? ""} className={cn(STICKER, number !== undefined && "flex gap-3", className)} {...props}>
+    <div data-sticker={id ?? ""} className={cn(STICKER, "flex items-center gap-3", className)} {...props}>
       {number !== undefined ? <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold", ACCENT.indigo.icon)}>{number}</span> : null}
-      <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="min-w-0 flex-1 space-y-1.5 text-center">
         {tag || meta ? (
           <div className="flex items-center justify-between gap-3">
             <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{tag}</span>
