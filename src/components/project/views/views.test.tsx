@@ -100,7 +100,7 @@ describe("CanvasView", () => {
   it("offers all three farm versions and badges only version 2 as FINAL", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
     const tabs = screen.getAllByRole("tab")
-    expect(tabs.map((t) => t.textContent)).toEqual(["Version 1", "Version 2FINAL", "Version 3"])
+    expect(tabs.map((t) => t.textContent)).toEqual(["V1", "V2FINAL", "V3"])
     expect(screen.getAllByTestId("final-badge")).toHaveLength(1)
     expect(within(tabs[1]).getByTestId("final-badge")).toHaveTextContent("FINAL")
   })
