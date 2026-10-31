@@ -3,7 +3,6 @@
 import { Boxes, Coins, Factory, Lightbulb, SearchX, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { cn } from "@/lib/utils"
 import { BulletList, IconBadge, NotReady, Panel, Section, type Accent } from "../primitives"
 
 export function BriefView({ view }: { view: ProjectView }) {
@@ -12,12 +11,12 @@ export function BriefView({ view }: { view: ProjectView }) {
   const brief = view.brief
   if (!brief) return <NotReady message={tp("notReady")} />
 
-  // A list with nothing in it gets no card: an empty card says "none" and adds nothing.
+  // Always three cards, so the layout does not jump; a list with nothing in it just shows its title.
   const lists = [
     { key: "segments", title: t("segments"), icon: Users, items: brief.customer_segment_candidates },
     { key: "resources", title: t("resources"), icon: Boxes, items: brief.existing_resources },
     { key: "gaps", title: t("gaps"), icon: SearchX, items: brief.gaps },
-  ].filter((list) => list.items.length > 0)
+  ]
 
   return (
     <div className="space-y-4">
@@ -33,7 +32,7 @@ export function BriefView({ view }: { view: ProjectView }) {
         </dl>
       </div>
 
-      <div className={cn("grid gap-4", lists.length === 3 ? "lg:grid-cols-3" : lists.length === 2 ? "lg:grid-cols-2" : "")}>
+      <div className="grid gap-4 lg:grid-cols-3">
         {lists.map(({ key, title, icon, items }) => (
           <Panel key={key}>
             <Section title={title} icon={icon} accent="indigo">

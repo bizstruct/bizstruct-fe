@@ -31,12 +31,10 @@ describe("BriefView", () => {
     expect(within(screen.getByText("Customer segment candidates").closest("section")!).getAllByRole("listitem")).toHaveLength(3)
   })
 
-  it("shows no card for a list with nothing in it", () => {
+  it("keeps all three cards when a list is empty, without a placeholder text", () => {
     const brief = { ...farm.brief!, existing_resources: [], gaps: [] }
     renderIntl(<BriefView view={{ ...farm, brief }} />)
-    expect(screen.getByText("Customer segment candidates")).toBeInTheDocument()
-    expect(screen.queryByText("Existing resources")).not.toBeInTheDocument()
-    expect(screen.queryByText("Gaps")).not.toBeInTheDocument()
+    for (const title of ["Customer segment candidates", "Existing resources", "Gaps"]) expect(screen.getByText(title)).toBeInTheDocument()
     expect(screen.queryByText(/^none$/i)).not.toBeInTheDocument()
   })
 
