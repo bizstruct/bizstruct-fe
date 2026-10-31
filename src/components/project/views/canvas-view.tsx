@@ -7,14 +7,14 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import type { CanvasFlow, CanvasVersionView, ProjectView } from "@/lib/mappers/project"
 import type { CanvasCard, CanvasSections } from "@/types/domain/canvas"
-import { ACCENT, IconBadge, NotReady, Panel, SegmentedControl, type Accent } from "../primitives"
+import { IconBadge, NotReady, Panel, SegmentedControl, type Accent } from "../primitives"
 
 type Marker = NonNullable<CanvasCard["errc_marker"]>
 const MARKER: Record<Marker, { tone: React.ComponentProps<typeof Badge>["tone"]; icon: LucideIcon; card: string }> = {
-  eliminate: { tone: "danger", icon: Trash2, card: "border-red-300 bg-red-50/60" },
-  reduce: { tone: "warning", icon: ArrowDown, card: "border-amber-300 bg-amber-50/60" },
-  raise: { tone: "success", icon: ArrowUp, card: "border-emerald-300 bg-emerald-50/60" },
-  create: { tone: "info", icon: Plus, card: "border-sky-300 bg-sky-50/60" },
+  eliminate: { tone: "danger", icon: Trash2, card: "border-red-400/70" },
+  reduce: { tone: "warning", icon: ArrowDown, card: "border-amber-400/70" },
+  raise: { tone: "success", icon: ArrowUp, card: "border-emerald-400/70" },
+  create: { tone: "info", icon: Plus, card: "border-sky-400/70" },
 }
 
 const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> = {
@@ -30,11 +30,14 @@ const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> 
 }
 
 /**
- * The classic board: five columns (the second and the fourth stack two blocks) over a cost/revenue row.
- * Columns, not a rigid row grid, so one long block never pushes its neighbour's partner away.
+ * The nine blocks in the classic reading order (left to right, top to bottom) on an even 3x3 grid: wide
+ * blocks keep long card texts short, and each row stretches to its tallest block so neighbours match.
  */
-const COLUMNS: (keyof CanvasSections)[][] = [["key_partnerships"], ["key_activities", "key_resources"], ["value_propositions"], ["customer_relationships", "channels"], ["customer_segments"]]
-const BOTTOM: (keyof CanvasSections)[][] = [["cost_structure"], ["revenue_streams"]]
+const BLOCKS: (keyof CanvasSections)[] = [
+  "key_partnerships", "key_activities", "key_resources",
+  "value_propositions", "customer_relationships", "channels",
+  "customer_segments", "cost_structure", "revenue_streams",
+]
 
 /** One selector per canvas flow (several only for a split Patterns), shared by Canvas, SWOT, Story, Future and Pitch. */
 export function CanvasPicker({ flows, value, onChange }: { flows: CanvasFlow[]; value: number; onChange: (index: number) => void }) {
@@ -124,10 +127,9 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
   const block = (section: keyof CanvasSections) => {
     const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
     const { icon, accent } = PLACE[section]
-    const a = ACCENT[accent]
     return (
-      <div key={section} data-section={section} className={cn("flex flex-col gap-2.5 rounded-2xl border p-3.5", a.soft, a.ring)}>
-        <h4 className={cn("flex items-center gap-2 text-xs font-bold uppercase tracking-wider", a.text)}>
+      <div key={section} data-section={section} className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 p-4">
+        <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
           <IconBadge icon={icon} accent={accent} className="size-6 shrink-0 rounded-lg" /> {t(`sections.${section}`)}
         </h4>
         {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
@@ -139,7 +141,7 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
                 key={card.id}
                 data-card={card.id}
                 data-marker={card.errc_marker ?? undefined}
-                className={cn("rounded-xl border bg-white p-2.5 text-[13px] leading-snug text-slate-800 shadow-sm shadow-slate-200/50", marker ? marker.card : "border-white")}
+                className={cn("rounded-xl border p-3 text-[13px] leading-snug text-slate-800", marker ? marker.card : "border-slate-200/80")}
               >
                 {marker && card.errc_marker ? (
                   <Badge tone={marker.tone} className="mb-1.5" data-testid="errc-marker">
@@ -156,13 +158,8 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
     )
   }
   return (
-    <div className="space-y-3" data-testid="canvas-grid">
-      <div className="grid items-start gap-3 md:grid-cols-2 lg:grid-cols-5">
-        {COLUMNS.map((column) => (
-          <div key={column[0]} className="space-y-3">{column.map(block)}</div>
-        ))}
-      </div>
-      <div className="grid items-start gap-3 md:grid-cols-2">{BOTTOM.map((column) => column.map(block))}</div>
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3" data-testid="canvas-grid">
+      {BLOCKS.map(block)}
     </div>
   )
 }
