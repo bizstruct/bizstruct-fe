@@ -31,9 +31,9 @@ export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flow
               </div>
             ))}
           </dl>
-          <Panel className="px-6 py-8 sm:px-12 sm:py-10">
+          <Panel className="px-5 py-6 sm:px-8 sm:py-8">
             {/* A reading column: the full panel width is far too long a line for a story. */}
-            <div className="mx-auto max-w-[68ch] space-y-6">
+            <div className="mx-auto max-w-[84ch] space-y-6">
               <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
                 <IconBadge icon={BookOpen} accent="violet" /> {t("narrative")}
               </h3>
