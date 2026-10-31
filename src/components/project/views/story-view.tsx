@@ -31,13 +31,13 @@ export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flow
               </div>
             ))}
           </dl>
-          <Panel className="px-5 py-6 sm:px-8 sm:py-8">
+          <Panel className="px-5 py-5 sm:px-8 sm:py-6">
             {/* A reading column: the full panel width is far too long a line for a story. */}
-            <div className="mx-auto max-w-[84ch] space-y-6">
+            <div className="mx-auto max-w-[92ch] space-y-4">
               <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
                 <IconBadge icon={BookOpen} accent="violet" /> {t("narrative")}
               </h3>
-              <div className="space-y-5 text-[17px] leading-8 text-slate-800">
+              <div className="space-y-3 text-base leading-7 text-slate-800">
                 {story.narrative_text.split(/\n{2,}/).map((paragraph, i) => (
                   <p key={i} className="whitespace-pre-line">{paragraph}</p>
                 ))}
