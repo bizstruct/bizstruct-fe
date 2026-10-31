@@ -1,10 +1,9 @@
 "use client"
 
-import { BookOpen, Quote } from "lucide-react"
+import { BookOpen } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { Fact, humanize, IconBadge, NotReady, Panel, Section } from "../primitives"
+import { humanize, IconBadge, NotReady, Panel, Section } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -20,27 +19,38 @@ export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flow
         <NotReady message={tp("notReady")} />
       ) : (
         <div className="space-y-4" data-testid="story-panel">
-          <dl className="grid gap-3 sm:grid-cols-3">
-            <Fact label={t("goal")}>{humanize(story.goal)}</Fact>
-            <Fact label={t("format")}>{humanize(story.format)}</Fact>
-            <Fact label={t("perspective")}>{humanize(story.perspective)}</Fact>
+          <dl className="flex flex-wrap justify-center gap-x-12 gap-y-3 text-center">
+            {[
+              [t("goal"), story.goal],
+              [t("format"), story.format],
+              [t("perspective"), story.perspective],
+            ].map(([label, value]) => (
+              <div key={label} className="space-y-0.5">
+                <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{label}</dt>
+                <dd className="text-sm font-medium text-slate-800">{humanize(value)}</dd>
+              </div>
+            ))}
           </dl>
-          <Panel className="space-y-4 p-6 sm:p-8">
-            <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
-              <IconBadge icon={BookOpen} accent="violet" /> {t("narrative")}
-            </h3>
-            <div className="relative">
-              <Quote aria-hidden className="absolute -left-1 -top-2 size-8 text-violet-100" />
-              <p className="relative whitespace-pre-line pl-4 text-base leading-8 text-slate-800">{story.narrative_text}</p>
+          <Panel className="px-6 py-8 sm:px-12 sm:py-10">
+            {/* A reading column: the full panel width is far too long a line for a story. */}
+            <div className="mx-auto max-w-[68ch] space-y-6">
+              <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+                <IconBadge icon={BookOpen} accent="violet" /> {t("narrative")}
+              </h3>
+              <div className="space-y-5 text-[17px] leading-8 text-slate-800">
+                {story.narrative_text.split(/\n{2,}/).map((paragraph, i) => (
+                  <p key={i} className="whitespace-pre-line">{paragraph}</p>
+                ))}
+              </div>
             </div>
           </Panel>
           <Panel>
             <Section title={t("references")}>
-              <ul className="space-y-2.5 text-sm">
+              <ul className="divide-y divide-slate-200/70 text-sm">
                 {story.canvas_references.map((ref, i) => (
-                  <li key={i} className="flex flex-wrap items-start gap-2.5 leading-relaxed text-slate-700">
-                    <Badge tone="accent" className="mt-0.5">{tc(`sections.${ref.section}`)}</Badge>
-                    <span className="min-w-0 flex-1">{ref.note}</span>
+                  <li key={i} className="grid gap-1 py-3 first:pt-0 last:pb-0 sm:grid-cols-[12rem_1fr] sm:gap-6">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600 sm:pt-0.5">{tc(`sections.${ref.section}`)}</span>
+                    <span className="leading-relaxed text-slate-700">{ref.note}</span>
                   </li>
                 ))}
               </ul>
