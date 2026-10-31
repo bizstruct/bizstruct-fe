@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Compass } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
@@ -41,25 +40,18 @@ export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flo
   )
 }
 
-/** A scenario shows its title and a short read; the full text and the questions it raises open on request (for that scenario alone). */
 function Variant({ variant, number }: { variant: FutureScenario["variants"][number]; number: number }) {
   const t = useTranslations("Views.future")
-  const [open, setOpen] = useState(false)
   return (
-    <Panel className="flex h-full flex-col gap-4">
+    <Panel className="h-full space-y-4">
       <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
         <span aria-hidden className={cn("inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-sm font-bold", ACCENT.indigo.icon)}>{number}</span>
         {variant.name}
       </h3>
-      <p className={cn("text-sm leading-relaxed text-slate-700", !open && "line-clamp-4")}>{variant.narrative}</p>
-      {open ? (
-        <Section title={t("questions")}>
-          <BulletList items={variant.adaptation_questions.map((q) => q.question)} />
-        </Section>
-      ) : null}
-      <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="mt-auto self-start text-sm font-medium text-indigo-600 hover:text-indigo-500">
-        {open ? t("less") : t("more")}
-      </button>
+      <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
+      <Section title={t("questions")}>
+        <BulletList items={variant.adaptation_questions.map((q) => q.question)} />
+      </Section>
     </Panel>
   )
 }

@@ -283,9 +283,7 @@
       "drivers": "Uncertainty drivers",
       "variants": "Scenarios",
       "questions": "Adaptation questions",
-      "intro": "{n, plural, one {# possible future} other {# possible futures}} that depend on these drivers",
-      "more": "Read more",
-      "less": "Show less"
+      "intro": "{n, plural, one {# possible future} other {# possible futures}} that depend on these drivers"
     },
     "pitch": {
       "hook": "Hook",
