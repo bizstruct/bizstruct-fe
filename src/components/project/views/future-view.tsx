@@ -1,6 +1,5 @@
 "use client"
 
-import { Compass } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
@@ -20,11 +19,6 @@ export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flo
         <NotReady message={tp("notReady")} />
       ) : (
         <>
-          <Panel>
-            <Section title={t("drivers")} icon={Compass} accent="indigo">
-              <BulletList items={future.uncertainty_drivers} />
-            </Section>
-          </Panel>
           <p className="text-center text-sm text-slate-500">{t("intro", { n: future.variants.length })}</p>
           {/* Every row is as tall as the tallest card, so an opened scenario never leaves its neighbours at a different size. */}
           <div className="grid gap-4 lg:auto-rows-fr lg:grid-cols-2" data-testid="future-variants">

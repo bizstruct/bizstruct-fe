@@ -234,7 +234,8 @@ describe("FutureView", () => {
     for (const name of ["Trusted Local Routine", "Abundant Produce, Reluctant Payers", "Costly City, Strong Demand", "Fragile Supply, Convenience Reset"]) {
       expect(variants.getByRole("heading", { name })).toBeInTheDocument()
     }
-    expect(screen.getByText("4 possible futures that depend on these drivers")).toBeInTheDocument()
+    expect(screen.getByText("4 possible futures")).toBeInTheDocument()
+    expect(screen.queryByText("Uncertainty drivers")).not.toBeInTheDocument()
     expect(variants.getByText(/How should recurring family-box payments, delivery fees, and preferred-produce add-ons be balanced/)).toBeInTheDocument()
     expect(variants.getAllByText("Adaptation questions")).toHaveLength(4)
     expect(screen.queryByRole("button")).not.toBeInTheDocument()

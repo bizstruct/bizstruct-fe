@@ -280,10 +280,9 @@
       "narrative": "Story"
     },
     "future": {
-      "drivers": "Uncertainty drivers",
       "variants": "Scenarios",
       "questions": "Adaptation questions",
-      "intro": "{n, plural, one {# possible future} other {# possible futures}} that depend on these drivers"
+      "intro": "{n, plural, one {# possible future} other {# possible futures}}"
     },
     "pitch": {
       "hook": "Hook",
