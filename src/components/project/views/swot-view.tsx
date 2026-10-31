@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import { ACCENT, humanize, IconBadge, NotReady, Panel, Reveal, Section, type Accent } from "../primitives"
-import { CanvasPicker, VersionSelector } from "./canvas-view"
+import { CanvasPicker, VersionHistory } from "./canvas-view"
 
 const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
   value_proposition: { icon: Gem, accent: "indigo" },
@@ -34,7 +34,7 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <CanvasPicker flows={view.canvases} value={flowIndex} onChange={(i) => { onFlow(i); setSelected(null) }} />
-        <VersionSelector versions={withSwot} value={current.version} onChange={setSelected} />
+        <VersionHistory versions={withSwot} value={current.version} defaultVersion={defaultVersion} onChange={setSelected} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2" data-testid="swot-clusters">
@@ -100,31 +100,33 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
         })}
       </div>
 
-      <Panel className="space-y-4" data-testid="errc-moves">
-        {current.errcOut ? (
-          <>
-            <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
-              <IconBadge icon={ArrowRight} accent="indigo" /> {t("movesFrom", { from: current.errcOut.from_version, to: current.errcOut.to_version })}
-            </h3>
-            <ul className="grid gap-3 lg:grid-cols-2">
-              {current.errcOut.moves.map((move, i) => (
-                <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 bg-slate-50/50 p-4 text-sm leading-relaxed" data-action={move.action}>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone="accent">{tc(`markers.${move.action}`)}</Badge>
-                    <span className="text-xs font-medium text-slate-500">{tc(`sections.${move.target_section}`)}</span>
-                  </div>
-                  {move.target_card_text ? <p className="text-slate-600"><span className="font-semibold">{t("target")}: </span>{move.target_card_text}</p> : null}
-                  {move.new_text ? <p className="text-slate-900"><span className="font-semibold">{t("newText")}: </span>{move.new_text}</p> : null}
-                  <p className="text-slate-600"><span className="font-semibold">{t("impact")}: </span>{move.opposite_side_impact}</p>
-                  <p className="text-slate-600"><span className="font-semibold">{t("rationale")}: </span>{move.rationale}</p>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p className="text-sm text-slate-400">{t("noMoves")}</p>
-        )}
-      </Panel>
+      {current.version !== defaultVersion ? (
+        <Panel className="space-y-4" data-testid="errc-moves">
+          {current.errcOut ? (
+            <>
+              <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+                <IconBadge icon={ArrowRight} accent="indigo" /> {t("movesFrom", { from: current.errcOut.from_version, to: current.errcOut.to_version })}
+              </h3>
+              <ul className="grid gap-3 lg:grid-cols-2">
+                {current.errcOut.moves.map((move, i) => (
+                  <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 bg-slate-50/50 p-4 text-sm leading-relaxed" data-action={move.action}>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge tone="accent">{tc(`markers.${move.action}`)}</Badge>
+                      <span className="text-xs font-medium text-slate-500">{tc(`sections.${move.target_section}`)}</span>
+                    </div>
+                    {move.target_card_text ? <p className="text-slate-600"><span className="font-semibold">{t("target")}: </span>{move.target_card_text}</p> : null}
+                    {move.new_text ? <p className="text-slate-900"><span className="font-semibold">{t("newText")}: </span>{move.new_text}</p> : null}
+                    <p className="text-slate-600"><span className="font-semibold">{t("impact")}: </span>{move.opposite_side_impact}</p>
+                    <p className="text-slate-600"><span className="font-semibold">{t("rationale")}: </span>{move.rationale}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p className="text-sm text-slate-400">{t("noMoves")}</p>
+          )}
+        </Panel>
+      ) : null}
     </div>
   )
 }

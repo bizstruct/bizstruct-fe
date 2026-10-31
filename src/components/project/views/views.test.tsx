@@ -16,6 +16,13 @@ const farm = buildProjectView(fixture(FARM))
 const music = buildProjectView(fixture(MUSIC))
 const flow = { flowIndex: 0, onFlow: () => {} }
 
+/** The versions sit behind the history button: open it, then optionally pick one. */
+const openHistory = (name = "History") => fireEvent.pointerDown(screen.getByRole("button", { name }), { button: 0, ctrlKey: false, pointerType: "mouse" })
+const pickVersion = (n: number, name = "History") => {
+  openHistory(name)
+  fireEvent.click(screen.getByRole("menuitem", { name: new RegExp(`Version ${n}`) }))
+}
+
 describe("BriefView", () => {
   it("shows the farm brief", () => {
     renderIntl(<BriefView view={farm} />)
@@ -97,46 +104,53 @@ describe("PatternsView", () => {
 })
 
 describe("CanvasView", () => {
-  it("offers all three farm versions and badges only version 2 as FINAL", () => {
+  it("shows no version switcher, only the quiet history button", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    const tabs = screen.getAllByRole("tab")
-    expect(tabs.map((t) => t.textContent)).toEqual(["V1", "V2FINAL", "V3"])
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "History" })).toBeInTheDocument()
+  })
+
+  it("offers all three farm versions in the history and badges only version 2 as FINAL", () => {
+    renderIntl(<CanvasView view={farm} {...flow} />)
+    openHistory()
+    const items = screen.getAllByRole("menuitem")
+    expect(items.map((i) => i.textContent)).toEqual(["V1", "V2FINAL", "V3"])
     expect(screen.getAllByTestId("final-badge")).toHaveLength(1)
-    expect(within(tabs[1]).getByTestId("final-badge")).toHaveTextContent("FINAL")
+    expect(within(items[1]).getByTestId("final-badge")).toHaveTextContent("FINAL")
   })
 
   it("opens on the final version", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    expect(screen.getByRole("tab", { name: /Version 2/ })).toHaveAttribute("aria-selected", "true")
+    openHistory()
+    expect(screen.getByRole("menuitem", { name: /Version 2/ })).toHaveAttribute("aria-current", "true")
   })
 
   it("opens on the final version even when it is not the last (music: final is version 1 of 2)", () => {
     renderIntl(<CanvasView view={music} {...flow} />)
-    expect(screen.getByRole("tab", { name: /Version 1/ })).toHaveAttribute("aria-selected", "true")
-    expect(within(screen.getByRole("tab", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
-    expect(within(screen.getByRole("tab", { name: /Version 2/ })).queryByTestId("final-badge")).not.toBeInTheDocument()
+    openHistory()
+    expect(screen.getByRole("menuitem", { name: /Version 1/ })).toHaveAttribute("aria-current", "true")
+    expect(within(screen.getByRole("menuitem", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
+    expect(within(screen.getByRole("menuitem", { name: /Version 2/ })).queryByTestId("final-badge")).not.toBeInTheDocument()
   })
 
   it("draws the nine blocks with the real cards", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    fireEvent.click(screen.getByRole("tab", { name: /Version 1/ }))
+    pickVersion(1)
     const grid = within(screen.getByTestId("canvas-grid"))
     expect(Object.keys(farm.canvases[0].versions[0].canvas.sections)).toHaveLength(9)
     expect(grid.getByText("Family-customizable local produce boxes matched to children’s preferences")).toBeInTheDocument()
     expect(screen.getByTestId("canvas-grid").querySelectorAll("[data-section]")).toHaveLength(9)
   })
 
-  it("marks the cards the ERRC changed: none in version 1, four in versions 2 and 3", () => {
+  it("marks the ERRC changes only on an earlier version the user opened, never on the final canvas", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
     const markers = () => screen.queryAllByTestId("errc-marker").map((m) => m.textContent)
+    expect(markers()).toEqual([]) // the final version (2) opens clean, though the loop made four changes to reach it
 
-    fireEvent.click(screen.getByRole("tab", { name: /Version 1/ }))
+    pickVersion(1)
     expect(markers()).toEqual([])
 
-    fireEvent.click(screen.getByRole("tab", { name: /Version 2/ }))
-    expect(markers().sort()).toEqual(["Create", "Raise", "Raise", "Reduce"])
-
-    fireEvent.click(screen.getByRole("tab", { name: /Version 3/ }))
+    pickVersion(3)
     expect(markers().sort()).toEqual(["Create", "Raise", "Raise", "Raise"])
   })
 
@@ -156,15 +170,18 @@ describe("CanvasView", () => {
     const cycle = project.rows.find((r) => r.stage === "swot_errc_cycle")!
     const without = buildProjectView({ ...project, rows: project.rows.map((r) => (r === cycle ? { ...r, finalVersion: undefined, finalCanvasId: undefined, finalSwotId: undefined } : r)) })
     renderIntl(<CanvasView view={without} {...flow} />)
+    openHistory()
     expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
-    expect(screen.getByRole("tab", { name: /Version 3/ })).toHaveAttribute("aria-selected", "true") // latest
+    expect(screen.getByRole("menuitem", { name: /Version 3/ })).toHaveAttribute("aria-current", "true") // latest
   })
 })
 
 describe("SwotView", () => {
   it("shows the four clusters of the final farm version with the whole threat catalog (2 + 5 + 7 + 7 = 21)", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
-    expect(screen.getByRole("tab", { name: /Version 2/ })).toHaveAttribute("aria-selected", "true")
+    openHistory()
+    expect(screen.getByRole("menuitem", { name: /Version 2/ })).toHaveAttribute("aria-current", "true")
+    fireEvent.keyDown(document.activeElement ?? document.body, { key: "Escape" })
     const clusters = screen.getByTestId("swot-clusters").querySelectorAll("[data-cluster]")
     expect([...clusters].map((c) => c.getAttribute("data-cluster"))).toEqual(["value_proposition", "cost_revenue", "infrastructure", "customer_interface"])
     const sizes = [...clusters].map((c) => within(c as HTMLElement).getByTestId("threat-catalog").children.length)
@@ -172,25 +189,26 @@ describe("SwotView", () => {
     expect(within(clusters[0] as HTMLElement).getByText("substitutes available")).toBeInTheDocument()
   })
 
-  it("lists the ERRC moves that lead to the next version", () => {
+  it("hides the ERRC moves on the final version and lists them for an earlier one", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
+    expect(screen.queryByTestId("errc-moves")).not.toBeInTheDocument()
+
+    pickVersion(1)
     const moves = within(screen.getByTestId("errc-moves"))
-    expect(moves.getByText("Moves from version 2 to 3")).toBeInTheDocument()
-    expect(moves.getAllByRole("listitem")).toHaveLength(4)
-    // a raise shows the card it targets and the text it becomes, both starting the same way
-    expect(moves.getAllByText(/In-app item pages showing farms, harvest dates, shelf life/).length).toBeGreaterThanOrEqual(2)
+    expect(moves.getByText("Moves from version 1 to 2")).toBeInTheDocument()
+    expect(moves.getAllByRole("listitem").length).toBeGreaterThan(0)
   })
 
   it("says the last version has no moves after it", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
-    fireEvent.click(screen.getByRole("tab", { name: /Version 3/ }))
+    pickVersion(3)
     expect(screen.getByText("This is the last version: no moves follow it")).toBeInTheDocument()
   })
 
-  it("marks the music project's final version 1 and shows its five moves", () => {
+  it("marks the music project's final version 1 in the history", () => {
     renderIntl(<SwotView view={music} {...flow} />)
-    expect(within(screen.getByRole("tab", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
-    expect(within(screen.getByTestId("errc-moves")).getAllByRole("listitem")).toHaveLength(5)
+    openHistory()
+    expect(within(screen.getByRole("menuitem", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
   })
 })
 
@@ -244,7 +262,8 @@ describe("PitchView", () => {
 describe("every view in Ukrainian", () => {
   it("renders the labels in the interface language and the content as generated", () => {
     renderIntl(<CanvasView view={farm} {...flow} />, "uk")
-    expect(screen.getByRole("tab", { name: /Версія 2/ })).toBeInTheDocument()
-    expect(within(screen.getByRole("tab", { name: /Версія 2/ })).getByTestId("final-badge")).toHaveTextContent("ФІНАЛЬНА")
+    openHistory("Історія версій")
+    expect(screen.getByRole("menuitem", { name: /Версія 2/ })).toBeInTheDocument()
+    expect(within(screen.getByRole("menuitem", { name: /Версія 2/ })).getByTestId("final-badge")).toHaveTextContent("ФІНАЛЬНА")
   })
 })

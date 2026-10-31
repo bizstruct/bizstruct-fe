@@ -242,7 +242,8 @@
       },
       "canvasN": "Canvas {n}",
       "covers": "Covers: {segments}",
-      "empty": "empty"
+      "empty": "empty",
+      "history": "History"
     },
     "swot": {
       "version": "Version {n}",

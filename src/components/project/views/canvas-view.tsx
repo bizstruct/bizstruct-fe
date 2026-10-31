@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Activity, ArrowDown, ArrowUp, Boxes, Coins, Gem, Handshake, Heart, Plus, Star, Trash2, Truck, Users, Wallet, type LucideIcon } from "lucide-react"
+import { Activity, ArrowDown, ArrowUp, Boxes, Check, ChevronDown, Coins, Gem, Handshake, Heart, History, Plus, Star, Trash2, Truck, Users, Wallet, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import type { CanvasFlow, CanvasVersionView, ProjectView } from "@/lib/mappers/project"
 import type { CanvasCard, CanvasSections } from "@/types/domain/canvas"
@@ -46,29 +47,35 @@ export function CanvasPicker({ flows, value, onChange }: { flows: CanvasFlow[]; 
   return <SegmentedControl id="canvas-flow" value={value} onChange={onChange} items={flows.map((f, i) => ({ id: i, label: t("canvasN", { n: i + 1 }) }))} />
 }
 
-export function VersionSelector({ versions, value, onChange }: { versions: CanvasVersionView[]; value: number; onChange: (version: number) => void }) {
+/**
+ * The versions of a canvas or SWOT are the steps of the generation loop; the user is shown the final one and
+ * the others stay behind this quiet button. With one version there is nothing to open.
+ */
+export function VersionHistory({ versions, value, defaultVersion, onChange }: { versions: CanvasVersionView[]; value: number; defaultVersion: number; onChange: (version: number) => void }) {
   const t = useTranslations("Views.canvas")
+  if (versions.length <= 1) return null
   return (
-    <SegmentedControl
-      id="canvas-version"
-      label={t("version")}
-      value={value}
-      onChange={onChange}
-      items={versions.map((v) => ({
-        id: v.version,
-        label: (
-          <>
-            {t("version")} {v.version}
+    <DropdownMenu>
+      <DropdownMenuTrigger aria-label={t("history")} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800">
+        <History aria-hidden className="size-3.5" />
+        {value === defaultVersion ? t("history") : `V${value}`}
+        <ChevronDown aria-hidden className="size-3" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {versions.map((v) => (
+          <DropdownMenuItem key={v.version} aria-label={`${t("version")} ${v.version}`} aria-current={v.version === value ? "true" : undefined} onSelect={() => onChange(v.version)}>
+            <span className="flex-1">V{v.version}</span>
             {v.isFinal ? (
               <Badge tone="final" data-testid="final-badge" className="gap-0.5">
                 <Star className="fill-current" aria-hidden />
                 {t("final")}
               </Badge>
             ) : null}
-          </>
-        ),
-      }))}
-    />
+            {v.version === value ? <Check aria-hidden className="size-3.5 text-indigo-500" /> : null}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -76,11 +83,11 @@ const railItem = "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-s
 const railActive = "bg-indigo-500/10 text-slate-900 dark:bg-indigo-400/[0.22]"
 const railIdle = "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
 
-/** The canvases (only when Patterns split them) and the versions (V1, V2, ...) of the open canvas, in one row above the board. */
-function CanvasRail({ flows, flowIndex, onFlow, versions, value, onChange }: { flows: CanvasFlow[]; flowIndex: number; onFlow: (index: number) => void; versions: CanvasVersionView[]; value: number; onChange: (version: number) => void }) {
+/** The canvases (only when Patterns split them) and the quiet version history, in one row above the board. */
+function CanvasRail({ flows, flowIndex, onFlow, versions, value, defaultVersion, onChange }: { flows: CanvasFlow[]; flowIndex: number; onFlow: (index: number) => void; versions: CanvasVersionView[]; value: number; defaultVersion: number; onChange: (version: number) => void }) {
   const t = useTranslations("Views.canvas")
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
       {flows.length > 1 ? (
         <div role="tablist" className="flex flex-wrap gap-1">
           {flows.map((_, i) => (
@@ -90,27 +97,7 @@ function CanvasRail({ flows, flowIndex, onFlow, versions, value, onChange }: { f
           ))}
         </div>
       ) : null}
-      <div role="tablist" aria-label={t("version")} className="flex flex-wrap gap-1">
-        {versions.map((v) => (
-          <button
-            key={v.version}
-            role="tab"
-            type="button"
-            aria-label={`${t("version")} ${v.version}`}
-            aria-selected={v.version === value}
-            onClick={() => onChange(v.version)}
-            className={cn(railItem, v.version === value ? railActive : railIdle)}
-          >
-            V{v.version}
-            {v.isFinal ? (
-              <Badge tone="final" data-testid="final-badge" className="gap-0.5">
-                <Star className="fill-current" aria-hidden />
-                {t("final")}
-              </Badge>
-            ) : null}
-          </button>
-        ))}
-      </div>
+      <VersionHistory versions={versions} value={value} defaultVersion={defaultVersion} onChange={onChange} />
     </div>
   )
 }
@@ -136,15 +123,17 @@ export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flo
           onFlow={(i) => { onFlow(i); setSelected(null) }}
           versions={flow.versions}
           value={current.version}
+          defaultVersion={defaultVersion}
           onChange={setSelected}
         />
       </div>
-      <CanvasGrid canvas={current.canvas.sections} />
+      <CanvasGrid canvas={current.canvas.sections} showMarkers={current.version !== defaultVersion} />
     </div>
   )
 }
 
-function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
+/** The ERRC markers say what the loop changed to reach a version: shown when the user looks at an earlier one, not on the final canvas. */
+function CanvasGrid({ canvas, showMarkers }: { canvas: CanvasSections; showMarkers: boolean }) {
   const t = useTranslations("Views.canvas")
   const block = (section: keyof CanvasSections) => {
     const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
@@ -157,7 +146,7 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
         {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
         <ul className="space-y-2">
           {cards.map((card) => {
-            const marker = card.errc_marker ? MARKER[card.errc_marker] : null
+            const marker = showMarkers && card.errc_marker ? MARKER[card.errc_marker] : null
             return (
               <li
                 key={card.id}

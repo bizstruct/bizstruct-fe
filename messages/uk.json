@@ -242,7 +242,8 @@
       },
       "canvasN": "Канва {n}",
       "covers": "Охоплює: {segments}",
-      "empty": "порожньо"
+      "empty": "порожньо",
+      "history": "Історія версій"
     },
     "swot": {
       "version": "Версія {n}",
