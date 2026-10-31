@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import type { CanvasFlow, CanvasVersionView, ProjectView } from "@/lib/mappers/project"
 import type { CanvasCard, CanvasSections } from "@/types/domain/canvas"
-import { IconBadge, NotReady, Panel, SegmentedControl, type Accent } from "../primitives"
+import { IconBadge, NotReady, SegmentedControl, type Accent } from "../primitives"
 
 type Marker = NonNullable<CanvasCard["errc_marker"]>
 const MARKER: Record<Marker, { tone: React.ComponentProps<typeof Badge>["tone"]; icon: LucideIcon; card: string }> = {
@@ -94,7 +94,7 @@ export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flo
         <VersionSelector versions={flow.versions} value={current.version} onChange={setSelected} />
       </div>
 
-      <Panel className="space-y-4 p-4 sm:p-5">
+      <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
           {current.isFinal ? (
             <Badge tone="final" className="gap-0.5 px-2 py-1">
@@ -117,7 +117,7 @@ export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flo
             </span>
           ))}
         </div>
-      </Panel>
+      </div>
     </div>
   )
 }
@@ -128,7 +128,7 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
     const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
     const { icon, accent } = PLACE[section]
     return (
-      <div key={section} data-section={section} className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 p-4">
+      <div key={section} data-section={section} className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/40">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
           <IconBadge icon={icon} accent={accent} className="size-6 shrink-0 rounded-lg" /> {t(`sections.${section}`)}
         </h4>
@@ -141,7 +141,7 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
                 key={card.id}
                 data-card={card.id}
                 data-marker={card.errc_marker ?? undefined}
-                className={cn("rounded-xl border p-3 text-[13px] leading-snug text-slate-800", marker ? marker.card : "border-slate-200/80")}
+                className={cn("rounded-lg border p-3 text-[13px] leading-snug text-slate-800", marker ? marker.card : "border-transparent bg-slate-100/70")}
               >
                 {marker && card.errc_marker ? (
                   <Badge tone={marker.tone} className="mb-1.5" data-testid="errc-marker">
