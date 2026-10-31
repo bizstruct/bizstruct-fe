@@ -239,8 +239,8 @@ describe("FutureView", () => {
     expect(variants.queryByText(question)).not.toBeInTheDocument()
     fireEvent.click(variants.getAllByRole("button", { name: "Read more" })[0])
     expect(variants.getByText(question)).toBeInTheDocument()
-    expect(variants.getByText("Adaptation questions")).toBeInTheDocument()
-    fireEvent.click(variants.getByRole("button", { name: "Show less" }))
+    expect(variants.getAllByText("Adaptation questions")).toHaveLength(4) // one switch opens all four, so they stay level
+    fireEvent.click(variants.getAllByRole("button", { name: "Show less" })[0])
     expect(variants.queryByText(question)).not.toBeInTheDocument()
   })
 
