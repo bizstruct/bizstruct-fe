@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import type { FutureScenario } from "@/types/domain/future-scenario"
-import { ACCENT, ItemList, NotReady, Panel, Reveal, Section } from "../primitives"
+import { ACCENT, NotReady, Panel, Reveal, Section, StickerList } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -45,7 +45,7 @@ function Variant({ variant, number }: { variant: FutureScenario["variants"][numb
       </h3>
       <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
       <Section title={t("questions")} icon={MessageCircleQuestion} accent="indigo">
-        <ItemList items={variant.adaptation_questions.map((q) => q.question)} data-testid="adaptation-questions" />
+        <StickerList items={variant.adaptation_questions.map((q) => q.question)} data-testid="adaptation-questions" />
       </Section>
     </Panel>
   )

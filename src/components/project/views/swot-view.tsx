@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import type { ErrcMove } from "@/types/domain/errc"
-import { BLOCK, humanize, IconBadge, ItemList, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
+import { humanize, IconBadge, NotReady, Panel, Reveal, Sticker, StickerList, UnderlineTabs } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
@@ -111,7 +111,7 @@ function Quadrant({ id, title, icon, entries, delay }: { id: string; title: stri
         <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
           <IconBadge icon={icon} accent="indigo" /> {title}
         </h3>
-        <ItemList items={(open ? entries : entries.slice(0, PREVIEW)).map((e) => ({ text: e.text, tag: e.tag, meta: <LevelChip level={e.level} title={e.title} /> }))} />
+        <StickerList items={(open ? entries : entries.slice(0, PREVIEW)).map((e) => ({ text: e.text, tag: e.tag, meta: <LevelChip level={e.level} title={e.title} /> }))} />
         {hidden > 0 ? (
           <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
             {open ? t("showLess") : t("showAll", { n: entries.length })}
@@ -153,7 +153,7 @@ function MoveCard({ move }: { move: ErrcMove }) {
       </div>
       {move.new_text && move.target_card_text ? <p className="text-slate-500">{move.target_card_text}</p> : null}
       {/* The filled block is what the move is about: the new text, or for an elimination the card that goes away. */}
-      {focus ? <p data-focus className={cn(BLOCK, "font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")}>{focus}</p> : null}
+      {focus ? <Sticker data-focus text={focus} className={cn("font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")} /> : null}
       <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
       <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
     </li>

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
 import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
 import type { StageId } from "@/types/domain/stages"
-import { Fact, ItemList, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
+import { Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, StickerList, UnderlineTabs, type Accent } from "../primitives"
 
 type Part = "empathy" | "scenario" | "ideation"
 
@@ -120,7 +120,7 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
         {quadrants.map(({ title, items, icon, accent }) => (
           <div key={title} className="rounded-2xl border border-slate-200/80 p-4">
             <Section title={title} icon={icon} accent={accent}>
-              <ItemList variant="bullet" items={items} accent={accent} />
+              <StickerList items={items} />
             </Section>
           </div>
         ))}
@@ -133,7 +133,7 @@ function Highlight({ title, items, icon, accent }: { title: string; items: reado
   return (
     <div className="rounded-2xl border border-slate-200/80 p-4">
       <Section title={title} icon={icon} accent={accent}>
-        <ItemList variant="bullet" items={items} accent={accent} />
+        <StickerList items={items} />
       </Section>
     </div>
   )
@@ -163,7 +163,7 @@ function ScenarioPanel({ segment }: { segment: SegmentView }) {
         ) : null}
       </dl>
       <Section title={t("questions")}>
-        <ItemList variant="bullet" items={s.open_questions} accent="violet" />
+        <StickerList items={s.open_questions} />
       </Section>
     </Panel>
   )
@@ -188,7 +188,7 @@ function IdeationPanel({ segment }: { segment: SegmentView }) {
         <p className="text-sm leading-relaxed text-slate-700">{i.epicenter.rationale}</p>
       </Section>
       <Section title={t("whatIf")}>
-        <ItemList numbered items={i.what_if_questions} className="md:grid-cols-2" />
+        <StickerList numbered items={i.what_if_questions} className="md:grid-cols-2" />
       </Section>
     </Panel>
   )

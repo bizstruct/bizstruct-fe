@@ -3,7 +3,7 @@
 import { Boxes, Coins, Factory, Lightbulb, SearchX, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { IconBadge, ItemList, NotReady, Panel, Section, type Accent } from "../primitives"
+import { IconBadge, NotReady, StickerList, Panel, Section, type Accent } from "../primitives"
 
 export function BriefView({ view }: { view: ProjectView }) {
   const t = useTranslations("Views.brief")
@@ -36,7 +36,7 @@ export function BriefView({ view }: { view: ProjectView }) {
         {lists.map(({ key, title, icon, items }) => (
           <Panel key={key}>
             <Section title={title} icon={icon} accent="indigo">
-              <ItemList variant="bullet" items={items} accent="indigo" />
+              <StickerList items={items} />
             </Section>
           </Panel>
         ))}

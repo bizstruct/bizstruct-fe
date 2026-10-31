@@ -55,38 +55,49 @@ export function Section({ title, icon, accent, children, className }: { title?: 
   )
 }
 
-/** The look of an item that sits inside a card: a light lavender block (translucent, so it works on any card background and in both themes). */
-export const BLOCK = "rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800"
+/** The look of a sticker: a light lavender block (translucent, so it works on any card background and in both themes). */
+const STICKER = "rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800"
 
-export interface ListItem {
+export interface StickerData {
   text: string
-  /** A small caption above the text (blocks only). */
+  /** A small caption above the text. */
   tag?: string
-  /** Something at the right end of the caption row, such as a level chip (blocks only). */
+  /** Something at the right end of the caption row, such as a level chip or a difficulty. */
   meta?: React.ReactNode
-  /** Goes to `data-item`, so tests and anchors can find the item. */
+  /** The number marker before the text. */
+  number?: number
+  /** Goes to `data-sticker`, so tests and anchors can find the sticker. */
   id?: string
 }
 
-/**
- * The one list of the project views. `block` is a lavender block per item (the nested level inside a card, where bullets
- * would blend into the text above), `bullet` is a plain dotted line for short lists. An item is a string or a `ListItem`.
- */
-export function ItemList({
+/** The one sticker of the project views: the text, plus an optional caption, meta element and number. */
+export function Sticker({ text, tag, meta, number, id, className, ...props }: StickerData & Omit<React.ComponentProps<"div">, "children" | "id">) {
+  return (
+    <div data-sticker={id ?? ""} className={cn(STICKER, number !== undefined && "flex gap-3", className)} {...props}>
+      {number !== undefined ? <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold", ACCENT.indigo.icon)}>{number}</span> : null}
+      <div className="min-w-0 flex-1 space-y-1.5">
+        {tag || meta ? (
+          <div className="flex items-center justify-between gap-3">
+            <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{tag}</span>
+            {meta}
+          </div>
+        ) : null}
+        <p>{text}</p>
+      </div>
+    </div>
+  )
+}
+
+/** A list of stickers; an item is a string or a `StickerData`. `numbered` numbers them in an ordered list. */
+export function StickerList({
   items,
-  variant = "block",
   numbered = false,
-  accent = "indigo",
   empty,
   className,
   ...props
 }: {
-  items: readonly (string | ListItem)[]
-  variant?: "block" | "bullet"
-  /** A number marker before each block. */
+  items: readonly (string | StickerData)[]
   numbered?: boolean
-  /** The colour of the bullet dot. */
-  accent?: Accent
   /** Shown when there are no items; without it an empty list renders nothing. */
   empty?: string
 } & Omit<React.ComponentProps<"ul">, "children" | "ref">) {
@@ -94,28 +105,12 @@ export function ItemList({
   if (list.length === 0) return empty ? <p className="text-sm text-slate-400">{empty}</p> : null
   const List = numbered ? "ol" : "ul"
   return (
-    <List className={cn("grid gap-2", variant === "bullet" && "text-sm leading-relaxed text-slate-700", className)} {...props}>
-      {list.map((item, i) =>
-        variant === "bullet" ? (
-          <li key={i} data-item={item.id ?? i} className="flex gap-2.5">
-            <span aria-hidden className={cn("mt-2 size-1.5 shrink-0 rounded-full", ACCENT[accent].dot)} />
-            <span>{item.text}</span>
-          </li>
-        ) : (
-          <li key={i} data-item={item.id ?? i} className={cn(BLOCK, numbered && "flex gap-3")}>
-            {numbered ? <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold", ACCENT.indigo.icon)}>{i + 1}</span> : null}
-            <div className="min-w-0 flex-1 space-y-1.5">
-              {item.tag || item.meta ? (
-                <div className="flex items-center justify-between gap-3">
-                  <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{item.tag}</span>
-                  {item.meta}
-                </div>
-              ) : null}
-              <p>{item.text}</p>
-            </div>
-          </li>
-        ),
-      )}
+    <List className={cn("grid gap-2", className)} {...props}>
+      {list.map((item, i) => (
+        <li key={i}>
+          <Sticker {...item} number={numbered ? i + 1 : item.number} />
+        </li>
+      ))}
     </List>
   )
 }

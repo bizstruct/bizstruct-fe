@@ -121,7 +121,7 @@ describe("CanvasView", () => {
     const grid = screen.getByTestId("canvas-grid")
     expect(Object.keys(farm.canvases[0].versions[1].canvas.sections)).toHaveLength(9)
     expect(grid.querySelectorAll("[data-section]")).toHaveLength(9)
-    expect(grid.querySelectorAll("[data-item]").length).toBeGreaterThan(9)
+    expect(grid.querySelectorAll("[data-sticker]").length).toBeGreaterThan(9)
   })
 
   it("names the covered segments only when the canvas covers more than one", () => {
