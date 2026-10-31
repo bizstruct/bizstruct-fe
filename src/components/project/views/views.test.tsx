@@ -238,6 +238,8 @@ describe("FutureView", () => {
     expect(screen.queryByText("Uncertainty drivers")).not.toBeInTheDocument()
     expect(variants.getByText(/How should recurring family-box payments, delivery fees, and preferred-produce add-ons be balanced/)).toBeInTheDocument()
     expect(variants.getAllByText("Adaptation questions")).toHaveLength(4)
+    const asked = farm.canvases[0].futureScenario!.artifact!.variants.map((v) => v.adaptation_questions.length)
+    expect(variants.getAllByTestId("adaptation-questions").map((l) => l.children.length)).toEqual(asked) // each question is its own block
     expect(screen.queryByRole("button")).not.toBeInTheDocument()
   })
 
