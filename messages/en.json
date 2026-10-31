@@ -223,15 +223,13 @@
     "canvas": {
       "version": "Version",
       "final": "FINAL",
-      "previous": "Previous version chain",
-      "derivedFrom": "from version {n}",
+      "derivedFrom": "Changes from version {n}",
       "markers": {
         "eliminate": "Eliminated",
         "reduce": "Reduce",
         "raise": "Raise",
         "create": "Create"
       },
-      "legend": "ERRC markers show what the cycle changed to produce this version",
       "sections": {
         "customer_segments": "Customer segments",
         "value_propositions": "Value propositions",

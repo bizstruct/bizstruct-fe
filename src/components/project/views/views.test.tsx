@@ -140,21 +140,9 @@ describe("CanvasView", () => {
     expect(markers().sort()).toEqual(["Create", "Raise", "Raise", "Raise"])
   })
 
-  it("shows the chain of previous versions and jumps to one", () => {
-    renderIntl(<CanvasView view={farm} {...flow} />)
-    fireEvent.click(screen.getByRole("tab", { name: /Version 3/ }))
-    const chain = within(screen.getByTestId("version-chain"))
-    expect(chain.getAllByRole("button").map((b) => b.textContent)).toEqual(["v1", "v2", "v3"])
-
-    fireEvent.click(chain.getByRole("button", { name: "v1" }))
-    expect(screen.getByRole("tab", { name: /Version 1/ })).toHaveAttribute("aria-selected", "true")
-    expect(within(screen.getByTestId("version-chain")).getAllByRole("button")).toHaveLength(1)
-  })
-
   it("says which version an ERRC-produced canvas came from, and which segments the canvas covers", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    expect(screen.getByText("from version 1")).toBeInTheDocument()
-    expect(screen.getByText("Covers: Maya Chen")).toBeInTheDocument()
+    expect(screen.getByText(/Covers: Maya Chen/)).toHaveTextContent("Covers: Maya Chen · Changes from version 1")
   })
 
   it("does not show a FINAL badge when be did not name a final version", () => {

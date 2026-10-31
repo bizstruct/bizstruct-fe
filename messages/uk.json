@@ -223,15 +223,13 @@
     "canvas": {
       "version": "Версія",
       "final": "ФІНАЛЬНА",
-      "previous": "Ланцюжок попередніх версій",
-      "derivedFrom": "з версії {n}",
+      "derivedFrom": "Зміни відносно версії {n}",
       "markers": {
         "eliminate": "Усунути",
         "reduce": "Зменшити",
         "raise": "Підвищити",
         "create": "Створити"
       },
-      "legend": "Маркери ERRC показують, що цикл змінив, створюючи цю версію",
       "sections": {
         "customer_segments": "Сегменти клієнтів",
         "value_propositions": "Ціннісні пропозиції",
