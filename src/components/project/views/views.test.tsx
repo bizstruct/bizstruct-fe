@@ -31,6 +31,15 @@ describe("BriefView", () => {
     expect(within(screen.getByText("Customer segment candidates").closest("section")!).getAllByRole("listitem")).toHaveLength(3)
   })
 
+  it("shows no card for a list with nothing in it", () => {
+    const brief = { ...farm.brief!, existing_resources: [], gaps: [] }
+    renderIntl(<BriefView view={{ ...farm, brief }} />)
+    expect(screen.getByText("Customer segment candidates")).toBeInTheDocument()
+    expect(screen.queryByText("Existing resources")).not.toBeInTheDocument()
+    expect(screen.queryByText("Gaps")).not.toBeInTheDocument()
+    expect(screen.queryByText(/^none$/i)).not.toBeInTheDocument()
+  })
+
   it("says so when the brief is not generated yet", () => {
     const empty: ProjectView = { ...farm, brief: undefined }
     renderIntl(<BriefView view={empty} />)

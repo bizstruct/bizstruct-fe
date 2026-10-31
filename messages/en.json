@@ -173,8 +173,7 @@
       "segments": "Customer segment candidates",
       "resources": "Existing resources",
       "gaps": "Gaps",
-      "monetization": "Monetization hint",
-      "none": "none"
+      "monetization": "Monetization hint"
     },
     "empathy": {
       "segment": "Segment",
