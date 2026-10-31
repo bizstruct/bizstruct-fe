@@ -163,7 +163,7 @@ function ScenarioPanel({ segment }: { segment: SegmentView }) {
         ) : null}
       </dl>
       <Section title={t("questions")}>
-        <StickerList items={s.open_questions} />
+        <StickerList items={s.open_questions} className="md:grid-cols-2" />
       </Section>
     </Panel>
   )

@@ -29,6 +29,11 @@ describe("StickerList", () => {
     expect(within(items[1]).getByText("T")).toBeInTheDocument()
   })
 
+  it("stretches every sticker to the height of its row, so a row of stickers is level", () => {
+    render(<StickerList items={["short", "a much longer text"]} />)
+    for (const sticker of document.querySelectorAll("[data-sticker]")) expect(sticker.className).toContain("h-full")
+  })
+
   it("numbers the stickers in an ordered list when asked", () => {
     const { container } = render(<StickerList numbered items={["a", "b", "c"]} />)
     expect(container.querySelector("ol")).not.toBeNull()

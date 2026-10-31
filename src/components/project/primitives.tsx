@@ -108,7 +108,7 @@ export function StickerList({
     <List className={cn("grid auto-rows-fr gap-2", className)} {...props}>
       {list.map((item, i) => (
         <li key={i}>
-          <Sticker {...item} number={numbered ? i + 1 : item.number} />
+          <Sticker {...item} number={numbered ? i + 1 : item.number} className="h-full" />
         </li>
       ))}
     </List>
