@@ -16,13 +16,6 @@ const farm = buildProjectView(fixture(FARM))
 const music = buildProjectView(fixture(MUSIC))
 const flow = { flowIndex: 0, onFlow: () => {} }
 
-/** The versions sit behind the history button: open it, then optionally pick one. */
-const openHistory = (name = "History") => fireEvent.pointerDown(screen.getByRole("button", { name }), { button: 0, ctrlKey: false, pointerType: "mouse" })
-const pickVersion = (n: number, name = "History") => {
-  openHistory(name)
-  fireEvent.click(screen.getByRole("menuitem", { name: new RegExp(`Version ${n}`) }))
-}
-
 describe("BriefView", () => {
   it("shows the farm brief", () => {
     renderIntl(<BriefView view={farm} />)
@@ -104,54 +97,31 @@ describe("PatternsView", () => {
 })
 
 describe("CanvasView", () => {
-  it("shows no version switcher, only the quiet history button", () => {
+  const firstCard = (v: ProjectView, flowN = 0, version = 0) => v.canvases[flowN].versions[version].canvas.sections.value_propositions![0].text
+
+  it("shows the final version only, without any version switcher or ERRC marker", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
     expect(screen.queryByRole("tab")).not.toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "History" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /Versions|History/ })).not.toBeInTheDocument()
+    expect(screen.queryByTestId("errc-marker")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
+    const finalVersion = farm.canvases[0].finalVersion
+    expect(finalVersion).toBe(2)
+    expect(within(screen.getByTestId("canvas-grid")).getByText(firstCard(farm, 0, 1))).toBeInTheDocument()
   })
 
-  it("offers all three farm versions in the history and badges only version 2 as FINAL", () => {
-    renderIntl(<CanvasView view={farm} {...flow} />)
-    openHistory()
-    const items = screen.getAllByRole("menuitem")
-    expect(items.map((i) => i.textContent)).toEqual(["V1", "V2FINAL", "V3"])
-    expect(screen.getAllByTestId("final-badge")).toHaveLength(1)
-    expect(within(items[1]).getByTestId("final-badge")).toHaveTextContent("FINAL")
-  })
-
-  it("opens on the final version", () => {
-    renderIntl(<CanvasView view={farm} {...flow} />)
-    openHistory()
-    expect(screen.getByRole("menuitem", { name: /Version 2/ })).toHaveAttribute("aria-current", "true")
-  })
-
-  it("opens on the final version even when it is not the last (music: final is version 1 of 2)", () => {
+  it("shows the final version even when it is not the last (music: final is version 1 of 2)", () => {
+    expect(music.canvases[0].finalVersion).toBe(1)
     renderIntl(<CanvasView view={music} {...flow} />)
-    openHistory()
-    expect(screen.getByRole("menuitem", { name: /Version 1/ })).toHaveAttribute("aria-current", "true")
-    expect(within(screen.getByRole("menuitem", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
-    expect(within(screen.getByRole("menuitem", { name: /Version 2/ })).queryByTestId("final-badge")).not.toBeInTheDocument()
+    expect(within(screen.getByTestId("canvas-grid")).getByText(firstCard(music, 0, 0))).toBeInTheDocument()
   })
 
   it("draws the nine blocks with the real cards", () => {
     renderIntl(<CanvasView view={farm} {...flow} />)
-    pickVersion(1)
-    const grid = within(screen.getByTestId("canvas-grid"))
-    expect(Object.keys(farm.canvases[0].versions[0].canvas.sections)).toHaveLength(9)
-    expect(grid.getByText("Family-customizable local produce boxes matched to children’s preferences")).toBeInTheDocument()
-    expect(screen.getByTestId("canvas-grid").querySelectorAll("[data-section]")).toHaveLength(9)
-  })
-
-  it("marks the ERRC changes only on an earlier version the user opened, never on the final canvas", () => {
-    renderIntl(<CanvasView view={farm} {...flow} />)
-    const markers = () => screen.queryAllByTestId("errc-marker").map((m) => m.textContent)
-    expect(markers()).toEqual([]) // the final version (2) opens clean, though the loop made four changes to reach it
-
-    pickVersion(1)
-    expect(markers()).toEqual([])
-
-    pickVersion(3)
-    expect(markers().sort()).toEqual(["Create", "Raise", "Raise", "Raise"])
+    const grid = screen.getByTestId("canvas-grid")
+    expect(Object.keys(farm.canvases[0].versions[1].canvas.sections)).toHaveLength(9)
+    expect(grid.querySelectorAll("[data-section]")).toHaveLength(9)
+    expect(grid.querySelectorAll("[data-card]").length).toBeGreaterThan(9)
   })
 
   it("names the covered segments only when the canvas covers more than one", () => {
@@ -165,23 +135,18 @@ describe("CanvasView", () => {
     expect(screen.getByText("Covers: Maya Torres, Marcus Reed, Maya Thompson")).toBeInTheDocument()
   })
 
-  it("does not show a FINAL badge when be did not name a final version", () => {
+  it("falls back to the latest version when be did not name a final one", () => {
     const project = fixture(FARM)
     const cycle = project.rows.find((r) => r.stage === "swot_errc_cycle")!
     const without = buildProjectView({ ...project, rows: project.rows.map((r) => (r === cycle ? { ...r, finalVersion: undefined, finalCanvasId: undefined, finalSwotId: undefined } : r)) })
     renderIntl(<CanvasView view={without} {...flow} />)
-    openHistory()
-    expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
-    expect(screen.getByRole("menuitem", { name: /Version 3/ })).toHaveAttribute("aria-current", "true") // latest
+    expect(within(screen.getByTestId("canvas-grid")).getByText(without.canvases[0].versions[2].canvas.sections.value_propositions![0].text)).toBeInTheDocument() // latest = version 3
   })
 })
 
 describe("SwotView", () => {
   it("shows the four clusters of the final farm version with the whole threat catalog (2 + 5 + 7 + 7 = 21)", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
-    openHistory()
-    expect(screen.getByRole("menuitem", { name: /Version 2/ })).toHaveAttribute("aria-current", "true")
-    fireEvent.keyDown(document.activeElement ?? document.body, { key: "Escape" })
     const clusters = screen.getByTestId("swot-clusters").querySelectorAll("[data-cluster]")
     expect([...clusters].map((c) => c.getAttribute("data-cluster"))).toEqual(["value_proposition", "cost_revenue", "infrastructure", "customer_interface"])
     const sizes = [...clusters].map((c) => within(c as HTMLElement).getByTestId("threat-catalog").children.length)
@@ -189,26 +154,11 @@ describe("SwotView", () => {
     expect(within(clusters[0] as HTMLElement).getByText("substitutes available")).toBeInTheDocument()
   })
 
-  it("hides the ERRC moves on the final version and lists them for an earlier one", () => {
+  it("shows no version switcher and no list of the loop's ERRC moves", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument()
     expect(screen.queryByTestId("errc-moves")).not.toBeInTheDocument()
-
-    pickVersion(1)
-    const moves = within(screen.getByTestId("errc-moves"))
-    expect(moves.getByText("Moves from version 1 to 2")).toBeInTheDocument()
-    expect(moves.getAllByRole("listitem").length).toBeGreaterThan(0)
-  })
-
-  it("says the last version has no moves after it", () => {
-    renderIntl(<SwotView view={farm} {...flow} />)
-    pickVersion(3)
-    expect(screen.getByText("This is the last version: no moves follow it")).toBeInTheDocument()
-  })
-
-  it("marks the music project's final version 1 in the history", () => {
-    renderIntl(<SwotView view={music} {...flow} />)
-    openHistory()
-    expect(within(screen.getByRole("menuitem", { name: /Version 1/ })).getByTestId("final-badge")).toBeInTheDocument()
+    expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
   })
 })
 
@@ -262,8 +212,6 @@ describe("PitchView", () => {
 describe("every view in Ukrainian", () => {
   it("renders the labels in the interface language and the content as generated", () => {
     renderIntl(<CanvasView view={farm} {...flow} />, "uk")
-    openHistory("Історія версій")
-    expect(screen.getByRole("menuitem", { name: /Версія 2/ })).toBeInTheDocument()
-    expect(within(screen.getByRole("menuitem", { name: /Версія 2/ })).getByTestId("final-badge")).toHaveTextContent("ФІНАЛЬНА")
+    expect(screen.getByText("Ключові партнери")).toBeInTheDocument()
   })
 })

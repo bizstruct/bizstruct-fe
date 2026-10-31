@@ -221,14 +221,6 @@
       "rationale": "Rationale"
     },
     "canvas": {
-      "version": "Version",
-      "final": "FINAL",
-      "markers": {
-        "eliminate": "Eliminated",
-        "reduce": "Reduce",
-        "raise": "Raise",
-        "create": "Create"
-      },
       "sections": {
         "customer_segments": "Customer segments",
         "value_propositions": "Value propositions",
@@ -242,8 +234,7 @@
       },
       "canvasN": "Canvas {n}",
       "covers": "Covers: {segments}",
-      "empty": "empty",
-      "history": "History"
+      "empty": "empty"
     },
     "swot": {
       "version": "Version {n}",
@@ -263,14 +254,9 @@
       "threats": "Threats",
       "catalog": "Threat catalog",
       "moves": "ERRC moves to the next version",
-      "movesFrom": "Moves from version {from} to {to}",
       "action": "Action",
       "section": "Section",
-      "target": "Card",
-      "newText": "New text",
-      "impact": "Opposite-side impact",
       "rationale": "Rationale",
-      "noMoves": "This is the last version: no moves follow it",
       "noSwot": "No SWOT for this version"
     },
     "story": {

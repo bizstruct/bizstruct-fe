@@ -1,14 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { ArrowRight, Blocks, Coins, Gem, Lightbulb, ShieldAlert, ThumbsDown, ThumbsUp, Users, type LucideIcon } from "lucide-react"
+import { Blocks, Coins, Gem, Lightbulb, ShieldAlert, ThumbsDown, ThumbsUp, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Bar, BarChart, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import { ACCENT, humanize, IconBadge, NotReady, Panel, Reveal, Section, type Accent } from "../primitives"
-import { CanvasPicker, VersionHistory } from "./canvas-view"
+import { CanvasPicker } from "./canvas-view"
 
 const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
   value_proposition: { icon: Gem, accent: "indigo" },
@@ -19,23 +18,18 @@ const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
 
 export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.swot")
-  const tc = useTranslations("Views.canvas")
   const tp = useTranslations("Project")
   const flow = view.canvases[Math.min(flowIndex, view.canvases.length - 1)]
-  const [selected, setSelected] = useState<number | null>(null)
   const withSwot = flow?.versions.filter((v) => v.swot) ?? []
   if (!flow || withSwot.length === 0) return <NotReady message={tp("notReady")} />
 
-  const defaultVersion = flow.finalVersion ?? withSwot[withSwot.length - 1].version
-  const current = withSwot.find((v) => v.version === (selected ?? defaultVersion)) ?? withSwot[withSwot.length - 1]
+  // Only the final version is shown (else the latest); the loop's earlier steps are not part of the client view.
+  const current = withSwot.find((v) => v.version === flow.finalVersion) ?? withSwot[withSwot.length - 1]
   const swot = current.swot!
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <CanvasPicker flows={view.canvases} value={flowIndex} onChange={(i) => { onFlow(i); setSelected(null) }} />
-        <VersionHistory versions={withSwot} value={current.version} defaultVersion={defaultVersion} onChange={setSelected} />
-      </div>
+      <CanvasPicker flows={view.canvases} value={flowIndex} onChange={onFlow} />
 
       <div className="grid gap-4 lg:grid-cols-2" data-testid="swot-clusters">
         {swot.clusters.map((cluster, n) => {
@@ -99,34 +93,6 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
           )
         })}
       </div>
-
-      {current.version !== defaultVersion ? (
-        <Panel className="space-y-4" data-testid="errc-moves">
-          {current.errcOut ? (
-            <>
-              <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
-                <IconBadge icon={ArrowRight} accent="indigo" /> {t("movesFrom", { from: current.errcOut.from_version, to: current.errcOut.to_version })}
-              </h3>
-              <ul className="grid gap-3 lg:grid-cols-2">
-                {current.errcOut.moves.map((move, i) => (
-                  <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 bg-slate-50/50 p-4 text-sm leading-relaxed" data-action={move.action}>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge tone="accent">{tc(`markers.${move.action}`)}</Badge>
-                      <span className="text-xs font-medium text-slate-500">{tc(`sections.${move.target_section}`)}</span>
-                    </div>
-                    {move.target_card_text ? <p className="text-slate-600"><span className="font-semibold">{t("target")}: </span>{move.target_card_text}</p> : null}
-                    {move.new_text ? <p className="text-slate-900"><span className="font-semibold">{t("newText")}: </span>{move.new_text}</p> : null}
-                    <p className="text-slate-600"><span className="font-semibold">{t("impact")}: </span>{move.opposite_side_impact}</p>
-                    <p className="text-slate-600"><span className="font-semibold">{t("rationale")}: </span>{move.rationale}</p>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p className="text-sm text-slate-400">{t("noMoves")}</p>
-          )}
-        </Panel>
-      ) : null}
     </div>
   )
 }

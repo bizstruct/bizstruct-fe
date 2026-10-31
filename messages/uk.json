@@ -221,14 +221,6 @@
       "rationale": "Обґрунтування"
     },
     "canvas": {
-      "version": "Версія",
-      "final": "ФІНАЛЬНА",
-      "markers": {
-        "eliminate": "Усунути",
-        "reduce": "Зменшити",
-        "raise": "Підвищити",
-        "create": "Створити"
-      },
       "sections": {
         "customer_segments": "Сегменти клієнтів",
         "value_propositions": "Ціннісні пропозиції",
@@ -242,8 +234,7 @@
       },
       "canvasN": "Канва {n}",
       "covers": "Охоплює: {segments}",
-      "empty": "порожньо",
-      "history": "Історія версій"
+      "empty": "порожньо"
     },
     "swot": {
       "version": "Версія {n}",
@@ -263,14 +254,9 @@
       "threats": "Загрози",
       "catalog": "Каталог загроз",
       "moves": "Ходи ERRC до наступної версії",
-      "movesFrom": "Ходи з версії {from} до {to}",
       "action": "Дія",
       "section": "Розділ",
-      "target": "Картка",
-      "newText": "Новий текст",
-      "impact": "Вплив на протилежну сторону",
       "rationale": "Обґрунтування",
-      "noMoves": "Це остання версія: ходів після неї немає",
       "noSwot": "Для цієї версії немає SWOT"
     },
     "story": {
