@@ -19,7 +19,7 @@ export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flow
       ) : (
         <div className="space-y-4" data-testid="pitch-panel">
           {/* The hook is the headline of the page, so it stands bare and large instead of in a panel. */}
-          <div className="mx-auto max-w-[70ch] space-y-3 px-2 py-3 text-center">
+          <div className="space-y-3 px-2 py-3 text-center">
             <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600">
               <Rocket className="size-4" aria-hidden /> {t("hook")}
             </p>
