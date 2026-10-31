@@ -244,15 +244,8 @@
         "infrastructure": "Інфраструктура",
         "customer_interface": "Взаємодія з клієнтом"
       },
-      "axis": "Сильні та слабкі сторони",
-      "positive": "Сильна сторона",
-      "negative": "Слабка сторона",
-      "importance": "Важливість",
-      "certainty": "Впевненість",
-      "score": "Оцінка",
       "opportunities": "Можливості",
       "threats": "Загрози",
-      "catalog": "Каталог загроз",
       "moves": "Ходи ERRC до наступної версії",
       "action": "Дія",
       "section": "Розділ",
@@ -265,6 +258,17 @@
         "reduce": "Зменшити",
         "raise": "Підвищити",
         "create": "Створити"
+      },
+      "strengths": "Сильні сторони",
+      "weaknesses": "Слабкі сторони",
+      "sorted": "Найважливіше зверху",
+      "detail": "Важливість {importance}/10, певність {certainty}/10",
+      "rating": "Оцінка {score}/5",
+      "minorThreats": "Інші загрози ({n})",
+      "levels": {
+        "high": "Висока",
+        "medium": "Середня",
+        "low": "Низька"
       },
       "noSwot": "Для цієї версії немає SWOT"
     },

@@ -244,15 +244,8 @@
         "infrastructure": "Infrastructure",
         "customer_interface": "Customer interface"
       },
-      "axis": "Strengths and weaknesses",
-      "positive": "Strength",
-      "negative": "Weakness",
-      "importance": "Importance",
-      "certainty": "Certainty",
-      "score": "Score",
       "opportunities": "Opportunities",
       "threats": "Threats",
-      "catalog": "Threat catalog",
       "moves": "ERRC moves to the next version",
       "action": "Action",
       "section": "Section",
@@ -265,6 +258,17 @@
         "reduce": "Reduce",
         "raise": "Raise",
         "create": "Create"
+      },
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "sorted": "Most important first",
+      "detail": "Importance {importance}/10, certainty {certainty}/10",
+      "rating": "Rating {score}/5",
+      "minorThreats": "Other threats ({n})",
+      "levels": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
       },
       "noSwot": "No SWOT for this version"
     },

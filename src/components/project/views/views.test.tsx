@@ -145,19 +145,43 @@ describe("CanvasView", () => {
 })
 
 describe("SwotView", () => {
-  it("shows the four clusters of the final farm version with the whole threat catalog (2 + 5 + 7 + 7 = 21)", () => {
+  it("sorts the final farm version into the four classic quadrants", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
-    const clusters = screen.getByTestId("swot-clusters").querySelectorAll("[data-cluster]")
-    expect([...clusters].map((c) => c.getAttribute("data-cluster"))).toEqual(["value_proposition", "cost_revenue", "infrastructure", "customer_interface"])
-    const sizes = [...clusters].map((c) => within(c as HTMLElement).getByTestId("threat-catalog").children.length)
-    expect(sizes).toEqual([2, 5, 7, 7])
-    expect(within(clusters[0] as HTMLElement).getByText("substitutes available")).toBeInTheDocument()
+    const quadrants = screen.getByTestId("swot-quadrants").querySelectorAll("[data-quadrant]")
+    expect([...quadrants].map((q) => q.getAttribute("data-quadrant"))).toEqual(["strengths", "opportunities", "weaknesses", "threats"]) // left column, then right
+    const swot = farm.canvases[0].versions[1].swot!
+    const axes = swot.clusters.flatMap((c) => c.axis_statements)
+    const count = (id: string) => within(screen.getByTestId("swot-quadrants").querySelector(`[data-quadrant=${id}]`) as HTMLElement).queryAllByRole("listitem").length
+    expect(count("strengths")).toBe(axes.filter((a) => a.score > 0).length)
+    expect(count("weaknesses")).toBe(axes.filter((a) => a.score < 0).length)
+    expect(count("opportunities")).toBe(swot.clusters.reduce((n, c) => n + c.opportunities.length, 0))
+  })
+
+  it("shows each axis once, on the side its score takes, and folds the minor threats away", () => {
+    renderIntl(<SwotView view={farm} {...flow} />)
+    const axes = farm.canvases[0].versions[1].swot!.clusters.flatMap((c) => c.axis_statements)
+    const strong = axes.find((a) => a.score > 0)
+    if (strong) {
+      expect(screen.getByText(strong.positive_statement)).toBeInTheDocument()
+      expect(screen.queryByText(strong.negative_statement)).not.toBeInTheDocument()
+    }
+    const threats = farm.canvases[0].versions[1].swot!.clusters.flatMap((c) => c.threats)
+    const minor = threats.filter((t) => t.score < 3).length
+    if (minor > 0) expect(screen.getByText(`Other threats (${minor})`)).toBeInTheDocument()
+  })
+
+  it("shows words instead of figures: no n/max lines, the exact numbers only in a tooltip", () => {
+    renderIntl(<SwotView view={farm} {...flow} />)
+    expect(screen.queryByRole("meter")).not.toBeInTheDocument()
+    expect(screen.queryByText(/^\d+\/\d+$/)).not.toBeInTheDocument()
+    expect(screen.getAllByText(/^(High|Medium|Low)$/).length).toBeGreaterThan(0)
+    expect(document.querySelector("[title^='Importance']")).not.toBeNull()
   })
 
   it("offers SWOT and ERRC as two parts when the final version came from an ERRC step (farm: version 2)", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
     expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["SWOT", "ERRC"])
-    expect(screen.getByTestId("swot-clusters")).toBeInTheDocument()
+    expect(screen.getByTestId("swot-quadrants")).toBeInTheDocument()
     expect(screen.queryByTestId("errc-moves")).not.toBeInTheDocument()
     expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
   })
@@ -169,13 +193,13 @@ describe("SwotView", () => {
     const list = screen.getByTestId("errc-moves")
     expect(list.querySelectorAll("[data-move]")).toHaveLength(moves.length)
     expect(within(list).getByText(moves[0].rationale, { exact: false })).toBeInTheDocument()
-    expect(screen.queryByTestId("swot-clusters")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("swot-quadrants")).not.toBeInTheDocument()
   })
 
   it("has no ERRC part when the final version is the first canvas (music: final is version 1)", () => {
     renderIntl(<SwotView view={music} {...flow} />)
     expect(screen.queryByRole("tab")).not.toBeInTheDocument()
-    expect(screen.getByTestId("swot-clusters")).toBeInTheDocument()
+    expect(screen.getByTestId("swot-quadrants")).toBeInTheDocument()
   })
 })
 

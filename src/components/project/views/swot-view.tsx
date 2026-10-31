@@ -1,24 +1,33 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowDown, ArrowUp, Blocks, Coins, Gem, Lightbulb, Plus, ShieldAlert, ThumbsDown, ThumbsUp, Users, X, type LucideIcon } from "lucide-react"
+import { ArrowDown, ArrowUp, Lightbulb, Plus, ShieldAlert, ThumbsDown, ThumbsUp, X, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import type { ErrcMove } from "@/types/domain/errc"
-import { humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
+import { humanize, IconBadge, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
-
-const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
-  value_proposition: { icon: Gem, accent: "indigo" },
-  cost_revenue: { icon: Coins, accent: "amber" },
-  infrastructure: { icon: Blocks, accent: "sky" },
-  customer_interface: { icon: Users, accent: "violet" },
-}
 
 const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
 
 type Part = "swot" | "errc"
+type Level = "high" | "medium" | "low"
+
+/** One entry of a quadrant; `weight` only orders the entries, the reader sees the level. */
+interface Entry {
+  text: string
+  tag: string
+  level: Level
+  weight: number
+  title: string
+}
+
+/** A rating becomes a word: the top fifth is high, up to the middle is low (1-10: 8+ high, 5-7 medium; 1-5: 4+ high, 3 medium). */
+const levelOf = (value: number, max: number): Level => (value / max >= 0.8 ? "high" : value / max > 0.4 ? "medium" : "low")
+
+/** Threats the model rated below this barely apply; they stay available but folded away. */
+const MINOR_THREAT = 3
 
 export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.swot")
@@ -34,6 +43,33 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
   // The ERRC moves that produced the shown version; version 1 has none, so then there is only SWOT.
   const errc = current.errcIn
   const active: Part = errc ? part : "swot"
+
+  // The clusters are flattened into the four classic quadrants. Each axis lands on the side its score takes
+  // (the other pole is its opposite wording and is dropped); importance and certainty become a word and a tooltip.
+  const strengths: Entry[] = []
+  const weaknesses: Entry[] = []
+  const opportunities: Entry[] = []
+  const threats: Entry[] = []
+  const minorThreats: Entry[] = []
+  for (const cluster of swot.clusters) {
+    const tag = t(`clusters.${cluster.cluster}`)
+    for (const a of cluster.axis_statements) {
+      const entry = {
+        text: a.score > 0 ? a.positive_statement : a.negative_statement,
+        tag,
+        level: levelOf(a.importance, 10),
+        weight: a.importance + Math.abs(a.score) / 10,
+        title: t("detail", { importance: a.importance, certainty: a.certainty }),
+      }
+      ;(a.score > 0 ? strengths : weaknesses).push(entry)
+    }
+    for (const o of cluster.opportunities) opportunities.push({ text: o.text, tag, level: levelOf(o.score, 5), weight: o.score, title: t("rating", { score: o.score }) })
+    for (const th of cluster.threats) {
+      const entry = { text: th.text, tag: humanize(th.question), level: levelOf(th.score, 5), weight: th.score, title: t("rating", { score: th.score }) }
+      ;(th.score >= MINOR_THREAT ? threats : minorThreats).push(entry)
+    }
+  }
+  for (const list of [strengths, weaknesses, opportunities, threats, minorThreats]) list.sort((a, b) => b.weight - a.weight)
 
   return (
     <div className="space-y-5">
@@ -55,61 +91,76 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
           </ul>
         </Reveal>
       ) : (
-      <div className="grid gap-4 lg:grid-cols-2" data-testid="swot-clusters">
-        {swot.clusters.map((cluster, n) => {
-          const { icon, accent } = CLUSTER[cluster.cluster] ?? { icon: Gem, accent: "slate" as Accent }
-          return (
-            <Reveal key={`${current.version}-${cluster.cluster}`} delay={n * 0.06}>
-              <Panel data-cluster={cluster.cluster} className="h-full space-y-5">
-                <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
-                  <IconBadge icon={icon} accent={accent} /> {t(`clusters.${cluster.cluster}`)}
-                </h3>
-
-                <Section title={t("axis")} icon={ThumbsUp} accent="emerald">
-                  <ul className="space-y-2.5">
-                    {cluster.axis_statements.map((axis, i) => (
-                      <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed">
-                        <p className="flex gap-2"><ThumbsUp className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden /><span><span className="font-semibold text-emerald-700">{t("positive")}: </span>{axis.positive_statement}</span></p>
-                        <p className="flex gap-2"><ThumbsDown className="mt-0.5 size-4 shrink-0 text-red-600" aria-hidden /><span><span className="font-semibold text-red-700">{t("negative")}: </span>{axis.negative_statement}</span></p>
-                        <div className="grid grid-cols-3 gap-4 pt-2">
-                          <Meter label={t("score")} value={axis.score} max={5} />
-                          <Meter label={t("importance")} value={axis.importance} max={10} />
-                          <Meter label={t("certainty")} value={axis.certainty} max={10} />
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-
-                <Section title={t("opportunities")} icon={Lightbulb} accent="amber">
-                  <ul className="space-y-2">
-                    {cluster.opportunities.map((o, i) => (
-                      <li key={i} className="space-y-2 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed text-slate-800">
-                        <p>{o.text}</p>
-                        <Meter value={o.score} max={5} />
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-
-                <Section title={t("catalog")} icon={ShieldAlert} accent="red">
-                  <ul className="space-y-3" data-testid="threat-catalog">
-                    {cluster.threats.map((threat) => (
-                      <li key={threat.question} className="space-y-1.5 text-sm">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{humanize(threat.question)}</span>
-                        <Meter value={threat.score} max={5} />
-                        <p className="leading-relaxed text-slate-700">{threat.text}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-              </Panel>
-            </Reveal>
-          )
-        })}
-      </div>
+        <>
+          <p className="text-center text-sm text-slate-500">{t("sorted")}</p>
+          {/* Two independent columns (what is good, what is bad), so a short quadrant never stretches to its neighbour's height. */}
+          <div className="grid items-start gap-4 md:grid-cols-2" data-testid="swot-quadrants">
+            <div className="space-y-4">
+              <Quadrant id="strengths" title={t("strengths")} icon={ThumbsUp} entries={strengths} delay={0} />
+              <Quadrant id="opportunities" title={t("opportunities")} icon={Lightbulb} entries={opportunities} delay={0.12} />
+            </div>
+            <div className="space-y-4">
+              <Quadrant id="weaknesses" title={t("weaknesses")} icon={ThumbsDown} entries={weaknesses} delay={0.06} />
+              <Quadrant id="threats" title={t("threats")} icon={ShieldAlert} entries={threats} folded={minorThreats} delay={0.18} />
+            </div>
+          </div>
+        </>
       )}
     </div>
+  )
+}
+
+function Quadrant({ id, title, icon, entries, folded = [], delay }: { id: string; title: string; icon: LucideIcon; entries: Entry[]; folded?: Entry[]; delay: number }) {
+  const t = useTranslations("Views.swot")
+  return (
+    <Reveal delay={delay}>
+      <Panel data-quadrant={id} className="space-y-4">
+        <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+          <IconBadge icon={icon} accent="indigo" /> {title}
+        </h3>
+        {entries.length > 0 ? <EntryList entries={entries} /> : null}
+        {folded.length > 0 ? (
+          <details className="text-sm">
+            <summary className="cursor-pointer text-slate-500 hover:text-slate-800">{t("minorThreats", { n: folded.length })}</summary>
+            <div className="mt-3">
+              <EntryList entries={folded} />
+            </div>
+          </details>
+        ) : null}
+      </Panel>
+    </Reveal>
+  )
+}
+
+function EntryList({ entries }: { entries: Entry[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {entries.map((entry, i) => (
+        <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed text-slate-800">
+          <div className="flex items-center justify-between gap-3">
+            <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{entry.tag}</span>
+            <LevelChip level={entry.level} title={entry.title} />
+          </div>
+          <p>{entry.text}</p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/** Three dots and a word; the exact figures sit in the tooltip for whoever wants them. */
+function LevelChip({ level, title }: { level: Level; title: string }) {
+  const t = useTranslations("Views.swot")
+  const filled = { high: 3, medium: 2, low: 1 }[level]
+  return (
+    <span title={title} className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-slate-600">
+      <span aria-hidden className="flex gap-0.5">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className={cn("size-1.5 rounded-full", i < filled ? "bg-indigo-400" : "bg-slate-300/70")} />
+        ))}
+      </span>
+      {t(`levels.${level}`)}
+    </span>
   )
 }
 
@@ -130,22 +181,5 @@ function MoveCard({ move }: { move: ErrcMove }) {
       <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
       <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
     </li>
-  )
-}
-
-/** A rating as a thin line that fills in proportion: `4/5`. A negative rating fills the same way, in red, and shows its sign. */
-function Meter({ label, value, max, className }: { label?: string; value: number; max: number; className?: string }) {
-  const negative = value < 0
-  const shown = negative ? `\u2212${Math.abs(value)}` : String(value)
-  return (
-    <div className={cn("space-y-1", className)} role="meter" aria-label={label} aria-valuenow={value} aria-valuemin={negative ? -max : 0} aria-valuemax={max}>
-      <div className="flex items-baseline justify-between gap-2 text-xs">
-        {label ? <span className="text-slate-500">{label}</span> : <span />}
-        <span className="font-medium tabular-nums text-slate-700">{shown}<span className="text-slate-400">/{max}</span></span>
-      </div>
-      <div aria-hidden className="h-1 overflow-hidden rounded-full bg-slate-200/70">
-        <div className={cn("h-full rounded-full", negative ? "bg-red-400" : "bg-indigo-400")} style={{ width: `${(Math.abs(value) / max) * 100}%` }} />
-      </div>
-    </div>
   )
 }
