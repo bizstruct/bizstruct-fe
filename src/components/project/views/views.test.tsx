@@ -169,6 +169,7 @@ describe("SwotView", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
     const threats = () => within(screen.getByTestId("swot-quadrants").querySelector("[data-quadrant=threats]") as HTMLElement)
     expect(threats().getAllByRole("listitem")).toHaveLength(5)
+    expect(threats().getByRole("button", { name: "Show all (21)" }).className).toContain("mt-auto") // pinned to the bottom of the block
     fireEvent.click(threats().getByRole("button", { name: "Show all (21)" }))
     expect(threats().getAllByRole("listitem")).toHaveLength(21)
     fireEvent.click(threats().getByRole("button", { name: "Show less" }))

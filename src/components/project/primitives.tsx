@@ -88,7 +88,7 @@ export function Sticker({ text, tag, meta, number, id, className, ...props }: St
   )
 }
 
-/** A list of stickers; an item is a string or a `StickerData`. `numbered` numbers them in an ordered list. */
+/** A list of stickers, all as tall as the tallest one; an item is a string or a `StickerData`. `numbered` numbers them in an ordered list. */
 export function StickerList({
   items,
   numbered = false,
@@ -105,7 +105,7 @@ export function StickerList({
   if (list.length === 0) return empty ? <p className="text-sm text-slate-400">{empty}</p> : null
   const List = numbered ? "ol" : "ul"
   return (
-    <List className={cn("grid gap-2", className)} {...props}>
+    <List className={cn("grid auto-rows-fr gap-2", className)} {...props}>
       {list.map((item, i) => (
         <li key={i}>
           <Sticker {...item} number={numbered ? i + 1 : item.number} />

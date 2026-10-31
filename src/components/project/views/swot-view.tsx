@@ -107,13 +107,13 @@ function Quadrant({ id, title, icon, entries, delay }: { id: string; title: stri
   const hidden = entries.length - PREVIEW
   return (
     <Reveal delay={delay} className="h-full">
-      <Panel data-quadrant={id} className="h-full space-y-4">
+      <Panel data-quadrant={id} className="flex h-full flex-col gap-4">
         <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
           <IconBadge icon={icon} accent="indigo" /> {title}
         </h3>
         <StickerList items={(open ? entries : entries.slice(0, PREVIEW)).map((e) => ({ text: e.text, tag: e.tag, meta: <LevelChip level={e.level} title={e.title} /> }))} />
         {hidden > 0 ? (
-          <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+          <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="mt-auto self-start text-sm font-medium text-indigo-600 hover:text-indigo-500">
             {open ? t("showLess") : t("showAll", { n: entries.length })}
           </button>
         ) : null}
