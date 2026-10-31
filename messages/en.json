@@ -257,6 +257,15 @@
       "action": "Action",
       "section": "Section",
       "rationale": "Rationale",
+      "part": "SWOT or ERRC",
+      "errcIntro": "The moves that turned the earlier canvas into this one",
+      "impact": "Effect on the opposite side",
+      "actions": {
+        "eliminate": "Eliminate",
+        "reduce": "Reduce",
+        "raise": "Raise",
+        "create": "Create"
+      },
       "noSwot": "No SWOT for this version"
     },
     "story": {

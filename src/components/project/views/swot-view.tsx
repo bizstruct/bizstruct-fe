@@ -1,10 +1,12 @@
 "use client"
 
-import { Blocks, Coins, Gem, Lightbulb, ShieldAlert, ThumbsDown, ThumbsUp, Users, type LucideIcon } from "lucide-react"
+import { useState } from "react"
+import { ArrowDown, ArrowUp, Blocks, Coins, Gem, Lightbulb, Plus, ShieldAlert, ThumbsDown, ThumbsUp, Users, X, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
-import { humanize, IconBadge, NotReady, Panel, Reveal, Section, type Accent } from "../primitives"
+import type { ErrcMove } from "@/types/domain/errc"
+import { humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
@@ -14,9 +16,14 @@ const CLUSTER: Record<string, { icon: LucideIcon; accent: Accent }> = {
   customer_interface: { icon: Users, accent: "violet" },
 }
 
+const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
+
+type Part = "swot" | "errc"
+
 export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.swot")
   const tp = useTranslations("Project")
+  const [part, setPart] = useState<Part>("swot")
   const flow = view.canvases[Math.min(flowIndex, view.canvases.length - 1)]
   const withSwot = flow?.versions.filter((v) => v.swot) ?? []
   if (!flow || withSwot.length === 0) return <NotReady message={tp("notReady")} />
@@ -24,11 +31,30 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
   // Only the final version is shown (else the latest); the loop's earlier steps are not part of the client view.
   const current = withSwot.find((v) => v.version === flow.finalVersion) ?? withSwot[withSwot.length - 1]
   const swot = current.swot!
+  // The ERRC moves that produced the shown version; version 1 has none, so then there is only SWOT.
+  const errc = current.errcIn
+  const active: Part = errc ? part : "swot"
 
   return (
     <div className="space-y-5">
       <CanvasPicker flows={view.canvases} value={flowIndex} onChange={onFlow} />
 
+      {errc ? (
+        <div className="border-b border-slate-200">
+          <UnderlineTabs className="justify-center" label={t("part")} value={active} onChange={setPart} items={[{ id: "swot", label: "SWOT" }, { id: "errc", label: "ERRC" }]} />
+        </div>
+      ) : null}
+
+      {active === "errc" && errc ? (
+        <Reveal key="errc" className="space-y-4">
+          <p className="text-center text-sm text-slate-500">{t("errcIntro")}</p>
+          <ul className="grid gap-4 lg:grid-cols-2" data-testid="errc-moves">
+            {errc.moves.map((move, i) => (
+              <MoveCard key={i} move={move} />
+            ))}
+          </ul>
+        </Reveal>
+      ) : (
       <div className="grid gap-4 lg:grid-cols-2" data-testid="swot-clusters">
         {swot.clusters.map((cluster, n) => {
           const { icon, accent } = CLUSTER[cluster.cluster] ?? { icon: Gem, accent: "slate" as Accent }
@@ -82,7 +108,28 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
           )
         })}
       </div>
+      )}
     </div>
+  )
+}
+
+function MoveCard({ move }: { move: ErrcMove }) {
+  const t = useTranslations("Views.swot")
+  const tc = useTranslations("Views.canvas")
+  const Icon = ACTION[move.action]
+  return (
+    <li data-move={move.action} className="space-y-3 rounded-2xl border border-slate-200/80 bg-white p-4 text-sm leading-relaxed shadow-sm shadow-slate-200/40">
+      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+        <IconBadge icon={Icon} accent="indigo" className="size-6 shrink-0 rounded-lg" />
+        <span className="text-indigo-600">{t(`actions.${move.action}`)}</span>
+        <span aria-hidden className="text-slate-300">·</span>
+        <span className="text-slate-500">{tc(`sections.${move.target_section}`)}</span>
+      </div>
+      {move.target_card_text ? <p className={cn("text-slate-500", move.action === "eliminate" && "line-through")}>{move.target_card_text}</p> : null}
+      {move.new_text ? <p className="font-medium text-slate-900">{move.new_text}</p> : null}
+      <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
+      <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
+    </li>
   )
 }
 

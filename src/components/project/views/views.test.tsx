@@ -154,11 +154,28 @@ describe("SwotView", () => {
     expect(within(clusters[0] as HTMLElement).getByText("substitutes available")).toBeInTheDocument()
   })
 
-  it("shows no version switcher and no list of the loop's ERRC moves", () => {
+  it("offers SWOT and ERRC as two parts when the final version came from an ERRC step (farm: version 2)", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
-    expect(screen.queryByRole("tab")).not.toBeInTheDocument()
+    expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual(["SWOT", "ERRC"])
+    expect(screen.getByTestId("swot-clusters")).toBeInTheDocument()
     expect(screen.queryByTestId("errc-moves")).not.toBeInTheDocument()
     expect(screen.queryByTestId("final-badge")).not.toBeInTheDocument()
+  })
+
+  it("the ERRC part lists the moves that produced the final canvas, with what changed and why", () => {
+    renderIntl(<SwotView view={farm} {...flow} />)
+    fireEvent.click(screen.getByRole("tab", { name: "ERRC" }))
+    const moves = farm.canvases[0].versions[1].errcIn!.moves
+    const list = screen.getByTestId("errc-moves")
+    expect(list.querySelectorAll("[data-move]")).toHaveLength(moves.length)
+    expect(within(list).getByText(moves[0].rationale, { exact: false })).toBeInTheDocument()
+    expect(screen.queryByTestId("swot-clusters")).not.toBeInTheDocument()
+  })
+
+  it("has no ERRC part when the final version is the first canvas (music: final is version 1)", () => {
+    renderIntl(<SwotView view={music} {...flow} />)
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument()
+    expect(screen.getByTestId("swot-clusters")).toBeInTheDocument()
   })
 })
 
