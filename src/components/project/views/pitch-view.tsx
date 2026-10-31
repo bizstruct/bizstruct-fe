@@ -1,9 +1,9 @@
 "use client"
 
-import { Coins, FileText, Rocket, ShieldAlert, Trophy, Users } from "lucide-react"
+import { Coins, FileText, Rocket, ShieldAlert, Trophy, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BulletList, NotReady, Panel, Section } from "../primitives"
+import { BlockList, NotReady, Panel, Section } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -18,48 +18,50 @@ export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flow
         <NotReady message={tp("notReady")} />
       ) : (
         <div className="space-y-4" data-testid="pitch-panel">
-          <div className="rounded-2xl border border-slate-200 border-l-4 border-l-indigo-500 bg-white p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-xs font-medium text-indigo-700">
+          {/* The hook is the headline of the page, so it stands bare and large instead of in a panel. */}
+          <div className="mx-auto max-w-[70ch] space-y-3 px-2 py-3 text-center">
+            <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600">
               <Rocket className="size-4" aria-hidden /> {t("hook")}
             </p>
-            <p className="mt-2 text-base font-medium leading-relaxed text-slate-900 sm:text-lg">{pitch.hook}</p>
+            <p className="text-lg font-semibold leading-snug text-slate-900 sm:text-xl">{pitch.hook}</p>
           </div>
 
-          <Panel>
-            <Section title={t("summary")} icon={FileText} accent="indigo">
-              <p className="text-sm leading-relaxed text-slate-700">{pitch.business_model_summary}</p>
-            </Section>
-          </Panel>
+          <Prose title={t("summary")} icon={FileText} text={pitch.business_model_summary} />
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Panel>
-              <Section title={t("advantages")} icon={Trophy} accent="emerald">
-                <BulletList items={pitch.competitive_advantages} accent="emerald" />
+              <Section title={t("advantages")} icon={Trophy} accent="indigo">
+                <BlockList items={pitch.competitive_advantages} />
               </Section>
             </Panel>
             <Panel>
-              <Section title={t("risks")} icon={ShieldAlert} accent="red">
-                <BulletList items={pitch.risk_analysis} accent="red" />
+              <Section title={t("risks")} icon={ShieldAlert} accent="indigo">
+                <BlockList items={pitch.risk_analysis} />
               </Section>
             </Panel>
           </div>
 
-          {pitch.team_section ? (
-            <Panel>
-              <Section title={t("team")} icon={Users} accent="sky">
-                <p className="text-sm leading-relaxed text-slate-700">{pitch.team_section}</p>
-              </Section>
-            </Panel>
-          ) : null}
-          {pitch.financial_analysis_section ? (
-            <Panel>
-              <Section title={t("financial")} icon={Coins} accent="amber">
-                <p className="text-sm leading-relaxed text-slate-700">{pitch.financial_analysis_section}</p>
-              </Section>
-            </Panel>
-          ) : null}
+          {pitch.team_section ? <Prose title={t("team")} icon={Users} text={pitch.team_section} /> : null}
+          {pitch.financial_analysis_section ? <Prose title={t("financial")} icon={Coins} text={pitch.financial_analysis_section} /> : null}
         </div>
       )}
     </div>
+  )
+}
+
+/** A text section in a reading column, split into paragraphs where the text has blank lines. */
+function Prose({ title, icon, text }: { title: string; icon: LucideIcon; text: string }) {
+  return (
+    <Panel className="px-5 py-5 sm:px-8 sm:py-6">
+      <div className="mx-auto max-w-[92ch]">
+        <Section title={title} icon={icon} accent="indigo">
+          <div className="space-y-3 text-base leading-7 text-slate-800">
+            {text.split(/\n{2,}/).map((paragraph, i) => (
+              <p key={i} className="whitespace-pre-line">{paragraph}</p>
+            ))}
+          </div>
+        </Section>
+      </div>
+    </Panel>
   )
 }

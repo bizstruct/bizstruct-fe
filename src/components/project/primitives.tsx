@@ -69,6 +69,17 @@ export function BulletList({ items, empty, accent = "indigo" }: { items: readonl
   )
 }
 
+/** A list whose items are light lavender blocks: the nested level inside a card, where bullets would blend into the text above. */
+export function BlockList({ items, ...props }: { items: readonly string[] } & React.ComponentProps<"ul">) {
+  return (
+    <ul className="space-y-2" {...props}>
+      {items.map((item, i) => (
+        <li key={i} className="rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800">{item}</li>
+      ))}
+    </ul>
+  )
+}
+
 export function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1 rounded-xl bg-slate-50/80 px-3.5 py-3">
