@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
 import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
 import type { StageId } from "@/types/domain/stages"
-import { BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
+import { ACCENT, BLOCK, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
 
 type Part = "empathy" | "scenario" | "ideation"
 
@@ -190,8 +190,8 @@ function IdeationPanel({ segment }: { segment: SegmentView }) {
       <Section title={t("whatIf")}>
         <ol className="grid gap-2.5 md:grid-cols-2">
           {i.what_if_questions.map((q, n) => (
-            <li key={n} className="flex gap-3 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed text-slate-800">
-              <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-900">{n + 1}</span>
+            <li key={n} className={cn(BLOCK, "flex gap-3")}>
+              <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold", ACCENT.indigo.icon)}>{n + 1}</span>
               <span>{q}</span>
             </li>
           ))}

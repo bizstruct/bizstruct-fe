@@ -69,12 +69,15 @@ export function BulletList({ items, empty, accent = "indigo" }: { items: readonl
   )
 }
 
+/** The one look of an item that sits inside a card: a light lavender block (translucent, so it works on any card background and in both themes). */
+export const BLOCK = "rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800"
+
 /** A list whose items are light lavender blocks: the nested level inside a card, where bullets would blend into the text above. */
 export function BlockList({ items, ...props }: { items: readonly string[] } & React.ComponentProps<"ul">) {
   return (
     <ul className="space-y-2" {...props}>
       {items.map((item, i) => (
-        <li key={i} className="rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800">{item}</li>
+        <li key={i} className={BLOCK}>{item}</li>
       ))}
     </ul>
   )
@@ -131,7 +134,7 @@ export function SegmentedControl<T extends string | number>({ items, value, onCh
 }
 
 /** Flat tabs with a lavender line under the chosen one: the quiet sibling of SegmentedControl for a single row. */
-export function UnderlineTabs<T extends string>({ items, value, onChange, label, className }: { items: readonly SegmentedItem<T>[]; value: T; onChange: (value: T) => void; label?: string; className?: string }) {
+export function UnderlineTabs<T extends string | number>({ items, value, onChange, label, className }: { items: readonly SegmentedItem<T>[]; value: T; onChange: (value: T) => void; label?: string; className?: string }) {
   return (
     <div role="tablist" aria-label={label} className={cn("flex gap-12", className)}>
       {items.map((item) => {

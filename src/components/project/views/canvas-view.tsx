@@ -4,7 +4,7 @@ import { Activity, Boxes, Coins, Gem, Handshake, Heart, Truck, Users, Wallet, ty
 import { useTranslations } from "next-intl"
 import type { CanvasFlow, ProjectView } from "@/lib/mappers/project"
 import type { CanvasCard, CanvasSections } from "@/types/domain/canvas"
-import { IconBadge, NotReady, SegmentedControl, type Accent } from "../primitives"
+import { BLOCK, NotReady, Section, UnderlineTabs, type Accent } from "../primitives"
 
 const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> = {
   key_partnerships: { icon: Handshake, accent: "slate" },
@@ -32,7 +32,11 @@ const BLOCKS: (keyof CanvasSections)[] = [
 export function CanvasPicker({ flows, value, onChange }: { flows: CanvasFlow[]; value: number; onChange: (index: number) => void }) {
   const t = useTranslations("Views.canvas")
   if (flows.length <= 1) return null
-  return <SegmentedControl id="canvas-flow" value={value} onChange={onChange} items={flows.map((f, i) => ({ id: i, label: t("canvasN", { n: i + 1 }) }))} />
+  return (
+    <div className="border-b border-slate-200">
+      <UnderlineTabs className="justify-center" value={value} onChange={onChange} items={flows.map((f, i) => ({ id: i, label: t("canvasN", { n: i + 1 }) }))} />
+    </div>
+  )
 }
 
 export function CanvasView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -64,18 +68,17 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
     const cards = (canvas[section] as CanvasCard[] | undefined) ?? []
     const { icon, accent } = PLACE[section]
     return (
-      <div key={section} data-section={section} className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/40">
-        <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-          <IconBadge icon={icon} accent={accent} className="size-6 shrink-0 rounded-lg" /> {t(`sections.${section}`)}
-        </h4>
-        {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
-        <ul className="space-y-2">
-          {cards.map((card) => (
-            <li key={card.id} data-card={card.id} className="rounded-lg bg-slate-100/70 p-3 text-[13px] leading-snug text-slate-800">
-              <p>{card.text}</p>
-            </li>
-          ))}
-        </ul>
+      <div key={section} data-section={section} className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/40">
+        <Section title={t(`sections.${section}`)} icon={icon} accent={accent}>
+          {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
+          <ul className="space-y-2">
+            {cards.map((card) => (
+              <li key={card.id} data-card={card.id} className={BLOCK}>
+                <p>{card.text}</p>
+              </li>
+            ))}
+          </ul>
+        </Section>
       </div>
     )
   }

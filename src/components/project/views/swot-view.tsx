@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import type { ErrcMove } from "@/types/domain/errc"
-import { humanize, IconBadge, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
+import { BLOCK, humanize, IconBadge, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
@@ -126,7 +126,7 @@ function EntryList({ entries }: { entries: Entry[] }) {
   return (
     <ul className="space-y-2.5">
       {entries.map((entry, i) => (
-        <li key={i} className="space-y-1.5 rounded-xl border border-slate-200/80 p-3 text-sm leading-relaxed text-slate-800">
+        <li key={i} className={cn(BLOCK, "space-y-1.5")}>
           <div className="flex items-center justify-between gap-3">
             <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{entry.tag}</span>
             <LevelChip level={entry.level} title={entry.title} />
@@ -169,7 +169,7 @@ function MoveCard({ move }: { move: ErrcMove }) {
       </div>
       {move.new_text && move.target_card_text ? <p className="text-slate-500">{move.target_card_text}</p> : null}
       {/* The filled block is what the move is about: the new text, or for an elimination the card that goes away. */}
-      {focus ? <p data-focus className={cn("rounded-lg bg-indigo-50 p-3 font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")}>{focus}</p> : null}
+      {focus ? <p data-focus className={cn(BLOCK, "font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")}>{focus}</p> : null}
       <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
       <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
     </li>
