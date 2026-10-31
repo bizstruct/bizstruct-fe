@@ -47,7 +47,7 @@ function Variant({ variant, number }: { variant: FutureScenario["variants"][numb
       <Section title={t("questions")} icon={MessageCircleQuestion} accent="indigo">
         <ul className="space-y-2" data-testid="adaptation-questions">
           {variant.adaptation_questions.map((q, i) => (
-            <li key={i} className="rounded-xl bg-indigo-50 px-4 py-3 text-sm leading-snug text-slate-800">{q.question}</li>
+            <li key={i} className="rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800">{q.question}</li>
           ))}
         </ul>
       </Section>
