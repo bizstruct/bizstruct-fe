@@ -1,5 +1,6 @@
 "use client"
 
+import { MessageCircleQuestion } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
@@ -38,15 +39,15 @@ function Variant({ variant, number }: { variant: FutureScenario["variants"][numb
   const t = useTranslations("Views.future")
   return (
     <Panel className="h-full space-y-4">
-      <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+      <h3 className="flex items-center gap-3 border-b border-slate-200/70 pb-4 text-lg font-bold text-slate-900">
         <span aria-hidden className={cn("inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-sm font-bold", ACCENT.indigo.icon)}>{number}</span>
         {variant.name}
       </h3>
       <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
-      <Section title={t("questions")}>
+      <Section title={t("questions")} icon={MessageCircleQuestion} accent="indigo">
         <ul className="space-y-2" data-testid="adaptation-questions">
           {variant.adaptation_questions.map((q, i) => (
-            <li key={i} className="rounded-lg bg-slate-100/70 p-3 text-sm leading-snug text-slate-800">{q.question}</li>
+            <li key={i} className="rounded-xl bg-indigo-50 px-4 py-3 text-sm leading-snug text-slate-800">{q.question}</li>
           ))}
         </ul>
       </Section>
