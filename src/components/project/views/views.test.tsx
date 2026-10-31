@@ -228,13 +228,26 @@ describe("StoryView", () => {
 })
 
 describe("FutureView", () => {
-  it("shows the four farm scenarios with their adaptation questions", () => {
+  it("shows the four farm scenarios as numbered cards, with the questions folded away until asked for", () => {
     renderIntl(<FutureView view={farm} {...flow} />)
     const variants = within(screen.getByTestId("future-variants"))
     for (const name of ["Trusted Local Routine", "Abundant Produce, Reluctant Payers", "Costly City, Strong Demand", "Fragile Supply, Convenience Reset"]) {
       expect(variants.getByRole("heading", { name })).toBeInTheDocument()
     }
-    expect(variants.getByText(/How should recurring family-box payments, delivery fees, and preferred-produce add-ons be balanced/)).toBeInTheDocument()
+    expect(screen.getByText("4 possible futures that depend on these drivers")).toBeInTheDocument()
+    const question = /How should recurring family-box payments, delivery fees, and preferred-produce add-ons be balanced/
+    expect(variants.queryByText(question)).not.toBeInTheDocument()
+    fireEvent.click(variants.getAllByRole("button", { name: "Read more" })[0])
+    expect(variants.getByText(question)).toBeInTheDocument()
+    expect(variants.getByText("Adaptation questions")).toBeInTheDocument()
+    fireEvent.click(variants.getByRole("button", { name: "Show less" }))
+    expect(variants.queryByText(question)).not.toBeInTheDocument()
+  })
+
+  it("names no canvas section next to the questions", () => {
+    renderIntl(<FutureView view={farm} {...flow} />)
+    fireEvent.click(screen.getAllByRole("button", { name: "Read more" })[0])
+    expect(within(screen.getByTestId("future-variants")).queryByText("Value propositions")).not.toBeInTheDocument()
   })
 
   it("shows the music scenarios", () => {

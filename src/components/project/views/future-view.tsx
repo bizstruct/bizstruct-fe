@@ -1,17 +1,16 @@
 "use client"
 
-import { Compass, Waypoints } from "lucide-react"
+import { useState } from "react"
+import { Compass } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BulletList, IconBadge, NotReady, Panel, Reveal, Section, type Accent } from "../primitives"
+import { cn } from "@/lib/utils"
+import type { FutureScenario } from "@/types/domain/future-scenario"
+import { ACCENT, BulletList, NotReady, Panel, Reveal, Section } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
-
-const VARIANT_ACCENT: Accent[] = ["sky", "violet", "amber", "pink"]
 
 export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.future")
-  const tc = useTranslations("Views.canvas")
   const tp = useTranslations("Project")
   const flow = view.canvases[Math.min(flowIndex, view.canvases.length - 1)]
   const future = flow?.futureScenario?.artifact
@@ -27,30 +26,39 @@ export function FutureView({ view, flowIndex, onFlow }: { view: ProjectView; flo
               <BulletList items={future.uncertainty_drivers} />
             </Section>
           </Panel>
-          <div className="grid gap-4 lg:grid-cols-2" data-testid="future-variants">
+          <p className="text-center text-sm text-slate-500">{t("intro", { n: future.variants.length })}</p>
+          <div className="grid items-start gap-4 lg:grid-cols-2" data-testid="future-variants">
             {future.variants.map((variant, n) => (
               <Reveal key={variant.name} delay={n * 0.07}>
-                <Panel className="h-full space-y-4">
-                  <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
-                    <IconBadge icon={Waypoints} accent={VARIANT_ACCENT[n % VARIANT_ACCENT.length]} /> {variant.name}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-slate-700">{variant.narrative}</p>
-                  <Section title={t("questions")}>
-                    <ul className="space-y-2.5 text-sm">
-                      {variant.adaptation_questions.map((q, i) => (
-                        <li key={i} className="flex flex-wrap items-start gap-2.5 leading-relaxed text-slate-700">
-                          <Badge tone="accent" className="mt-0.5">{tc(`sections.${q.section}`)}</Badge>
-                          <span className="min-w-0 flex-1">{q.question}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </Section>
-                </Panel>
+                <Variant variant={variant} number={n + 1} />
               </Reveal>
             ))}
           </div>
         </>
       )}
     </div>
+  )
+}
+
+/** A scenario shows its title and a short read; the full text and the questions it raises open on request. */
+function Variant({ variant, number }: { variant: FutureScenario["variants"][number]; number: number }) {
+  const t = useTranslations("Views.future")
+  const [open, setOpen] = useState(false)
+  return (
+    <Panel className="space-y-4">
+      <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+        <span aria-hidden className={cn("inline-flex size-8 shrink-0 items-center justify-center rounded-xl text-sm font-bold", ACCENT.indigo.icon)}>{number}</span>
+        {variant.name}
+      </h3>
+      <p className={cn("text-sm leading-relaxed text-slate-700", !open && "line-clamp-4")}>{variant.narrative}</p>
+      {open ? (
+        <Section title={t("questions")}>
+          <BulletList items={variant.adaptation_questions.map((q) => q.question)} />
+        </Section>
+      ) : null}
+      <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+        {open ? t("less") : t("more")}
+      </button>
+    </Panel>
   )
 }
