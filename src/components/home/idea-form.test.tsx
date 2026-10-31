@@ -103,17 +103,8 @@ describe("IdeaForm", () => {
     fireEvent.click(screen.getByRole("button", START))
 
     await waitFor(() => expect(createProject).toHaveBeenCalledOnce())
-    expect(createProject).toHaveBeenCalledWith({ title: expect.any(String), idea: idea(60), language: "en", enabledOptional: ["environment_scan"], autoApprove: true })
+    expect(createProject).toHaveBeenCalledWith({ idea: idea(60), language: "en", enabledOptional: ["environment_scan"], autoApprove: true })
     expect(router.push).toHaveBeenCalledWith("/project/p-123")
-  })
-
-  it("names the project after its idea instead of leaving be's default title", async () => {
-    createProject.mockResolvedValue({ ok: true, data: { id: "p-123" } })
-    renderIntl(<IdeaForm />, "en")
-    fireEvent.change(screen.getByLabelText("Your idea"), { target: { value: `Marketplace for local farm food. ${idea(60)}` } })
-    fireEvent.click(screen.getByRole("button", START))
-    await waitFor(() => expect(createProject).toHaveBeenCalledOnce())
-    expect(createProject).toHaveBeenCalledWith(expect.objectContaining({ title: "Marketplace for local farm food" }))
   })
 
   it("generates in the language the idea is written in, whatever the browser says", async () => {

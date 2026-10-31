@@ -6,7 +6,6 @@ import { Check, Loader2, SlidersHorizontal, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { notifyProjectsChanged } from "@/hooks/use-projects"
 import { createProject } from "@/lib/api/projects"
-import { titleFromIdea } from "@/lib/title"
 import { useHydrated } from "@/hooks/use-hydrated"
 import { useRouter } from "@/i18n/routing"
 import { detectLanguage, preferredLanguage } from "@/lib/language"
@@ -40,7 +39,7 @@ export function IdeaForm() {
     if (problem) return
     setSubmitting(true)
     setServerError(null)
-    const result = await createProject({ title: titleFromIdea(idea), idea: idea.trim(), language: language(), enabledOptional: optional, autoApprove })
+    const result = await createProject({ idea: idea.trim(), language: language(), enabledOptional: optional, autoApprove })
     setSubmitting(false)
     if (!result.ok) return setServerError(result.kind === "validation" ? result.detail : t("errors.generic"))
     notifyProjectsChanged()
