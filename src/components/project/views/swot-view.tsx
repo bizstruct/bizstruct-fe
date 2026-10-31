@@ -26,8 +26,8 @@ interface Entry {
 /** A rating becomes a word: the top fifth is high, up to the middle is low (1-10: 8+ high, 5-7 medium; 1-5: 4+ high, 3 medium). */
 const levelOf = (value: number, max: number): Level => (value / max >= 0.8 ? "high" : value / max > 0.4 ? "medium" : "low")
 
-/** Threats the model rated below this barely apply; they stay available but folded away. */
-const MINOR_THREAT = 3
+/** A quadrant shows this many entries until the reader asks for all of them, so the four blocks stay about equal. */
+const PREVIEW = 5
 
 export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.swot")
@@ -50,7 +50,6 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
   const weaknesses: Entry[] = []
   const opportunities: Entry[] = []
   const threats: Entry[] = []
-  const minorThreats: Entry[] = []
   for (const cluster of swot.clusters) {
     const tag = t(`clusters.${cluster.cluster}`)
     for (const a of cluster.axis_statements) {
@@ -64,12 +63,9 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
       ;(a.score > 0 ? strengths : weaknesses).push(entry)
     }
     for (const o of cluster.opportunities) opportunities.push({ text: o.text, tag, level: levelOf(o.score, 5), weight: o.score, title: t("rating", { score: o.score }) })
-    for (const th of cluster.threats) {
-      const entry = { text: th.text, tag: humanize(th.question), level: levelOf(th.score, 5), weight: th.score, title: t("rating", { score: th.score }) }
-      ;(th.score >= MINOR_THREAT ? threats : minorThreats).push(entry)
-    }
+    for (const th of cluster.threats) threats.push({ text: th.text, tag: humanize(th.question), level: levelOf(th.score, 5), weight: th.score, title: t("rating", { score: th.score }) })
   }
-  for (const list of [strengths, weaknesses, opportunities, threats, minorThreats]) list.sort((a, b) => b.weight - a.weight)
+  for (const list of [strengths, weaknesses, opportunities, threats]) list.sort((a, b) => b.weight - a.weight)
 
   return (
     <div className="space-y-5">
@@ -93,16 +89,11 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
       ) : (
         <>
           <p className="text-center text-sm text-slate-500">{t("sorted")}</p>
-          {/* Two independent columns (what is good, what is bad), so a short quadrant never stretches to its neighbour's height. */}
-          <div className="grid items-start gap-4 md:grid-cols-2" data-testid="swot-quadrants">
-            <div className="space-y-4">
-              <Quadrant id="strengths" title={t("strengths")} icon={ThumbsUp} entries={strengths} delay={0} />
-              <Quadrant id="opportunities" title={t("opportunities")} icon={Lightbulb} entries={opportunities} delay={0.12} />
-            </div>
-            <div className="space-y-4">
-              <Quadrant id="weaknesses" title={t("weaknesses")} icon={ThumbsDown} entries={weaknesses} delay={0.06} />
-              <Quadrant id="threats" title={t("threats")} icon={ShieldAlert} entries={threats} folded={minorThreats} delay={0.18} />
-            </div>
+          <div className="grid gap-4 md:grid-cols-2" data-testid="swot-quadrants">
+            <Quadrant id="strengths" title={t("strengths")} icon={ThumbsUp} entries={strengths} delay={0} />
+            <Quadrant id="weaknesses" title={t("weaknesses")} icon={ThumbsDown} entries={weaknesses} delay={0.06} />
+            <Quadrant id="opportunities" title={t("opportunities")} icon={Lightbulb} entries={opportunities} delay={0.12} />
+            <Quadrant id="threats" title={t("threats")} icon={ShieldAlert} entries={threats} delay={0.18} />
           </div>
         </>
       )}
@@ -110,22 +101,21 @@ export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowI
   )
 }
 
-function Quadrant({ id, title, icon, entries, folded = [], delay }: { id: string; title: string; icon: LucideIcon; entries: Entry[]; folded?: Entry[]; delay: number }) {
+function Quadrant({ id, title, icon, entries, delay }: { id: string; title: string; icon: LucideIcon; entries: Entry[]; delay: number }) {
   const t = useTranslations("Views.swot")
+  const [open, setOpen] = useState(false)
+  const hidden = entries.length - PREVIEW
   return (
-    <Reveal delay={delay}>
-      <Panel data-quadrant={id} className="space-y-4">
+    <Reveal delay={delay} className="h-full">
+      <Panel data-quadrant={id} className="h-full space-y-4">
         <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
           <IconBadge icon={icon} accent="indigo" /> {title}
         </h3>
-        {entries.length > 0 ? <EntryList entries={entries} /> : null}
-        {folded.length > 0 ? (
-          <details className="text-sm">
-            <summary className="cursor-pointer text-slate-500 hover:text-slate-800">{t("minorThreats", { n: folded.length })}</summary>
-            <div className="mt-3">
-              <EntryList entries={folded} />
-            </div>
-          </details>
+        {entries.length > 0 ? <EntryList entries={open ? entries : entries.slice(0, PREVIEW)} /> : null}
+        {hidden > 0 ? (
+          <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+            {open ? t("showLess") : t("showAll", { n: entries.length })}
+          </button>
         ) : null}
       </Panel>
     </Reveal>

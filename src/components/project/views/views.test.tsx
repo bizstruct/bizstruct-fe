@@ -148,26 +148,32 @@ describe("SwotView", () => {
   it("sorts the final farm version into the four classic quadrants", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
     const quadrants = screen.getByTestId("swot-quadrants").querySelectorAll("[data-quadrant]")
-    expect([...quadrants].map((q) => q.getAttribute("data-quadrant"))).toEqual(["strengths", "opportunities", "weaknesses", "threats"]) // left column, then right
+    expect([...quadrants].map((q) => q.getAttribute("data-quadrant"))).toEqual(["strengths", "weaknesses", "opportunities", "threats"])
     const swot = farm.canvases[0].versions[1].swot!
     const axes = swot.clusters.flatMap((c) => c.axis_statements)
     const count = (id: string) => within(screen.getByTestId("swot-quadrants").querySelector(`[data-quadrant=${id}]`) as HTMLElement).queryAllByRole("listitem").length
-    expect(count("strengths")).toBe(axes.filter((a) => a.score > 0).length)
-    expect(count("weaknesses")).toBe(axes.filter((a) => a.score < 0).length)
-    expect(count("opportunities")).toBe(swot.clusters.reduce((n, c) => n + c.opportunities.length, 0))
+    expect(count("strengths")).toBe(Math.min(5, axes.filter((a) => a.score > 0).length))
+    expect(count("weaknesses")).toBe(Math.min(5, axes.filter((a) => a.score < 0).length))
+    expect(count("opportunities")).toBe(Math.min(5, swot.clusters.reduce((n, c) => n + c.opportunities.length, 0)))
   })
 
-  it("shows each axis once, on the side its score takes, and folds the minor threats away", () => {
+  it("shows each axis once, on the side its score takes", () => {
     renderIntl(<SwotView view={farm} {...flow} />)
     const axes = farm.canvases[0].versions[1].swot!.clusters.flatMap((c) => c.axis_statements)
-    const strong = axes.find((a) => a.score > 0)
-    if (strong) {
-      expect(screen.getByText(strong.positive_statement)).toBeInTheDocument()
-      expect(screen.queryByText(strong.negative_statement)).not.toBeInTheDocument()
-    }
-    const threats = farm.canvases[0].versions[1].swot!.clusters.flatMap((c) => c.threats)
-    const minor = threats.filter((t) => t.score < 3).length
-    if (minor > 0) expect(screen.getByText(`Other threats (${minor})`)).toBeInTheDocument()
+    const strong = axes.filter((a) => a.score > 0).sort((a, b) => b.importance - a.importance)[0]
+    expect(screen.getByText(strong.positive_statement)).toBeInTheDocument()
+    expect(screen.queryByText(strong.negative_statement)).not.toBeInTheDocument()
+  })
+
+  it("caps every quadrant at five entries and expands the threat list on request (21 in the catalog)", () => {
+    renderIntl(<SwotView view={farm} {...flow} />)
+    const threats = () => within(screen.getByTestId("swot-quadrants").querySelector("[data-quadrant=threats]") as HTMLElement)
+    expect(threats().getAllByRole("listitem")).toHaveLength(5)
+    fireEvent.click(threats().getByRole("button", { name: "Show all (21)" }))
+    expect(threats().getAllByRole("listitem")).toHaveLength(21)
+    fireEvent.click(threats().getByRole("button", { name: "Show less" }))
+    expect(threats().getAllByRole("listitem")).toHaveLength(5)
+    expect(screen.queryByText(/Other threats/)).not.toBeInTheDocument()
   })
 
   it("shows words instead of figures: no n/max lines, the exact numbers only in a tooltip", () => {

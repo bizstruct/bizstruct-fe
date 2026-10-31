@@ -264,7 +264,8 @@
       "sorted": "Most important first",
       "detail": "Importance {importance}/10, certainty {certainty}/10",
       "rating": "Rating {score}/5",
-      "minorThreats": "Other threats ({n})",
+      "showAll": "Show all ({n})",
+      "showLess": "Show less",
       "levels": {
         "high": "High",
         "medium": "Medium",

@@ -264,7 +264,8 @@
       "sorted": "Найважливіше зверху",
       "detail": "Важливість {importance}/10, певність {certainty}/10",
       "rating": "Оцінка {score}/5",
-      "minorThreats": "Інші загрози ({n})",
+      "showAll": "Показати всі ({n})",
+      "showLess": "Згорнути",
       "levels": {
         "high": "Висока",
         "medium": "Середня",
