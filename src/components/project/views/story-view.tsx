@@ -3,12 +3,11 @@
 import { BookOpen } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { humanize, IconBadge, NotReady, Panel, Section } from "../primitives"
+import { humanize, IconBadge, NotReady, Panel } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.story")
-  const tc = useTranslations("Views.canvas")
   const tp = useTranslations("Project")
   const flow = view.canvases[Math.min(flowIndex, view.canvases.length - 1)]
   const story = flow?.storytelling?.artifact
@@ -43,18 +42,6 @@ export function StoryView({ view, flowIndex, onFlow }: { view: ProjectView; flow
                 ))}
               </div>
             </div>
-          </Panel>
-          <Panel>
-            <Section title={t("references")}>
-              <ul className="divide-y divide-slate-200/70 text-sm">
-                {story.canvas_references.map((ref, i) => (
-                  <li key={i} className="grid gap-1 py-3 first:pt-0 last:pb-0 sm:grid-cols-[12rem_1fr] sm:gap-6">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600 sm:pt-0.5">{tc(`sections.${ref.section}`)}</span>
-                    <span className="leading-relaxed text-slate-700">{ref.note}</span>
-                  </li>
-                ))}
-              </ul>
-            </Section>
           </Panel>
         </div>
       )}

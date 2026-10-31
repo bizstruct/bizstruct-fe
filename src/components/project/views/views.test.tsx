@@ -211,13 +211,14 @@ describe("SwotView", () => {
 })
 
 describe("StoryView", () => {
-  it("shows the farm story with its goal, format and canvas references", () => {
+  it("shows the farm story with its goal and format, without the canvas references list", () => {
     renderIntl(<StoryView view={farm} {...flow} />)
     const panel = within(screen.getByTestId("story-panel"))
     expect(panel.getByText("pitching investors")).toBeInTheDocument()
     expect(panel.getByText("text and image")).toBeInTheDocument()
     expect(panel.getByText(/On Tuesday evening, after her children are asleep, Maya Chen/)).toBeInTheDocument()
-    expect(panel.getAllByRole("listitem")).toHaveLength(farm.canvases[0].storytelling!.artifact!.canvas_references.length)
+    expect(panel.queryByRole("listitem")).not.toBeInTheDocument()
+    expect(screen.queryByText("Canvas references")).not.toBeInTheDocument()
   })
 
   it("shows the music story", () => {
