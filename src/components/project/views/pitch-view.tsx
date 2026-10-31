@@ -49,19 +49,17 @@ export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flow
   )
 }
 
-/** A text section in a reading column, split into paragraphs where the text has blank lines. */
+/** A text section across the full panel width, split into paragraphs where the text has blank lines. */
 function Prose({ title, icon, text }: { title: string; icon: LucideIcon; text: string }) {
   return (
     <Panel className="px-5 py-5 sm:px-8 sm:py-6">
-      <div className="mx-auto max-w-[92ch]">
-        <Section title={title} icon={icon} accent="indigo">
-          <div className="space-y-3 text-base leading-7 text-slate-800">
-            {text.split(/\n{2,}/).map((paragraph, i) => (
-              <p key={i} className="whitespace-pre-line">{paragraph}</p>
-            ))}
-          </div>
-        </Section>
-      </div>
+      <Section title={title} icon={icon} accent="indigo">
+        <div className="space-y-3 text-base leading-7 text-slate-800">
+          {text.split(/\n{2,}/).map((paragraph, i) => (
+            <p key={i} className="whitespace-pre-line">{paragraph}</p>
+          ))}
+        </div>
+      </Section>
     </Panel>
   )
 }
