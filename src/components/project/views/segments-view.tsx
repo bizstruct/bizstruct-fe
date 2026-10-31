@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import type { ProjectView, SegmentView } from "@/lib/mappers/project"
 import { stateOf, type StageState } from "@/lib/mappers/tab-stages"
 import type { StageId } from "@/types/domain/stages"
-import { ACCENT, BLOCK, BulletList, Fact, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
+import { Fact, ItemList, humanize, IconBadge, NotReady, Panel, Reveal, Section, UnderlineTabs, type Accent } from "../primitives"
 
 type Part = "empathy" | "scenario" | "ideation"
 
@@ -120,7 +120,7 @@ function EmpathyPanel({ segment }: { segment: SegmentView }) {
         {quadrants.map(({ title, items, icon, accent }) => (
           <div key={title} className="rounded-2xl border border-slate-200/80 p-4">
             <Section title={title} icon={icon} accent={accent}>
-              <BulletList items={items} accent={accent} />
+              <ItemList variant="bullet" items={items} accent={accent} />
             </Section>
           </div>
         ))}
@@ -133,7 +133,7 @@ function Highlight({ title, items, icon, accent }: { title: string; items: reado
   return (
     <div className="rounded-2xl border border-slate-200/80 p-4">
       <Section title={title} icon={icon} accent={accent}>
-        <BulletList items={items} accent={accent} />
+        <ItemList variant="bullet" items={items} accent={accent} />
       </Section>
     </div>
   )
@@ -163,7 +163,7 @@ function ScenarioPanel({ segment }: { segment: SegmentView }) {
         ) : null}
       </dl>
       <Section title={t("questions")}>
-        <BulletList items={s.open_questions} accent="violet" />
+        <ItemList variant="bullet" items={s.open_questions} accent="violet" />
       </Section>
     </Panel>
   )
@@ -188,14 +188,7 @@ function IdeationPanel({ segment }: { segment: SegmentView }) {
         <p className="text-sm leading-relaxed text-slate-700">{i.epicenter.rationale}</p>
       </Section>
       <Section title={t("whatIf")}>
-        <ol className="grid gap-2.5 md:grid-cols-2">
-          {i.what_if_questions.map((q, n) => (
-            <li key={n} className={cn(BLOCK, "flex gap-3")}>
-              <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold", ACCENT.indigo.icon)}>{n + 1}</span>
-              <span>{q}</span>
-            </li>
-          ))}
-        </ol>
+        <ItemList numbered items={i.what_if_questions} className="md:grid-cols-2" />
       </Section>
     </Panel>
   )

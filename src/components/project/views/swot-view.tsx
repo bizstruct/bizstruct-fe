@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
 import { cn } from "@/lib/utils"
 import type { ErrcMove } from "@/types/domain/errc"
-import { BLOCK, humanize, IconBadge, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
+import { BLOCK, humanize, IconBadge, ItemList, NotReady, Panel, Reveal, UnderlineTabs } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
@@ -111,7 +111,7 @@ function Quadrant({ id, title, icon, entries, delay }: { id: string; title: stri
         <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
           <IconBadge icon={icon} accent="indigo" /> {title}
         </h3>
-        {entries.length > 0 ? <EntryList entries={open ? entries : entries.slice(0, PREVIEW)} /> : null}
+        <ItemList items={(open ? entries : entries.slice(0, PREVIEW)).map((e) => ({ text: e.text, tag: e.tag, meta: <LevelChip level={e.level} title={e.title} /> }))} />
         {hidden > 0 ? (
           <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
             {open ? t("showLess") : t("showAll", { n: entries.length })}
@@ -119,22 +119,6 @@ function Quadrant({ id, title, icon, entries, delay }: { id: string; title: stri
         ) : null}
       </Panel>
     </Reveal>
-  )
-}
-
-function EntryList({ entries }: { entries: Entry[] }) {
-  return (
-    <ul className="space-y-2.5">
-      {entries.map((entry, i) => (
-        <li key={i} className={cn(BLOCK, "space-y-1.5")}>
-          <div className="flex items-center justify-between gap-3">
-            <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">{entry.tag}</span>
-            <LevelChip level={entry.level} title={entry.title} />
-          </div>
-          <p>{entry.text}</p>
-        </li>
-      ))}
-    </ul>
   )
 }
 

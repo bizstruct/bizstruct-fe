@@ -3,7 +3,7 @@
 import { Coins, FileText, Rocket, ShieldAlert, Trophy, Users, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ProjectView } from "@/lib/mappers/project"
-import { BlockList, NotReady, Panel, Section } from "../primitives"
+import { ItemList, NotReady, Panel, Section } from "../primitives"
 import { CanvasPicker } from "./canvas-view"
 
 export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
@@ -31,12 +31,12 @@ export function PitchView({ view, flowIndex, onFlow }: { view: ProjectView; flow
           <div className="grid gap-4 lg:grid-cols-2">
             <Panel>
               <Section title={t("advantages")} icon={Trophy} accent="indigo">
-                <BlockList items={pitch.competitive_advantages} />
+                <ItemList items={pitch.competitive_advantages} />
               </Section>
             </Panel>
             <Panel>
               <Section title={t("risks")} icon={ShieldAlert} accent="indigo">
-                <BlockList items={pitch.risk_analysis} />
+                <ItemList items={pitch.risk_analysis} />
               </Section>
             </Panel>
           </div>

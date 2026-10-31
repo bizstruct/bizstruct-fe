@@ -4,7 +4,7 @@ import { Activity, Boxes, Coins, Gem, Handshake, Heart, Truck, Users, Wallet, ty
 import { useTranslations } from "next-intl"
 import type { CanvasFlow, ProjectView } from "@/lib/mappers/project"
 import type { CanvasCard, CanvasSections } from "@/types/domain/canvas"
-import { BLOCK, NotReady, Section, UnderlineTabs, type Accent } from "../primitives"
+import { ItemList, NotReady, Section, UnderlineTabs, type Accent } from "../primitives"
 
 const PLACE: Record<keyof CanvasSections, { icon: LucideIcon; accent: Accent }> = {
   key_partnerships: { icon: Handshake, accent: "slate" },
@@ -71,13 +71,7 @@ function CanvasGrid({ canvas }: { canvas: CanvasSections }) {
       <div key={section} data-section={section} className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/40">
         <Section title={t(`sections.${section}`)} icon={icon} accent={accent}>
           {cards.length === 0 ? <p className="text-xs text-slate-400">{t("empty")}</p> : null}
-          <ul className="space-y-2">
-            {cards.map((card) => (
-              <li key={card.id} data-card={card.id} className={BLOCK}>
-                <p>{card.text}</p>
-              </li>
-            ))}
-          </ul>
+          <ItemList items={cards.map((card) => ({ text: card.text, id: card.id }))} />
         </Section>
       </div>
     )
