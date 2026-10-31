@@ -158,6 +158,7 @@ function MoveCard({ move }: { move: ErrcMove }) {
   const t = useTranslations("Views.swot")
   const tc = useTranslations("Views.canvas")
   const Icon = ACTION[move.action]
+  const focus = move.new_text ?? move.target_card_text
   return (
     <li data-move={move.action} className="space-y-3 rounded-2xl border border-slate-200/80 bg-white p-4 text-sm leading-relaxed shadow-sm shadow-slate-200/40">
       <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider">
@@ -166,8 +167,9 @@ function MoveCard({ move }: { move: ErrcMove }) {
         <span aria-hidden className="text-slate-300">·</span>
         <span className="text-slate-500">{tc(`sections.${move.target_section}`)}</span>
       </div>
-      {move.target_card_text ? <p className={cn("text-slate-500", move.action === "eliminate" && "line-through")}>{move.target_card_text}</p> : null}
-      {move.new_text ? <p className="font-medium text-slate-900">{move.new_text}</p> : null}
+      {move.new_text && move.target_card_text ? <p className="text-slate-500">{move.target_card_text}</p> : null}
+      {/* The filled block is what the move is about: the new text, or for an elimination the card that goes away. */}
+      {focus ? <p data-focus className={cn("rounded-lg bg-indigo-50 p-3 font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")}>{focus}</p> : null}
       <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
       <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
     </li>

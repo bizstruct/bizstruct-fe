@@ -199,6 +199,7 @@ describe("SwotView", () => {
     const list = screen.getByTestId("errc-moves")
     expect(list.querySelectorAll("[data-move]")).toHaveLength(moves.length)
     expect(within(list).getByText(moves[0].rationale, { exact: false })).toBeInTheDocument()
+    expect(list.querySelectorAll("[data-focus]")).toHaveLength(moves.length) // one filled block per move, no other fills
     expect(screen.queryByTestId("swot-quadrants")).not.toBeInTheDocument()
   })
 
