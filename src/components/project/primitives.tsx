@@ -55,12 +55,8 @@ export function Section({ title, icon, accent, children, className }: { title?: 
   )
 }
 
-/**
- * The look of a sticker: a light lavender block (translucent, so it works on any card background and in both themes).
- * Every sticker has the same minimum height, enough for about 320 characters in the narrowest column (three across),
- * so a short text sits centred in the same box as a long one. It is a minimum, so a longer text is never cut off.
- */
-const STICKER = "min-h-44 rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800"
+/** The look of a sticker: a light lavender block (translucent, so it works on any card background and in both themes). */
+const STICKER = "rounded-xl bg-indigo-500/[0.08] px-4 py-3 text-sm leading-snug text-slate-800"
 
 export interface StickerData {
   text: string
