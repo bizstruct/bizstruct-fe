@@ -1,19 +1,16 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { useLocale, useTranslations } from "next-intl"
-import { Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useTranslations } from "next-intl"
+import { Loader2 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { notifyProjectsChanged } from "@/hooks/use-projects"
 import { useProject } from "@/hooks/use-project"
-import { deleteProject } from "@/lib/api/projects"
 import { buildProjectView } from "@/lib/mappers/project"
-import { Link, useRouter } from "@/i18n/routing"
-import { NotReady } from "./primitives"
-import { ProgressView } from "./progress-view"
-import { ProjectStatusChip } from "./status-chip"
+import { TAB_IDS, stageProgress, stagesOfTab, stateOf, type TabId } from "@/lib/mappers/tab-stages"
+import { NotReady, Reveal } from "./primitives"
+import { StageStatusPanel } from "./stage-status"
+import { StateIcon } from "./state-icon"
+import { TabActions } from "./tab-actions"
 import { BriefView } from "./views/brief-view"
 import { CanvasView } from "./views/canvas-view"
 import { FutureView } from "./views/future-view"
@@ -25,9 +22,10 @@ import { SwotView } from "./views/swot-view"
 
 export function ProjectScreen({ id }: { id: string }) {
   const t = useTranslations("Project")
-  const { project, error, loading, polling, refresh, replace } = useProject(id)
+  const { project, error, loading, refresh, replace } = useProject(id)
   const view = useMemo(() => (project ? buildProjectView(project) : null), [project])
   const [flowIndex, setFlowIndex] = useState(0)
+  const [tab, setTab] = useState<TabId>("brief")
 
   if (loading && !project) return <p className="p-8 text-sm text-slate-500">{t("loading")}</p>
   if (!project || !view) {
@@ -35,86 +33,96 @@ export function ProjectScreen({ id }: { id: string }) {
   }
 
   const flow = { flowIndex, onFlow: setFlowIndex }
+  const hasCanvas = view.canvases.length > 0
+  const content: Record<TabId, { ready: boolean; node: React.ReactNode }> = {
+    brief: { ready: true, node: <BriefView view={view} /> },
+    segments: { ready: true, node: <SegmentsView view={view} /> },
+    patterns: { ready: true, node: <PatternsView view={view} /> },
+    canvas: { ready: hasCanvas, node: <CanvasView view={view} {...flow} /> },
+    swot: { ready: hasCanvas, node: <SwotView view={view} {...flow} /> },
+    story: { ready: hasCanvas, node: <StoryView view={view} {...flow} /> },
+    future: { ready: hasCanvas, node: <FutureView view={view} {...flow} /> },
+    pitch: { ready: hasCanvas, node: <PitchView view={view} {...flow} /> },
+  }
+
+  const { done, total } = stageProgress(project.rows, project.enabledOptional)
+  const percent = total === 0 ? 0 : Math.round((done / total) * 100)
+  const failed = project.status === "failed"
+  // One regeneration at a time: nothing is offered while any row is still being generated.
+  const generating = project.rows.some((r) => r.status === "pending" || r.status === "running" || r.status === "consistency_check")
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 px-6 py-8">
-      <Header project={project} polling={polling} />
-      {error ? <p role="alert" className="text-xs text-amber-700">{t("loadError")}</p> : null}
+    <div className="flex h-full min-h-0 flex-col">
+      <Tabs value={tab} onValueChange={(value) => setTab(value as TabId)} className="h-full min-h-0 gap-0">
+        {/*
+          The bar sits above the scrolling area instead of floating over it, so the content is cut off at the same
+          gap that separates them at rest: nothing ever slides behind or past the bar. The tabs say where each stage
+          stands; the line along the bottom edge says how far the whole project is.
+        */}
+        <div className="shrink-0 px-4 pb-5 pt-3 sm:px-6">
+          <div className="relative mx-auto flex max-w-6xl items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-black/10">
+            <TabsList className="group-data-horizontal/tabs:h-auto grid min-w-0 flex-1 grid-flow-col auto-cols-fr gap-0 overflow-x-auto rounded-none bg-transparent p-0">
+              {TAB_IDS.map((id) => (
+                <div key={id} className="group/cell relative flex">
+                  <TabsTrigger
+                    value={id}
+                    className="h-12 min-w-28 flex-1 justify-start gap-2.5 rounded-none border-transparent px-4 text-sm font-medium text-slate-500 after:hidden hover:text-slate-900 data-active:bg-indigo-500/10 data-active:text-indigo-900 data-active:shadow-none dark:data-active:border-transparent dark:data-active:bg-indigo-400/[0.22]"
+                  >
+                    <StateIcon
+                      state={stateOf(project.rows, stagesOfTab(id, project.enabledOptional))}
+                      className={id === tab ? "transition-opacity group-has-[[data-regen]:hover]/cell:opacity-0 group-has-[[data-regen]:focus-visible]/cell:opacity-0" : undefined}
+                    />
+                    {t(`tabs.${id}`)}
+                  </TabsTrigger>
+                  {id === tab ? (
+                    <TabActions project={project} stages={stagesOfTab(id, project.enabledOptional)} available={!generating} onProject={replace} onRefresh={() => void refresh()} />
+                  ) : null}
+                </div>
+              ))}
+            </TabsList>
+            <div
+              role="progressbar"
+              aria-label={t("progress", { done, total })}
+              aria-valuemin={0}
+              aria-valuemax={total}
+              aria-valuenow={done}
+              className="absolute inset-x-0 bottom-0 h-0.5 bg-slate-200/70"
+            >
+              <div
+                style={{ width: `${percent}%` }}
+                className={`h-full transition-[width] duration-700 ease-out ${failed ? "bg-red-500" : done === total ? "bg-emerald-500" : "bg-indigo-500"}`}
+              />
+            </div>
+          </div>
+          {error ? <p role="alert" className="mx-auto mt-3 max-w-6xl text-xs text-amber-700">{t("loadError")}</p> : null}
+        </div>
 
-      <Tabs defaultValue="progress">
-        <TabsList className="h-auto flex-wrap justify-start">
-          {(["progress", "brief", "segments", "patterns", "canvas", "swot", "story", "future", "pitch"] as const).map((tab) => (
-            <TabsTrigger key={tab} value={tab}>{t(`tabs.${tab}`)}</TabsTrigger>
-          ))}
-        </TabsList>
-        <div className="pt-4">
-          <TabsContent value="progress"><ProgressView project={project} onProject={replace} onRefresh={() => void refresh()} /></TabsContent>
-          <TabsContent value="brief"><BriefView view={view} /></TabsContent>
-          <TabsContent value="segments"><SegmentsView view={view} /></TabsContent>
-          <TabsContent value="patterns"><PatternsView view={view} /></TabsContent>
-          <TabsContent value="canvas">{view.canvases.length ? <CanvasView view={view} {...flow} /> : <NotReady message={t("notReady")} />}</TabsContent>
-          <TabsContent value="swot">{view.canvases.length ? <SwotView view={view} {...flow} /> : <NotReady message={t("notReady")} />}</TabsContent>
-          <TabsContent value="story">{view.canvases.length ? <StoryView view={view} {...flow} /> : <NotReady message={t("notReady")} />}</TabsContent>
-          <TabsContent value="future">{view.canvases.length ? <FutureView view={view} {...flow} /> : <NotReady message={t("notReady")} />}</TabsContent>
-          <TabsContent value="pitch">{view.canvases.length ? <PitchView view={view} {...flow} /> : <NotReady message={t("notReady")} />}</TabsContent>
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 sm:px-6">
+          <div className="mx-auto max-w-6xl pb-10">
+            {TAB_IDS.map((tab) => {
+              const stages = stagesOfTab(tab, project.enabledOptional)
+              const state = stateOf(project.rows, stages)
+              return (
+                <TabsContent key={tab} value={tab} className="space-y-5">
+                  <Reveal><StageStatusPanel project={project} stages={stages} onProject={replace} onRefresh={() => void refresh()} /></Reveal>
+                  <Reveal delay={0.08}>{content[tab].ready ? content[tab].node : <Pending running={state === "running"} />}</Reveal>
+                </TabsContent>
+              )
+            })}
+          </div>
         </div>
       </Tabs>
     </div>
   )
 }
 
-function Header({ project, polling }: { project: NonNullable<ReturnType<typeof useProject>["project"]>; polling: boolean }) {
+/** What a tab shows in place of its content while the stage behind it has produced nothing yet. */
+function Pending({ running }: { running: boolean }) {
   const t = useTranslations("Project")
-  const ta = useTranslations("Actions")
-  const td = useTranslations("Delete")
-  const locale = useLocale()
-  const router = useRouter()
-  const [confirming, setConfirming] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [failed, setFailed] = useState(false)
-
-  async function remove() {
-    setBusy(true)
-    const result = await deleteProject(project.id)
-    setBusy(false)
-    if (result.ok) {
-      notifyProjectsChanged()
-      router.replace("/")
-    } else setFailed(true)
-  }
-
+  if (!running) return <NotReady message={t("waitingFor")} />
   return (
-    <header className="space-y-3">
-      <Link href="/" className="text-xs text-slate-500 hover:text-slate-800">← {t("back")}</Link>
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0 space-y-1">
-          <h1 className="truncate text-2xl font-semibold tracking-tight text-slate-900">{project.title}</h1>
-          <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-            <ProjectStatusChip status={project.status} />
-            <span>{t("language")}: {project.language.toUpperCase()}</span>
-            <span>{new Date(project.createdAt).toLocaleString(locale)}</span>
-            <span aria-live="polite">{polling ? t("live") : t("stopped")}</span>
-          </div>
-        </div>
-        <Button variant="destructive" size="sm" onClick={() => setConfirming(true)}>
-          <Trash2 /> {ta("delete")}
-        </Button>
-      </div>
-      <p className="max-w-3xl text-sm text-slate-600">{project.idea}</p>
-
-      <Dialog open={confirming} onOpenChange={setConfirming}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{td("title")}</DialogTitle>
-            <DialogDescription>{td("body")}</DialogDescription>
-          </DialogHeader>
-          {failed ? <p role="alert" className="text-sm text-red-700">{ta("failed")}</p> : null}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirming(false)}>{ta("cancel")}</Button>
-            <Button variant="destructive" disabled={busy} onClick={() => void remove()}>{busy ? ta("working") : td("confirm")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </header>
+    <p role="status" className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-sky-200 bg-sky-50/50 p-6 text-sm text-sky-800">
+      <Loader2 className="size-4 animate-spin" /> {t("generating")}
+    </p>
   )
 }

@@ -13,11 +13,14 @@
     "history": "Your projects",
     "empty": "No projects yet",
     "signOut": "Sign out",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme",
+    "group_today": "Today",
+    "group_week": "Last 7 days",
+    "group_earlier": "Earlier"
   },
   "Auth": {
-    "loginTitle": "Sign in",
-    "registerTitle": "Create an account",
     "email": "Email",
     "password": "Password",
     "fullName": "Name (optional)",
@@ -25,26 +28,23 @@
     "signUp": "Create account",
     "noAccount": "No account yet?",
     "haveAccount": "Already have an account?",
-    "passwordHint": "At least 8 characters",
     "errors": {
       "invalid": "Wrong email or password",
       "exists": "An account with this email already exists",
       "generic": "Something went wrong. Try again.",
       "unreachable": "The server is unreachable",
       "validation": "Check the email and the password (8+ characters)"
-    }
+    },
+    "loginLead": "Welcome",
+    "loginAccent": "back",
+    "registerLead": "Create your",
+    "registerAccent": "account"
   },
   "Home": {
-    "title": "Structure your next business idea",
-    "subtitle": "Describe the idea. The pipeline builds the brief, the segments, the business model canvas, the SWOT/ERRC cycle and the pitch.",
+    "title": "Structure your business idea",
     "ideaLabel": "Your idea",
-    "ideaPlaceholder": "An app that delivers boxes of fresh produce from local farms to busy city parents…",
-    "counter": "{count} / {max} characters (at least {min})",
-    "language": "Generation language",
-    "languageUk": "Ukrainian",
-    "languageEn": "English",
-    "optional": "Optional stages",
-    "advanced": "Advanced",
+    "ideaPlaceholder": "Describe your idea in a few sentences, for example: an app that delivers boxes of fresh produce from local farms to busy city parents…",
+    "counter": "{count} / {max}",
     "autoApprove": "Approve automatically",
     "autoApproveHint": "Rows with consistency errors continue without waiting for you",
     "submit": "Start generation",
@@ -54,10 +54,9 @@
       "tooLong": "The idea must be at most {max} characters",
       "generic": "Could not start the generation"
     },
-    "projectsTitle": "Your projects",
-    "noProjects": "No projects yet. Start with an idea above.",
-    "loadError": "Could not load the projects",
-    "created": "Created"
+    "titleLead": "Structure your",
+    "titleAccent": "business idea",
+    "options": "Options"
   },
   "Status": {
     "project": {
@@ -73,6 +72,13 @@
       "needs_retry": "Needs retry",
       "done": "Done",
       "error": "Error"
+    },
+    "state": {
+      "done": "Done",
+      "running": "Running",
+      "attention": "Needs attention",
+      "error": "Error",
+      "waiting": "Waiting"
     }
   },
   "Stages": {
@@ -99,7 +105,6 @@
   },
   "Project": {
     "tabs": {
-      "progress": "Progress",
       "brief": "Brief",
       "segments": "Segments",
       "patterns": "Patterns",
@@ -116,7 +121,10 @@
     "stopped": "Generation finished",
     "back": "All projects",
     "notReady": "This part is not generated yet",
-    "language": "Language"
+    "language": "Language",
+    "progress": "{done} of {total} stages done",
+    "generating": "Generating this part…",
+    "waitingFor": "Waiting for the earlier stages"
   },
   "Progress": {
     "title": "Pipeline",
@@ -165,8 +173,7 @@
       "segments": "Customer segment candidates",
       "resources": "Existing resources",
       "gaps": "Gaps",
-      "monetization": "Monetization hint",
-      "none": "none"
+      "monetization": "Monetization hint"
     },
     "empathy": {
       "segment": "Segment",
@@ -177,7 +184,9 @@
       "thinksAndFeels": "Thinks and feels",
       "saysAndDoes": "Says and does",
       "pains": "Pains",
-      "gains": "Gains"
+      "gains": "Gains",
+      "tab": "Empathy map",
+      "part": "Part of the segment"
     },
     "scenario": {
       "title": "Customer scenario",
@@ -212,17 +221,6 @@
       "rationale": "Rationale"
     },
     "canvas": {
-      "version": "Version",
-      "final": "FINAL",
-      "previous": "Previous version chain",
-      "derivedFrom": "from version {n}",
-      "markers": {
-        "eliminate": "Eliminated",
-        "reduce": "Reduce",
-        "raise": "Raise",
-        "create": "Create"
-      },
-      "legend": "ERRC markers show what the cycle changed to produce this version",
       "sections": {
         "customer_segments": "Customer segments",
         "value_propositions": "Value propositions",
@@ -246,37 +244,45 @@
         "infrastructure": "Infrastructure",
         "customer_interface": "Customer interface"
       },
-      "axis": "Strengths and weaknesses",
-      "positive": "Strength",
-      "negative": "Weakness",
-      "importance": "Importance",
-      "certainty": "Certainty",
-      "score": "Score",
       "opportunities": "Opportunities",
       "threats": "Threats",
-      "catalog": "Threat catalog",
       "moves": "ERRC moves to the next version",
-      "movesFrom": "Moves from version {from} to {to}",
       "action": "Action",
       "section": "Section",
-      "target": "Card",
-      "newText": "New text",
-      "impact": "Opposite-side impact",
       "rationale": "Rationale",
-      "noMoves": "This is the last version: no moves follow it",
+      "part": "SWOT or ERRC",
+      "errcIntro": "The moves that turned the earlier canvas into this one",
+      "impact": "Effect on the opposite side",
+      "actions": {
+        "eliminate": "Eliminate",
+        "reduce": "Reduce",
+        "raise": "Raise",
+        "create": "Create"
+      },
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "sorted": "Most important first",
+      "detail": "Importance {importance}/10, certainty {certainty}/10",
+      "rating": "Rating {score}/5",
+      "showAll": "Show all ({n})",
+      "showLess": "Show less",
+      "levels": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
       "noSwot": "No SWOT for this version"
     },
     "story": {
       "goal": "Goal",
       "format": "Format",
       "perspective": "Perspective",
-      "references": "Canvas references",
       "narrative": "Story"
     },
     "future": {
-      "drivers": "Uncertainty drivers",
       "variants": "Scenarios",
-      "questions": "Adaptation questions"
+      "questions": "Adaptation questions",
+      "intro": "{n, plural, one {# possible future} other {# possible futures}}"
     },
     "pitch": {
       "hook": "Hook",
@@ -287,5 +293,25 @@
       "financial": "Financial analysis",
       "pitchN": "Pitch for canvas {n}"
     }
+  },
+  "ProjectMenu": {
+    "options": "Project options",
+    "rename": "Rename",
+    "details": "Details",
+    "delete": "Delete",
+    "renameTitle": "Rename the project",
+    "renameLabel": "Title",
+    "save": "Save",
+    "detailsTitle": "Project details",
+    "idea": "Idea",
+    "language": "Language",
+    "created": "Created",
+    "status": "Status",
+    "optional": "Optional stages",
+    "autoApprove": "Approves automatically",
+    "yes": "yes",
+    "no": "no",
+    "none": "none",
+    "close": "Close"
   }
 }

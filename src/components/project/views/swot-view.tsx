@@ -1,102 +1,161 @@
 "use client"
 
 import { useState } from "react"
+import { ArrowDown, ArrowUp, Lightbulb, Plus, ShieldAlert, ThumbsDown, ThumbsUp, X, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { Badge } from "@/components/ui/badge"
 import type { ProjectView } from "@/lib/mappers/project"
-import { humanize, NotReady, Panel, Section } from "../primitives"
-import { CanvasPicker, VersionSelector } from "./canvas-view"
+import { cn } from "@/lib/utils"
+import type { ErrcMove } from "@/types/domain/errc"
+import { humanize, IconBadge, NotReady, Panel, Reveal, Sticker, StickerList, UnderlineTabs } from "../primitives"
+import { CanvasPicker } from "./canvas-view"
+
+const ACTION: Record<ErrcMove["action"], LucideIcon> = { eliminate: X, reduce: ArrowDown, raise: ArrowUp, create: Plus }
+
+type Part = "swot" | "errc"
+type Level = "high" | "medium" | "low"
+
+/** One entry of a quadrant; `weight` only orders the entries, the reader sees the level. */
+interface Entry {
+  text: string
+  tag: string
+  level: Level
+  weight: number
+  title: string
+}
+
+/** A rating becomes a word: the top fifth is high, up to the middle is low (1-10: 8+ high, 5-7 medium; 1-5: 4+ high, 3 medium). */
+const levelOf = (value: number, max: number): Level => (value / max >= 0.8 ? "high" : value / max > 0.4 ? "medium" : "low")
+
+/** A quadrant shows this many entries until the reader asks for all of them, so the four blocks stay about equal. */
+const PREVIEW = 5
 
 export function SwotView({ view, flowIndex, onFlow }: { view: ProjectView; flowIndex: number; onFlow: (i: number) => void }) {
   const t = useTranslations("Views.swot")
-  const tc = useTranslations("Views.canvas")
   const tp = useTranslations("Project")
+  const [part, setPart] = useState<Part>("swot")
   const flow = view.canvases[Math.min(flowIndex, view.canvases.length - 1)]
-  const [selected, setSelected] = useState<number | null>(null)
   const withSwot = flow?.versions.filter((v) => v.swot) ?? []
   if (!flow || withSwot.length === 0) return <NotReady message={tp("notReady")} />
 
-  const defaultVersion = flow.finalVersion ?? withSwot[withSwot.length - 1].version
-  const current = withSwot.find((v) => v.version === (selected ?? defaultVersion)) ?? withSwot[withSwot.length - 1]
+  // Only the final version is shown (else the latest); the loop's earlier steps are not part of the client view.
+  const current = withSwot.find((v) => v.version === flow.finalVersion) ?? withSwot[withSwot.length - 1]
   const swot = current.swot!
+  // The ERRC moves that produced the shown version; version 1 has none, so then there is only SWOT.
+  const errc = current.errcIn
+  const active: Part = errc ? part : "swot"
+
+  // The clusters are flattened into the four classic quadrants. Each axis lands on the side its score takes
+  // (the other pole is its opposite wording and is dropped); importance and certainty become a word and a tooltip.
+  const strengths: Entry[] = []
+  const weaknesses: Entry[] = []
+  const opportunities: Entry[] = []
+  const threats: Entry[] = []
+  for (const cluster of swot.clusters) {
+    const tag = t(`clusters.${cluster.cluster}`)
+    for (const a of cluster.axis_statements) {
+      const entry = {
+        text: a.score > 0 ? a.positive_statement : a.negative_statement,
+        tag,
+        level: levelOf(a.importance, 10),
+        weight: a.importance + Math.abs(a.score) / 10,
+        title: t("detail", { importance: a.importance, certainty: a.certainty }),
+      }
+      ;(a.score > 0 ? strengths : weaknesses).push(entry)
+    }
+    for (const o of cluster.opportunities) opportunities.push({ text: o.text, tag, level: levelOf(o.score, 5), weight: o.score, title: t("rating", { score: o.score }) })
+    for (const th of cluster.threats) threats.push({ text: th.text, tag: humanize(th.question), level: levelOf(th.score, 5), weight: th.score, title: t("rating", { score: th.score }) })
+  }
+  for (const list of [strengths, weaknesses, opportunities, threats]) list.sort((a, b) => b.weight - a.weight)
 
   return (
-    <div className="space-y-4">
-      <CanvasPicker flows={view.canvases} value={flowIndex} onChange={(i) => { onFlow(i); setSelected(null) }} />
-      <VersionSelector versions={withSwot} value={current.version} onChange={setSelected} />
+    <div className="space-y-5">
+      <CanvasPicker flows={view.canvases} value={flowIndex} onChange={onFlow} />
 
-      <div className="grid gap-4 lg:grid-cols-2" data-testid="swot-clusters">
-        {swot.clusters.map((cluster) => (
-          <Panel key={cluster.cluster} data-cluster={cluster.cluster} className="space-y-4">
-            <h3 className="text-base font-semibold text-slate-900">{t(`clusters.${cluster.cluster}`)}</h3>
+      {errc ? (
+        <div className="border-b border-slate-200">
+          <UnderlineTabs className="justify-center" label={t("part")} value={active} onChange={setPart} items={[{ id: "swot", label: "SWOT" }, { id: "errc", label: "ERRC" }]} />
+        </div>
+      ) : null}
 
-            <Section title={t("axis")}>
-              <ul className="space-y-2">
-                {cluster.axis_statements.map((axis, i) => (
-                  <li key={i} className="rounded-lg border border-slate-200 p-2 text-sm">
-                    <p><span className="font-medium text-emerald-700">{t("positive")}: </span>{axis.positive_statement}</p>
-                    <p className="mt-1"><span className="font-medium text-red-700">{t("negative")}: </span>{axis.negative_statement}</p>
-                    <div className="mt-1.5 flex flex-wrap gap-1.5 text-xs">
-                      <Badge>{t("score")} {axis.score}</Badge>
-                      <Badge>{t("importance")} {axis.importance}</Badge>
-                      <Badge>{t("certainty")} {axis.certainty}</Badge>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-
-            <Section title={t("opportunities")}>
-              <ul className="space-y-1.5">
-                {cluster.opportunities.map((o, i) => (
-                  <li key={i} className="flex items-start justify-between gap-2 text-sm text-slate-700">
-                    <span>{o.text}</span>
-                    <Badge tone="success">{o.score}</Badge>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-
-            <Section title={t("catalog")}>
-              <ul className="space-y-1.5" data-testid="threat-catalog">
-                {cluster.threats.map((threat) => (
-                  <li key={threat.question} className="text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-xs font-medium uppercase tracking-wide text-slate-400">{humanize(threat.question)}</span>
-                      <Badge tone="warning">{threat.score}</Badge>
-                    </div>
-                    <p className="text-slate-700">{threat.text}</p>
-                  </li>
-                ))}
-              </ul>
-            </Section>
-          </Panel>
-        ))}
-      </div>
-
-      <Panel className="space-y-3" data-testid="errc-moves">
-        {current.errcOut ? (
-          <>
-            <h3 className="text-base font-semibold text-slate-900">{t("movesFrom", { from: current.errcOut.from_version, to: current.errcOut.to_version })}</h3>
-            <ul className="space-y-2">
-              {current.errcOut.moves.map((move, i) => (
-                <li key={i} className="rounded-lg border border-slate-200 p-3 text-sm" data-action={move.action}>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone="accent">{tc(`markers.${move.action}`)}</Badge>
-                    <span className="text-xs text-slate-500">{tc(`sections.${move.target_section}`)}</span>
-                  </div>
-                  {move.target_card_text ? <p className="mt-1.5 text-slate-600"><span className="font-medium">{t("target")}: </span>{move.target_card_text}</p> : null}
-                  {move.new_text ? <p className="mt-1 text-slate-800"><span className="font-medium">{t("newText")}: </span>{move.new_text}</p> : null}
-                  <p className="mt-1 text-slate-600"><span className="font-medium">{t("impact")}: </span>{move.opposite_side_impact}</p>
-                  <p className="mt-1 text-slate-600"><span className="font-medium">{t("rationale")}: </span>{move.rationale}</p>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p className="text-sm text-slate-400">{t("noMoves")}</p>
-        )}
-      </Panel>
+      {active === "errc" && errc ? (
+        <Reveal key="errc" className="space-y-4">
+          <p className="text-center text-sm text-slate-500">{t("errcIntro")}</p>
+          <ul className="grid gap-4 lg:grid-cols-2" data-testid="errc-moves">
+            {errc.moves.map((move, i) => (
+              <MoveCard key={i} move={move} />
+            ))}
+          </ul>
+        </Reveal>
+      ) : (
+        <>
+          <p className="text-center text-sm text-slate-500">{t("sorted")}</p>
+          <div className="grid gap-4 md:grid-cols-2" data-testid="swot-quadrants">
+            <Quadrant id="strengths" title={t("strengths")} icon={ThumbsUp} entries={strengths} delay={0} />
+            <Quadrant id="weaknesses" title={t("weaknesses")} icon={ThumbsDown} entries={weaknesses} delay={0.06} />
+            <Quadrant id="opportunities" title={t("opportunities")} icon={Lightbulb} entries={opportunities} delay={0.12} />
+            <Quadrant id="threats" title={t("threats")} icon={ShieldAlert} entries={threats} delay={0.18} />
+          </div>
+        </>
+      )}
     </div>
+  )
+}
+
+function Quadrant({ id, title, icon, entries, delay }: { id: string; title: string; icon: LucideIcon; entries: Entry[]; delay: number }) {
+  const t = useTranslations("Views.swot")
+  const [open, setOpen] = useState(false)
+  const hidden = entries.length - PREVIEW
+  return (
+    <Reveal delay={delay} className="h-full">
+      <Panel data-quadrant={id} className="flex h-full flex-col gap-4">
+        <h3 className="flex items-center gap-3 text-lg font-bold text-slate-900">
+          <IconBadge icon={icon} accent="indigo" /> {title}
+        </h3>
+        <StickerList items={(open ? entries : entries.slice(0, PREVIEW)).map((e) => ({ text: e.text, tag: e.tag, meta: <LevelChip level={e.level} title={e.title} /> }))} />
+        {hidden > 0 ? (
+          <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="mt-auto self-start text-sm font-medium text-indigo-600 hover:text-indigo-500">
+            {open ? t("showLess") : t("showAll", { n: entries.length })}
+          </button>
+        ) : null}
+      </Panel>
+    </Reveal>
+  )
+}
+
+/** Three dots and a word; the exact figures sit in the tooltip for whoever wants them. */
+function LevelChip({ level, title }: { level: Level; title: string }) {
+  const t = useTranslations("Views.swot")
+  const filled = { high: 3, medium: 2, low: 1 }[level]
+  return (
+    <span title={title} className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-slate-600">
+      <span aria-hidden className="flex gap-0.5">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className={cn("size-1.5 rounded-full", i < filled ? "bg-indigo-400" : "bg-slate-300/70")} />
+        ))}
+      </span>
+      {t(`levels.${level}`)}
+    </span>
+  )
+}
+
+function MoveCard({ move }: { move: ErrcMove }) {
+  const t = useTranslations("Views.swot")
+  const tc = useTranslations("Views.canvas")
+  const Icon = ACTION[move.action]
+  const focus = move.new_text ?? move.target_card_text
+  return (
+    <li data-move={move.action} className="space-y-3 rounded-2xl border border-slate-200/80 bg-white p-4 text-sm leading-relaxed shadow-sm shadow-slate-200/40">
+      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+        <IconBadge icon={Icon} accent="indigo" className="size-6 shrink-0 rounded-lg" />
+        <span className="text-indigo-600">{t(`actions.${move.action}`)}</span>
+        <span aria-hidden className="text-slate-300">·</span>
+        <span className="text-slate-500">{tc(`sections.${move.target_section}`)}</span>
+      </div>
+      {move.new_text && move.target_card_text ? <p className="text-slate-500">{move.target_card_text}</p> : null}
+      {/* The filled block is what the move is about: the new text, or for an elimination the card that goes away. */}
+      {focus ? <Sticker data-focus text={focus} className={cn("font-medium", move.new_text ? "text-slate-900" : "text-slate-500 line-through")} /> : null}
+      <p className="text-slate-700"><span className="font-semibold text-slate-900">{t("rationale")}: </span>{move.rationale}</p>
+      <p className="text-slate-500"><span className="font-semibold text-slate-600">{t("impact")}: </span>{move.opposite_side_impact}</p>
+    </li>
   )
 }

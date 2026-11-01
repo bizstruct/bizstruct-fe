@@ -10,6 +10,7 @@ const ALLOWED: { method: string; pattern: RegExp }[] = [
   { method: "POST", pattern: /^\/api\/generation$/ },
   { method: "GET", pattern: /^\/api\/projects$/ },
   { method: "GET", pattern: /^\/api\/projects\/[0-9a-f-]{36}$/i },
+  { method: "PATCH", pattern: /^\/api\/projects\/[0-9a-f-]{36}$/i },
   { method: "DELETE", pattern: /^\/api\/projects\/[0-9a-f-]{36}$/i },
   { method: "POST", pattern: /^\/api\/projects\/[0-9a-f-]{36}\/rows\/[0-9a-f-]{36}\/(approve|regenerate)$/i },
 ]

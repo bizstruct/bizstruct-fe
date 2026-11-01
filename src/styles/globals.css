@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -85,38 +85,130 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0e1017;
+  --foreground: #f0f2fb;
+  --card: #161923;
+  --card-foreground: #f0f2fb;
+  --popover: #161923;
+  --popover-foreground: #f0f2fb;
+  --primary: #a99bf5;
+  --primary-foreground: #12141c;
+  --secondary: #1d212e;
+  --secondary-foreground: #f0f2fb;
+  --muted: #1d212e;
+  --muted-foreground: #99a1c6;
+  --accent: #1d212e;
+  --accent-foreground: #f0f2fb;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: #292e3f;
+  --input: #3a4057;
+  --ring: #a99bf5;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar: #0e1017;
+  --sidebar-foreground: #f0f2fb;
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-accent: #1d212e;
+  --sidebar-accent-foreground: #f0f2fb;
+  --sidebar-border: #292e3f;
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/* Nocturne: the dark theme. Tailwind colors are CSS variables, so remapping the scales here
+   recolors every utility (bg-slate-50, text-indigo-700, border-emerald-200 ...) without touching components.
+   slate runs inverted (900 is the lightest text); indigo and violet are the soft lavender accent; the other accents
+   become dark tints at 50-300 and bright at 400-900. */
+.dark {
+  color-scheme: dark;
+  --color-white: #161923;
+  --color-black: #000;
+  --color-slate-50: #0e1017;
+  --color-slate-100: #1d212e;
+  --color-slate-200: #292e3f;
+  --color-slate-300: #3a4057;
+  --color-slate-400: #80879f;
+  --color-slate-500: #99a0b8;
+  --color-slate-600: #b3b9ce;
+  --color-slate-700: #ccd0e0;
+  --color-slate-800: #e1e4ee;
+  --color-slate-900: #eef0f7;
+  --color-slate-950: #ffffff;
+  --color-indigo-50: hsl(251 26% 14%);
+  --color-indigo-100: hsl(251 28% 20%);
+  --color-indigo-200: hsl(251 30% 29%);
+  --color-indigo-300: hsl(251 36% 42%);
+  --color-indigo-400: hsl(251 82% 77%);
+  --color-indigo-500: hsl(251 72% 70%);
+  --color-indigo-600: hsl(251 86% 78%);
+  --color-indigo-700: hsl(251 90% 83%);
+  --color-indigo-800: hsl(251 92% 88%);
+  --color-indigo-900: hsl(251 94% 93%);
+  --color-sky-50: hsl(199 38% 13%);
+  --color-sky-100: hsl(199 40% 19%);
+  --color-sky-200: hsl(199 42% 28%);
+  --color-sky-300: hsl(199 48% 40%);
+  --color-sky-400: hsl(199 80% 64%);
+  --color-sky-500: hsl(199 78% 62%);
+  --color-sky-600: hsl(199 88% 72%);
+  --color-sky-700: hsl(199 90% 79%);
+  --color-sky-800: hsl(199 92% 86%);
+  --color-sky-900: hsl(199 94% 92%);
+  --color-violet-50: hsl(264 26% 14%);
+  --color-violet-100: hsl(264 28% 20%);
+  --color-violet-200: hsl(264 30% 29%);
+  --color-violet-300: hsl(264 36% 42%);
+  --color-violet-400: hsl(264 82% 77%);
+  --color-violet-500: hsl(264 72% 70%);
+  --color-violet-600: hsl(264 86% 78%);
+  --color-violet-700: hsl(264 90% 83%);
+  --color-violet-800: hsl(264 92% 88%);
+  --color-violet-900: hsl(264 94% 93%);
+  --color-pink-50: hsl(330 38% 13%);
+  --color-pink-100: hsl(330 40% 19%);
+  --color-pink-200: hsl(330 42% 28%);
+  --color-pink-300: hsl(330 48% 40%);
+  --color-pink-400: hsl(330 80% 64%);
+  --color-pink-500: hsl(330 78% 62%);
+  --color-pink-600: hsl(330 88% 72%);
+  --color-pink-700: hsl(330 90% 79%);
+  --color-pink-800: hsl(330 92% 86%);
+  --color-pink-900: hsl(330 94% 92%);
+  --color-amber-50: hsl(38 38% 13%);
+  --color-amber-100: hsl(38 40% 19%);
+  --color-amber-200: hsl(38 42% 28%);
+  --color-amber-300: hsl(38 48% 40%);
+  --color-amber-400: hsl(38 80% 64%);
+  --color-amber-500: hsl(38 78% 62%);
+  --color-amber-600: hsl(38 88% 72%);
+  --color-amber-700: hsl(38 90% 79%);
+  --color-amber-800: hsl(38 92% 86%);
+  --color-amber-900: hsl(38 94% 92%);
+  --color-red-50: hsl(2 38% 13%);
+  --color-red-100: hsl(2 40% 19%);
+  --color-red-200: hsl(2 42% 28%);
+  --color-red-300: hsl(2 48% 40%);
+  --color-red-400: hsl(2 80% 64%);
+  --color-red-500: hsl(2 78% 62%);
+  --color-red-600: hsl(2 88% 72%);
+  --color-red-700: hsl(2 90% 79%);
+  --color-red-800: hsl(2 92% 86%);
+  --color-red-900: hsl(2 94% 92%);
+  --color-emerald-50: hsl(158 38% 13%);
+  --color-emerald-100: hsl(158 40% 19%);
+  --color-emerald-200: hsl(158 42% 28%);
+  --color-emerald-300: hsl(158 48% 40%);
+  --color-emerald-400: hsl(158 80% 64%);
+  --color-emerald-500: hsl(158 78% 62%);
+  --color-emerald-600: hsl(158 88% 72%);
+  --color-emerald-700: hsl(158 90% 79%);
+  --color-emerald-800: hsl(158 92% 86%);
+  --color-emerald-900: hsl(158 94% 92%);
+}
+
 
 @layer base {
   * {
@@ -127,5 +219,15 @@
   }
   html {
     @apply font-sans;
+    /* The interface is dense (canvas, SWOT): 14px root makes every rem-based size 12.5% smaller than the 16px default. */
+    font-size: 14px;
   }
+}
+/* The dotted board behind the pages: hairline dots and a faint lavender glow from the top. */
+.nocturne-grid {
+  background-color: var(--color-slate-50);
+  background-image:
+    radial-gradient(60rem 28rem at 50% -8rem, color-mix(in oklab, var(--color-indigo-400) 14%, transparent), transparent 70%),
+    radial-gradient(circle, color-mix(in oklab, var(--color-slate-400) 22%, transparent) 1px, transparent 1.2px);
+  background-size: auto, 22px 22px;
 }

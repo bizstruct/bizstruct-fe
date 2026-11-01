@@ -1,4 +1,7 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react"
+import { NextIntlClientProvider } from "next-intl"
+import { renderToString } from "react-dom/server"
+import en from "../../../messages/en.json"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { router } from "@/test/routing-mock"
 import { renderIntl } from "@/test/render"
@@ -74,6 +77,18 @@ describe("register", () => {
 
   it("is available in Ukrainian", () => {
     renderIntl(<AuthForm mode="register" />, "uk")
-    expect(screen.getByRole("heading", { name: "Створення облікового запису" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Створіть свій акаунт" })).toBeInTheDocument()
+  })
+})
+
+describe("before the client takes over", () => {
+  it("renders the form with a POST method and a disabled button, so a password can never end up in the URL", () => {
+    const html = renderToString(
+      <NextIntlClientProvider locale="en" messages={en}>
+        <AuthForm mode="login" />
+      </NextIntlClientProvider>,
+    )
+    expect(html).toMatch(/<form[^>]*method="post"/)
+    expect(html).toMatch(/<button[^>]*type="submit"[^>]*disabled/)
   })
 })
